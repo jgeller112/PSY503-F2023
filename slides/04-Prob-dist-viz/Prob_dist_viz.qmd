@@ -53,8 +53,15 @@ execute:
 ## Packages
 
 ```{r}
-library(grateful)
+#| echo: false
+#| message: false
+library(pacman)
+p_load("tidyverse")
 
+```
+
+```{r}
+library(grateful)
 pkgs <- cite_packages(output = "table", out.dir = ".")
 knitr::kable(pkgs)
 ```
@@ -642,8 +649,10 @@ ggplot(data = data.frame(x = `X variable`, y = `Y variable`), aes(x = x, y = y))
 
     ::: columns
     ::: {.column width="50%"}
-    ```{r}
-    gapminder_2002 <- gapminder %>% 
+```{r}
+
+library(gapminder)
+gapminder_2002 <- gapminder %>% 
       filter(year == 2002)
 
     fig=ggplot(gapminder_2002,
@@ -670,7 +679,9 @@ ggplot(data = data.frame(x = `X variable`, y = `Y variable`), aes(x = x, y = y))
 
     ::: columns
     ::: {.column width="50%"}
-    ```{r}
+```{r}
+
+library(ggdist)
         gapminder_2002 <- gapminder %>% 
           filter(year == 2002)
 
@@ -1213,7 +1224,7 @@ ggplot(data, aes(x = group, y = value, fill=group)) +
 -   Multiple Geoms
 
 ```{r}
-
+library(gghalves)
 p6 <- ggplot(filter(gapminder_2002, 
               continent != "Oceania"),
        aes(y = lifeExp,
