@@ -27,13 +27,9 @@ I place a strong emphasis on practical application. I believe you are more likel
 At the end of the course, students will be able to:
 
 - Make informed analytic decisions
-
 - Run and code analyses in R
-
 - Interpret output and summarize results of the analyses
-
 - Effectively communicate results from statistical analyses to a general audience
-
 - Use Quarto to write reproducible reports and GitHub for version control and collaboration
 
 ## Office Hours

@@ -1,7 +1,7 @@
 ---
-title: "Introduction to R"
+title: "Gentle Introduction to R"
 subtitle: "Princeton University"
-author: "Jason Geller, PH.D."
+author: "Jason Geller, PH.D. (He/Him)"
 date: 'Updated:`r Sys.Date()`'
 footer: "PSY 503: Foundations of Statistics in Psychology"
 format: 
@@ -22,7 +22,7 @@ editor_options:
   chunk_output_type: inline
 ---
 
-# Objective
+## Objective
 
 ::: columns
 ::: {.column width="50%"}
@@ -49,7 +49,7 @@ editor_options:
 knitr::include_graphics("lover.png")
 ```
 
-# It's Scary
+## It's Scary
 
 ```{r}
 #| fig.align = "center",
@@ -60,7 +60,7 @@ knitr::include_graphics("lover.png")
 knitr::include_graphics("nocluedog.png")
 ```
 
-# Note
+## Note
 
 -   You can learn R!
 
@@ -69,9 +69,10 @@ knitr::include_graphics("nocluedog.png")
 -   You will get errors that don't help or make sense.
 
     -   Google is your friend.
-    -   Try Googling the specific error message first.
-    -   Then try googling your specific function and the error.
-    -   Try a bunch of different search terms.
+        -   Try Googling the specific error message first.
+        -   Then try googling your specific function and the error.
+        -   Try a bunch of different search terms.
+    -   ChatGPT
 
 # Outline
 
@@ -89,7 +90,7 @@ knitr::include_graphics("nocluedog.png")
 
 -   Saving R scripts
 
-# Why R?
+## Why R?
 
 ::: columns
 ::: {.column width="50%"}
@@ -123,9 +124,15 @@ knitr::include_graphics("nocluedog.png")
 
 -   Saving R scripts
 
-# IDE
+## IDE
 
 ![](https://bookdown.org/ndphillips/YaRrr/images/RStudio_Screenshot_Labels.png){fig-align="center"}
+
+## IDE
+
+-   Make it your own!
+
+![](https://i0.wp.com/cdn.r-bar.net/PID1174/SuperDarkMode.jpg?zoom=2&w=578&ssl=1){fig-align="center"}
 
 # Outline
 
@@ -143,7 +150,7 @@ knitr::include_graphics("nocluedog.png")
 
 -   Saving R scripts
 
-# Commands
+## Commands
 
 -   Commands are the code that you tell R to do for you.
 
@@ -161,7 +168,7 @@ knitr::include_graphics("nocluedog.png")
 X <- 4
 ```
 
-# Commands
+## Commands
 
 -   `>` indicates the console is ready for more code
 
@@ -175,7 +182,7 @@ X <- 4
 
 -   Use the `?` followed by a command to learn more about it
 
-# Comments
+## Comments
 
 ::: columns
 ::: {.column width="50%"}
@@ -200,7 +207,7 @@ x=4 #assign
 
 ```
 
-# Assignment
+## Assignment
 
 -   A variable is a symbol or object that stands for another value (just like "X" in algebra)
 
@@ -216,7 +223,7 @@ x
 
 -   Can use `=` if you want
 
-# Objects and Values
+## Objects and values
 
 -   We will use the terms **object** and **variable** a lot when talking about code in this class
 
@@ -224,7 +231,7 @@ x
 
 -   We will use the word `Variable` to refer to columns of a data frame and to data variables that we use in models
 
-# Vectors
+## Vectors
 
 -   Think of it as a row or column in a spreadsheet
 
@@ -240,7 +247,7 @@ x
 
 ```
 
-# Vectors
+## Vectors
 
 -   Character
 
@@ -266,11 +273,11 @@ x==7
 
 ```
 
-# Indexing
+## Indexing
 
 -   Vectors can be indexed
 
-    -   1 not 0
+    -   1 not 0 (looking at you Python)
 
 ```{r}
 
@@ -279,7 +286,7 @@ x[-2] # everything but that number
 x[1] <- 7 # Change values in vector
 ```
 
-# Lists
+## Lists
 
 -   While vectors are one row of data, we might want to have multiple rows or types
 
@@ -299,7 +306,7 @@ output <- lm(flipper_length_mm ~ bill_length_mm, data = penguins)
 str(output)
 ```
 
-# R as a Calculator
+## R as a calculator
 
 -   Typing in a simple calculation show us the result
 
@@ -322,7 +329,7 @@ str(output)
 5^2
 ```
 
-# Functions
+## Functions
 
 -   Take an object, do something to it, and return the result
 
@@ -347,7 +354,7 @@ sr=function(a, b){
 sr(2,3)
 ```
 
-# Arguments
+## Arguments
 
 -   Some functions have settings ("arguments") that we can adjust:
 
@@ -359,7 +366,7 @@ sr(2,3)
 
     -   One decimal place
 
-# Getting Help
+## Getting Help
 
 1.  Help files
 
@@ -372,7 +379,7 @@ sr(2,3)
 knitr::include_graphics("help.png")
 ```
 
-# Exercises
+## Exercise 1
 
 1.  Open a blank new script
 
@@ -404,7 +411,7 @@ knitr::include_graphics("help.png")
 
 -   Saving R scripts
 
-# Tidyverse and Pipes
+## Tidyverse and pipes
 
 -   The `tidyverse` is an ecosystem of R packages designed for data science. All packages share an underlying design philosophy, grammar, and data structures.
 
@@ -417,7 +424,7 @@ knitr::include_graphics("help.png")
 knitr::include_graphics("hex.png")
 ```
 
-# Installing Tidyverse
+## Installing Tidyverse
 
 ```{r}
 #| fig.align = "center",
@@ -442,7 +449,7 @@ library(tidyverse)
 
 ```
 
-# Pipes
+## Pipes
 
 -   `tidyverse` provides another interface to functions---the pipe operator
 
@@ -481,7 +488,7 @@ a %>%
 
 -   Saving R scripts
 
-# Multiple Functions
+## Multiple Functions
 
 -   Pipe operator makes it easy to do multiple functions in a row
 
@@ -511,7 +518,7 @@ a %>%
 
 -   Saving R scripts
 
-# Reading in Data
+## Reading in data
 
 -   Download the file
 
@@ -525,7 +532,7 @@ knitr::include_graphics("readr.png")
 
 -   General form: `dataframe.name <-read.csv('filename')`
 
-# Data Frames
+## Data frames
 
 > A data frame is like an Excel spreadsheet. It is two-dimensional with rows and columns.
 
@@ -546,7 +553,7 @@ flextable::flextable(cars_df)%>% flextable::autofit()
 
 ```
 
-# Tibbles
+## Tibbles
 
 -   More modern take on Data frames
 
@@ -566,15 +573,11 @@ as.tibble()
 
 ```
 
-# Matrices
+## Matrices
 
 -   Matrices are vectors with dimensions (like a 2X3)
 
 -   All the data *must be the same type*
-
--   Data Frames / Tibbles
-
-    -   Like a matrix, but the columns can be different types of classes
 
 ```{r}
 myMatrix <- matrix(data = 1:10,
@@ -583,13 +586,15 @@ myMatrix <- matrix(data = 1:10,
 myMatrix
 ```
 
-# Working Directories
+## Working directories
 
 -   `Here` package
 
     -   `Here` helps set relative as opposed to absolute paths
 
         -   Why would this be a problem?
+
+        . . .
 
 ```{r}
 #| eval = FALSE
@@ -610,11 +615,13 @@ here::here()
 # can use with read.csv
 ```
 
-# Loading the Data
+## Loading the Data
 
+::: callout-note
 **Always create an R project before you start**
+:::
 
-# Aside: Naming Conventions
+## Aside: Naming Conventions
 
 -   Object names are case-sensitive!!
 
@@ -630,7 +637,7 @@ here::here()
 
 -   Names should be short and descriptive, with descriptive being the most important feature
 
-# Loading the Data
+## Loading the data
 
 -   You can download data directly from OSF or Github
     -   https://osf.io/qh9rb/
@@ -643,20 +650,22 @@ The faculty dataset contains aggregated data per faculty:
 -   salary: amount of salary
 -   costs: amount of costs dataset entails demographic and school-related information on imaginary students, such as
 
-# Load the data
+## Load the data
 
 -   CSV
 
 ```{r}
 library(kableExtra)
 
-fac=read.csv(here::here("slides", "01-R", "datasets", "faculty.csv"))
+fac=read.csv(here::here("slides", "02-R", "datasets", "faculty.csv"))
 
 fac %>% 
   kbl() %>%
   kable_material_dark()
 
 ```
+
+## Load data from osf
 
 ```{r}
 
@@ -665,7 +674,7 @@ fac %>%
 
 ```
 
-# Looking at Data
+## Looking at Data
 
 ```{r}
 
@@ -674,7 +683,7 @@ fac%>%
 
 ```
 
-# Looking at Data
+## Looking at Data
 
 ```{r}
 
@@ -687,7 +696,7 @@ fac%>%
   kable_material_dark()
 ```
 
-# Looking at the Data
+## Looking at the Data
 
 -   Select specific columns
 
@@ -709,7 +718,7 @@ fac%>%
 
 ```
 
-# Looking at the Data
+## Looking at the Data
 
 ```{r}
 
@@ -719,7 +728,7 @@ head(fac)
 tail(fac)
 ```
 
-# Looking at Data
+## Looking at Data
 
 ```{r}
 # look at specific variables
@@ -734,7 +743,7 @@ tabyl(fac$students)
 
 ------------------------------------------------------------------------
 
-# Reading in Other File Types
+## Reading other File types
 
 -   Excel
 
@@ -774,7 +783,7 @@ fac<-  read_spss('/Users/jg/Desktop/experiment.spss')
 
 -   `Saving R scripts`
 
-# Saving Files
+## Saving Files
 
 ```{r}
 #| eval = FALSE
@@ -790,17 +799,17 @@ write.table(fac, file="df.txt")
 
 -   You've learned:
 
--   Some basic programming terminology
+    -   Some basic programming terminology
 
--   Specific *R* defaults and issues
+    -   Specific *R* defaults and issues
 
--   Example functions and use cases
+    -   Example functions and use cases
 
 -   How do I get started?
 
     -   Practice!
 
-# Helpful Websites
+## Helpful Websites
 
 -   Google!
 -   Cheat sheets (https://rstudio.cloud/learn/cheat-sheets)
@@ -810,7 +819,7 @@ write.table(fac, file="df.txt")
 -   Stack Overflow: www.stackoverflow.com
 -   Learn Statistics with R: https://learningstatisticswithr.com/
 
-# Exercise
+## Exercise 2
 
 1.  Create a variable called y with the value of 7
 
