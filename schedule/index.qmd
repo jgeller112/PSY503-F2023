@@ -1,0 +1,59 @@
+---
+title: "Schedule"
+sidebar: false
+toc: false
+page-layout: full
+---
+
+```{r packages-data, include=FALSE}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+```
+
+::: schedule-page
+Here's your roadmap for the semester!
+
+<ul class="icon-list">
+
+<li><i class="fas fa-book-reader"></i> Readings should be completed ***before*** each class session</li>
+
+<li><i class="fas fa-laptop-code"></i> Slides and other class materials will be added on the day of class</li>
+
+<li><i class="fas fa-pen-ruler"></i> Assignments are due at 11:00 P.M. on Sunday (unless otherwise stated)</li>
+
+
+**Schedule is subject to change**
+
+</ul>
+| Week | Date                | Topic                                                                           | Content                                                    | Class                  | Labs                 |
+|------|---------------------|---------------------------------------------------------------------------------|------------------------------------------------------------|------------------------|----------------------|
+| 1    | 9/6/23              | Course Introduction and Getting Setup                                           | [{{<    fa   book-open-reader >}}](/schedule/01-week.qmd)  | {{< fa laptop-code >}} |                      |
+| 2    | 9/11/23             | Introduction to R and RStudio                                                   | [{{<    fa   book-open-reader >}}](/schedule/02-week.qmd)  | {{< fa laptop-code >}} |                      |
+| 2    | 9/13/23             | Lab 1 (Computational Reproducibility w Github and R)                            |                                                            |                        | {{< fa pen-ruler >}} |
+| 3    | 9/18/23             | Introduction to Markdown/Quarto                                                 | [{{<    fa   book-open-reader >}}](/schedule/03-week.qmd)  | {{< fa laptop-code >}} |                      |
+| 3    | 9/20/23             | Lab 2                                                                           |                                                            |                        | {{< fa pen-ruler >}} |
+| 4    | 9/25/23             | Distributions and Visualization                                                 | [{{<    fa   book-open-reader >}}](/schedule/04-week.qmd)  | {{< fa laptop-code >}} |                      |
+| 4    | 9/27/23             | Basics of Modeling, Normal Distribution, and Z-scores                           | [{{<    fa   book-open-reader >}}](/schedule/04b-week.qmd) |                        | {{< fa pen-ruler >}} |
+| 4    |                     | Lab 3                                                                           |                                                            |                        |                      |
+| 5    | 10/2/23             | Statistical Inference: Sampling Distributions, Uncertainty, NHST, p-values, CIs | [{{<    fa   book-open-reader >}}](/schedule/05-week.qmd)  | {{< fa laptop-code >}} |                      |
+| 5    | 10/4/23             | Lab 4                                                                           |                                                            |                        | {{< fa pen-ruler >}} |
+| 6    | 10/9/23             | GLM 1: Regression: Numerical and Categorical Explanatory Models                 | [{{<    fa   book-open-reader >}}](/schedule/06-week.qmd)  | {{< fa laptop-code >}} |                      |
+| 6    | 10/11/23            | Lab 5                                                                           |                                                            |                        | {{< fa pen-ruler >}} |
+| 7    | 10-16/10-18         | Midterm Break                                                                   |                                                            |                        |                      |
+| 8    | 10/23/23            | GLM 2: Categorical Explanatory Models                                           | [{{<    fa   book-open-reader >}}](/schedule/08-week.qmd)  | {{< fa laptop-code >}} |                      |
+| 8    | 10/25/23            | Lab 6                                                                           |                                                            |                        | {{< fa pen-ruler >}} |
+| 9    | 10/30/23            | GLM 3: Categorical Explanatory Models                                           | [{{<    fa   book-open-reader >}}](/schedule/09-week.qmd)  | {{< fa laptop-code >}} |                      |
+| 9    | 11/1/23             | Lab 7                                                                           |                                                            |                        | {{< fa pen-ruler >}} |
+| 10   | 11/6/23             | GLM 4: Introduction to MR                                                       | [{{<    fa   book-open-reader >}}](/schedule/10-week.qmd)  | {{< fa laptop-code >}} |                      |
+| 10   | 11/8/23             | Lab 8                                                                           |                                                            |                        | {{< fa pen-ruler >}} |
+| 11   | 11/13/23            | GLM 5: MR: Interactions                                                         | [{{<    fa   book-open-reader >}}](/schedule/11-week.qmd)  | {{< fa laptop-code >}} |                      |
+| 11   | 11/15/23            | Lab 9                                                                           |                                                            |                        | {{< fa pen-ruler >}} |
+| 12   | 11/20/23 - 11/23/23 | Thanksgiving -   No Class                                                       |                                                            |                        |                      |
+| 13   | 11/27/23            | GLM 5: Multiple Regression: More Interactions                                        | [{{<    fa   book-open-reader >}}](/schedule/13-week.qmd)  | {{< fa laptop-code >}} |                      |
+| 13   | 11/29/23            | Lab 10                                                                          |                                                            |                        | {{< fa pen-ruler >}} |
+| 14   | 12/4/23             | GLM 6: Model Selection                                                          | [{{<    fa   book-open-reader >}}](/schedule/14-week.qmd)  | {{< fa laptop-code >}} |                      |
+| 14   | 12/6/23             | Lab 11                                                                          |                                                            |                        | {{< fa pen-ruler >}} |
+| 15   | 12/11/23-12/13/23   | Reading Week - No Class                                                         |                                                            |                        |                      |
+| 15   | Finals              | Final Paper Due                                                                 |                                                            |                        | {{< fa pen-ruler >}} |
+:::

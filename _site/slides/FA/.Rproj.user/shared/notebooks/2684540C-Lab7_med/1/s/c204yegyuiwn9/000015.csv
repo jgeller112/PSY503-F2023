@@ -1,0 +1,3 @@
+"0","library(broom)"
+"0","names(data_nomiss)[7] <- ""Group"""
+"0","head(data_nomiss)"

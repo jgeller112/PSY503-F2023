@@ -1,0 +1,10 @@
+---
+title: "Week 14"
+subtitle: "Mulitvariate Model Selection"
+date: 2023-12-4
+---
+## Before Class
+
+### Textbook
+
+Chapter 14 - Statistics and Data Science: A Modeling Approach

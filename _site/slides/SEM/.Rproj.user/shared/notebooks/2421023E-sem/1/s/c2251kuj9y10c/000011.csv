@@ -1,0 +1,4 @@
+"0","fit <- summary(grad.model, se=""bootstrap"", fit.measures=TRUE, standardized=TRUE, data=grad)"
+"2","Error in summary(grad.model, se = ""bootstrap"", fit.measures = TRUE, standardized = TRUE,  : 
+  object 'grad.model' not found
+"

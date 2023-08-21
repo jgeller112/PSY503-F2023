@@ -1,0 +1,81 @@
+---
+title: "Robust_Notes"
+editor: visual
+---
+
+```{r}
+library(boot) # package dedicated to bootstrap methods
+library(simpleboot) #
+```
+
+```{r}
+
+n <- 6 # sample size
+samp <- 1:n
+samp
+
+```
+
+```{r}
+set.seed(21) # for reproducible results
+boot_samp <- sample(samp, size = n, replace = TRUE) # sample with replacement
+boot_samp
+```
+
+```{r}
+# for reproducible results
+boot_samp <- sample(samp, size = n, replace = TRUE) # sample with replacement
+boot_samp
+```
+
+```{r}
+boot_samp <- sample(samp, size = n, replace = TRUE) # sample with replacement
+boot_samp
+```
+
+```{r}
+x=c(1,5,6,7,8,9)
+indices=c(2,2,3)
+
+x[indices]
+```
+
+```{r}
+set.seed(666)
+# define the function that will be used to calculate the mean
+# can be extended to other statistics
+mean_fun = function(data, indices) {
+  return(mean(data[indices])) #indices to do bootstrapping
+}
+# use boot to bootstrap means 1000 times (R)
+#input is df, function for mean, and # of boot samples
+results = boot(samp, mean_fun, R=1000)
+```
+
+```{r}
+
+#bias is bootstrapped sample mean - sample mean
+
+results
+
+```
+
+Bias = sample mean - bootstrapped mean
+
+original = sample mean
+
+std.error (precision)
+
+# permutations
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```

@@ -1,0 +1,7 @@
+---
+title: "Week 3"
+subtitle: "Introduction to RMarkdown/Quarto"
+date: 2023-09-18
+---
+## Before Class
+

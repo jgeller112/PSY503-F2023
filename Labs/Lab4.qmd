@@ -1,0 +1,11 @@
+---
+title: "Lab 4: Multinomial Regression"
+author: "Jason Geller, Ph.D."
+date: 2023 03 01
+toc: true
+toc_float: true
+---
+
+In this lab, we will be using data from `eightythirtyfive` looking at factors that influence voting behavior.
+
+To access Lab 4, please go here: [Click here](https://classroom.github.com/a/1JSn6ce5)

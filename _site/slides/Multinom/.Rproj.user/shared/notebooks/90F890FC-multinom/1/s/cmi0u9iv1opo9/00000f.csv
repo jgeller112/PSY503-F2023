@@ -1,0 +1,2 @@
+"0","model_parameters(health_m, exponentiate = FALSE)%>%  filter(Response==""Fair"") %>%"
+"0","  kable(digits = 3, format = ""markdown"")"

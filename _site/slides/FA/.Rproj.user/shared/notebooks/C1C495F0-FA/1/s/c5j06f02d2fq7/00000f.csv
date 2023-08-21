@@ -1,0 +1,10 @@
+"0","#change rotate arg to desired rotation"
+"0","#orthogonal rotation"
+"0","efa_or <- psych::fa(data, nfactors = 5, rotate=""none"", fm=""varimax"") %>% "
+"0","   model_parameters(sort = TRUE, threshold = ""max"")"
+"2","factor method not specified correctly, minimum residual (unweighted least squares  used
+"
+"0","# correlated rotation"
+"0","efa_obs <- psych::fa(data, nfactors = 5, rotate=""oblimin"", fm=""pa"") %>% "
+"0","   model_parameters(sort = TRUE, threshold = ""max"")"
+"0","  "

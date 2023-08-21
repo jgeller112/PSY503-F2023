@@ -1,0 +1,8 @@
+"0","#| echo: false"
+"0","#| fig.align: center"
+"0","scat2 <- ggscatter(iris, x = ""Petal.Length"", y=""Petal.Width"", shape = ""Species"", color = ""Species"", palette = ""lancet"", size = 2, alpha = 0.6) + stat_smooth(method=lm, se=FALSE, colour=""black"")"
+"0","xdens2 <- ggdensity(iris, ""Petal.Length"", colour = ""Species"", fill = ""Species"", palette = ""lancet"")"
+"0","ydens2 <- ggdensity(iris, ""Petal.Width"", colour = ""Species"", fill = ""Species"", palette = ""lancet"") + rotate()"
+"0","ggarrange(xdens2, NULL, scat2, ydens2, nrow = 2, ncol = 2, align = ""hv"", widths = c(2,1), heights = c(1,2), common.legend = TRUE)"
+"2","[38;5;232m`geom_smooth()` using formula
+= 'y ~ x'[39m"

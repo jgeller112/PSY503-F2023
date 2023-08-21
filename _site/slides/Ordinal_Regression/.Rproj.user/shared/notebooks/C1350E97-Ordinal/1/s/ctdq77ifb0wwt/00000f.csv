@@ -1,0 +1,5 @@
+"0","# link = probit would also be acceptable"
+"0","ols1 = clm(apply ~ pared, data=dat, link = ""logit"")"
+"2","Error in clm(apply ~ pared, data = dat, link = ""logit"") : 
+  could not find function ""clm""
+"

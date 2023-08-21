@@ -1,0 +1,31 @@
+---
+title: "Week 8"
+subtitle: "Regression: Single Numerical and Categorical Predictors"
+date: 2023-10-23
+---
+## Before Class
+
+### Textbook
+
+Chapter 6 and 7 - Statistics and Data Science: A Modeling Approach
+
+### Articles
+
+- Brehm, L., & Alday, P. M. (2022). Contrast coding choices in a decade of mixed models. Journal of Memory and Language, 125, 104334. https://doi.org/10.1016/j.jml.2022.104334
+
+### Additonal Material
+
+- [Contrast Coding](https://debruine.github.io/faux/articles/contrasts.html)
+
+#### Book Chapter
+
+[ROS: Chapters 6 ad 7](https://users.aalto.fi/~ave/ROS.pdf")
+
+
+#### Podcasts
+
+- S2E18: Regression — Like That Old High School Friend You’ve Outgrown – QuantitudePod. (n.d.). Retrieved August 7, 2023, from https://quantitudepod.org/s2e18-regression-like-that-old-high-school-friend-youve-outgrown/
+
+- S4E01 Ordinary Least Squares: Back Where It All Began – QuantitudePod. (n.d.). Retrieved August 7, 2023, from https://quantitudepod.org/s4e01-ols/
+
+- S4E19 The Dark Art of Regression Diagnostics – QuantitudePod. (n.d.). Retrieved August 7, 2023, from https://quantitudepod.org/s4e19-regression-diagnostics/

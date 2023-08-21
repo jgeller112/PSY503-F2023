@@ -1,0 +1,6 @@
+"0",""
+"0","# add the fixed effect of vocode"
+"0","inter_model <- lmer(mean_pupil ~vocoded+(1|subject), data = eye)"
+"0",""
+"0","#grab the fixed effects"
+"0","broom.mixed::tidy(inter_model) %>% filter(effect == ""fixed"")"

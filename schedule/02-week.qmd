@@ -1,0 +1,11 @@
+---
+title: "Week 2"
+subtitle: "Introduction to R"
+date: 2023-09-11
+---
+## Before Class
+
+- Chapters 1 and 2: Statistics and Data Science: A Modeling Approach
+
+
+

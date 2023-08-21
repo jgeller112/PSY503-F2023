@@ -1,0 +1,118 @@
+lessons:
+
+  - title: '<span class="fake-header-table">Research Issues and Practices</span>'
+    header: True
+
+  - title: "Introduction to the course"
+    date: "Week 1 [T, 9/06]"
+    reading: ""
+    slides: "/static/slides/01-Introduction"
+    class: "/01-R/Intro_R"
+    notes: 'Welcome!'
+    hasclass: True
+    hasassignment: True
+    assignment: "01"
+    
+    
+  - title: "Install R and RStudio"
+    date: [T]
+    slides: ""
+    notes: 'Prior to class, please install <a href = "https://vimeo.com/203516510">R</a>, <a href = "https://vimeo.com/203516968">RStudio</a>'
+    reading: ""
+    hasclass: True
+    
+  - title: "Tutorial: Introduction to R/Markdown/Papaja"
+    date: "Week 2 [T, 9/13]"
+    notes: "HW 1 due"
+    slides: ""
+    reading: ""
+    hasclass: True
+    
+  - title: "Seminar: Robert Calin-Jageman, Ph.D. (Dominican University)"
+    date: "Week 3 [T, 9/20]"
+    slides: ""
+    notes: 'Prior to the talk Bob will lead a short workshop on ESCI in R and JAMOVI'
+    reading: ""
+    hasclass: True
+    
+  - title: "Tutorial: Data Wrangling in R"
+    date: "Week 4 [T, 9/27]"
+    slides: ""
+    notes: ""
+    reading: ""
+    hasclass: True
+    
+  - title: "Seminar: Daniël Lakens, Ph.D. (Eindhoven University of Technology)"
+    date: "Week 5 [T, 10/04]"
+    slides: ""
+    notes: ""
+    reading: ""
+    hasclass: True
+    
+  - title: "Seminar: Ulrich Schimmack, Ph.D. (University of Toronto Mississauga)"
+    date: "Week 6 [T, 10/11]"
+    slides: ""
+    notes: ""
+    reading: ""
+    hasclass: True
+    
+  - title: "Break (No Class)"
+    date: "Week 7 [T, 10/18]"
+    slides: ""
+    notes: ""
+    reading: ""
+    hasclass: False
+    
+  - title: "Discussion: Open Science and Replication/Reproducibility"
+    date: "Week 8 [T, 10/25]"
+    slides: ""
+    notes: "In class we will fill out preregistration'"
+    reading: ""
+    hasclass: True
+    hasassignment: True
+    
+  - title: "Seminar: Bob McMurrary (The University of Iowa)"
+    date: "Week 9 [T, 11/01]"
+    slides: ""
+    notes: ""
+    reading: ""
+    hasclass: True
+    hasassignment: True
+    
+  - title: "Seminar: Erin Buchanan, Ph.D. (Harrisburg University of Science and Technology)"
+    date: "Week 10 [T, 11/08]"
+    slides: ""
+    notes: ""
+    reading: ""
+    hasclass: True
+    hasassignment: True
+    
+  - title: "Antoine Coutrot, Ph.D.(French National Centre for Scientific Research)"
+    date: "Week 11 [T, 11/15]"
+    slides: ""
+    notes: ""
+    reading: ""
+    hasclass: True
+    hasassignment: True
+    
+  - title: "Thanksgiving Break"
+    date: "Week 12 [T, 11/22]"
+    slides: ""
+    notes: ""
+    reading: ""
+    hasclass: False
+    
+  - title: "Tutorial: Data Visualization in R "
+    date: "Week 13 [T, 11/29]"
+    slides: ""
+    notes: ""
+    reading: ""
+    hasclass: False
+    
+  - title: "Presentations"
+    date: "Week 14 [T, 12/6]"
+    slides: ""
+    notes: ""
+    reading: ""
+    hasclass: False
+    

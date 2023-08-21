@@ -1,0 +1,18 @@
+---
+title: "Week 4"
+subtitle: "Distributions and Visualizations"
+date: 2023-09-25
+---
+## Before Class
+
+### Textbook
+
+- Ch.3 and Ch.4 Statistics and Data Science: A Modeling Approach
+
+### Articles
+
+- Hehman, E., & Xie, S. Y. (2021). [Doing Better Data Visualization.](https://journals.sagepub.com/doi/full/10.1177/25152459211045334).Advances in Methods and Practices in Psychological Science, 4(4), 25152459211045336. https://doi.org/10.1177/25152459211045334
+
+- Nordmann, E., McAleer, P., Toivo, W., Paterson, H., & DeBruine, L. M. (2022). [Data Visualization Using R for Researchers Who Do Not Use R.](https://journals.sagepub.com/doi/epub/10.1177/25152459221074654) Advances in Methods and Practices in Psychological Science, 5(2), 25152459221074656. https://doi.org/10.1177/25152459221074654
+
+

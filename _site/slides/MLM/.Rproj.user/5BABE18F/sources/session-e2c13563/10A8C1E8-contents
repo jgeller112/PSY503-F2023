@@ -1,0 +1,54 @@
+---
+title: "Class_notes"
+editor: visual
+---
+
+```{r}
+library(tidyverse)
+library(lme4) # fit mixed models
+library(broom.mixed) # tidy output of mixed models
+library(afex) # fit mixed models
+library(emmeans) # marginal means
+library(ggeffects) # marginal means
+eye  <- read_csv(here::here("data","vocoded_pupil.csv" ))
+
+```
+
+```{r}
+
+eye_agg <- eye %>%
+  group_by(subject, vocoded)%>%
+  summarize(mean_pupil=mean(mean_pupil))
+
+lm_model <- lm(mean_pupil ~ vocoded, data = eye_agg)
+
+tidy(lm_model)
+
+
+```
+
+```{r}
+
+library(lme4) # pop linear modeling package
+
+null_model <- lmer(mean_pupil ~ (1|subject), data = eye)
+
+summary(null_model)
+
+```
+
+
+```{r}
+
+# add the fixed effect of vocode
+inter_model <- brms(mean_pupil ~vocoded+(1|subject), data = eye)
+
+#grab the fixed effects
+broom.mixed::tidy(inter_model) %>% filter(effect == "fixed")
+
+
+
+```
+
+
+

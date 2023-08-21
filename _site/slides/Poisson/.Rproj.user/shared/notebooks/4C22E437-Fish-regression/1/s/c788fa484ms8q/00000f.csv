@@ -1,0 +1,13 @@
+"0","# fit poisson model# change family to poisson"
+"0","# tidy summary"
+"0","# repeated measures poisson"
+"0","#dumy coded"
+"0","model1 <- glmer(Number_of_fixations ~ emotion+ Group + (1|ID), data = hh_data, family = poisson(link = ""log"")) # change family to poisson"
+"0","# tidy summary"
+"0","#contrast coded (0.5, -0.5)"
+"0","model1_cont <- glmer(Number_of_fixations ~ emotion+ Group + (1|ID), data = hh_data_contrast, family = poisson(link = ""log"")) # change family to poisson"
+"0","# tidy summary"
+"0",""
+"0","```"
+"2","Error: attempt to use zero-length variable name
+"

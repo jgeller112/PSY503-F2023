@@ -1,0 +1,7 @@
+"0",""
+"0","#install.packages(""devtools"")"
+"0","#devtools::install_github('smin95/smplot2')"
+"0","library(smplot2) # has auc function with plotting func"
+"0","library(tidyverse)"
+"0",""
+"0",""

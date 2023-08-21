@@ -1,0 +1,94 @@
+---
+title: "Lab 07: mediatio"
+subtitle: "Lab 7"
+output: 
+  tufte::tufte_html:
+    css: 
+    tufte_variant: "envisioned"
+    highlight: pygments
+    fig_height: 10
+    toc: true
+    toc_depth: 1
+link-citations: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      warning=FALSE, 
+                      message=FALSE,
+                      eval=FALSE)
+```
+
+
+## Data
+
+For this lab, we are going to be reproducing the mediation results from https://link.springer.com/article/10.1007/s10484-023-09579-1. On p.7 , the authors show a path diagram of a mediation model they fit. The data for the mediation analysis is here: https://osf.io/t5s4z/. 
+
+## Task 
+
+I want you to try to reproduce their results using R and their OSF resources. Namely: 
+
+1. I want you toassess the results from the causal steps approach 
+
+2. Using the bootstrapping approach with Lavaan 
+
+3. Create a path model diagram using your desired software
+
+4. Write up your results in APA style and a discussion of the findings and if there are differences between your analysis and theirs. What are your thoughts on how they shared their data?
+
+
+```{r}
+library(tidyverse)
+library(MeMoBootR)
+
+
+med_file=read_csv("med_1.csv")
+
+
+
+```
+
+
+```{r}
+
+med1 <- med_file %>% filter(`mPFC-LAmyg_post` !="N/A", emobiasscore != "N/A") %>%
+  mutate(L_amyg_post=as.numeric(`mPFC-LAmyg_post`), emobias = as.numeric(emobiasscore), group=`Group (1=inc, 2=dec)`) %>%
+  select(group, emobias, L_amyg_post) %>%
+  mutate(group=ifelse(group==1, -0.5, 0.5))
+
+
+library(JSmediation)
+
+mediation_fit <- mdt_simple(med1,
+             IV =group,
+             DV = emobias,
+             M  = L_amyg_post)
+
+
+
+
+```
+
+```{r}
+
+library(lavaan)
+
+multipleMediation <- '
+emobias ~ b * L_amyg_post + cp * group
+L_amyg_post ~ a * group
+# indirect 1
+indirect1 := a * b
+
+# total
+total := cp + (a * b) 
+
+#prob mediated
+#prop_indirect1
+prop_med_1 := indirect1 / (indirect1+cp)
+'
+fit <- sem(model = multipleMediation, data = med1, se = "bootstrap",  bootstrap = 10000)
+# you should run 5000-10000 bootstraps
+
+summary(fit, ci=TRUE) # output with 95% bootstrapped cis
+
+```

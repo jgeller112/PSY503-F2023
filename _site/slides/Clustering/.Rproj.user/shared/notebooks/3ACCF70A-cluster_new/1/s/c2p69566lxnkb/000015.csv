@@ -1,0 +1,8 @@
+"0",""
+"0","#| fig.align: center"
+"0","#| "
+"0"," "
+"0","#easystats"
+"0","n <- n_clusters_hclust(clust_data, standardize=FALSE, distance_method = ""euclidian"", hclust_method = ""ward.D2"",  iterations = 500)"
+"0",""
+"0","plot(n)"

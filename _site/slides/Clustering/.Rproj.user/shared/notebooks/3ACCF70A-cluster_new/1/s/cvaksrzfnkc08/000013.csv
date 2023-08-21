@@ -1,0 +1,3 @@
+"0",""
+"0","cluster_analysis(iris.scaled, n=3, method=""kmeans"") %>%"
+"0","  plot()"

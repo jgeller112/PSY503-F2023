@@ -1,0 +1,15 @@
+---
+title: "Week 4b"
+subtitle: "Modeling, Normal Distribution,and Z-scores"
+date: 2023-09-27
+---
+
+## Before Class
+
+### Textbook
+
+Chapters 5 and 6 - Statistics and Data Science: A Modeling Approach
+
+
+
+

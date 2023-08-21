@@ -1,0 +1,7 @@
+"0","#| echo: false"
+"0","#| "
+"0",""
+"0","efa$Vaccounted %>%"
+"0","  kable()"
+"2","Error in kable(.) : could not find function ""kable""
+"

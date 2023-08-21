@@ -1,0 +1,16 @@
+---
+title: "Week 5"
+subtitle: "Statistical Inference, NHST, and CIs"
+date: 2023-10-02
+---
+## Before Class
+
+- Ch.10 and 12 Statistics and Data Science: A Modeling Approach
+
+### Additional Resources
+
+- [Ch.1 Improving Your Statistical Inferences](https://lakens.github.io/statistical_inferences/01-pvalue.html)
+
+
+
+

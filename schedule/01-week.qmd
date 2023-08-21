@@ -1,0 +1,26 @@
+---
+title: "Week 1"
+subtitle: "Welcome1 "
+date: 2023-09-06
+---
+## Before Class
+
+- Fill out this survey before we meet for class on the 6th: https://forms.gle/Js1ZkNfjwnqTyefy6
+
+## During Class
+
+::: callout-important
+-   Install latest version of RStudio (https://www.rstudio.com/products/rstudio/download/#download)
+
+-   Install Quarto: https://quarto.org/docs/download/
+
+    -   Follow: <https://quarto.org/docs/get-started/hello/rstudio.html>
+
+-  Sign up for free github account
+
+-  Install Github Desktop: <https://docs.github.com/en/desktop/installing-and-configuring-github-desktop/installing-and-authenticating-to-github-desktop/installing-github-desktop>
+
+- Install Git: <https://git-scm.com/downloads>
+
+- Make sure RStudio recognized Git: <https://happygitwithr.com/rstudio-see-git.html#rstudio-see-git>
+:::

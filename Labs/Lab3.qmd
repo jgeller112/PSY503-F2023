@@ -1,0 +1,11 @@
+---
+title: "Lab 3: Ordinal Regression"
+author: "Jason Geller, Ph.D."
+date: 2023 02 21
+toc: true
+toc_float: true
+---
+
+In this lab, you will be using a Great British Bakeoff dataset to learn more about ordinal regression.
+
+To access Lab 3, please go here: [Click here](https://classroom.github.com/a/1mxcXffF)

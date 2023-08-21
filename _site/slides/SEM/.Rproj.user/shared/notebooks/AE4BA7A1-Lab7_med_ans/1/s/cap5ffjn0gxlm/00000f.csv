@@ -1,0 +1,8 @@
+"0","library(tidyverse)"
+"0","library(MeMoBootR)"
+"0",""
+"0",""
+"0","med_file=read_csv(""med_1.csv"")"
+"0",""
+"0",""
+"0",""

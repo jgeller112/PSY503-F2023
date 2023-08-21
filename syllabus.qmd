@@ -1,0 +1,220 @@
+---
+title: "Syllabus"
+page-layout: full
+sidebar: false
+---
+
+## Course Introduction
+
+This graduate-level course covers foundations of statistics in psychological research. It is required of all first-year students in the psychology Ph.D. program. The purpose of this course is to introduce students to statistics with an emphasis on modeling. We cover many of the most widely applied data analysis models in psychology. We focus on data visualization, effect size estimation and interpretation, and using statistical analysis to inform scientific research questions. We develop practical skills related to data management, reproducibility, and statistical programming through the use of R, R Markdown/Quarto, and Github.
+
+I place a strong emphasis on practical application. I believe you are more likely to learn and readily use these analyses in the future if you do them at least once now. Every Wednesday there will be a lab going over the material covered that week. The lab assignments will help you build a personal library of example statistical scripts that you will hopefully find useful for years into the future. These lab assignments will be due at the end of the week. 
+
+## Prerequisite
+
+- First year psychology graduate student
+
+## Course Objectives 
+
+-	Understand statistical inference in classical frameworks
+-	Build and interpret general linear models
+-	Diagnose model misspecification and misfit
+-	Use statistical models to inform decisions, make predictions, and answer scientific questions
+-	Implement statistical models in a modern computing environment
+
+## Student Learning Outcomes
+
+At the end of the course, students will be able to:
+
+- Make informed analytic decisions
+
+- Run and code analyses in R
+
+- Interpret output and summarize results of the analyses
+
+- Effectively communicate results from statistical analyses to a general audience
+
+- Use Quarto to write reproducible reports and GitHub for version control and collaboration
+
+## Office Hours
+
+I will hold weekly office hours (M: 1-3 P.M.; W: 1-2 P.M.). If you need to see me outside of these hours please schedule a meeting: https://calendly.com/jg9120/30min
+
+## Course Materials
+
+### CourseKata book (installed on Canvas page)
+
+The main text for this course will be the CourseKata book Statistics: A Modeling Approach. This book
+is integrated with our Canvas page, so you can access all of the materials there for free. This book has exercise built into every chapter. 
+
+### R and RStudio
+
+R is the primary data-analysis software we will be using for the course. It is free, and works on both Windows and Mac computers. 
+
+While R will be our primary statistics workhorse, it is not a very pretty program. R Studio is a free (and Windows-/Mac-friendly) supplemental program, that dresses R up a bit to make it
+more user-friendly and functional.
+
+### Quarto Notebook
+
+We will be using Quarto notebooks in RStuido as a tool for running our data analyses in R. Quarto notebooks
+will be used in class during lectures and for labs.
+
+### Github
+
+This semester we will make use of GitHub which is a web-based platform that serves as a centralized repository for hosting and managing software development projects using the version control system called Git. It provides a collaborative environment for developers to work together on code, track changes, and manage project updates. 
+
+All lab assignments will be hosted on Github and this will be how you submit assignments and receieve feedback. 
+
+## Attendance Policy
+
+You're expected to come to class, having (1) carefully read the material and (2) completed the weekly readings.
+
+Attendance and participation are *crucial* to your success in this course. If you are sick or are incapable of participating meaningfully in class (e.g., you have stayed up all night and are going to fall asleep in class), please stay home. I will try my best to record in-class lectures (or record them at home).
+
+## Absences and Late Work
+
+If you need to be absent or submit an assignment late, please let me know as soon as possible. I don't need to know your personal or medical details. We can be flexible, but please respect my time by turning your assignments in on time whenever possible.
+
+## Technology
+
+It is expected that you will bring your laptop to class. Please try to keep it class related.
+
+\vspace{.75cm}
+
+## Communication
+
+All lecture notes, assignment instructions, an up-to-date schedule, and other course materials may be found on the course website.
+
+Announcements will be emailed through Canvas periodically. Please check your email regularly to ensure you have the latest announcements for the course.
+
+## Assignments
+
+There will be no points associated with any of the assignments this semester. However, in order to receive a passing grade (A), all assignments must be turned in. 
+
+### CourseKata Readings
+
+- Some weeks you will be assigned to complete 1-3 chapters of the CourseKata textbook in preparation
+for lecture. These chapters contained embedded questions and exercises that must be completed. You should plan to spend 2-3 hours completing a chapter. Completing the chapters includes the chapter review questions. 
+
+**Some weeks you will be expected to read material not in the textbook.**
+
+### Labs/Exercises
+
+- In labs, you will apply the concepts discussed in lecture to various data analysis scenarios, with a focus on the computation. Each week (Wednesday) we will have one corresponding lab exercise that will be started in class. Most lab assignments will be completed in class. You are expected to use a Git repository as the central platform for collaboration. Lab assignments will be completed using Quarto and correspond to an appropriate GitHub repository. 
+
+You may complete the labs by yourself or working with another person. If you work with another person, your work must obviously be your own.
+
+Ideally, you will finish labs in class. However, if you choose to finish at home, completed labs will be due at 6:00 p.m. on the Sunday of that week. Please let me know if you need an extension.
+
+**I will provide feedback on each lab. This feedback should be incorporated into the lab.**
+
+### Final Project
+
+Your semester project assignment is due at the end of the semester and is submitted as a link (to your project on Github or OSF) on Canvas. 
+
+We will discuss this project across the semester. As an overview, you will be demonstrating that you can conduct a reproducible analysis, which is an analysis of data that is independently verifiable. For example, someone else could obtain your data and code and independently reproduce your analysis. 
+
+You will complete three related parts.
+
+1. Reproducible Report: Obtain open-data from an existing psych paper, load the data in R, and attempt to reproduce the statistical analysis that the original authors reported. **It would be preferable if you had your own data to work with.** 
+
+2. APA paper: Learn how to use the `papaja` package that allows you to compile .Rmd files to APA style manuscripts in pdf form. Then, write a short APA-style research report that describes your reproducible analysis.
+
+3. Simulation based power analysis: Include a simulation based power analysis at the end of your APA paper.
+
+#### Part 1: Reproducible report
+
+##### Finding a paper with data
+
+Here are a few tips for finding a psych paper with open data. **Most important**, for this assignment you do not need to re-analyze **all of the data** from a particular paper. Many papers have multiple experiments, and multiple analyses, including analyses you may not be familiar with. You can restrict your re-analysis to a portion of the paper. For example, you might only re-analyze the results from one experiment, and perhaps only the results relevant to one of the tests reported for the experiment. **You can limit your re-analyses to tests that have been covered in lecture or lab**. 
+
+1. [https://osf.io](https://osf.io) The open science framework contains many repositories of open data that are part of published papers.
+
+2. Some journals, including Psychological Science, put badges on papers with open data. Look for the blue open-data badge. You will usually find the link to the open-data in the paper.
+
+##### Loading the data into R
+
+The data you find could be in many different formats. It should be possible to load it into R and transform the data into the format/organization that you need to complete the analysis.
+
+##### Re-analysis of original data
+
+Focus on a single analysis that was relevant to one of the research questions. For example, if the analysis involved several t-tests:
+
+1. Conduct and report the same t-tests
+2. Report a table of means
+3. Report a graph of the means
+
+**feel free to propose additional analyses**
+
+#### Write a reproducible report
+
+The concept of a reproducible report is that someone else could exactly reproduce your analysis given your report. It is easy to make reproducible reports using R markdown. If you write your report in an .Rmd file, and that file includes your scripts for loading and analyzing the data, then by sharing your .rmd file, other people can exactly reproduce your report.
+
+Your report should include the following: 
+
+1. A brief description of the research question and experiment (with citation to the paper, and link to find the data)
+
+2. The R code chunks necessary to complete the re-analysis
+
+3. A write-up of your re-analysis results.
+
+4. A brief discussion of whether you were successful or not. 
+
+*If you would like to run an additional analysis (not included in paper), also include a write-up of this.* 
+
+#### Part 2: APA paper in R markdown
+
+##### Papaja
+
+In part 2, you will learn how to use the `papaja` package to create APA style manuscripts using R markdown. We will discuss how to use `papaja` in class. You will create a new RMD file using the papaja template, and then transfer your reproducible report into this format. You will write very brief sections for:
+
+1. Abstract (50-100 words) (1 point)
+2. Introduction (1 or two paragraphs)
+3. Methods (1 paragraph)  (1 point)
+4. Results (Your re-analysis results)
+  - Must include the R code chunks for the analysis
+  - Full points only if the reporting of results is also reproducible (not by hand), as in the the example (see below).
+5. Discussion (very brief, 1 paragraph)  
+6. References (cite the paper, and anything else you want to cite)
+7. A completed RMD file and successfully compiled .pdf using `papaja`
+
+Again, the purpose here is not to write a full-length APA paper, but to get some experience with using the `papaja` package.
+
+#### Part 3: Power analysis
+
+##### Simulation based power analysis
+
+In part 3 you will add a simulation-based power analysis to your APA-style manuscript. While it is never advisable to calculate post-hoc power, think about this is as a future replication attempt. That is, given the current parameters (e.g., $\mu M$, $\sigma \Sigma$), if you were to replicate this study how many Ps would you need to achieve a certain level of power. Specifically, you should report a graph showing a power-curve for the design. We will discuss how to conduct simulation based power analyses in class.
+
+The following should be included in the general discussion of your APA-paper (from part 2).
+
+1. The R code chunk conducting your power analysis
+2. A paragraph or two discussing and explaining your power analysis to the reader, as well as reporting the results of the power analysis. 
+3. A graph depicting a power-curve for the design.
+4. A statement about how the design might be changed to achieve a desired or preferred amount of power.
+
+## __Note__
+
+ Your whole paper must be reproducible! To ensure this, provide a fellow classmate with your paper and have them re-run it. If they can't, make changes to ensure it can be reproduced by me. 
+
+## Participation
+
+It is expected that you will come to class having read the articles assigned and prepared to discuss the material.
+
+## Grades
+
+At the end of the semester, you will assign yourself the final grade. You will provide a self-evaluation as whether you met the learning outcomes for the course and how well you think you did on assignments and the final project. I have veto rights to change your assigned grade :). 
+
+## Diversity and Inclusion Statement
+
+I would like to create a learning environment for my students that supports a diversity of thoughts, perspectives and experiences, and honors your identities (including race, gender, class, sexuality, religion, ability, SES, etc.)To help accomplish this:
+
+- If  you  have  a  name  and/or  set  of  pronouns  that  differ  from  those  that  appear  in  your  official  Princeton records, please let me know!
+
+- If you feel like your performance in the class is being impacted by your experiences outside of class or in class,  please bon’t hesitate to come and talk with me. I want to be a resource for you. Remember that you can also submit anonymous feedback (which will lead to me making a general announcement to the class, if necessary to address your concerns).
+
+- I (like many people) am still in the process of learning about diverse perspectives and identities.  If something was said in class (by anyone) that made you feel uncomfortable, please talk to me about it.  (Again,anonymous feedback is always an option). 
+\vspace{.75cm}
+
+# [Schedule](/schedule/index.qmd)
+

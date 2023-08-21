@@ -1,0 +1,10 @@
+---
+title: "Week 10"
+subtitle: "Multiple Regression"
+date: 2023-11-13
+---
+## Before Class
+
+### Textbook
+
+- Chapters 13 and 14 - Statistics and Data Science: A Modeling Approach

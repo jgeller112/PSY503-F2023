@@ -1,0 +1,2 @@
+"0","# Display plots side by side"
+"0","gridExtra::grid.arrange(p1, p2,p3,  nrow = 1)"

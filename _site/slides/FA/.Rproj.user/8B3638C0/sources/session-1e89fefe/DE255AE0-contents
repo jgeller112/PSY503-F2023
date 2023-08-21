@@ -1,0 +1,49 @@
+---
+  title: "Introduction to Structural Equation Modeling in R"
+subtitle: "Princeton University"
+author: "Jason Geller, PH.D."
+date: 'Updated:`r Sys.Date()`'
+footer: "PSY 504: Advanced Statistics"
+format: 
+  revealjs:
+  theme: psy504.css
+multiplex: true
+transition: fade
+slide-number: true
+incremental: false 
+chalkboard: true
+execute:
+  freeze: auto
+echo: true
+message: false
+warning: false
+---
+  
+  ```{r}
+#| echo: false
+#| 
+library(parameters)
+library(effectsize) 
+library(papaja)
+library(tidyverse)
+library(performance)
+library(see)
+library(equatiomatic)
+library(kableExtra)
+library(broom)
+library(report)
+library(emmeans)
+library(flextable)
+library(huxtable)
+library(skimr)
+library(mediation)
+library(JSmediation)
+library(MeMoBootR)
+library(papaja)
+library(tidyverse)
+library(processR)
+library(broom)
+library(ggdist)
+library(semPlot)
+library(pacman)
+```

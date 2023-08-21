@@ -1,0 +1,15 @@
+---
+title: "Lab 6"
+format: html
+editor: visual
+author: "Jason Geller, Ph.D."
+date: 2023 03 22
+toc: true
+toc_float: true
+---
+
+## Lab 5: Bayesian Data Analysis
+
+In Lab 6, we will analyze data from Carney, Cuddy, and Yap's (2010) study on the effect of power posing on testosterone levels. To conduct the analysis, we will be using the brms package to fit a Bayesian regression model. The focus of this lab is to teach you how to fit and report Bayesian regression models, including discussion of the posterior distribution, working with priors, and model selection.
+
+To access Lab 6, please [Click here](https://classroom.github.com/a/Z7n5wtRw)

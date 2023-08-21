@@ -1,0 +1,17 @@
+---
+title: "Week 9"
+subtitle: "Categorical Predictors: 3 Groups"
+date: 2023-10-30
+---
+## Before Class
+
+### Textbook
+
+Chapter 8 - Statistics and Data Science: A Modeling Approach
+
+### Book Chapter
+
+- [Ch.6 Improving Your Statistical Inferences](https://lakens.github.io/statistical_inferences/06-effectsize.html)
+
+- [Ch.8 Improving Your Statistical Inferences](https://lakens.github.io/statistical_inferences/08-samplesizejustification.html)
+

@@ -1,0 +1,3 @@
+- Factor analysis attempts to achieve parsimony (data reduction) by:
+  - Explaining the *maximum amount of common variance* in a correlation matrix 
+- Using the *smallest* number of explanatory constructs (factors)

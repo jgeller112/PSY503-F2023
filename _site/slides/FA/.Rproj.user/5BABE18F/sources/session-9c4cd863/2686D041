@@ -1,0 +1,33 @@
+{
+    "id": "2686D041",
+    "path": "~/Documents/psy504-advanced-stats/slides/FA/FA.qmd",
+    "project_path": "FA.qmd",
+    "type": "quarto_markdown",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1680562059317.0,
+    "source_on_save": false,
+    "relative_order": 2,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "1,50",
+        "scrollLine": "0",
+        "rmdVisualMode": "true",
+        "rmdVisualWrapConfigured": "true",
+        "docOutlineVisible": "1",
+        "rmdVisualModeLocation": "5807:22425.5",
+        "rmdVisualCollapsedChunks": "",
+        "chunk_output_type": "inline",
+        "docOutlineSize": "68"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1681159920,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1681159920727,
+    "read_only": false,
+    "read_only_alternatives": []
+}

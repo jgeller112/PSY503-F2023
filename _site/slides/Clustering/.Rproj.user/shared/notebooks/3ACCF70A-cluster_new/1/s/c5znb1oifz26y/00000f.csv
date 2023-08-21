@@ -1,0 +1,19 @@
+"0","p_load(cluster,factoextra, dendextend)"
+"0",""
+"0","clust_data = read_csv(""https://raw.githubusercontent.com/jgeller112/clustering_project/main/data/class_wide_1.csv"")"
+"2","New names:"
+"2","[1mRows: [22m[34m45[39m [1mColumns: [22m[34m87[39m"
+"2","[36m──[39m [1mColumn specification[22m [36m──────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m  (2): speaker, 54
+[32mdbl[39m (85): ...1, 8, 7, 1, 10, 11, 12, 1..."
+"2","
+[36mℹ[39m Use `spec()` to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set `show_col_types = FALSE` to quiet this message."
+"0","clust_data <- dplyr::select(clust_data, -...1, -`54`) # remove extra col sub 54 has weird formatting"
+"0","clust_data <- as.data.frame(clust_data) # turn into df "
+"0",""
+"0","rownames(clust_data) <- clust_data$speaker # make row names speaker "
+"0",""
+"0","clust_data %>%"
+"0","  select(-speaker)"

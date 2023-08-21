@@ -1,0 +1,52 @@
+---
+title: "Lab 9: Clustering"
+subtitle: "Lab 9"
+editor: visual
+execute: 
+  message: false
+  warning: false
+---
+
+## Lab 9 - Clustering
+
+## Instructions:
+
+-   If you are fitting a model, display the model output in a neatly formatted table. (The \`tidy\` and \`kable\` functions can help!).
+
+-   If you are creating a plot, use clear labels for all axes, titles, etc.
+
+-   Commit and push your work to GitHub regularly, at least after each exercise. Write short and informative commit messages.
+
+When you're done, we should be able to knit the final version of the QMD in your GitHub as a HTML.
+
+## Data
+
+-   For this lab, we will reproduce the results of Reilly et al. (2023; Experiment 1). Do not worry about any of the statistical tests performed.
+
+Reilly, J., Finley, A. M., Kelly, A., Zuckerman, B., & Flurie, M. (2021). Olfactory language and semantic processing in anosmia: A neuropsychological case control study. *Neurocase*, *27*(1), 86--96. <https://doi.org/10.1080/13554794.2020.1871491>
+
+-   The data and analysis scripts can be found on OSF.
+
+## Hierarchical clustering
+
+-   Run a hierarchical cluster analysis as done in Reilly et al. Please provide a figure of the dendrogram. Do they look similar?
+
+-   Run the same analysis, but choose a different link method. Does this change the interpretation at all?
+
+-   Determine the optimal number of clusters for each group using the elbow, silhouette, and gap methods. Do they all agree? Include a dendrogram with the clusters color coded.
+
+-   Perform a bootstrapped hierarchical clustering analysis on both P01 and MTurk samples. Does the number of clusters converge with the \# clusters above?
+
+```         
+## K-means
+```
+
+-   Now perform a k-means cluster analysis. As a starting point, k = \# of clusters decided on above. Plot a figure of the cluster solution.
+
+-   Use the consensus method `n_clusters` to determine the number of clusters. Include a figure of the new cluster solution.
+
+```         
+## Write-up
+```
+
+-   Write-up a report and provide a discussion of the findings. If there are any differences between your analysis and theirs, describe them. Additionally, share your thoughts on how the authors shared their data.

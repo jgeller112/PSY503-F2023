@@ -1,0 +1,7 @@
+"0",""
+"0",""
+"0","fviz_cluster(rez_kmeans"
+"0",")"
+"2","Error in fviz_cluster(rez_kmeans) : 
+  Can't handle an object of class cluster_analysisparameters_clustersdata.frame
+"

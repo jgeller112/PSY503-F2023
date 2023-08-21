@@ -1,0 +1,3 @@
+"0","model_parameters(health_m, exponentiate = TRUE) %>% "
+"0","  filter(Response==""Good"") %>%"
+"0","  kable(digits = 3, format = ""markdown"")"

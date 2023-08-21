@@ -1,0 +1,10 @@
+"0","#| echo: false"
+"0","#| "
+"0",""
+"0","scat1 <- ggpubr::ggscatter(iris, x = ""Sepal.Length"", y=""Sepal.Width"", shape = ""Species"", color = ""Species"", palette = ""lancet"", size = 2, alpha = 0.6) + stat_smooth(method=lm, se=FALSE, colour=""black"")"
+"0","xdens1 <- ggdensity(iris, ""Sepal.Length"", colour = ""Species"", fill = ""Species"", palette = ""lancet"")"
+"0","ydens1 <- ggdensity(iris, ""Sepal.Width"", colour = ""Species"", fill = ""Species"", palette = ""lancet"") + ggpubr::rotate()"
+"0",""
+"0","ggarrange(xdens1, NULL, scat1, ydens1, nrow=2, ncol=2, align = ""hv"", widths = c(2,1), heights = c(1,2), common.legend = TRUE)"
+"2","[38;5;232m`geom_smooth()` using formula
+= 'y ~ x'[39m"

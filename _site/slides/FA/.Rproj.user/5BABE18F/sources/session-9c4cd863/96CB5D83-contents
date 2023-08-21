@@ -1,0 +1,150 @@
+---
+title: "Lab 07: mediation"
+subtitle: "Lab 7"
+output: 
+  tufte::tufte_html:
+    css: 
+    tufte_variant: "envisioned"
+    highlight: pygments
+    fig_height: 10
+    toc: true
+    toc_depth: 1
+link-citations: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      warning=FALSE, 
+                      message=FALSE,
+                      eval=FALSE)
+```
+
+## Data
+
+For this lab, we will replicate the mediation results of Cho et al.'s (2023) study titled "Changes in Medial Prefrontal Cortex Mediate Effects of Heart Rate Variability Biofeedback on Positive Emotional Memory Biases." On page 7 of the article, the authors provide a path diagram of the mediation model they employed. The data for the mediation analysis can be found at https://osf.io/t5s4z/.
+
+## Task
+
+Your task is to reproduce the study by Cho et al. (2023) by following the steps below:
+
+-   Utilize R to apply Baron & Kenny's causal steps approach.
+
+-   Use the Lavaan package in R to run the mediation model and calculate the bootstrapped indirect effect.
+
+-   Create a path model diagram using your preferred software.
+
+-   Write-up a reproducible report using APA style and provide a discussion of the findings. If there are any differences between your analysis and theirs, describe them. Additionally, share your thoughts on how the authors shared their data.
+
+```{r}
+#Load in data
+require("httr")
+url <- "https://osf.io/4yfwq//?action=download"
+filename <- "Data.txt"
+GET(url, write_disk(filename, overwrite = TRUE))
+data <- read.delim(filename, 
+                   header = TRUE, 
+                   sep = "\t",
+                   dec = ".")
+head(data)
+
+library(dplyr)
+print(n_distinct(data$ID))
+```
+
+```{r}
+#Remove exclusions: rows 100, 134, 135, 136, 137, 166, 167, 168, 117, 128, 28, 120, 9, 12, 13, 31, 49, 56, 71, 89, 106, 107, 142, 144, 157)
+
+data_nomiss <- data[-c(100, 134, 135, 136, 137, 166, 167, 168, 117, 128, 28, 120, 9, 12, 13, 31, 49, 56, 71, 89, 106, 107, 142, 144, 157),]
+
+```
+
+**Barron and Kenny**
+
+```{r}
+library(broom)
+names(data_nomiss)[7] <- "Group"
+head(data_nomiss)
+
+data_nomiss$Group <- as.factor(data_nomiss$Group)
+
+data_nomiss %>%
+mutate(Group=ifelse(Group==1, -0.5, 0.5))
+
+data_nomiss$emobiasscore <- as.numeric(data_nomiss$emobiasscore)
+
+data_nomiss$mPFC.LAmyg_post <- as.numeric(data_nomiss$mPFC.LAmyg_post)
+
+data_nomiss$mPFC.LAmyg_pre <- as.numeric(data_nomiss$mPFC.LAmyg_pre)
+#c path
+model1 <- lm(emobiasscore ~ Group + mPFC.LAmyg_pre, data = data_nomiss)
+tidy(model1, digit=3)
+```
+
+```{r}
+#a path
+
+model2 <- lm(mPFC.LAmyg_post ~ Group + mPFC.LAmyg_pre, data = data_nomiss)
+tidy(model2, digit=3)
+```
+
+```{r}
+#b path
+model3 <- lm(emobiasscore ~ mPFC.LAmyg_post + mPFC.LAmyg_pre, data = data_nomiss)
+tidy(model3, digit=3)
+
+#c' path
+model4 <- lm(emobiasscore ~ mPFC.LAmyg_post + Group + mPFC.LAmyg_pre, data = data_nomiss)
+tidy(model4, digits=3)
+```
+
+```{r}
+library(bda)
+#conducts sobel test
+mediation.test(data_nomiss$mPFC.LAmyg_post,data_nomiss$Group,data_nomiss$emobiasscore)
+```
+
+Conclusion from the Barron and Kenny: No mediation occurred.
+
+**Lavaan**
+
+```{r}
+library(lavaan)
+
+Mediation <- '
+emobiasscore ~ b1 * mPFC.LAmyg_post + cp * Group
+mPFC.LAmyg_post ~ a1 * Group
+# indirect 1
+indirect1 := a1 * b1
+# total
+total := cp + (a1 * b1)
+total_indirect := (a1 * b1)
+#prob mediated
+#prop_indirect1
+prop_med_1 := indirect1 / (indirect1+cp)
+prop_med := total_indirect /(total_indirect+cp)
+'
+fit <- sem(model = Mediation, data = data_nomiss, se = "bootstrap",  bootstrap = 10000)
+
+```
+
+```{r}
+summary(fit, ci=TRUE)
+```
+
+![](PSY504_Lab7_Figure.jpg)
+
+**Write-up**
+
+We used the Lavaan package in R with 10,000 bootstraps to test whether post-intervention Left Amygdala mPFC levels (mPFC.LAmyg_post) mediate the relationship between experimental condition (Group) and positive emotional memory bias (emobiasscore).
+
+The total effect of the "c path" (Group (Osc− vs. +) --\> emobiasscore) was statistically significant, b = -0.458, SE = 0.225, p = 0.041, 95% CI\[-0.896, -0.015\], meaning that experimental condition predicts positive emotional memory bias.
+
+The "a" pathway (Group (Osc− vs. +) --\> mPFC.LAmyg_post) was statistically significant, b = -0.099, SE = 0.030, p = 0.001, 95% CI \[-0.157, -0.041\]; this means that being placed in the condition to decrease HRV was associated with lower post-intervention Left Amygdala mPFC levels.
+
+The b pathway (mPFC.LAmyg_post --\> emobiasscore) was also statistically significant, b = 1.466, SE = 0.538, p = 0.006, 95% CI \[ 0.368 , 2.511\]; this means that, controlling for experimental condition, higher post-intervention Left Amygdala mPFC levels were associated with increased positive emotional memory bias (so lower activation is associated with less positive emotional memory bias).
+
+The direct effect (c' path) was not statistically significant, b = -0.313, SE = 0.234, p = 0.182, 95% CI \[-0.782,0.138\]; this means that controlling for post-intervention Left Amygdala mPFC levels, there was not a statistically significant relationship between experimental condition and positive emotional memory bias.
+
+The indirect effect was statistically significant: b = -0.146, SE = 0.061, p = 0.017, 95% \[-0.274, -0.033\].
+
+Replication: We did not replicate the exact values of the original paper, but this may have been due to the fact that the authors controlled for pre-intervention Left Amygdala mPFC levels. Our estimates were relatively close and the conclusions from the inferential statistics matched the paper's. I found the way that the authors shared their data to be less than ideal. The variable names were confusing and inconsistent, which made replicating their analyses more challenging. Furthermore, the fact that they used SPSS precluded them from sharing their code publicly.

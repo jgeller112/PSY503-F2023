@@ -1,0 +1,5 @@
+"0","library(parameters)"
+"0","ez_hclust <- cluster_analysis(clust_data, n = 4, method = ""hclust"")"
+"0",""
+"0","# Visualize"
+"0","plot(ez_hclust) "
