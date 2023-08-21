@@ -44,15 +44,13 @@ I will hold weekly office hours (M: 1-3 P.M.; W: 1-2 P.M.). If you need to see m
 
 ### CourseKata book (installed on Canvas page)
 
-The main text for this course will be the CourseKata book Statistics: A Modeling Approach. This book
-is integrated with our Canvas page, so you can access all of the materials there for free. This book has exercise built into every chapter. 
+The main text for this course will be the CourseKata book Statistics: A Modeling Approach. Unlike other textbooks you may have encountered, this is an interactive textbook. Each chapter contains embedded exercises as well as web applications to help students better understand the content.
 
 ### R and RStudio
 
 R is the primary data-analysis software we will be using for the course. It is free, and works on both Windows and Mac computers. 
 
-While R will be our primary statistics workhorse, it is not a very pretty program. R Studio is a free (and Windows-/Mac-friendly) supplemental program, that dresses R up a bit to make it
-more user-friendly and functional.
+While R will be our primary statistics workhorse, it is not a very pretty program. R Studio is a free (and Windows-/Mac-friendly) supplemental program, that dresses R up a bit to make it more user-friendly and functional.
 
 ### Quarto Notebook
 
