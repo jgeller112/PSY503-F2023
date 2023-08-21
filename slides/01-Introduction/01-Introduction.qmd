@@ -14,10 +14,12 @@ format:
     chalkboard: true
 execute:
   freeze: auto
-  echo: true
+  echo: false
   message: false
   warning: false
   fig-align: "center"
+  fig-width: 12
+  fig-height: 8
 editor_options: 
   chunk_output_type: inline
 editor: 
@@ -27,24 +29,24 @@ editor:
 
 # Welcome to PSY 503!
 
-# About Me
+## About Me
 
 ```{r}
-#| fig.align = "center",
-#| echo = FALSE,
-#| warning = FALSE
+####| fig.align = "center",
+####| echo = FALSE,
+####| warning = FALSE
 
 knitr::include_graphics("images/jg.jpg")
 ```
 
-# My Journey
+## My Journey
 
 ```{r}
-#| echo = FALSE,
-#| message = FALSE,
-#| warning = FALSE,
-#| out.width = "100%",
-#| out.height = "60%"
+####| echo = FALSE,
+####| message = FALSE,
+####| warning = FALSE,
+####| out.width = "100%",
+####| out.height = "60%"
 
 library(vistime)
 library(tidyverse)
@@ -72,7 +74,7 @@ pp
 
 ```
 
-# Research Interests
+## Research Interests
 
 ::: columns
 ::: {.column width="50%"}
@@ -96,7 +98,7 @@ pp
 :::
 :::
 
-# Ice Breaker
+## Ice breaker
 
 ::: columns
 ::: {.column width="50%"}
@@ -113,67 +115,65 @@ pp
 -   One fun thing you did during the summer
 :::
 
+::: {.column width="50%"}
 ```{r}
-#| echo = FALSE,
-#| warning = FALSE,
-#| out.width = "100%",
-#| out.height = "100%"
 
 knitr::include_graphics("images/quant.jpeg")
 ```
 :::
+:::
 
-# Summer Fun
+## Summer fun
 
 ![](images/lond_tea-01.JPG){fig-align="center"}
 
-# Questionaire
+#### Questionaire
 
 ```{r}
-#| echo = FALSE,
-#| out.width = "75%",
-#| fig.cap = "",
-#| fig.show = "hold",
-#| fig.align = "center"
+####| echo = FALSE,
+####| out.width = "75%",
+####| fig.cap = "",
+####| fig.show = "hold",
+####| fig.align = "center"
 
 knitr::include_graphics("q1.png")
 
 ```
 
-# Questionaire
+## Questionaire
 
 ```{r}
-#| echo = FALSE,
-#| out.width = "75%",
-#| fig.cap = "",
-#| fig.show = "hold",
-#| fig.align = "center"
+####| echo = FALSE,
+####| out.width = "75%",
+####| fig.cap = "",
+####| fig.show = "hold",
+####| fig.align = "center"
 
 knitr::include_graphics("q2.png")
 
 ```
 
-# Questionaire
+## Questionaire
 
 ```{r}
-#| echo = FALSE,
-#| out.width = "75%",
-#| fig.cap = "",
-#| fig.show = "hold",
-#| fig.align = "center"
+####| echo = FALSE,
+####| out.width = "75%",
+####| fig.cap = "",
+####| fig.show = "hold",
+####| fig.align = "center"
 
 knitr::include_graphics("q3_feels.png")
 
 ```
 
-# Questionaire
+## Questionaire
 
 ```{r}
-#| echo = FALSE,
-#| out.width = "75%",
-#| fig.cap = "",
-#| fig.show = "hold",
-#| fig.align = "center"
+####| echo = FALSE,
+####| out.width = "75%",
+####| fig.cap = "",
+####| fig.show = "hold",
+####| fig.align = "center"
 
 knitr::include_graphics("q4_ner.png")
 
@@ -182,20 +182,20 @@ knitr::include_graphics("q4_ner.png")
 background-image: url("nomath.png") background-position: 100% 100%
 background-size: 100% 100%
 
-# Questionaire
+## Questionaire
 
 ```{r}
-#| echo = FALSE,
-#| out.width = "95%",
-#| fig.cap = "",
-#| fig.show = "hold",
-#| fig.align = "center"
+####| echo = FALSE,
+####| out.width = "95%",
+####| fig.cap = "",
+####| fig.show = "hold",
+####| fig.align = "center"
 
 knitr::include_graphics("Picture1.png")
 
 ```
 
-# Questionnaire Responses
+## Questionnaire Responses
 
 -   What statistical methods do you use/plan to use in your research?
 
@@ -211,7 +211,7 @@ knitr::include_graphics("Picture1.png")
 
     -   ANOVA
 
-# Questionnaire Responses
+## Questionnaire Responses
 
 -   What topics would you like to see discussed?
 
@@ -225,7 +225,7 @@ knitr::include_graphics("Picture1.png")
 
     -   Power Analysis/Determination
 
-# Instructor Contact:
+## Instructor contact:
 
 -   Office: PSH 325
 
@@ -235,7 +235,7 @@ knitr::include_graphics("Picture1.png")
 
 -   Twitter: jgeller_phd
 
-# Office Hours
+## Office hours
 
 -   M 1:00 P.M.- 3:00 P.M.; W 1:00 P.M. - 2:00 P.M. 🪑
 
@@ -243,25 +243,26 @@ knitr::include_graphics("Picture1.png")
 
     -   Calendly: **https://calendly.com/jg9120/30min**
 
-# Course Content
+## Course content
 
 -   Readings, Assignments, and Schedule:
 
-    -   
+    -   https://psy503-f2023.netlify.app/
 
 -   Canvas:
 
     -   Interactive textbook
 
-    -   Send announcements
+    -   Announcements
 
-    -   Retrieve assignments
+-   I will post html and Quarto versions of slides day of class (on
+    website)
 
-    -   Answer and send emails
+    -   You can access the Quarto document from Github
 
--   I will post html versions of slides day of class (on website)
+        -   https://github.com/jgeller112/PSY503-F2023
 
-# Required Text:
+## Required texts:
 
 -   CoureKata interactive textbook (free)
 
@@ -269,7 +270,7 @@ knitr::include_graphics("Picture1.png")
 
 -   **Articles - these will be posted on website under readings**
 
-# Software
+## Software
 
 ::: columns
 ::: {.column width="50%"}
@@ -281,17 +282,17 @@ knitr::include_graphics("Picture1.png")
 :::
 :::
 
-# Precept Time
+## Precept Time
 
--   PSY 505
+::: callout-note
+Consider enrolling in PSY505
 
-    -   Tuesdays 11:00 A.M. - 1:00 P.M.
+-   Tuesdays 11:00 A.M. - 1:00 P.M.
+    -   Speakers and workshop focused
+    -   No HW or papers
+:::
 
--   Speaker and workshop focused
-
--   No HW or papers
-
-# My Statistical Goals for You
+## My Statistical Goals for You
 
 -   Understand the role and philosophy of hypothesis testing
 
@@ -306,7 +307,7 @@ knitr::include_graphics("Picture1.png")
 
 -   Develop an ability to write and communicate statistical results
 
-# Grades
+## Grades
 
 -   No points associated with assignments
 
@@ -322,7 +323,7 @@ knitr::include_graphics("Picture1.png")
     -   How much time outside of class did spend preparing for class?
 
     ::: callout-note
-    ## Grades
+    #### Grades
 
     -   To me a letter grade of A would consist of finishing all the
         labs, engaging with the material at a sufficient level (ie.,
@@ -333,7 +334,7 @@ knitr::include_graphics("Picture1.png")
         provide an assessment of how you think you did this semester.
     :::
 
-# Assignments
+## Assignments
 
 -   CourseKata Readings
 
@@ -349,13 +350,13 @@ knitr::include_graphics("Picture1.png")
 -   Lab should be completed in RMD/QMD or Jypter Notebook
     (\*\*reproducible\*\*)
 
--   Labs will be pushed to Github repository
+-   Labs will be pushed to individualized Github repository
 
--   Have until end of the week
+    -   Have until end of the week (Sunday at 11:59 P.M.
 
-# Class Format
+## Class Format
 
-## Lectures (Monday)
+#### Lectures (Monday)
 
 -   I'll highlight main concepts
 
@@ -368,7 +369,7 @@ knitr::include_graphics("Picture1.png")
 -   Graduate studies -- learning to be independent and thinking on your
     own!
 
-    ## Lab (Wednesday)
+    #### Lab (Wednesday)
 
 -   Wednesday will be reserved for working on activities related to the
     topic
@@ -376,13 +377,13 @@ knitr::include_graphics("Picture1.png")
 -   Also a time to seek clarification on topics from me or your
     classmates
 
-# Attendance
+## Attendance
 
 -   No attendance requirements
 
 -   If you are sick please stay home
 
-# Class Environment
+## Class Environment
 
 I would like to create a learning environment for my students that
 supports a diversity of thoughts, perspectives and experiences, and
@@ -404,18 +405,18 @@ religion, ability, SES, etc. ) To help accomplish this:
     (by anyone) that made you feel uncomfortable, please talk to me
     about it. (Again, anonymous feedback is always an option).
 
-Class Questions
+## Class Questions
 
 -   Any general questions about course content or assignments should be
     posted on the class
-    \[GitHub\](https://github.com/jgeller112/psy504-advanced-stats/issues)
-    Issues. There is a chance another student has already asked a
-    similar question, so please check the other posts before adding a
-    new question. If you know the answer to a question posted in the
-    discussion forum, I encourage you to respond!
+    \[GitHub\](https://github.com/jgeller112/PSY503-F2023) Issues. There
+    is a chance another student has already asked a similar question, so
+    please check the other posts before adding a new question. If you
+    know the answer to a question posted in the discussion forum, I
+    encourage you to respond!
 
-    Schedule
+    ## Schedule
 
-    \<https://psy504-advanced-stats.netlify.app/schedule/\>
+    \<https://psy503-f2023.netlify.app/schedule/\>
 
-Questions?
+# Questions?
