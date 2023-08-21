@@ -488,7 +488,7 @@ a %>%
 
 -   Saving R scripts
 
-## Multiple Functions
+## Multiple functions
 
 -   Pipe operator makes it easy to do multiple functions in a row
 
