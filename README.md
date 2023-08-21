@@ -1,3 +1,3 @@
-# psy504-advanced-stats
+# psy503-advanced-stats
 
-Course content for PSY504: Advanced Statistics
+Course content for PSY503
