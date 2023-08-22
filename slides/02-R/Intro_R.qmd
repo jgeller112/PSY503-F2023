@@ -1,7 +1,7 @@
 ---
-title: "Gentle Introduction to R"
+title: "Introduction to R"
 subtitle: "Princeton University"
-author: "Jason Geller, PH.D. (He/Him)"
+author: "Jason Geller, PH.D."
 date: 'Updated:`r Sys.Date()`'
 footer: "PSY 503: Foundations of Statistics in Psychology"
 format: 
@@ -17,9 +17,15 @@ execute:
   echo: true
   message: false
   warning: false
-  fig-align: "center"
-editor_options: 
+  fig-align: center
+  fig-width: 12
+  fig-height: 8
+  editor_options: 
   chunk_output_type: inline
+  code-overflow: wrap
+  html:
+    code-fold: true
+    code-tools: true
 ---
 
 ## Objective
@@ -37,6 +43,8 @@ editor_options:
 -   Explain how to structure any data analysis project
 
 -   Learn how to run commands and save scripts
+
+-   Manipulate data
 :::
 :::
 
@@ -87,6 +95,8 @@ knitr::include_graphics("nocluedog.png")
     -   Multiple Functions
 
 -   Reading in data
+
+-   Manipulating data
 
 -   Saving R scripts
 
@@ -451,7 +461,7 @@ library(tidyverse)
 
 ## Pipes
 
--   `tidyverse` provides another interface to functions---the pipe operator
+-   `tidyverse` provides another interface to functionsthe pipe operator
 
     -   Makes code easier to read and follow:
 
@@ -572,6 +582,8 @@ as.tibble()
 
 
 ```
+
+## Tidy Data
 
 ## Matrices
 
@@ -741,8 +753,6 @@ library("janitor")
 tabyl(fac$students)
 ```
 
-------------------------------------------------------------------------
-
 ## Reading other File types
 
 -   Excel
@@ -767,6 +777,181 @@ fac<-  read_spss('/Users/jg/Desktop/experiment.spss')
 
 ```
 
+# Tools
+
+-   `dplyr` is organized around verbs that manipulate data frames
+
+-   Isolating data:
+
+    -   select()
+    -   filter()
+    -   arrange()
+
+## Select
+
+![](select.svg){fig-align="center"}
+
+## Titanic data
+
+-   Load in the Titanic data that comes in `R` called `Titanic`.
+
+```{r}
+#install.packages("titanic") # get titanic data
+library(titanic) #install and load df
+
+data("titanic_train")
+df = titanic_train# df is a copy of mtcars
+head(df) 
+```
+
+# Exercise 1
+
+-   Alter the code to select just the name column
+
+. . .
+
+```{r}
+
+select(df, Survived, Sex) %>%
+  head()
+
+```
+
+-   Alter the code to select just the name column
+
+```{r}
+
+select(df, name))
+
+```
+
+## Select Helpers
+
+![](select_helpers.svg){fig-align="center"}
+
+## Subset columns
+
+If you wanted it to be a single vector (not a `tibble`), use `pull`:
+
+```{r}
+pull(select(df, Name))
+```
+
+## Select columns
+
+The `select` command from `dplyr` allows you to subset columns matching strings:
+
+```{r}
+select(df, Name, Sex, Age)
+select(df, starts_with("S"))
+```
+
+## Filter
+
+![](filter.svg){fig-align="center"}
+
+## Filter
+
+-   Subsetting Rows
+
+The command in `dplyr` for subsetting rows is `filter`. Try `?filter`
+
+```{r}
+head(filter(df, Survived==1, Age < 20))
+```
+
+Note, no `$` or subsetting is necessary
+
+## Filter
+
+`==` (tests if equal)
+
+```{r}
+head(filter(df, Survived==1, Age < 20))
+```
+
+`=` (returns error)
+
+```{r, eval=FALSE}
+head(filter(df, Survived=1, Age < 20))
+```
+
+## Subset Rows
+
+You can have multiple logical conditions using the following:
+
+-   `==` : equals to
+-   `!` : not/negation
+-   `>` / `<`: greater than / less than
+-   `>=` or `<=`: greater than or equal to / less than or equal to
+-   `&` : AND
+-   `|` : OR
+-   `is.na(x)`: is NA
+-   `!is.na(x)`: is not NA
+
+## Exercise
+
+> See if you can use the logical operators to manipulate our Titanic data
+
+-   All of the names where age is less than 30
+
+-   All of the children less than 10 and in 3rd class.
+
+-   All of names where age is `NA`
+
+## Common Mistakes
+
+-   Using `=` instead of `==`
+
+```{r}
+
+filter(df, Survived==1)
+
+```
+
+-   Forgetting quotes
+
+```{r, eval=FALSE}
+
+filter(df, Name==John)
+
+filter(df, Name=="John")
+
+```
+
+## Arrange
+
+![](arrange.svg){fig-align="center"}
+
+## Arrange
+
+-   The `arrange` function can reorder rows
+
+-   By default, `arrange` orders in ascending order:
+
+```{r}
+arrange(df, Survived) %>%
+  head()
+```
+
+# Outline
+
+-   Why R
+
+-   IDE
+
+-   R commands, data structures, and functions
+
+    -   Tidyverse & the Pipe Operator
+
+    -   Multiple Functions
+
+-   Reading in data
+
+-   Manipulating data
+
+-   Saving R scripts
+
 # Outline
 
 -   Why R
@@ -781,9 +966,11 @@ fac<-  read_spss('/Users/jg/Desktop/experiment.spss')
 
 -   Reading in data
 
+-   Manipulating data
+
 -   `Saving R scripts`
 
-## Saving Files
+## Saving files
 
 ```{r}
 #| eval = FALSE
@@ -795,7 +982,7 @@ write.table(fac, file="df.txt")
 
 ```
 
-# Wrapping Up
+## Wrapping up
 
 -   You've learned:
 

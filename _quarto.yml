@@ -40,8 +40,6 @@ website:
       - syllabus.qmd
       - text: "Schedule"
         file: schedule/index.qmd
-      - text: "Assignments"
-        file: Assignments/index.qmd
   sidebar:
     - title: "Schedule"
       style: "docked"
