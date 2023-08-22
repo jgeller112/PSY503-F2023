@@ -342,17 +342,42 @@ Consider enrolling in PSY505
 
 -   Final paper
 
+## CourseKata readings
+
+-   It is expected you will work your way through each chapter
+    completing the review questions as the end
+
 ## Labs
 
 -   Every week (Wednesday) we will have a lab activity covering material
     from that week
 
--   Lab should be completed in RMD/QMD or Jypter Notebook
+-   Lab should be completed in .qmd or Jypter Notebook
     (\*\*reproducible\*\*)
 
 -   Labs will be pushed to individualized Github repository
 
     -   Have until end of the week (Sunday at 11:59 P.M.
+
+## Final Paper
+
+-   Reproducible analysis
+
+    -   Find data (OSF is a good place to start) or use your own data
+        and see if you can reproduce results in a replicable manner
+
+        -   You will give it to your classmates and they will try to run
+            it from what is given
+
+-   APA formatted paper using `papaja`
+
+-   Power analysis
+
+    -   Run simulations for a replication attempt
+
+::: callout-important
+More information can be found on the syllabus
+:::
 
 ## Class Format
 

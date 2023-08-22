@@ -61,16 +61,6 @@ website:
         - schedule/11-week.qmd
         - schedule/13-week.qmd
         - schedule/14-week.qmd
-        
-    - title: "Assignments"
-      style: "docked"
-      contents:
-        - section: "Overview"
-          contents:
-            - Assignments/index.qmd
-        - section: "Preparation"
-          contents:
-            - Assignments/presentation-discussion.qmd
   page-footer:
     left: |
       Content {{< fa brands creative-commons >}} {{< var course.copyright_year >}} by [{{< var instructor.name_no_title >}}]({{< var instructor.url >}}) <br>
