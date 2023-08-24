@@ -28,6 +28,27 @@ execute:
     code-tools: true
 ---
 
+## Packages
+
+```{r}
+#| echo: false
+
+library(tidyverse)
+library(titanic)
+library(gt)
+
+
+```
+
+```{r}
+
+library(grateful)
+pkgs <- cite_packages(output = "table", out.dir = ".")
+knitr::kable(pkgs)
+
+
+```
+
 ## Objective
 
 ::: columns
@@ -42,9 +63,9 @@ execute:
 ::: {.column width="50%"}
 -   Explain how to structure any data analysis project
 
--   Learn how to run commands and save scripts
-
 -   Manipulate data
+
+-   Learn how to run commands and save scripts
 :::
 :::
 
@@ -80,11 +101,11 @@ knitr::include_graphics("nocluedog.png")
         -   Try Googling the specific error message first.
         -   Then try googling your specific function and the error.
         -   Try a bunch of different search terms.
-    -   ChatGPT
+    -   ChatGPT (use wisely)
 
 # Outline
 
--   Why R
+-   `Why R`
 
 -   IDE
 
@@ -672,8 +693,7 @@ library(kableExtra)
 fac=read.csv(here::here("slides", "02-R", "datasets", "faculty.csv"))
 
 fac %>% 
-  kbl() %>%
-  kable_material_dark()
+  gt()
 
 ```
 
@@ -686,7 +706,7 @@ fac %>%
 
 ```
 
-## Looking at Data
+## Looking at data
 
 ```{r}
 
@@ -695,7 +715,7 @@ fac%>%
 
 ```
 
-## Looking at Data
+## Looking at data
 
 ```{r}
 
@@ -704,11 +724,10 @@ library(flextable)
 
 fac%>%
   skim() %>% 
-  kbl() %>%
-  kable_material_dark()
+ gt()
 ```
 
-## Looking at the Data
+## Looking at data
 
 -   Select specific columns
 
@@ -730,7 +749,7 @@ fac%>%
 
 ```
 
-## Looking at the Data
+## Looking at data
 
 ```{r}
 
@@ -740,7 +759,7 @@ head(fac)
 tail(fac)
 ```
 
-## Looking at Data
+## Looking at data
 
 ```{r}
 # look at specific variables
@@ -753,7 +772,7 @@ library("janitor")
 tabyl(fac$students)
 ```
 
-## Reading other File types
+## Reading other file types
 
 -   Excel
 
@@ -777,7 +796,9 @@ fac<-  read_spss('/Users/jg/Desktop/experiment.spss')
 
 ```
 
-# Tools
+# Manipulation Tools
+
+## Manipulating data
 
 -   `dplyr` is organized around verbs that manipulate data frames
 
@@ -800,13 +821,42 @@ fac<-  read_spss('/Users/jg/Desktop/experiment.spss')
 library(titanic) #install and load df
 
 data("titanic_train")
-df = titanic_train# df is a copy of mtcars
-head(df) 
+df = titanic_train
+
+df %>% 
+  head() %>%
+  gt()
 ```
 
-# Exercise 1
+## Select Helpers
 
--   Alter the code to select just the name column
+![](select_helpers.svg){fig-align="center"}
+
+## Select columns
+
+The `select` command from `dplyr` allows you to subset columns matching strings:
+
+```{r}
+select(df, Name, Sex, Age) %>%
+  head() %>% 
+  gt()
+
+```
+
+## Select columns
+
+```{r}
+
+select(df, starts_with("S")) %>%
+  head() %>% 
+  gt()
+
+
+```
+
+# Exercise
+
+-   Alter the code to select just the sex column
 
 . . .
 
@@ -819,15 +869,13 @@ select(df, Survived, Sex) %>%
 
 -   Alter the code to select just the name column
 
+. . .
+
 ```{r}
 
-select(df, name))
+select(df, Name)
 
 ```
-
-## Select Helpers
-
-![](select_helpers.svg){fig-align="center"}
 
 ## Subset columns
 
@@ -835,15 +883,6 @@ If you wanted it to be a single vector (not a `tibble`), use `pull`:
 
 ```{r}
 pull(select(df, Name))
-```
-
-## Select columns
-
-The `select` command from `dplyr` allows you to subset columns matching strings:
-
-```{r}
-select(df, Name, Sex, Age)
-select(df, starts_with("S"))
 ```
 
 ## Filter
@@ -876,7 +915,7 @@ head(filter(df, Survived==1, Age < 20))
 head(filter(df, Survived=1, Age < 20))
 ```
 
-## Subset Rows
+## Filter
 
 You can have multiple logical conditions using the following:
 
@@ -888,16 +927,6 @@ You can have multiple logical conditions using the following:
 -   `|` : OR
 -   `is.na(x)`: is NA
 -   `!is.na(x)`: is not NA
-
-## Exercise
-
-> See if you can use the logical operators to manipulate our Titanic data
-
--   All of the names where age is less than 30
-
--   All of the children less than 10 and in 3rd class.
-
--   All of names where age is `NA`
 
 ## Common Mistakes
 
@@ -933,6 +962,87 @@ filter(df, Name=="John")
 arrange(df, Survived) %>%
   head()
 ```
+
+## Adding columns
+
+-   The `mutate` function in `dplyr` allows you to add or replace columns of a `data.frame`:
+
+```{r}
+df = mutate(df, newcol = Sex)
+```
+
+```{r}
+print(head({df = mutate(df, newcol = Sex)}, 2))
+```
+
+## Creating Conditional (If-Else) Variables
+
+One frequently-used tool is creating variables with conditions.
+
+A general function for creating new variables based on existing variables is the `ifelse()` function, which "returns a value with the same shape as test which is filled with elements selected from either yes or no depending on whether the element of test is `TRUE` or `FALSE`."
+
+```{r}
+#| eval: false
+#| 
+ifelse(test, yes, no)
+
+# test: an object which can be coerced
+#to logical mode.
+# yes: return values for true elements of test.
+# no: return values for false elements of test.
+```
+
+## Adding columns
+
+Combined with `ifelse(condition, TRUE, FALSE)`, it can give you:
+
+```{r}
+df = mutate(df, 
+            ticket_type = ifelse(
+              Pclass==1,
+              "First Class", ifelse(
+              Pclass== 2, "Business Class", 
+              "Economy")
+            )
+)
+head(df$money)
+```
+
+## Adding columns
+
+Alternatively, `case_when` provides a clean syntax as well:
+
+```{r}
+df = mutate(df, 
+            ticket_type = case_when(
+              Pclass==1 ~ "First CLass",
+              Pclass==2 ~ "Buiness Class",
+              TRUE ~ "Economy"
+            ))
+head(df$ticket_type)
+```
+
+## Exercise
+
+> See if you can use the logical operators to manipulate our Titanic data
+
+-   All of the names where age is less than 30
+
+-   All of the children less than 10 and in 3rd class.
+
+-   All of names where age is `NA`
+
+## Exercise
+
+use `%` to:
+
+-   Filter by sex and age
+
+    -   Females under the age of 30
+
+-   Select columns: sex, age, and fare
+
+-   Arrange by fare (ascending order)
 
 # Outline
 
@@ -1005,17 +1115,3 @@ write.table(fac, file="df.txt")
 -   Swirl: www.swirlstats.com
 -   Stack Overflow: www.stackoverflow.com
 -   Learn Statistics with R: https://learningstatisticswithr.com/
-
-## Exercise 2
-
-1.  Create a variable called y with the value of 7
-
-2.  Save the results of 6 + 3 as a variable called a.
-
-3.  Create a new project folder for this course entitled "psy_503" (run the .Rproj file)
-
-3.1 Place the exercise.csv file in the folder
-
-5.  Using `here` assign the file to a name of your choice
-
-6.  Explore the data set by running the commands head(data), str(data), glimpse(data) and summary(data) in your R script. You will use these a lot in the future, so have a closer look at the different outputs in the console (lower left). Remember to save your script!

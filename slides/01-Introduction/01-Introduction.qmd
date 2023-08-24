@@ -363,17 +363,18 @@ Consider enrolling in PSY505
 
 -   Reproducible analysis
 
-    -   Find data (OSF is a good place to start) or use your own data
-        and see if you can reproduce results in a replicable manner
+    -   Find open data (OSF is a good place to start) in your field of
+        interest or use your own data and re-run in a reproducible
+        manner
 
-        -   You will give it to your classmates and they will try to run
-            it from what is given
+    -   You will give it to your classmates and they will try to run it
+        from what is given
 
 -   APA formatted paper using `papaja`
 
 -   Power analysis
 
-    -   Run simulations for a replication attempt
+    -   Run simulations for a hypothetical replication attempt
 
 ::: callout-important
 More information can be found on the syllabus
