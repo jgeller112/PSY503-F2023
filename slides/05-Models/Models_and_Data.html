@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>PSY 503: Foundations of Statistical Methods in Psychological Science</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Jason Geller, Ph.D. (he/him/his)" />
+    <meta name="date" content="2022-09-28" />
+    <script src="Models_and_Data_files/header-attrs/header-attrs.js"></script>
+    <link href="Models_and_Data_files/countdown/countdown.css" rel="stylesheet" />
+    <script src="Models_and_Data_files/countdown/countdown.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# PSY 503: Foundations of Statistical Methods in Psychological Science
+]
+.subtitle[
+## Models, The Standard Normal, and Z-Scores
+]
+.author[
+### Jason Geller, Ph.D. (he/him/his)
+]
+.institute[
+### Princeton University
+]
+.date[
+### 2022-09-28
+]
+
+---
+
+
+
+
+
+
+# Knowledge Check
+
+&lt;div style='position: relative; padding-bottom: 56.25%; padding-top: 35px; height: 0; overflow: hidden;'&gt;&lt;iframe sandbox='allow-scripts allow-same-origin allow-presentation' allowfullscreen='true' allowtransparency='true' frameborder='0' height='315' src='https://www.mentimeter.com/app/presentation/1aa5ba7e7422ef7e4312cb8f04cedf25/53357b8b34cf/embed' style='position: absolute; top: 0; left: 0; width: 100%; height: 100%;' width='420'&gt;&lt;/iframe&gt;&lt;/div&gt;
+
+<div class="countdown" id="timer_ac54edd7" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+&lt;img src="table.svg" width="75%" height="10%" style="display: block; margin: auto;" /&gt;
+---
+# Outline
+
+- Thinking about models 
+
+- The standard normal distribution
+
+- *Z*-scores
+
+  - How to compute *Z*-scores
+  
+  - *Z*-score practice
+---
+class:middle center
+&gt; __statistical modeling__ = "making __models__ of **distributions**"
+
+---
+# What is a model?
+
+ &gt; Models are simplifications of things in the real world 
+
+&lt;img src="titanic.jpeg" width="75%" height="15%" style="display: block; margin: auto;" /&gt;
+---
+&lt;img src="map.jpg" width="75%" height="15%" style="display: block; margin: auto;" /&gt;
+---
+# Distributions
+
+&lt;img src="distribs.png" width="75%" height="25%" style="display: block; margin: auto;" /&gt;
+---
+# Basic Structure of a Model
+
+&lt;br&gt;
+&lt;br&gt;
+
+`$$data = model + error$$`
+
+1. Model 
+
+2. Error (predicted - observed)
+
+  - Use our model to predict the value of the data for any given observation: 
+
+ `$$\widehat{data_i} = model_i$$`
+
+  `$$error_i = data_i - \widehat{data_i}$$`
+
+
+???
+statistical model, which expresses the values that we expect the data to take given our knowledge
+
+The “hat” over the data denotes that it’s our prediction rather than the actual value of the data.This means that the predicted value of the data for observation is equal to the value of the model for that observation. Once we have a prediction from the model, we can then compute the error:
+
+That is, the error for any observation is the difference between the observed value of the data and the predicted value of the data from the model.
+
+---
+# The Golem of Prague
+
+
+- The golem was a powerful clay robot
+
+--
+
+- Brought to life by writing emet (“truth”) on its forehead
+
+--
+
+- Obeyed commands literally
+--
+
+- Powerful, but no wisdom
+--
+
+- In some versions, Rabbi Judah Loew ben Bezalel built a golem to protect
+
+--
+
+- But he lost control, causing innocent deaths
+
+---
+# Statitsical Golems
+
+- Statistical (and scientific) models are our golems
+- We build them from basic parts
+- They are powerful—we can use them to understand the world and make predictions
+- They are animated by “truth” (data), but they themselves are neither true nor false
+-The model describes the golem, not the world
+- They are mindless automatons that simply run their programs
+- The model doesn’t describe the world or tell us what scientific conclusion to draw—that’s on us
+- We need to be careful about how we build, interpret, and apply models
+---
+# Simple Example
+
+.pull-left[
+- Experiment
+    - Take 200 7-year-olds
+    
+    - Randomly assign to 2 groups
+    
+    - Control: Normal breakfast
+    
+    - Treatment: Normal breakfast + 1 packet of Smarties
+    
+    - Outcome: Age-appropriate general reasoning test
+    
+           - Norm scores: Mean 100, SD 15
+
+- What statistical analysis do I run?
+
+]
+
+.pull-right[
+
+&lt;img src="candy.jpg" width="100%" height="50%" style="display: block; margin: auto;" /&gt;
+
+]
+---
+# Choosing a Statitsical Model
+
+
+.pull-left[
+
+- Cookbook approach
+
+  -  My data are ordinal, what type of test do I use?
+]
+
+.pull-right[
+
+&lt;img src="test_selection.png" width="100%" height="50%" style="display: block; margin: auto;" /&gt;
+]
+
+.footnote[[1]Figure from Statistical Rethinking.]
+
+
+---
+# Choosing a Statistical Model
+
+.pull-left[
+
+- Cookbook approach
+
+  -  My data are ordinal, what type of test do I use?
+
+  - Every one of these tests is the same model
+  
+      - The general linear model (__GLM__)
+]
+
+.pull-right[
+
+&lt;img src="test_selection.png" width="100%" height="50%" style="display: block; margin: auto;" /&gt;
+]
+---
+# Choosing a Statistical Model
+
+.pull-left[
+
+- Cookbook approach
+
+  -  My data are ordinal, what type of test do I use?
+
+  - Every one of these tests is the same model
+  
+      - The general linear model (__GLM__)
+
+  - This approach makes it hard to think clearly about relationship between our question and the statistics
+    
+]
+
+.pull-right[
+
+&lt;img src="test_selection.png" width="100%" height="50%" style="display: block; margin: auto;" /&gt;
+]
+---
+# The GLM
+&lt;br&gt;
+&lt;br&gt;
+-  General mathematical framework
+
+    - Regression all the way down 
+    
+    - Highly flexible
+    
+      - Can fit qualitative (categorical) and quantitative predictors
+      
+    - Easy to interpret
+    
+    - Helps understand interrealtedness to other models
+    
+    - Easy to build to more complex models
+
+--
+&lt;br&gt;
+&lt;br&gt;
+- __Let’s build a model for the candy experiment__
+
+---
+# The Data
+
+
+
+```r
+library(tidyverse)
+control_group= c(92, 97, 123, 101, 102, 126, 107, 81, 90, 93, 118, 105, 106, 102, 92, 127, 107, 71, 111, 93, 84, 97, 85, 89, 91, 75, 113, 102, 83, 119, 106, 96, 113, 113, 112, 110, 108, 99, 95, 94, 90, 97, 81, 133, 118, 83, 94, 93, 112, 99, 104, 100, 99, 121, 97, 123, 77, 109, 102, 103, 106, 92, 95, 85, 84, 105, 107, 101, 114, 131, 93, 65, 115, 89, 90, 115, 96, 82, 103, 98, 100, 106, 94, 110, 97, 105, 116, 107, 95, 117, 115, 108, 104, 91, 120, 91, 133, 123, 96, 85)
+
+
+treat_group= c(99, 114, 106, 105, 96, 109, 98, 85, 104, 124, 101, 119, 86, 109, 118, 115, 112, 100, 97, 95, 112, 96, 103, 106, 138, 100, 114, 111, 96, 109, 132, 117, 111, 104, 79, 127, 88, 121, 139, 88, 121, 106, 86, 87, 86, 102, 88, 120, 142, 91, 122, 122, 115, 95, 108, 106, 118, 104, 125, 104, 126, 94, 91, 159, 104, 114, 120, 103, 118, 116, 107, 111, 109, 142, 99, 94, 111, 115, 117, 103, 94, 129, 105, 97, 106, 107, 127, 111, 121, 103, 113, 105, 111, 97, 90, 140, 119, 91, 101, 92)
+
+df &lt;- tibble(treatment=treat_group, control=control_group)
+
+df &lt;- df %&gt;%
+  pivot_longer(treatment:control, names_to = "cond", values_to = "values")
+```
+
+---
+# The Data
+
+&lt;img src="Models_and_Data_files/figure-html/unnamed-chunk-11-1.png" width="100%" height="100%" style="display: block; margin: auto;" /&gt;
+
+---
+# Bulding a Model - Notation
+
+.pull-left[
+
+Small Roman Letters
+
+- Individual observed data points
+
+  - `\(y_1\)`, `\(y_2\)`, `\(y_3\)`, `\(y_4\)`, …, `\(y_n\)`
+
+          - The scores for person 1, person 2, person 3, etc.
+          
+  - `\(y_i\)`
+  
+          - The score for the “ith” person
+
+]
+
+.pull-right[
+
+Big Roman Letters
+
+- A “random variable”
+- The model for data we could observe, but haven’t yet
+
+- `\(Y_i\)`
+
+  - The model for person 1
+  - The yet-to-be-observed score of person 1
+  
+]
+---
+# Bulding a Model - Notation
+
+.pull-left[
+
+Greek letters
+
+- Unobservable parameters   
+      
+      - Use to describe features of the model
+- μ
+      - mu
+      - Pronounced “mew”
+      - Used to describe means
+- σ
+      - Sigma
+      - Pronounced “sigma”
+      - Used to describe a standard deviation
+]
+
+.pull-right[
+
+
+&lt;img src="mew.png" width="100%" height="30%" style="display: block; margin: auto;" /&gt;
+]
+---
+# Building a Model - Normal Distribution
+
+- Called a Gaussian model 
+
+- Many of the DVs we use are normally distributed
+
+- If we assume a variable is at least normally distributed can make many inferences! 
+
+- Most of the statistical models assume normal distribution
+
+---
+# Building a Model - Normal Distribution
+
+- Properties of a normal distribution
+
+.pull-left[
+  - Shape
+    - Unimodal
+    - Symmetric
+    - Asymptotic
+]
+
+.pull-right[
+&lt;img src="Models_and_Data_files/figure-html/unnamed-chunk-13-1.png" width="100%" height="100%" style="display: block; margin: auto;" /&gt;
+]
+---
+&lt;img src="ghost.JPG" width="50%" height="5%" style="display: block; margin: auto;" /&gt;
+
+---
+# Building a Model - Normal Distribution
+
+&lt;img src="skew2.png" width="50%" height="100%" style="display: block; margin: auto;" /&gt;
+
+---
+# Building a Model - Normal Distribution
+
+&lt;img src="kur2.png" width="50%" height="100%" style="display: block; margin: auto;" /&gt;
+
+---
+# Testing for Skewness and Kurtosis
+
+
+```r
+library(moments)
+
+#calculate skewness
+skewness(data)
+
+#calculate kurtosis
+kurtosis(data)
+```
+- How can we tell if bad?
+
+  -  -2 and +2 are considered acceptable in order to prove normal 
+
+  - Others suggest skewness between ‐2 to +2 and kurtosis is between ‐7 to +7
+---
+# Building a Model - Normal Distribution
+
+- Properties of a normal distribution
+
+ - Empirical Rule
+
+&lt;img src="interpsd11.png" width="100%" height="50%" style="display: block; margin: auto;" /&gt;
+
+---
+# Building a Model - Normal Distribution
+
+- Properties of a normal distribution
+
+  - Empirical Rule
+
+&lt;img src="sd2.png" width="100%" height="50%" style="display: block; margin: auto;" /&gt;
+
+---
+# Building a Model - Normal Distribution
+
+.pull-left[
+
+- Normal(μ, σ)
+
+- Parameters:
+    - μ		Mean
+    - σ		Standard deviation
+
+- Mean is the center of the distribution
+
+]
+
+.pull-right[
+
+&lt;img src="diffnorm.png" width="100%" height="50%" style="display: block; margin: auto;" /&gt;
+
+
+
+]
+
+---
+# Sample Mean
+
+&lt;img src="meanasmodel.png" width="100%" height="50%" style="display: block; margin: auto;" /&gt;
+---
+# Building a Model - Normal Distribution
+
+.pull-left[
+
+- Normal(μ, σ)
+
+- Parameters:
+    - μ		Mean
+    - σ		Standard deviation
+    
+- Variance is average squared deviation from the mean
+Standard deviation
+    - 𝜎=√𝑉𝑎𝑟𝑖𝑎𝑛𝑐𝑒
+    - On average, how far is each point from the mean (spread)?
+
+]
+.pull-right[
+
+&lt;img src="normaldist.svg" width="100%" height="50%" style="display: block; margin: auto;" /&gt;
+
+]
+---
+# Building a Model - Normal Distribution
+
+- If we say `\(Y_1\)` ∼ Normal(100, 15)
+
+&lt;img src="normaldist.svg" width="50%" height="50%" style="display: block; margin: auto;" /&gt;
+---
+# A Simple Model
+
+.pull-left[
+- `\(Y_1\)` ∼ Normal(100, 15)
+
+- `\(Y_2\)` ∼ Normal(100, 15)
+
+- `\(Y_n\)` ∼ Normal(100, 15)
+	
+- Or for all observations, 
+
+      - `\(Y_i\)` ∼ Normal(100, 15)
+   
+- What does this model say?
+]
+
+--
+.pull-right[
+
+1. Everyone’s score comes from the same distribution
+
+2. The average score should be around 100
+
+3. Scores should be spread out by 15
+
+4. Scores should follow bell-shaped curve
+]
+---
+# A Good Model?
+
+&lt;img src="Models_and_Data_files/figure-html/unnamed-chunk-24-1.png" width="100%" height="50%" style="display: block; margin: auto;" /&gt;
+---
+# A More Complex Model
+
+- Allow the groups to have different means
+
+- Add an unknown parameter
+
+  - Something that the model will estimate
+
+	    - `\(Y_i\)` ,control ∼	Normal(100, 15)
+    	- `\(Y_i\)` ,treatment ∼	Normal($μ_t$, 15)
+
+- What does this model say?
+
+---
+# A More Complex Model
+
+.pull-left[
+
+&lt;img src="complex.svg" width="100%" height="50%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+
+1. Control and treatment scores come different distributions
+2. The average control group score should be around 100
+3. The average treatment group score is unknown
+      - Freely estimated
+4. Scores should spread out by about 15 in both groups
+5. Scores should follow a bell-shaped curve in both groups
+]
+
+---
+# Unknown Paramters
+
+.pull-left[
+
+- We dont know what they are
+
+- We need to __estimate__ them
+
+- Denote estimates with a hat: 
+
+    - `\(\mu_t\)` our estimate of μt
+]
+--
+.pull-right[
+
+It turns out that, for a normal distribution, the best estimate of the population mean is sample mean
+
+μ̂t = `$$\frac{1}{n} \sum_{i=i}^{n} x_{i}$$`
+    
+]
+
+---
+# Treatment Group Sample Mean
+
+
+```r
+mean(treat_group)
+```
+
+```
+## [1] 108.43
+```
+---
+# Better Model?
+
+&lt;img src="01_models-and-monsters.png" width="100%" height="50%" style="display: block; margin: auto;" /&gt;
+---
+# Let's Streamline Our Notation
+
+.pull-left[
+
+- Simple Model:
+      - `\(Y_i\)` ∼ Normal(100, 15)
+
+- A More Typical Simple Model
+      - `\(Y_i\)` ∼ Normal(μ, σ)
+      - μ = `\(β_0\)`
+
+      - One common mean μ
+      - One common SD σ
+]
+
+
+.pull-right[
+
+
+```r
+library(knitr)
+library(broom)
+#intercept only
+lm(df$values~1)
+```
+
+```
+## 
+## Call:
+## lm(formula = df$values ~ 1)
+## 
+## Coefficients:
+## (Intercept)  
+##       104.9
+```
+
+]
+---
+# More Complex Model
+
+`$$Y_i ∼ Normal(μ_i, σ)$$`
+`$$μ_i = β_0 + β_1X_i$$`
+  
+`$$μ_i = μcontrol + diff*group_i$$`
+  
+  - Control group mean `\(β_0\)`
+  - Group mean difference `\(β_1\)`
+  - One common SD σ
+
+
+```r
+#cond in model
+lm(df$values~df$cond)
+```
+
+```
+## 
+## Call:
+## lm(formula = df$values ~ df$cond)
+## 
+## Coefficients:
+##      (Intercept)  df$condtreatment  
+##           101.42              7.01
+```
+
+---
+# General Linear Model
+
+&lt;img src="GLM.svg" width="100%" height="50%" style="display: block; margin: auto;" /&gt;
+---
+# Probability and Standard Normal Distribution: *Z*-Scores
+
+`$$z=\frac{value-mean}{standard deviation}$$`
+
+`$$Z(x) = \frac{x - \mu}{\sigma}$$`
+- Z-score /standard score tells us how far away any data point is from the mean, in units of standard deviation
+
+-  Conversions
+
+  - Solve for X 
+
+&lt;center&gt;
+ `\(X = z*\sigma -  \mu\)`
+&lt;center&gt;
+
+---
+class:center middle
+# __Scaling does not change the distribution! It is just a linear transformation__
+---
+# Z tables
+
+- NO MORE TABLES
+
+
+&lt;img src="Z-Score-Table-1.png" width="80%" height="20%" style="display: block; margin: auto;" /&gt;
+
+---
+# Using R
+
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+
+- dnorm(): *Z*-score to density (height)
+- pnorm(): *Z*-score to area
+- qnorm(): area to *Z*-score
+
+---
+# Using R 
+
+- `pnorm(): *z*-scores to area`
+
+  - CDF 
+  
+    - `\(P(X &gt;= x) or P(X &lt;= x)\)`
+
+&gt; If you cacluated a Z-score you can find the probability of a Z-score less than(lower.tail=TRUE) or greater than (lower.tail=FALSE) by using pnorm(Z).
+---
+# Using R: `pnorm`
+
+1. What is the z-score?
+
+2. What percentage is above this z-score?
+
+
+```r
+mu &lt;- 70
+sigma &lt;- 10
+X &lt;- 80
+```
+
+--
+
+
+```r
+z &lt;- (X-mu)/sigma
+z
+```
+
+```
+## [1] 1
+```
+- Above
+
+```r
+pnorm(1, lower.tail = FALSE)
+```
+
+```
+## [1] 0.1586553
+```
+
+---
+# Using R: `pnorm` 
+
+- Percentage below IQ score of 55?
+
+
+```r
+mu &lt;- 100
+sigma &lt;- 15
+X &lt;- 55
+z &lt;- (X-mu)/sigma
+pnorm(z, lower.tail = TRUE)
+```
+
+```
+## [1] 0.001349898
+```
+
+- Percentage above IQ score of 55?
+
+
+```r
+mu &lt;- 100
+sigma &lt;- 15
+X &lt;- 55
+z &lt;- (X-mu)/sigma
+pnorm(z, lower.tail = FALSE)
+```
+
+```
+## [1] 0.9986501
+```
+
+---
+# Using R: `pnorm`
+
+- Percentage between IQ score of 120 and 159?
+
+
+
+```r
+mu &lt;- 100
+sigma &lt;- 15
+X1 &lt;- 159
+X2&lt;-120
+
+
+pnorm(X1, mu, sigma)-pnorm(X2, mu, sigma)
+```
+
+```
+## [1] 0.09116933
+```
+---
+# Package `PnormGC`
+
+Suppose that you have a normal random variable X μ=70 and σ=3. Probablity X will turn out to be less than 66.
+
+
+```r
+require(tigerstats)
+
+pnormGC(bound=66,region="below",mean=70,sd=3, graph=TRUE)
+```
+
+&lt;img src="Models_and_Data_files/figure-html/unnamed-chunk-38-1.png" width="100%" height="10%" style="display: block; margin: auto;" /&gt;
+
+```
+## [1] 0.09121122
+```
+
+---
+# Package `PnormGC`
+
+What about `\(P(X&gt;69)\)`
+
+
+```r
+pnormGC(bound=69,region="above",
+        mean=70,sd=3,graph=TRUE)
+```
+
+&lt;img src="Models_and_Data_files/figure-html/unnamed-chunk-39-1.png" width="100%" height="10%" style="display: block; margin: auto;" /&gt;
+
+```
+## [1] 0.6305587
+```
+
+---
+# Package `PnormGC`
+
+ - The probability that X is between 68 and 72: `\(P(68&lt;X&lt;72)\)`
+
+
+```r
+ pnormGC(bound=c(68,72),region="between",
+        mean=70,sd=3,graph=TRUE)
+```
+
+&lt;img src="Models_and_Data_files/figure-html/unnamed-chunk-40-1.png" width="100%" height="10%" style="display: block; margin: auto;" /&gt;
+
+```
+## [1] 0.4950149
+```
+---
+# Using R: `qnorm`
+
+- qnorm(): area to *z*-scores
+
+- With a mean 70 and standard deviation 10, what is the score for which 5% lies above?
+
+
+```r
+qnorm(.05, lower.tail = FALSE)
+```
+
+```
+## [1] 1.644854
+```
+
+---
+# Practice `pnorm`
+
+Suppose that BMI measures for men age 60 in a Heart Study population is normally distributed with a mean (μ) = 29 and standard deviation (σ) = 6. You are asked to compute the probability that a 60 year old man in this population will have a BMI less than 30.
+
+- What is the z-score?
+
+- What is probability of a Z-score less than Z? Greater than?
+
+- What is the probability a 60 year old man in this population will have a BMI between 30 and 40.
+
+---
+
+```r
+mu &lt;- 29
+sigma &lt;- 6
+X &lt;- 30
+X1 &lt;- 40
+z &lt;- (X-mu)/sigma
+z2 &lt;- (X1-mu)/sigma
+
+pnorm(z)
+```
+
+```
+## [1] 0.5661838
+```
+
+```r
+pnorm(z, lower.tail = FALSE)
+```
+
+```
+## [1] 0.4338162
+```
+
+```r
+pnormGC(bound=c(30,40),region="between", mean=29,sd=6,graph=TRUE)
+```
+
+&lt;img src="Models_and_Data_files/figure-html/unnamed-chunk-42-1.png" width="36%" /&gt;
+
+```
+## [1] 0.4004397
+```
+
+---
+# Practice: `qnorm`
+
+Suppose that SAT scores are normally distributed, and that the mean SAT score is 1000, and the standard deviation of all SAT scores is 100. How high must you score so that only 10% of the population scores higher than you?
+
+--
+
+
+```r
+qnorm(.10, 1000, 100, lower.tail = FALSE)
+```
+
+```
+## [1] 1128.155
+```
+---
+# Z-scores In Practice
+
+- Scaling your measures so they are are comparable 
+
+
+```r
+library(datawizard)
+x=c(5, 6, 7, 8, 9, 10, 15, 16)
+datawizard::standardize(x)
+```
+
+```
+## [1] -1.1150879 -0.8672906 -0.6194933 -0.3716960 -0.1238987  0.1238987  1.3628852
+## [8]  1.6106825
+## attr(,"center")
+## [1] 9.5
+## attr(,"scale")
+## [1] 4.035556
+## attr(,"robust")
+## [1] FALSE
+```
+
+---
+# Measures Related to Z
+
+- IQ
+
+  - `\(\mu = 100\)` `\(\sigma = 15\)`
+  
+- SAT
+
+  - `\(\mu =500\)` `\(\sigma = 100\)`
+  
+  
+- T-score
+
+  - `\(\mu = 50\)` `\(\sigma = 10\)`
+  
+- New score =  New SD(*z*) + New mean
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"slideNumberFormat": "%current%",
+"highlightStyle": "github",
+"highlightLines": true,
+"ratio": "16:9",
+"countIncrementalSlides": true,
+"background-image": "url(\"lover.png\")",
+"background-size": "cover"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

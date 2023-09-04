@@ -68,17 +68,22 @@ knitr::kable(pkgs)
 
 ## Probability warm-up
 
-1.  What is probability of drawing the ace of spades from a fair deck of cards?
+1.  What is probability of drawing the ace of spades from a fair deck of
+    cards?
 
 2.  What is the probability of drawing an ace of any suit?
 
-3.  You are going to roll some dice twice. What is the chance you roll double 1s?
+3.  You are going to roll some dice twice. What is the chance you roll
+    double 1s?
 
-4.  What is the chance that a live specimen of the New Jersey Devil will be found?
+4.  What is the chance that a live specimen of the New Jersey Devil will
+    be found?
 
-5.  Who is more likely to be a victim of a street robbery, a young man or an old lady?
+5.  Who is more likely to be a victim of a street robbery, a young man
+    or an old lady?
 
-6.  Yesterday the whether forecaster said that there was a 30% chance of rain today, and it rained today. Was she right or wrong?
+6.  Yesterday the whether forecaster said that there was a 30% chance of
+    rain today, and it rained today. Was she right or wrong?
 
 ## What is probability theory?
 
@@ -109,7 +114,8 @@ coinflips(1)
 ::: {.column width="50%"}
 1.  Can you tell me what the outcome will be?
 
-2.  If we were to flip a fair coin many many times, would you be able to tell the proportion of times that we would obtain heads?
+2.  If we were to flip a fair coin many many times, would you be able to
+    tell the proportion of times that we would obtain heads?
 :::
 :::
 
@@ -125,19 +131,24 @@ THEN
 
 ## Random processes
 
--   Random processes are **mechanisms** that produce outcomes... from **a world/set of possible** outcomes... with some degree of **uncertainty** but with **regularity**
+-   Random processes are **mechanisms** that produce outcomes... from
+    **a world/set of possible** outcomes... with some degree of
+    **uncertainty** but with **regularity**
 
 ## What is a random variable?
 
 -   A variable that depends on a random process
 
-    -   Think about the following random phenomenon: "randomly selecting 2 students in this class room"
+    -   Think about the following random phenomenon: "randomly selecting
+        2 students in this class room"
 
         -   Sample space?
 
-            -   One possible outcome: $\omega = \{\mathrm{Tyler, \: Stats}\}$
+            -   One possible outcome:
+                $\omega = \{\mathrm{Tyler, \: Stats}\}$
 
-            -   Another possible outcome: $\omega = \{\mathrm{Sana, \: Sev}\}$
+            -   Another possible outcome:
+                $\omega = \{\mathrm{Sana, \: Sev}\}$
 
 -   Can this be considered a random variable?
 
@@ -149,19 +160,24 @@ THEN
 
 ## Illustration
 
--   Random variables are translations of outcomes of a random process into **numbers**
+-   Random variables are translations of outcomes of a random process
+    into **numbers**
 
--   Formally, a random variable is defined as a function that maps the sample space $\Omega$ of a random generative process into the real line (or into real numbers)
+-   Formally, a random variable is defined as a function that maps the
+    sample space $\Omega$ of a random generative process into the real
+    line (or into real numbers)
 
 ![](https://pbs.twimg.com/media/FybCMzJaQAA_B9R?format=webp&name=small){fig-align="center"}
 
 ## Probability distribution functions
 
--   The **distribution** of a random variable $X$ describes the likelihood of the values that $X$ can take
+-   The **distribution** of a random variable $X$ describes the
+    likelihood of the values that $X$ can take
 
 -   We will see different distribution functions of random variables
 
--   Earlier, we derived the distribution of a simple rv by directly investigating the underlying sample space
+-   Earlier, we derived the distribution of a simple rv by directly
+    investigating the underlying sample space
 
 ## Categories of random variables
 
@@ -171,13 +187,15 @@ THEN
 
     -   Continuous
 
-## Discrete random variables: Definition
+## Discrete random variables: definition
 
 ::: columns
 ::: {.column width="50%"}
--   Discrete random variables are defined on a range that is a countable set
+-   Discrete random variables are defined on a range that is a countable
+    set
 
--   i.e., they can only take on a **finite** or **countably infinite** number of different values
+-   i.e., they can only take on a **finite** or **countably infinite**
+    number of different values
 :::
 
 ::: {.column width="50%"}
@@ -189,7 +207,8 @@ THEN
 
 ::: columns
 ::: {.column width="50%"}
--   A continuous random variable is a variable that can take on an infinite number of values within a given range or interval
+-   A continuous random variable is a variable that can take on an
+    infinite number of values within a given range or interval
 :::
 
 ::: {.column width="50%"}
@@ -203,9 +222,11 @@ THEN
 ::: {.column width="50%"}
 -   Let $X$ be a discrete rv
 
--   The *probability mass function (PMF)* of $X$ summarizes the probability of each outcome $x$
+-   The *probability mass function (PMF)* of $X$ summarizes the
+    probability of each outcome $x$
 
--   PMF: function $p$ given by $$p(x) = P(X = x)$$ for all possible values of $x$
+-   PMF: function $p$ given by $$p(x) = P(X = x)$$ for all possible
+    values of $x$
 :::
 
 ::: {.column width="50%"}
@@ -229,28 +250,59 @@ ggplot(df, aes(x = x, y = probability)) +
 :::
 :::
 
-## Cumulative Distribution Function (CDF): Definition
+## Cumulative distribution function (CDF): definition
 
--   The CDF of a random variable is the function $F$ such that $F(x) = P(X \leq x)$
+::: columns
+::: {.column width="50%"}
+-   The CDF of a random variable is the function $F$ such that
+    $F(x) = P(X \leq x)$
 
--   CDF tells us the probability that an outcome below a specific outcome occurs
+-   CDF tells us the probability that an outcome below a specific
+    outcome occurs
 
-    -   e.g., probability of less than 30 tables showing up if you accepted 34 reservations
-    -   
+-   Sums to 1
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo:false
+
+# Generate a random dataset
+set.seed(666)
+data <- data.frame(x = rnorm(100))
+
+# Calculate the cumulative distribution
+data <- data %>% 
+  arrange(x) %>% 
+  mutate(cdf = row_number() / n())
+
+# Create the CDF plot
+ggplot(data, aes(x = x, y = cdf)) +
+  geom_line() +
+  geom_point() +
+  ggtitle("CDF of Random Data") +
+  xlab("Data Points") +
+  ylab("CDF")
+
+```
+:::
+:::
 
 ## Probablity Density Function (PDF): Definition
 
 ::: columns
 ::: {.column width="50%"}
 -   Continuous random variables
--   The PDF of a random variable is the function $F$ such that $F(x) = P(a \geq X \geq b)$
+-   The PDF of a random variable is the function $F$ such that
+    $F(x) = P(a \geq X \geq b)$
 -   PDF tells us the probability of range of outcomes
 :::
 
 ::: {.column width="50%"}
 What is probability of observing IQ between 100 and 125?
 
-![](https://psy503-found-stats.netlify.app/slides/05-probability/basics_of_probability_theory_files/figure-html/unnamed-chunk-28-1.png){fig-align="center" width="687"}
+![](https://psy503-found-stats.netlify.app/slides/05-probability/basics_of_probability_theory_files/figure-html/unnamed-chunk-28-1.png){fig-align="center"
+width="687"}
 :::
 :::
 
@@ -262,7 +314,8 @@ What is probability of observing IQ between 100 and 125?
 
 ## Summarizing discrete random variables
 
--   PMFs and CDFs are very useful tools to summarize information from rvs.
+-   PMFs and CDFs are very useful tools to summarize information from
+    rvs.
 
 -   Many other ways to summarize random variables!
 
@@ -274,17 +327,23 @@ What is probability of observing IQ between 100 and 125?
 
 Link probability distributions to the data generating process (GDP)
 
--   The data generating process (GDP) represents the "real-world" process of how data comes about
+-   The data generating process (GDP) represents the "real-world"
+    process of how data comes about
 
--   Probability distributions are mathematical models used to model and understand the GDP
+-   Probability distributions are mathematical models used to model and
+    understand the GDP
 
 ## DGP
 
 ::: columns
 ::: {.column width="50%"}
--   **Bottom-up**: This approach begins with the observed data. By examining the data distribution, one might make educated guesses or inferences about the underlying processes that produced it
+-   **Bottom-up**: This approach begins with the observed data. By
+    examining the data distribution, one might make educated guesses or
+    inferences about the underlying processes that produced it
 
--   **Top-down**: This approach relies on pre-existing knowledge or theories about the system or phenomenon in question to inform our understanding of the DGP
+-   **Top-down**: This approach relies on pre-existing knowledge or
+    theories about the system or phenomenon in question to inform our
+    understanding of the DGP
 :::
 
 ::: {.column width="50%"}
@@ -311,12 +370,14 @@ Link probability distributions to the data generating process (GDP)
 :::
 
 ::: {.column width="50%"}
-![](https://psy503-found-stats.netlify.app/slides/05-probability/basics_of_probability_theory_files/figure-html/unnamed-chunk-9-1.png){fig-align="center" width="649" height="364"}
+![](https://psy503-found-stats.netlify.app/slides/05-probability/basics_of_probability_theory_files/figure-html/unnamed-chunk-9-1.png){fig-align="center"
+width="649" height="364"}
 :::
 :::
 
 ::: notes
-Once we have an idea about the DGP we can simulate data to see if it conforms to expectations.
+Once we have an idea about the DGP we can simulate data to see if it
+conforms to expectations.
 
 The book talks about dice rolls.
 
@@ -344,11 +405,11 @@ sample_number
 
 ## Randomness
 
--   Probability is used to characterize uncertainty/randomness
+-   DGP to characterize uncertainty/randomness
 
     ::: columns
     ::: {.column width="50%"}
-    -   `shuffle`
+    -   `shuffle` function
     :::
 
     ::: {.column width="50%"}
@@ -358,15 +419,22 @@ sample_number
 
 # Visualizing Variance
 
-## `ggplot2`
+::: columns
+::: {.column width="50%"}
+![](/slides/02-R/images/ggplot.PNG){fig-align="center"}
+:::
 
+::: {.column width="50%"}
 -   `ggplot2` is tidyverse's data visualization package
 
 -   The gg in `ggplot2` stands for Grammar of Graphics
 
 -   It is inspired by the book Grammar of Graphics by Leland Wilkinson
 
--   A grammar of graphics is a tool that enables us to concisely describe the components of a graphic
+-   A grammar of graphics is a tool that enables us to concisely
+    describe the components of a graphic
+:::
+:::
 
 ## `ggplot2`
 
@@ -448,7 +516,8 @@ ggplot(data=penguins, mapping = aes(x=bill_length_mm, y = flipper_length_mm)) +
 
 ## `ggplot2` - Layers
 
--   It might be nice to see the raw data WITH the line. We can combine geoms!
+-   It might be nice to see the raw data WITH the line. We can combine
+    geoms!
 
 ```{r}
 #| code-line-numbers: "2-3"
@@ -637,7 +706,8 @@ ggplot(data = data.frame(x = `X variable`, y = `Y variable`), aes(x = x, y = y))
 
 \- More information is always better!
 
--   Avoid visualizing single numbers when you have a whole distribution of numbers
+-   Avoid visualizing single numbers when you have a whole distribution
+    of numbers
 
 ![](https://pbs.twimg.com/media/Ei5qvgNVoAAV1Ay.png){fig-align="center"}
 
@@ -645,20 +715,21 @@ ggplot(data = data.frame(x = `X variable`, y = `Y variable`), aes(x = x, y = y))
 
 ## Histograms
 
--   Put data into equally spaced buckets (or bins), plot how many rows are in each bucket
+-   Put data into equally spaced buckets (or bins), plot how many rows
+    are in each bucket
 
     ::: columns
     ::: {.column width="50%"}
-```{r}
+    ```{r}
 
-library(gapminder)
-gapminder_2002 <- gapminder %>% 
-      filter(year == 2002)
+    library(gapminder)
+    gapminder_2002 <- gapminder %>% 
+          filter(year == 2002)
 
-    fig=ggplot(gapminder_2002,
-           aes(x = lifeExp)) +
-      geom_histogram()+
-      theme_minimal(base_size = 16)
+        fig=ggplot(gapminder_2002,
+               aes(x = lifeExp)) +
+          geom_histogram()+
+          theme_minimal(base_size = 16)
     ```
     :::
 
@@ -675,20 +746,21 @@ gapminder_2002 <- gapminder %>%
 
 ## `ggdist`
 
--   Put data into equally spaced buckets (or bins), plot how many rows are in each bucket
+-   Put data into equally spaced buckets (or bins), plot how many rows
+    are in each bucket
 
     ::: columns
     ::: {.column width="50%"}
-```{r}
+    ```{r}
 
-library(ggdist)
-        gapminder_2002 <- gapminder %>% 
-          filter(year == 2002)
+    library(ggdist)
+            gapminder_2002 <- gapminder %>% 
+              filter(year == 2002)
 
-        fig=ggplot(gapminder_2002,
-               aes(x = lifeExp)) +
-          geom_dots()+
-      theme_minimal(base_size = 16)
+            fig=ggplot(gapminder_2002,
+                   aes(x = lifeExp)) +
+              geom_dots()+
+          theme_minimal(base_size = 16)
     ```
     :::
 
@@ -1198,7 +1270,8 @@ ggplot(data, aes(x = group, y = value, fill=group)) +
 ::: {.column width="50%"}
 Half violin plots + box + raw points
 
-![](https://github.com/jorvlan/open-visualizations/raw/master/R/package_figures/Rplot03.png){fig-align="center" width="365"}
+![](https://github.com/jorvlan/open-visualizations/raw/master/R/package_figures/Rplot03.png){fig-align="center"
+width="365"}
 :::
 
 ::: {.column width="50%"}

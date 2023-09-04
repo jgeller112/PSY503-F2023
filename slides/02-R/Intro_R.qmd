@@ -189,11 +189,13 @@ knitr::include_graphics("nocluedog.png")
 
 -   Computers do what *you* tell them to do. Mistakes happen!
 
-    -   Maybe it's a typo, maybe it's a misunderstanding of what the code does
+    -   Maybe it's a typo, maybe it's a misunderstanding of what the
+        code does
 
 -   You can type a command directly into the *console*
 
--   You can type in a document (*Script* or *Markdown*) and tell it to then run in the *console*
+-   You can type in a document (*Script* or *Markdown*) and tell it to
+    then run in the *console*
 
 ```{r}
 X <- 4
@@ -207,9 +209,11 @@ X <- 4
 
 -   Capitalization and symbols matter
 
--   Hit the up arrow -- you can scroll through the last commands that were run
+-   Hit the up arrow -- you can scroll through the last commands that
+    were run
 
--   Hit the tab key -- you'll get a list of variable names and options to select from
+-   Hit the tab key -- you'll get a list of variable names and options
+    to select from
 
 -   Use the `?` followed by a command to learn more about it
 
@@ -223,11 +227,14 @@ X <- 4
 ::: {.column width="50%"}
 -   You can make comments on your code using the `#` symbol
 
--   Comments are not processed by R, they provide documentation of your code for humans
+-   Comments are not processed by R, they provide documentation of your
+    code for humans
 
--   Feel free to comment your personal code as much as you need to in order to understand it
+-   Feel free to comment your personal code as much as you need to in
+    order to understand it
 
--   Try to make your code clear enough that it can be understood even without comments
+-   Try to make your code clear enough that it can be understood even
+    without comments
 :::
 :::
 
@@ -240,7 +247,8 @@ x=4 #assign
 
 ## Assignment
 
--   A variable is a symbol or object that stands for another value (just like "X" in algebra)
+-   A variable is a symbol or object that stands for another value (just
+    like "X" in algebra)
 
 ```{r}
 
@@ -250,17 +258,22 @@ x
 
 ```
 
--   The arrow `<-` is called an ASSIGNMENT OPERATOR, and tells R to save an object called x that has the value of 6. This is similar to saving a value in a graphing calculator.
+-   The arrow `<-` is called an ASSIGNMENT OPERATOR, and tells R to save
+    an object called x that has the value of 6. This is similar to
+    saving a value in a graphing calculator.
 
 -   Can use `=` if you want
 
 ## Objects and values
 
--   We will use the terms **object** and **variable** a lot when talking about code in this class
+-   We will use the terms **object** and **variable** a lot when talking
+    about code in this class
 
--   `Objects` are things you save in your environment (like a set of numbers, a dataset, or a regression model)
+-   `Objects` are things you save in your environment (like a set of
+    numbers, a dataset, or a regression model)
 
--   We will use the word `Variable` to refer to columns of a data frame and to data variables that we use in models
+-   We will use the word `Variable` to refer to columns of a data frame
+    and to data variables that we use in models
 
 ## Vectors
 
@@ -319,15 +332,19 @@ x[1] <- 7 # Change values in vector
 
 ## Lists
 
--   While vectors are one row of data, we might want to have multiple rows or types
+-   While vectors are one row of data, we might want to have multiple
+    rows or types
 
--   With a vector, it is *key* to understand they have to be all the same type
+-   With a vector, it is *key* to understand they have to be all the
+    same type
 
--   Lists are a grouping of variables that can be multiple types (between list items) and *can be different lengths*
+-   Lists are a grouping of variables that can be multiple types
+    (between list items) and *can be different lengths*
 
 -   Often function output is saved as a list for this reason
 
--   They usually have names to help you print out just a small part of the list
+-   They usually have names to help you print out just a small part of
+    the list
 
 ```{r}
 
@@ -420,11 +437,15 @@ knitr::include_graphics("help.png")
 
     1.3 Click on new script icon
 
-2.  To paste strings together you can use the `paste`() function (e.g., paste("Hello", "World")). Use ?paste or Google "paste function in R" to get an idea of how to use this function.
+2.  To paste strings together you can use the `paste`() function (e.g.,
+    paste("Hello", "World")). Use ?paste or Google "paste function in R"
+    to get an idea of how to use this function.
 
-    2.1 Use the `paste` function to string together a sentence of your choice. Assign it to a variable or object.
+    2.1 Use the `paste` function to string together a sentence of your
+    choice. Assign it to a variable or object.
 
-3.  Modify the function above and instead of returning the sum return the product.
+3.  Modify the function above and instead of returning the sum return
+    the product.
 
 # Outline
 
@@ -444,7 +465,9 @@ knitr::include_graphics("help.png")
 
 ## Tidyverse and pipes
 
--   The `tidyverse` is an ecosystem of R packages designed for data science. All packages share an underlying design philosophy, grammar, and data structures.
+-   The `tidyverse` is an ecosystem of R packages designed for data
+    science. All packages share an underlying design philosophy,
+    grammar, and data structures.
 
 ```{r}
 #| fig.align = "center",
@@ -565,11 +588,15 @@ knitr::include_graphics("readr.png")
 
 ## Data frames
 
-> A data frame is like an Excel spreadsheet. It is two-dimensional with rows and columns.
+> A data frame is like an Excel spreadsheet. It is two-dimensional with
+> rows and columns.
 
--   Instead of creating a number of vectors we store all the vectors into a single DF
+-   Instead of creating a number of vectors we store all the vectors
+    into a single DF
 
--   Can store numeric data (phone number, postal code, coordinates, etc.), float data (internet IP address, etc.), logical data (wants to receive ads: FALSE/TRUE, etc.), etc.
+-   Can store numeric data (phone number, postal code, coordinates,
+    etc.), float data (internet IP address, etc.), logical data (wants
+    to receive ads: FALSE/TRUE, etc.), etc.
 
 ```{r}
 
@@ -621,13 +648,21 @@ myMatrix
 
 ## Working directories
 
+::: columns
+::: {.column width="50%"}
+![](images/here.PNG){fig-align="center"}
+:::
+
+::: {.column width="50%"}
 -   `Here` package
 
     -   `Here` helps set relative as opposed to absolute paths
 
         -   Why would this be a problem?
+:::
+:::
 
-        . . .
+## Here
 
 ```{r}
 #| eval = FALSE
@@ -660,7 +695,8 @@ here::here()
 
 -   Typing in data to call an object named Data will fail
 
--   Object names can contain letters, numbers, underscores "\_" and periods "."
+-   Object names can contain letters, numbers, underscores "\_" and
+    periods "."
 
 -   In most cases you should use snake_case to name objects
 
@@ -668,7 +704,12 @@ here::here()
 
 -   use_an_underscore_between_words
 
--   Names should be short and descriptive, with descriptive being the most important feature
+-   Names should be short and descriptive, with descriptive being the
+    most important feature
+
+## Janitor
+
+![](images/janitor.PNG){fig-align="center"}
 
 ## Loading the data
 
@@ -681,7 +722,8 @@ The faculty dataset contains aggregated data per faculty:
 -   students: number of students
 -   profs: number of profs
 -   salary: amount of salary
--   costs: amount of costs dataset entails demographic and school-related information on imaginary students, such as
+-   costs: amount of costs dataset entails demographic and
+    school-related information on imaginary students, such as
 
 ## Load the data
 
@@ -834,7 +876,8 @@ df %>%
 
 ## Select columns
 
-The `select` command from `dplyr` allows you to subset columns matching strings:
+The `select` command from `dplyr` allows you to subset columns matching
+strings:
 
 ```{r}
 select(df, Name, Sex, Age) %>%
@@ -887,13 +930,9 @@ pull(select(df, Name))
 
 ## Filter
 
-![](filter.svg){fig-align="center"}
+![](images/filter.PNG){fig-align="center"}
 
 ## Filter
-
--   Subsetting Rows
-
-The command in `dplyr` for subsetting rows is `filter`. Try `?filter`
 
 ```{r}
 head(filter(df, Survived==1, Age < 20))
@@ -963,23 +1002,28 @@ arrange(df, Survived) %>%
   head()
 ```
 
-## Adding columns
+## Mutate
 
--   The `mutate` function in `dplyr` allows you to add or replace columns of a `data.frame`:
+![](images/mutate.PNG){fig-align="center"}
+
+## Mutate
 
 ```{r}
 df = mutate(df, newcol = Sex)
-```
 
-```{r}
-print(head({df = mutate(df, newcol = Sex)}, 2))
+df %>%
+  tibble()
 ```
 
 ## Creating Conditional (If-Else) Variables
 
 One frequently-used tool is creating variables with conditions.
 
-A general function for creating new variables based on existing variables is the `ifelse()` function, which "returns a value with the same shape as test which is filled with elements selected from either yes or no depending on whether the element of test is `TRUE` or `FALSE`."
+A general function for creating new variables based on existing
+variables is the `ifelse()` function, which "returns a value with the
+same shape as test which is filled with elements selected from either
+yes or no depending on whether the element of test is `TRUE` or
+`FALSE`."
 
 ```{r}
 #| eval: false
@@ -1008,10 +1052,14 @@ df = mutate(df,
 head(df$money)
 ```
 
-## Adding columns
+## Case_when
 
-Alternatively, `case_when` provides a clean syntax as well:
+::: columns
+::: {.column width="50%"}
+![](images/case_when.PNG){fig-align="center"}
+:::
 
+::: {.column width="50%"}
 ```{r}
 df = mutate(df, 
             ticket_type = case_when(
@@ -1020,11 +1068,15 @@ df = mutate(df,
               TRUE ~ "Economy"
             ))
 head(df$ticket_type)
+
 ```
+:::
+:::
 
 ## Exercise
 
-> See if you can use the logical operators to manipulate our Titanic data
+> See if you can use the logical operators to manipulate our Titanic
+> data
 
 -   All of the names where age is less than 30
 
@@ -1034,7 +1086,7 @@ head(df$ticket_type)
 
 ## Exercise
 
-use `%` to:
+With Titanic data use `%` to:
 
 -   Filter by sex and age
 

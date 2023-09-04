@@ -16,7 +16,7 @@ date: 2023-09-06
 
     -   Follow: <https://quarto.org/docs/get-started/hello/rstudio.html>
 
--  Sign up for free github account
+-  Sign up for free Github account <(https://education.github.com/pack)>
 
 -  Install Github Desktop: <https://docs.github.com/en/desktop/installing-and-configuring-github-desktop/installing-and-authenticating-to-github-desktop/installing-github-desktop>
 

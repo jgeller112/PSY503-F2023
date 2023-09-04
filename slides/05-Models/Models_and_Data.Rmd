@@ -1,0 +1,982 @@
+---
+title: "PSY 503: Foundations of Statistical Methods in Psychological Science"
+subtitle: "Models, The Standard Normal, and Z-Scores"
+institute: "Princeton University"
+author: "Jason Geller, Ph.D. (he/him/his)"
+date:  '`r Sys.Date()`'
+output:
+  xaringan::moon_reader:
+    css: xaringan-themer.css
+    nature:
+      slideNumberFormat: "%current%"
+      highlightStyle: github
+      highlightLines: true
+      ratio: 16:9
+      countIncrementalSlides: true
+      background-image: url("lover.png")
+      background-size: cover
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(
+  fig.width=9, fig.height=3.5, fig.retina=3,
+  out.width = "36%",
+  cache = FALSE,
+  echo = TRUE,
+  message = FALSE, 
+  warning = FALSE,
+  fig.show = TRUE,
+  hiline = TRUE
+)
+
+hook_source <- knitr::knit_hooks$get('source')
+knitr::knit_hooks$set(source = function(x, options) {
+  x <- stringr::str_replace(x, "^[[:blank:]]?([^*].+?)[[:blank:]]*#<<[[:blank:]]*$", "*\\1")
+  hook_source(x, options)
+})
+```
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+
+style_solarized_dark(
+  header_font_google = google_font("Aleo"),
+  header_h1_font_size = "36px",
+  header_color = "black",
+  text_font_google = google_font("Aleo"),
+  text_font_size = "28px",
+  text_color = "black", 
+  background_color = "orange", 
+  code_font_google = google_font("Share Tech Mono"),
+  extra_css = list(
+    ".remark-slide-content h2" = list(
+      "margin-top" = "2em",
+      "margin-bottom" = "2em"
+    ),
+    .big = list("font-size" = "150%"),
+    .small = list("font-size" = "75%"),
+    .subtle = list(opacity = "0.6"),
+    ".countdown-has-style h3, .countdown-has-style h3 ~ p, .countdown-has-style h3 ~ ul" = list(
+      "margin" = "0"
+    ),
+    ".countdown-has-style pre" = list(
+      "margin-top" = "-10px"
+    ),
+    "p .remark-inline-code" = list(
+      "background-color" = "orange",
+      "padding" = "2px 2px",
+      "margin" = "0 -2px"
+    ),
+    blockquote = list("margin-left" = 0),
+    "em" = list(color = "#2aa198")
+  ),
+)
+
+```
+
+# Knowledge Check
+
+<div style='position: relative; padding-bottom: 56.25%; padding-top: 35px; height: 0; overflow: hidden;'><iframe sandbox='allow-scripts allow-same-origin allow-presentation' allowfullscreen='true' allowtransparency='true' frameborder='0' height='315' src='https://www.mentimeter.com/app/presentation/1aa5ba7e7422ef7e4312cb8f04cedf25/53357b8b34cf/embed' style='position: absolute; top: 0; left: 0; width: 100%; height: 100%;' width='420'></iframe></div>
+
+```{r, echo=FALSE}
+library(countdown)
+
+countdown(minutes = 5)
+```
+
+---
+
+```{r echo=FALSE,out.height="10%", out.width="75%",fig.cap="",fig.show='hold',fig.align='center'}
+
+knitr::include_graphics("table.svg")
+
+```
+---
+# Outline
+
+- Thinking about models 
+
+- The standard normal distribution
+
+- *Z*-scores
+
+  - How to compute *Z*-scores
+  
+  - *Z*-score practice
+---
+class:middle center
+> __statistical modeling__ = "making __models__ of **distributions**"
+
+---
+# What is a model?
+
+ > Models are simplifications of things in the real world 
+
+```{r echo=FALSE,out.height="15%", out.width="75%",fig.cap="",fig.show='hold',fig.align='center'}
+
+knitr::include_graphics('titanic.jpeg')
+
+```
+---
+```{r echo=FALSE,out.height="15%", out.width="75%",fig.cap="",fig.show='hold',fig.align='center'}
+
+knitr::include_graphics('map.jpg')
+
+```
+---
+# Distributions
+
+```{r echo=FALSE,out.height="25%", out.width="75%",fig.cap="",fig.show='hold',fig.align='center'}
+
+knitr::include_graphics('distribs.png')
+
+
+```
+---
+# Basic Structure of a Model
+
+<br>
+<br>
+
+$$data = model + error$$
+
+1. Model 
+
+2. Error (predicted - observed)
+
+  - Use our model to predict the value of the data for any given observation: 
+
+ $$\widehat{data_i} = model_i$$
+
+  $$error_i = data_i - \widehat{data_i}$$
+
+
+???
+statistical model, which expresses the values that we expect the data to take given our knowledge
+
+The “hat” over the data denotes that it’s our prediction rather than the actual value of the data.This means that the predicted value of the data for observation is equal to the value of the model for that observation. Once we have a prediction from the model, we can then compute the error:
+
+That is, the error for any observation is the difference between the observed value of the data and the predicted value of the data from the model.
+
+---
+# The Golem of Prague
+
+
+- The golem was a powerful clay robot
+
+--
+
+- Brought to life by writing emet (“truth”) on its forehead
+
+--
+
+- Obeyed commands literally
+--
+
+- Powerful, but no wisdom
+--
+
+- In some versions, Rabbi Judah Loew ben Bezalel built a golem to protect
+
+--
+
+- But he lost control, causing innocent deaths
+
+---
+# Statitsical Golems
+
+- Statistical (and scientific) models are our golems
+- We build them from basic parts
+- They are powerful—we can use them to understand the world and make predictions
+- They are animated by “truth” (data), but they themselves are neither true nor false
+-The model describes the golem, not the world
+- They are mindless automatons that simply run their programs
+- The model doesn’t describe the world or tell us what scientific conclusion to draw—that’s on us
+- We need to be careful about how we build, interpret, and apply models
+---
+# Simple Example
+
+.pull-left[
+- Experiment
+    - Take 200 7-year-olds
+    
+    - Randomly assign to 2 groups
+    
+    - Control: Normal breakfast
+    
+    - Treatment: Normal breakfast + 1 packet of Smarties
+    
+    - Outcome: Age-appropriate general reasoning test
+    
+           - Norm scores: Mean 100, SD 15
+
+- What statistical analysis do I run?
+
+]
+
+.pull-right[
+
+```{r echo=FALSE,out.height="50%", out.width="100%",fig.cap="",fig.show='hold',fig.align='center'}
+
+knitr::include_graphics('candy.jpg')
+
+```
+
+]
+---
+# Choosing a Statitsical Model
+
+
+.pull-left[
+
+- Cookbook approach
+
+  -  My data are ordinal, what type of test do I use?
+]
+
+.pull-right[
+
+```{r echo=FALSE,out.height="50%", out.width="100%",fig.cap="",fig.show='hold',fig.align='center'}
+
+knitr::include_graphics('test_selection.png')
+
+```
+]
+
+.footnote[[1]Figure from Statistical Rethinking.]
+
+
+---
+# Choosing a Statistical Model
+
+.pull-left[
+
+- Cookbook approach
+
+  -  My data are ordinal, what type of test do I use?
+
+  - Every one of these tests is the same model
+  
+      - The general linear model (__GLM__)
+]
+
+.pull-right[
+
+```{r echo=FALSE,out.height="50%", out.width="100%",fig.cap="",fig.show='hold',fig.align='center'}
+
+knitr::include_graphics('test_selection.png')
+
+```
+]
+---
+# Choosing a Statistical Model
+
+.pull-left[
+
+- Cookbook approach
+
+  -  My data are ordinal, what type of test do I use?
+
+  - Every one of these tests is the same model
+  
+      - The general linear model (__GLM__)
+
+  - This approach makes it hard to think clearly about relationship between our question and the statistics
+    
+]
+
+.pull-right[
+
+```{r echo=FALSE,out.height="50%", out.width="100%",fig.cap="",fig.show='hold',fig.align='center'}
+
+knitr::include_graphics('test_selection.png')
+
+```
+]
+---
+# The GLM
+<br>
+<br>
+-  General mathematical framework
+
+    - Regression all the way down 
+    
+    - Highly flexible
+    
+      - Can fit qualitative (categorical) and quantitative predictors
+      
+    - Easy to interpret
+    
+    - Helps understand interrealtedness to other models
+    
+    - Easy to build to more complex models
+
+--
+<br>
+<br>
+- __Let’s build a model for the candy experiment__
+
+---
+# The Data
+
+
+```{r}
+library(tidyverse)
+control_group= c(92, 97, 123, 101, 102, 126, 107, 81, 90, 93, 118, 105, 106, 102, 92, 127, 107, 71, 111, 93, 84, 97, 85, 89, 91, 75, 113, 102, 83, 119, 106, 96, 113, 113, 112, 110, 108, 99, 95, 94, 90, 97, 81, 133, 118, 83, 94, 93, 112, 99, 104, 100, 99, 121, 97, 123, 77, 109, 102, 103, 106, 92, 95, 85, 84, 105, 107, 101, 114, 131, 93, 65, 115, 89, 90, 115, 96, 82, 103, 98, 100, 106, 94, 110, 97, 105, 116, 107, 95, 117, 115, 108, 104, 91, 120, 91, 133, 123, 96, 85)
+
+
+treat_group= c(99, 114, 106, 105, 96, 109, 98, 85, 104, 124, 101, 119, 86, 109, 118, 115, 112, 100, 97, 95, 112, 96, 103, 106, 138, 100, 114, 111, 96, 109, 132, 117, 111, 104, 79, 127, 88, 121, 139, 88, 121, 106, 86, 87, 86, 102, 88, 120, 142, 91, 122, 122, 115, 95, 108, 106, 118, 104, 125, 104, 126, 94, 91, 159, 104, 114, 120, 103, 118, 116, 107, 111, 109, 142, 99, 94, 111, 115, 117, 103, 94, 129, 105, 97, 106, 107, 127, 111, 121, 103, 113, 105, 111, 97, 90, 140, 119, 91, 101, 92)
+
+df <- tibble(treatment=treat_group, control=control_group)
+
+df <- df %>%
+  pivot_longer(treatment:control, names_to = "cond", values_to = "values")
+```
+
+---
+# The Data
+
+```{r, out.width="100%", out.height="100%", fig.align="center", echo=FALSE}
+library(ggdist)
+
+  df %>%
+  ggplot(aes(x=values, y = cond, fill=cond)) +
+  geom_dotsinterval() + 
+    theme_dark()
+
+```
+
+---
+# Bulding a Model - Notation
+
+.pull-left[
+
+Small Roman Letters
+
+- Individual observed data points
+
+  - $y_1$, $y_2$, $y_3$, $y_4$, …, $y_n$
+
+          - The scores for person 1, person 2, person 3, etc.
+          
+  - $y_i$
+  
+          - The score for the “ith” person
+
+]
+
+.pull-right[
+
+Big Roman Letters
+
+- A “random variable”
+- The model for data we could observe, but haven’t yet
+
+- $Y_i$
+
+  - The model for person 1
+  - The yet-to-be-observed score of person 1
+  
+]
+---
+# Bulding a Model - Notation
+
+.pull-left[
+
+Greek letters
+
+- Unobservable parameters   
+      
+      - Use to describe features of the model
+- μ
+      - mu
+      - Pronounced “mew”
+      - Used to describe means
+- σ
+      - Sigma
+      - Pronounced “sigma”
+      - Used to describe a standard deviation
+]
+
+.pull-right[
+
+
+```{r echo=FALSE,out.height="30%", out.width="100%",fig.cap="",fig.show='hold',fig.align='center'}
+
+knitr::include_graphics('mew.png')
+
+```
+]
+---
+# Building a Model - Normal Distribution
+
+- Called a Gaussian model 
+
+- Many of the DVs we use are normally distributed
+
+- If we assume a variable is at least normally distributed can make many inferences! 
+
+- Most of the statistical models assume normal distribution
+
+---
+# Building a Model - Normal Distribution
+
+- Properties of a normal distribution
+
+.pull-left[
+  - Shape
+    - Unimodal
+    - Symmetric
+    - Asymptotic
+]
+
+.pull-right[
+```{r echo=FALSE,out.height="100%", out.width="100%",fig.cap="",fig.show='hold',fig.align='center'}
+
+p1 <- ggplot(data = data.frame(x = c(-3, 3)), aes(x)) +
+  stat_function(fun = dnorm, n = 101, args = list(mean = 0, sd = 1)) + ylab("") +
+  scale_y_continuous(breaks = NULL)
+p1
+
+```
+]
+---
+```{r echo=FALSE,out.height="5%", out.width="50%",fig.cap="",fig.show='hold',fig.align='center'}
+
+knitr::include_graphics('ghost.JPG')
+
+```
+
+---
+# Building a Model - Normal Distribution
+
+```{r echo=FALSE,out.height="100%", out.width="50%",fig.cap="",fig.show='hold',fig.align='center'}
+
+knitr::include_graphics('skew2.png')
+
+```
+
+---
+# Building a Model - Normal Distribution
+
+```{r echo=FALSE,out.height="100%", out.width="50%",fig.cap="",fig.show='hold',fig.align='center'}
+
+knitr::include_graphics('kur2.png')
+
+```
+
+---
+# Testing for Skewness and Kurtosis
+
+```{r, eval=FALSE}
+library(moments)
+
+#calculate skewness
+skewness(data)
+
+#calculate kurtosis
+kurtosis(data)
+```
+- How can we tell if bad?
+
+  -  -2 and +2 are considered acceptable in order to prove normal 
+
+  - Others suggest skewness between ‐2 to +2 and kurtosis is between ‐7 to +7
+---
+# Building a Model - Normal Distribution
+
+- Properties of a normal distribution
+
+ - Empirical Rule
+
+```{r echo=FALSE,out.height="50%", out.width="100%",fig.cap="",fig.show='hold',fig.align='center'}
+
+knitr::include_graphics('interpsd11.png')
+
+```
+
+---
+# Building a Model - Normal Distribution
+
+- Properties of a normal distribution
+
+  - Empirical Rule
+
+```{r echo=FALSE,out.height="50%", out.width="100%",fig.cap="",fig.show='hold',fig.align='center'}
+
+knitr::include_graphics('sd2.png')
+
+```
+
+---
+# Building a Model - Normal Distribution
+
+.pull-left[
+
+- Normal(μ, σ)
+
+- Parameters:
+    - μ		Mean
+    - σ		Standard deviation
+
+- Mean is the center of the distribution
+
+]
+
+.pull-right[
+
+```{r echo=FALSE,out.height="50%", out.width="100%",fig.cap="",fig.show='hold',fig.align='center'}
+
+knitr::include_graphics('diffnorm.png')
+
+```
+
+
+
+]
+
+---
+# Sample Mean
+
+```{r echo=FALSE,out.height="50%", out.width="100%",fig.cap="",fig.show='hold',fig.align='center'}
+
+knitr::include_graphics('meanasmodel.png')
+
+```
+---
+# Building a Model - Normal Distribution
+
+.pull-left[
+
+- Normal(μ, σ)
+
+- Parameters:
+    - μ		Mean
+    - σ		Standard deviation
+    
+- Variance is average squared deviation from the mean
+Standard deviation
+    - 𝜎=√𝑉𝑎𝑟𝑖𝑎𝑛𝑐𝑒
+    - On average, how far is each point from the mean (spread)?
+
+]
+.pull-right[
+
+```{r echo=FALSE,out.height="50%", out.width="100%",fig.cap="",fig.show='hold',fig.align='center'}
+
+knitr::include_graphics('normaldist.svg')
+
+```
+
+]
+---
+# Building a Model - Normal Distribution
+
+- If we say $Y_1$ ∼ Normal(100, 15)
+
+```{r echo=FALSE,out.height="50%", out.width="50%",fig.cap="",fig.show='hold',fig.align='center'}
+knitr::include_graphics('normaldist.svg')
+```
+---
+# A Simple Model
+
+.pull-left[
+- $Y_1$ ∼ Normal(100, 15)
+
+- $Y_2$ ∼ Normal(100, 15)
+
+- $Y_n$ ∼ Normal(100, 15)
+	
+- Or for all observations, 
+
+      - $Y_i$ ∼ Normal(100, 15)
+   
+- What does this model say?
+]
+
+--
+.pull-right[
+
+1. Everyone’s score comes from the same distribution
+
+2. The average score should be around 100
+
+3. Scores should be spread out by 15
+
+4. Scores should follow bell-shaped curve
+]
+---
+# A Good Model?
+
+```{r, echo=FALSE,out.height="50%", out.width="100%",fig.cap="",fig.show='hold',fig.align='center'}
+  df %>%
+  ggplot(aes(x=values, y = cond, fill=cond)) +
+  #geom_dotsinterval()+
+
+ stat_halfeye() 
+
+
+```
+---
+# A More Complex Model
+
+- Allow the groups to have different means
+
+- Add an unknown parameter
+
+  - Something that the model will estimate
+
+	    - $Y_i$ ,control ∼	Normal(100, 15)
+    	- $Y_i$ ,treatment ∼	Normal($μ_t$, 15)
+
+- What does this model say?
+
+---
+# A More Complex Model
+
+.pull-left[
+
+```{r echo=FALSE,out.height="50%", out.width="100%",fig.cap="",fig.show='hold',fig.align='center'}
+
+knitr::include_graphics('complex.svg')
+
+```
+]
+
+.pull-right[
+
+1. Control and treatment scores come different distributions
+2. The average control group score should be around 100
+3. The average treatment group score is unknown
+      - Freely estimated
+4. Scores should spread out by about 15 in both groups
+5. Scores should follow a bell-shaped curve in both groups
+]
+
+---
+# Unknown Paramters
+
+.pull-left[
+
+- We dont know what they are
+
+- We need to __estimate__ them
+
+- Denote estimates with a hat: 
+
+    - $\mu_t$ our estimate of μt
+]
+--
+.pull-right[
+
+It turns out that, for a normal distribution, the best estimate of the population mean is sample mean
+
+μ̂t = $$\frac{1}{n} \sum_{i=i}^{n} x_{i}$$
+    
+]
+
+---
+# Treatment Group Sample Mean
+
+```{r}
+
+mean(treat_group)
+
+
+```
+---
+# Better Model?
+
+```{r echo=FALSE,out.height="50%", out.width="100%",fig.cap="",fig.show='hold',fig.align='center'}
+
+knitr::include_graphics('01_models-and-monsters.png')
+
+```
+---
+# Let's Streamline Our Notation
+
+.pull-left[
+
+- Simple Model:
+      - $Y_i$ ∼ Normal(100, 15)
+
+- A More Typical Simple Model
+      - $Y_i$ ∼ Normal(μ, σ)
+      - μ = $β_0$
+
+      - One common mean μ
+      - One common SD σ
+]
+
+
+.pull-right[
+
+```{r}
+library(knitr)
+library(broom)
+#intercept only
+lm(df$values~1)
+```
+
+]
+---
+# More Complex Model
+
+$$Y_i ∼ Normal(μ_i, σ)$$
+$$μ_i = β_0 + β_1X_i$$
+  
+$$μ_i = μcontrol + diff*group_i$$
+  
+  - Control group mean $β_0$
+  - Group mean difference $β_1$
+  - One common SD σ
+
+```{r}
+#cond in model
+lm(df$values~df$cond)
+```
+
+---
+# General Linear Model
+
+```{r echo=FALSE,out.height="50%", out.width="100%",fig.cap="",fig.show='hold',fig.align='center'}
+
+knitr::include_graphics('GLM.svg')
+
+```
+---
+# Probability and Standard Normal Distribution: *Z*-Scores
+
+$$z=\frac{value-mean}{standard deviation}$$
+
+$$Z(x) = \frac{x - \mu}{\sigma}$$
+- Z-score /standard score tells us how far away any data point is from the mean, in units of standard deviation
+
+-  Conversions
+
+  - Solve for X 
+
+<center>
+ $X = z*\sigma -  \mu$
+<center>
+
+---
+class:center middle
+# __Scaling does not change the distribution! It is just a linear transformation__
+---
+# Z tables
+
+- NO MORE TABLES
+
+
+```{r echo=FALSE,out.height="20%", out.width="80%",fig.cap="",fig.show='hold',fig.align='center'}
+
+knitr::include_graphics('Z-Score-Table-1.png')
+
+```
+
+---
+# Using R
+
+<br>
+<br>
+<br>
+
+- dnorm(): *Z*-score to density (height)
+- pnorm(): *Z*-score to area
+- qnorm(): area to *Z*-score
+
+---
+# Using R 
+
+- `pnorm(): *z*-scores to area`
+
+  - CDF 
+  
+    - $P(X >= x) or P(X <= x)$
+
+> If you cacluated a Z-score you can find the probability of a Z-score less than(lower.tail=TRUE) or greater than (lower.tail=FALSE) by using pnorm(Z).
+---
+# Using R: `pnorm`
+
+1. What is the z-score?
+
+2. What percentage is above this z-score?
+
+```{r}
+mu <- 70
+sigma <- 10
+X <- 80
+```
+
+--
+
+```{r}
+z <- (X-mu)/sigma
+z
+```
+- Above
+```{r}
+
+pnorm(1, lower.tail = FALSE)
+
+```
+
+---
+# Using R: `pnorm` 
+
+- Percentage below IQ score of 55?
+
+```{r}
+
+mu <- 100
+sigma <- 15
+X <- 55
+z <- (X-mu)/sigma
+pnorm(z, lower.tail = TRUE)
+
+
+```
+
+- Percentage above IQ score of 55?
+
+```{r}
+
+mu <- 100
+sigma <- 15
+X <- 55
+z <- (X-mu)/sigma
+pnorm(z, lower.tail = FALSE)
+
+```
+
+---
+# Using R: `pnorm`
+
+- Percentage between IQ score of 120 and 159?
+
+
+```{r}
+mu <- 100
+sigma <- 15
+X1 <- 159
+X2<-120
+
+
+pnorm(X1, mu, sigma)-pnorm(X2, mu, sigma)
+
+
+```
+---
+# Package `PnormGC`
+
+Suppose that you have a normal random variable X μ=70 and σ=3. Probablity X will turn out to be less than 66.
+
+```{r, out.width="100%", out.height="10%", fig.align='center'}
+require(tigerstats)
+
+pnormGC(bound=66,region="below",mean=70,sd=3, graph=TRUE)
+
+```
+
+---
+# Package `PnormGC`
+
+What about $P(X>69)$
+
+```{r, out.width="100%", out.height="10%", fig.align='center'}
+
+pnormGC(bound=69,region="above",
+        mean=70,sd=3,graph=TRUE)
+
+```
+
+---
+# Package `PnormGC`
+
+ - The probability that X is between 68 and 72: $P(68<X<72)$
+
+```{r, out.width="100%", out.height="10%", fig.align="center"}
+
+ pnormGC(bound=c(68,72),region="between",
+        mean=70,sd=3,graph=TRUE)
+```
+---
+# Using R: `qnorm`
+
+- qnorm(): area to *z*-scores
+
+- With a mean 70 and standard deviation 10, what is the score for which 5% lies above?
+
+```{r}
+qnorm(.05, lower.tail = FALSE)
+```
+
+---
+# Practice `pnorm`
+
+Suppose that BMI measures for men age 60 in a Heart Study population is normally distributed with a mean (μ) = 29 and standard deviation (σ) = 6. You are asked to compute the probability that a 60 year old man in this population will have a BMI less than 30.
+
+- What is the z-score?
+
+- What is probability of a Z-score less than Z? Greater than?
+
+- What is the probability a 60 year old man in this population will have a BMI between 30 and 40.
+
+---
+```{r}
+
+mu <- 29
+sigma <- 6
+X <- 30
+X1 <- 40
+z <- (X-mu)/sigma
+z2 <- (X1-mu)/sigma
+
+pnorm(z)
+
+pnorm(z, lower.tail = FALSE)
+
+pnormGC(bound=c(30,40),region="between", mean=29,sd=6,graph=TRUE)
+```
+
+---
+# Practice: `qnorm`
+
+Suppose that SAT scores are normally distributed, and that the mean SAT score is 1000, and the standard deviation of all SAT scores is 100. How high must you score so that only 10% of the population scores higher than you?
+
+--
+
+```{r}
+qnorm(.10, 1000, 100, lower.tail = FALSE)
+```
+---
+# Z-scores In Practice
+
+- Scaling your measures so they are are comparable 
+
+```{r}
+library(datawizard)
+x=c(5, 6, 7, 8, 9, 10, 15, 16)
+datawizard::standardize(x)
+
+```
+
+---
+# Measures Related to Z
+
+- IQ
+
+  - $\mu = 100$ $\sigma = 15$
+  
+- SAT
+
+  - $\mu =500$ $\sigma = 100$
+  
+  
+- T-score
+
+  - $\mu = 50$ $\sigma = 10$
+  
+- New score =  New SD(*z*) + New mean

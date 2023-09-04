@@ -8,7 +8,7 @@ toc_float: true
 
 In Lab 1, you will be introduced to Github, R and RStudio. 
 
-For this assignment, you will pull a repository, make changes, and push your work to a Github repository.
+For this assignment, you will pull a repository I have created, add information to the assignment, and push your work to a Github repository.
 
 
 To access Lab 1, please go here: [Access to assignment](https://classroom.github.com/a/Pky4VZYu).

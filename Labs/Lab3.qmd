@@ -1,11 +1,17 @@
 ---
-title: "Lab 3: Ordinal Regression"
+title: "Lab 3: Summarizing and Visualizing Data"
 author: "Jason Geller, Ph.D."
 date: 2023 02 21
 toc: true
 toc_float: true
 ---
 
-In this lab, you will be using a Great British Bakeoff dataset to learn more about ordinal regression.
+By the end of this assignment, you should:
+
+- Understand how to read in data using read_csv
+- Understand how to derive information from data (summarize, mutate, group_by)
+- Understand how to make and modify a basic plot using ggplot
+
+This assignment focuses on data from apaper examining the role that songs play in soothing infants (Bainbridge & Bertolo et al., 2021). To get started, you should give the paper a read and broadly understand the question the paper is trying to answer and the methods that they used (note that the methods are described in detail at the end of the paper). 
 
 To access Lab 3, please go here: [Click here](https://classroom.github.com/a/1mxcXffF)

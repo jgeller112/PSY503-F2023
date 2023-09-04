@@ -1,7 +1,7 @@
 ---
 title: "Welcome to PSY503!"
 subtitle: "Princeton University"
-author: "Jason Geller, PH(Pronouns: He/him)"
+author: "Jason Geller, PH.D.(Pronouns: He/him)"
 date: 'Updated:`r Sys.Date()`'
 footer: "PSY 503: Foundations of Statistics in Psychology"
 format: 
@@ -39,7 +39,7 @@ editor:
 knitr::include_graphics("images/jg.jpg")
 ```
 
-## My Journey
+## My journey
 
 ```{r}
 ####| echo = FALSE,
@@ -60,8 +60,8 @@ batman_data <- data.frame(
              "RuCCS",
                   "Here at Princeton"),
 
-  start = as.character(c("2009-08-09","2012-08-08", "2017-01-08", "2019-04-07", "2020-07-05", "2022-01-07")), 
-  end = as.character(c("2012-05-06","2017-08-08", "2019-01-04", "2020-01-07", "2022-01-08", "2023-01-07"))
+  start = as.character(c("2009-06-09","2012-08-01", "2017-01-08", "2019-04-07", "2020-07-05", "2022-01-07")), 
+  end = as.character(c("2012-05-06","2017-08-01", "2019-01-04", "2020-01-07", "2022-01-08", "2023-01-07"))
 ) 
 
 
@@ -74,7 +74,7 @@ pp
 
 ```
 
-## Research Interests
+## Research interests
 
 ::: columns
 ::: {.column width="50%"}
@@ -83,26 +83,31 @@ pp
     -   Mechanisms and representations
         -   Auditory and visual word recognition
         -   Semantics
-            -   **Under ambiguity**
+    -   **Under ambiguity**
 :::
 
 ::: {.column width="50%"}
 -   Learning and memory
 
     -   Metamemory
+
     -   Desirable difficulties
 
 -   Meta-research (philosophy of science)
 
--   Replication issues in psychology and neuroscience \]
+    -   Replication issues in psychology and neuroscience
 :::
 :::
+
+## Aside
+
+This is not beer
+
+![](images/liqdeath.jpg){fig-align="center"}
 
 ## Ice breaker
 
-::: columns
-::: {.column width="50%"}
--   Name
+-   Name (preferred pronouns)
 
 -   Lab
 
@@ -113,21 +118,16 @@ pp
 -   What is a boring fact about you?
 
 -   One fun thing you did during the summer
-:::
 
-::: {.column width="50%"}
-```{r}
+## Boring
 
-knitr::include_graphics("images/quant.jpeg")
-```
-:::
-:::
+![](images/quant.jpeg){fig-align="center"}
 
 ## Summer fun
 
 ![](images/lond_tea-01.JPG){fig-align="center"}
 
-#### Questionaire
+## Questionaire
 
 ```{r}
 ####| echo = FALSE,
@@ -168,19 +168,9 @@ knitr::include_graphics("q3_feels.png")
 
 ## Questionaire
 
-```{r}
-####| echo = FALSE,
-####| out.width = "75%",
-####| fig.cap = "",
-####| fig.show = "hold",
-####| fig.align = "center"
+-   How nervous are you?
 
-knitr::include_graphics("q4_ner.png")
-
-```
-
-background-image: url("nomath.png") background-position: 100% 100%
-background-size: 100% 100%
+![](images/nomath.png){fig-align="center"}
 
 ## Questionaire
 
@@ -197,25 +187,9 @@ knitr::include_graphics("Picture1.png")
 
 ## Questionnaire Responses
 
--   What statistical methods do you use/plan to use in your research?
-
-    -   Computational modeling
-
-    -   Linear Regression
-
-    -   Logistic Regression
-
-    -   PCA/EFA/CFA
-
-    -   Multilevel Modeling/MLM
-
-    -   ANOVA
-
-## Questionnaire Responses
-
 -   What topics would you like to see discussed?
 
-    -   Bayesian Modeling
+    -   Bayesian modeling
 
     -   MLM
 
@@ -225,15 +199,41 @@ knitr::include_graphics("Picture1.png")
 
     -   Power Analysis/Determination
 
+## This semester
+
+::: columns
+::: {.column width="50%"}
+-   Data analysis
+
+    -   R
+
+    -   Github
+
+    -   Manipulating, cleaning, and visualizing data
+:::
+
+::: {.column width="50%"}
+-   Modeling
+
+    -   Shift from traditional way stats is taught in psychology
+
+        -   General linear model (GLM)
+
+            -   Regression
+
+            -   Null hypothesis significance testing framework
+:::
+:::
+
 ## Instructor contact:
 
 -   Office: PSH 325
 
 -   Email: jg9120\@princeton.edu
 
--   Cell: 515-520-3464
+-   X: jgeller_phd
 
--   Twitter: jgeller_phd
+-   Bluesky: jgeller1phd.bsky.social
 
 ## Office hours
 
@@ -245,7 +245,7 @@ knitr::include_graphics("Picture1.png")
 
 ## Course content
 
--   Readings, Assignments, and Schedule:
+-   Readings, assignments, and schedule:
 
     -   https://psy503-f2023.netlify.app/
 
@@ -255,8 +255,7 @@ knitr::include_graphics("Picture1.png")
 
     -   Announcements
 
--   I will post html and Quarto versions of slides day of class (on
-    website)
+-   I will post HTML versions of slides day of class (on website)
 
     -   You can access the Quarto document from Github
 
@@ -264,48 +263,75 @@ knitr::include_graphics("Picture1.png")
 
 ## Required texts:
 
--   CoureKata interactive textbook (free)
+-   CourseKata interactive textbook (free)
 
     -   **Statistics and Data Science: A Modeling Approach**
 
--   **Articles - these will be posted on website under readings**
+-   Articles
+
+-   Podcasts
 
 ## Software
 
 ::: columns
 ::: {.column width="50%"}
 ![](images/r.png){fig-align="center"}
+
+![](https://quarto.org/quarto-dark-bg.jpeg){fig-align="center"}
+
+-   A programming language and environment primarily focused on
+    statistical computing and data analysis
+
+-   **RStudio**: An integrated development environment (IDE) for R that
+    provides a more user-friendly interface and additional tools for
+    development
 :::
 
 ::: {.column width="50%"}
 ![](https://foundations.projectpythia.org/_images/GitHub-logo.png){fig-align="center"}
+
+-   **Repositories**: Users can create repositories to host project
+    files
+
+-   **Version Control**: A platform built on Git, used for version
+    control of code
+
+-   **Collaboration**: Allows multiple people to work on projects
+    simultaneously
 :::
 :::
 
-## Precept Time
+## Precept time
 
 ::: callout-note
 Consider enrolling in PSY505
 
 -   Tuesdays 11:00 A.M. - 1:00 P.M.
     -   Speakers and workshop focused
+
     -   No HW or papers
+-   Free food!!!
 :::
 
-## My Statistical Goals for You
+## My statistical goals for you
 
--   Understand the role and philosophy of hypothesis testing
+-   Read papers and understand what researchers are doing
 
--   Rationale and limitations of statistical tests
+-   Collaborate on projects
 
--   Identify the appropriate statistical tests to use
+-   Analyze data with R
 
--   Run statistical models in R
+-   Create reproducible documents
 
--   Build a stronger understanding of probability by using sampling and
-    resampling techniques
+-   **Obtain a skill set that generalizes outside academia**
 
--   Develop an ability to write and communicate statistical results
+## Assessments
+
+-   CourseKata readings
+
+-   Labs
+
+-   Final paper
 
 ## Grades
 
@@ -334,45 +360,38 @@ Consider enrolling in PSY505
         provide an assessment of how you think you did this semester.
     :::
 
-## Assignments
-
--   CourseKata Readings
-
--   Labs
-
--   Final paper
-
 ## CourseKata readings
 
 -   It is expected you will work your way through each chapter
-    completing the review questions as the end
+
+    -   **No need to do the surveys at the beginning of some of the
+        chapters**
 
 ## Labs
 
 -   Every week (Wednesday) we will have a lab activity covering material
     from that week
 
--   Lab should be completed in .qmd or Jypter Notebook
+-   Lab should be completed in .qmd and knitted into a HTML file
     (\*\*reproducible\*\*)
 
 -   Labs will be pushed to individualized Github repository
 
-    -   Have until end of the week (Sunday at 11:59 P.M.
+    -   Have until end of the week (Sunday at 11:59 P.M.)
 
 ## Final Paper
 
--   Reproducible analysis
+1.  Reproducible statistical analysis
 
     -   Find open data (OSF is a good place to start) in your field of
-        interest or use your own data and re-run in a reproducible
-        manner
+        interest
 
-    -   You will give it to your classmates and they will try to run it
-        from what is given
+    -   If you have published something or have a dataset, re-run in a
+        reproducible manner
 
--   APA formatted paper using `papaja`
+2.  Reproducible APA formatted paper using `papaja`
 
--   Power analysis
+3.  Power analysis
 
     -   Run simulations for a hypothetical replication attempt
 
@@ -392,10 +411,10 @@ More information can be found on the syllabus
 -   It is your responsibility to dig deeper when you need and / or want
     to
 
--   Graduate studies -- learning to be independent and thinking on your
-    own!
+    -   Graduate studies -- learning to be independent and thinking on
+        your own!
 
-    #### Lab (Wednesday)
+#### Lab (Wednesday)
 
 -   Wednesday will be reserved for working on activities related to the
     topic
@@ -407,9 +426,11 @@ More information can be found on the syllabus
 
 -   No attendance requirements
 
--   If you are sick please stay home
+    ::: callout-caution
+    -   If you are sick please stay home
+    :::
 
-## Class Environment
+## Class environment
 
 I would like to create a learning environment for my students that
 supports a diversity of thoughts, perspectives and experiences, and
@@ -417,7 +438,7 @@ honors your identities (including race, gender, class, sexuality,
 religion, ability, SES, etc. ) To help accomplish this:
 
 -   If you have a name and/or set of pronouns that differ from those
-    that appear in your official Rutgers records, please let me know!
+    that appear in your official Princeton records, please let me know!
 
 -   If you feel like your performance in the class is being impacted by
     your experiences outside of class, please don't hesitate to come and
@@ -433,16 +454,16 @@ religion, ability, SES, etc. ) To help accomplish this:
 
 ## Class Questions
 
--   Any general questions about course content or assignments should be
-    posted on the class
-    \[GitHub\](https://github.com/jgeller112/PSY503-F2023) Issues. There
-    is a chance another student has already asked a similar question, so
-    please check the other posts before adding a new question. If you
-    know the answer to a question posted in the discussion forum, I
-    encourage you to respond!
+Any general questions about course content or assignments should be
+posted on the class
+\[GitHub\](https://github.com/jgeller112/PSY503-F2023) Issues. There is
+a chance another student has already asked a similar question, so please
+check the other posts before adding a new question. If you know the
+answer to a question posted in the discussion forum, I encourage you to
+respond!
 
-    ## Schedule
+## Schedule
 
-    \<https://psy503-f2023.netlify.app/schedule/\>
+\<https://psy503-f2023.netlify.app/schedule/\>
 
 # Questions?
