@@ -18,8 +18,8 @@ execute:
   message: false
   warning: false
   fig-align: "center"
-  fig-width: 12
-  fig-height: 8
+  fig-width: 16
+  fig-height: 12
 editor_options: 
   chunk_output_type: inline
 editor: 
@@ -32,9 +32,9 @@ editor:
 ## About Me
 
 ```{r}
-####| fig.align = "center",
-####| echo = FALSE,
-####| warning = FALSE
+#| fig.align = "center",
+#| echo = FALSE,
+#| warning = FALSE
 
 knitr::include_graphics("images/jg.jpg")
 ```
@@ -131,46 +131,123 @@ This is not beer
 
 ```{r}
 ####| echo = FALSE,
-####| out.width = "75%",
 ####| fig.cap = "",
 ####| fig.show = "hold",
 ####| fig.align = "center"
 
-knitr::include_graphics("q1.png")
+class <- read.csv(here::here("slides/01-Introduction/data/class_demo.csv"))
+
+# Data manipulation
+class_tally <- class %>%
+  group_by(Data_Analysis) %>%
+  tally() %>%
+  mutate(perc = n / sum(n) * 100) # For label positioning
+
+ggplot(class_tally, aes(x = "Data Analysis", y = perc, fill = Data_Analysis)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(y = perc, label = paste0(round(perc, 1), "%")),
+            color = "black",
+            size = 16,
+            position = position_stack(vjust = 0.5)) +
+  labs(
+    title = "Stacked Bar Plot of Data Analysis Categories",
+    x = NULL,
+    y = "Percentage"
+  ) +
+  theme(axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()) + 
+  theme_minimal(base_size = 16)
 
 ```
 
 ## Questionaire
 
 ```{r}
-####| echo = FALSE,
-####| out.width = "75%",
-####| fig.cap = "",
-####| fig.show = "hold",
-####| fig.align = "center"
 
-knitr::include_graphics("q2.png")
+class_tally <- class %>%
+  group_by(How.much.experience.do.you.have.writing.code.) %>%
+  tally() %>%
+  mutate(perc = n / sum(n) * 100) # For label positioning
+
+ggplot(class_tally, aes(x = "Experience Writing Code", y = perc, fill = How.much.experience.do.you.have.writing.code. )) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(y = perc, label = paste0(round(perc, 1), "%")),
+            color = "black",
+            size = 16,
+            position = position_stack(vjust = 0.5)) +
+  labs(
+    title = "Stacked Bar Plot of Experience Coding",
+    x = "",
+    y = "Percentage"
+  ) +
+  theme(axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()) + ggeasy::easy_add_legend_title("Experience Coding") + 
+  theme_minimal(base_size = 16)
 
 ```
 
 ## Questionaire
 
 ```{r}
-####| echo = FALSE,
-####| out.width = "75%",
-####| fig.cap = "",
-####| fig.show = "hold",
-####| fig.align = "center"
+class_tally <- class %>%
+  group_by(Math) %>%
+  tally() %>%
+  mutate(perc = n / sum(n) * 100) # For label positioning
 
-knitr::include_graphics("q3_feels.png")
+ggplot(class_tally, aes(x = "Math Code", y = perc, fill = Math )) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(y = perc, label = paste0(round(perc, 1), "%")),
+            color = "black",
+            size = 16,
+            position = position_stack(vjust = 0.5)) +
+  labs(
+    title = "Stacked Bar Plot of Math Feelings",
+    x = "",
+    y = "Percentage"
+  ) +
+  theme(axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()) + ggeasy::easy_add_legend_title("Math Experience") + 
+    theme_minimal(base_size = 16)
+
+
 
 ```
 
 ## Questionaire
 
--   How nervous are you?
+::: columns
+::: {.column width="50%"}
+```{r}
 
-![](images/nomath.png){fig-align="center"}
+class_tally <- class %>%
+  group_by(Nervous) %>%
+  tally() %>%
+  mutate(perc = n / sum(n) * 100) # For label positioning
+
+ggplot(class_tally, aes(x = "Nervous", y = perc, fill = Nervous )) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(y = perc, label = paste0(round(perc, 1), "%")),
+            color = "black",
+            size = 16,
+            position = position_stack(vjust = 0.5)) +
+  labs(
+    title = "Stacked Bar Plot Nervous",
+    x = "",
+    y = "Percentage"
+  ) +
+  theme(axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()) + ggeasy::easy_add_legend_title("Nervous") + 
+    theme_minimal(base_size = 16)
+
+
+
+```
+:::
+
+::: {.column width="50%"}
+![](images/nomath.png){width="14.24in"}
+:::
+:::
 
 ## Questionaire
 
@@ -180,8 +257,27 @@ knitr::include_graphics("q3_feels.png")
 ####| fig.cap = "",
 ####| fig.show = "hold",
 ####| fig.align = "center"
+####| 
+class_tally <- class %>%
+  group_by(RMD) %>%
+  tally() %>%
+  mutate(perc = n / sum(n) * 100) # For label positioning
 
-knitr::include_graphics("Picture1.png")
+ggplot(class_tally, aes(x = "RMD", y = perc, fill = RMD )) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(y = perc, label = paste0(round(perc, 1), "%")),
+            color = "black",
+            size = 16,
+            position = position_stack(vjust = 0.5)) +
+  labs(
+    title = "RMD",
+    x = "",
+    y = "Percentage"
+  ) +
+  theme(axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()) + ggeasy::easy_add_legend_title("RMD") + 
+    theme_minimal(base_size = 16)
+
 
 ```
 
@@ -275,21 +371,33 @@ knitr::include_graphics("Picture1.png")
 
 ::: columns
 ::: {.column width="50%"}
-![](images/r.png){fig-align="center"}
+![](https://i2.wp.com/www.jumpingrivers.com/blog/quarto-rmarkdown-comparison/featured.png?w=400&ssl=1){fig-align="center"}
 
-![](https://quarto.org/quarto-dark-bg.jpeg){fig-align="center"}
+![](https://re-docs.genomicsengland.co.uk/img/r_logo.png){fig-align="center"}
+:::
 
--   A programming language and environment primarily focused on
+::: {.column width="50%"}
+-   R is programming language and environment primarily focused on
     statistical computing and data analysis
 
 -   **RStudio**: An integrated development environment (IDE) for R that
     provides a more user-friendly interface and additional tools for
     development
+
+-   **RMD/QMD**: open-source scientific and technical publishing
+    systemsthat allows you to embed code and explanatory text in the
+    same document
+:::
+:::
+
+## Software
+
+::: columns
+::: {.column width="50%"}
+![](https://foundations.projectpythia.org/_images/GitHub-logo.png){fig-align="center"}
 :::
 
 ::: {.column width="50%"}
-![](https://foundations.projectpythia.org/_images/GitHub-logo.png){fig-align="center"}
-
 -   **Repositories**: Users can create repositories to host project
     files
 
@@ -313,7 +421,7 @@ Consider enrolling in PSY505
 -   Free food!!!
 :::
 
-## My statistical goals for you
+## My applied statistical goals for you
 
 -   Read papers and understand what researchers are doing
 
