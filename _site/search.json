@@ -361,7 +361,7 @@
     "href": "Labs/Lab1.html",
     "title": "Lab 1: Introduction to R",
     "section": "",
-    "text": "In Lab 1, you will be introduced to Github, R and RStudio.\nFor this assignment, you will pull a repository, make changes, and push your work to a Github repository.\nTo access Lab 1, please go here: Access to assignment.\nTo push and pull to your repository you can use Github Desktop, or do it within RStudio. If the latter, you will need to follow the directions from the Quarto blog presentation (https://psy504-advanced-stats.netlify.app/slides/quarto/quarto#/github-in-rstudio)."
+    "text": "In Lab 1, you will be introduced to Github, R and RStudio.\nFor this assignment, you will pull a repository I have created, add information to the assignment, and push your work to a Github repository.\nTo access Lab 1, please go here: Access to assignment.\nTo push and pull to your repository you can use Github Desktop, or do it within RStudio. If the latter, you will need to follow the directions from the Quarto blog presentation (https://psy504-advanced-stats.netlify.app/slides/quarto/quarto#/github-in-rstudio)."
   },
   {
     "objectID": "robust_class.html",
@@ -380,9 +380,9 @@
   {
     "objectID": "Labs/Lab3.html",
     "href": "Labs/Lab3.html",
-    "title": "Lab 3: Ordinal Regression",
+    "title": "Lab 3: Summarizing and Visualizing Data",
     "section": "",
-    "text": "In this lab, you will be using a Great British Bakeoff dataset to learn more about ordinal regression.\nTo access Lab 3, please go here: Click here"
+    "text": "By the end of this assignment, you should:\n\nUnderstand how to read in data using read_csv\nUnderstand how to derive information from data (summarize, mutate, group_by)\nUnderstand how to make and modify a basic plot using ggplot\n\nThis assignment focuses on data from apaper examining the role that songs play in soothing infants (Bainbridge & Bertolo et al., 2021). To get started, you should give the paper a read and broadly understand the question the paper is trying to answer and the methods that they used (note that the methods are described in detail at the end of the paper).\nTo access Lab 3, please go here: Click here"
   },
   {
     "objectID": "Labs/Lab4.html",
@@ -564,7 +564,7 @@
     "href": "schedule/01-week.html#during-class",
     "title": "Week 1",
     "section": "During Class",
-    "text": "During Class\n\n\n\n\n\n\nImportant\n\n\n\n\nInstall latest version of RStudio (https://www.rstudio.com/products/rstudio/download/#download)\nInstall Quarto: https://quarto.org/docs/download/\n\nFollow: https://quarto.org/docs/get-started/hello/rstudio.html\n\nSign up for free github account\nInstall Github Desktop: https://docs.github.com/en/desktop/installing-and-configuring-github-desktop/installing-and-authenticating-to-github-desktop/installing-github-desktop\nInstall Git: https://git-scm.com/downloads\nMake sure RStudio recognized Git: https://happygitwithr.com/rstudio-see-git.html#rstudio-see-git"
+    "text": "During Class\n\n\n\n\n\n\nImportant\n\n\n\n\nInstall latest version of RStudio (https://www.rstudio.com/products/rstudio/download/#download)\nInstall Quarto: https://quarto.org/docs/download/\n\nFollow: https://quarto.org/docs/get-started/hello/rstudio.html\n\nSign up for free Github account &lt;(https://education.github.com/pack)&gt;\nInstall Github Desktop: https://docs.github.com/en/desktop/installing-and-configuring-github-desktop/installing-and-authenticating-to-github-desktop/installing-github-desktop\nInstall Git: https://git-scm.com/downloads\nMake sure RStudio recognized Git: https://happygitwithr.com/rstudio-see-git.html#rstudio-see-git"
   },
   {
     "objectID": "schedule/02-week.html#before-class",
