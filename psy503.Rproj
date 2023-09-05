@@ -13,3 +13,6 @@ RnwWeave: Sweave
 LaTeX: XeLaTeX
 
 AutoAppendNewline: Yes
+
+MarkdownWrap: Column
+MarkdownWrapAtColumn: 72

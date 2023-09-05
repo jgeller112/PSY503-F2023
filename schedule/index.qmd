@@ -31,7 +31,7 @@ on Sunday (unless otherwise stated)</li>
 
 | Week | Date                | Topic                                                                           | Content                                               | Class                                                                      | Labs                 |
 |------------|------------|------------|-------------|------------|------------|
-| 1    | 9/6/23              | Course Introduction and Getting Setup                                           | [{{< fa book-open-reader >}}](/schedule/01-week.qmd)  |[{{< fa laptop-code >}}](/_site/slides/01-Introduction/01-Introduction.html) |                      |
+| 1    | 9/6/23              | Course Introduction and Getting Setup                                           | [{{< fa book-open-reader >}}](/schedule/01-week.qmd)  |[{{< fa laptop-code >}}](/slides/01-Introduction/01-Introduction.html) |                      |
 | 2    | 9/11/23             | Introduction to R and RStudio                                                   | [{{< fa book-open-reader >}}](/schedule/02-week.qmd)  | {{< fa laptop-code >}}                                                     |                      |
 | 2    | 9/13/23             | Lab 1 (Computational Reproducibility w Github and R)                            |                                                       |                                                                            | {{< fa pen-ruler >}} |
 | 3    | 9/18/23             | Introduction to Markdown/Quarto                                                 | [{{< fa book-open-reader >}}](/schedule/03-week.qmd)  | {{< fa laptop-code >}}                                                     |                      |
