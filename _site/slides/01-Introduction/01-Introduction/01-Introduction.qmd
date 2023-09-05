@@ -1,0 +1,577 @@
+---
+title: "Welcome to PSY503!"
+subtitle: "Princeton University"
+author: "Jason Geller, PH.D.(Pronouns: He/him)"
+date: 'Updated:`r Sys.Date()`'
+footer: "PSY 503: Foundations of Statistics in Psychology"
+format: 
+  revealjs:
+    theme: psy504.css
+    multiplex: true
+    transition: fade
+    slide-number: true
+    incremental: false 
+    chalkboard: true
+execute:
+  freeze: auto
+  echo: false
+  message: false
+  warning: false
+  fig-align: "center"
+  fig-width: 16
+  fig-height: 12
+editor_options: 
+  chunk_output_type: inline
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+# Welcome to PSY 503!
+
+## About Me
+
+```{r}
+#| fig.align = "center",
+#| echo = FALSE,
+#| warning = FALSE
+
+knitr::include_graphics("images/jg.jpg")
+```
+
+## My journey
+
+```{r}
+####| echo = FALSE,
+####| message = FALSE,
+####| warning = FALSE,
+####| out.width = "100%",
+####| out.height = "60%"
+
+library(vistime)
+library(tidyverse)
+batman_data <- data.frame(
+
+  
+   event = c("M.S. DePaul University",
+                  "Ph.D. Iowa State University",
+                  "Post-doc -  University of Alabama-Birmingham", 
+                  "Postdoc - University of Iowa",
+             "RuCCS",
+                  "Here at Princeton"),
+
+  start = as.character(c("2009-06-09","2012-08-01", "2017-01-08", "2019-04-07", "2020-07-05", "2022-01-07")), 
+  end = as.character(c("2012-05-06","2017-08-01", "2019-01-04", "2020-01-07", "2022-01-08", "2023-01-07"))
+) 
+
+
+pp <- gg_vistime(batman_data, optimize_y = FALSE)
+
+pp <- pp + theme(axis.text.x = element_text(size = 20, color = "black", angle = 30))+ 
+                   theme(text=element_text(size=12))
+
+pp
+
+```
+
+## Research interests
+
+::: columns
+::: {.column width="50%"}
+-   Language processing
+
+    -   Mechanisms and representations
+        -   Auditory and visual word recognition
+        -   Semantics
+    -   **Under ambiguity**
+:::
+
+::: {.column width="50%"}
+-   Learning and memory
+
+    -   Metamemory
+
+    -   Desirable difficulties
+
+-   Meta-research (philosophy of science)
+
+    -   Replication issues in psychology and neuroscience
+:::
+:::
+
+## Aside
+
+This is not beer
+
+![](images/liqdeath.jpg){fig-align="center"}
+
+## Ice breaker
+
+-   Name (preferred pronouns)
+
+-   Lab
+
+-   Research interests
+
+-   Where are you from?
+
+-   What is a boring fact about you?
+
+-   One fun thing you did during the summer
+
+## Boring
+
+![](images/quant.jpeg){fig-align="center"}
+
+## Summer fun
+
+![](images/lond_tea-01.JPG){fig-align="center"}
+
+## Questionaire
+
+```{r}
+####| echo = FALSE,
+####| fig.cap = "",
+####| fig.show = "hold",
+####| fig.align = "center"
+
+class <- read.csv(here::here("slides/01-Introduction/data/class_demo.csv"))
+
+# Data manipulation
+class_tally <- class %>%
+  group_by(Data_Analysis) %>%
+  tally() %>%
+  mutate(perc = n / sum(n) * 100) # For label positioning
+
+ggplot(class_tally, aes(x = "Data Analysis", y = perc, fill = Data_Analysis)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(y = perc, label = paste0(round(perc, 1), "%")),
+            color = "black",
+            size = 16,
+            position = position_stack(vjust = 0.5)) +
+  labs(
+    title = "Stacked Bar Plot of Data Analysis Categories",
+    x = NULL,
+    y = "Percentage"
+  ) +
+  theme(axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()) + 
+  theme_minimal(base_size = 16)
+
+```
+
+## Questionaire
+
+```{r}
+
+class_tally <- class %>%
+  group_by(How.much.experience.do.you.have.writing.code.) %>%
+  tally() %>%
+  mutate(perc = n / sum(n) * 100) # For label positioning
+
+ggplot(class_tally, aes(x = "Experience Writing Code", y = perc, fill = How.much.experience.do.you.have.writing.code. )) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(y = perc, label = paste0(round(perc, 1), "%")),
+            color = "black",
+            size = 16,
+            position = position_stack(vjust = 0.5)) +
+  labs(
+    title = "Stacked Bar Plot of Experience Coding",
+    x = "",
+    y = "Percentage"
+  ) +
+  theme(axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()) + ggeasy::easy_add_legend_title("Experience Coding") + 
+  theme_minimal(base_size = 16)
+
+```
+
+## Questionaire
+
+```{r}
+class_tally <- class %>%
+  group_by(Math) %>%
+  tally() %>%
+  mutate(perc = n / sum(n) * 100) # For label positioning
+
+ggplot(class_tally, aes(x = "Math Code", y = perc, fill = Math )) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(y = perc, label = paste0(round(perc, 1), "%")),
+            color = "black",
+            size = 16,
+            position = position_stack(vjust = 0.5)) +
+  labs(
+    title = "Stacked Bar Plot of Math Feelings",
+    x = "",
+    y = "Percentage"
+  ) +
+  theme(axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()) + ggeasy::easy_add_legend_title("Math Experience") + 
+    theme_minimal(base_size = 16)
+
+
+
+```
+
+## Questionaire
+
+::: columns
+::: {.column width="50%"}
+```{r}
+
+class_tally <- class %>%
+  group_by(Nervous) %>%
+  tally() %>%
+  mutate(perc = n / sum(n) * 100) # For label positioning
+
+ggplot(class_tally, aes(x = "Nervous", y = perc, fill = Nervous )) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(y = perc, label = paste0(round(perc, 1), "%")),
+            color = "black",
+            size = 16,
+            position = position_stack(vjust = 0.5)) +
+  labs(
+    title = "Stacked Bar Plot Nervous",
+    x = "",
+    y = "Percentage"
+  ) +
+  theme(axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()) + ggeasy::easy_add_legend_title("Nervous") + 
+    theme_minimal(base_size = 16)
+
+
+
+```
+:::
+
+::: {.column width="50%"}
+![](images/nomath.png){width="14.24in"}
+:::
+:::
+
+## Questionaire
+
+```{r}
+####| echo = FALSE,
+####| out.width = "95%",
+####| fig.cap = "",
+####| fig.show = "hold",
+####| fig.align = "center"
+####| 
+class_tally <- class %>%
+  group_by(RMD) %>%
+  tally() %>%
+  mutate(perc = n / sum(n) * 100) # For label positioning
+
+ggplot(class_tally, aes(x = "RMD", y = perc, fill = RMD )) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(y = perc, label = paste0(round(perc, 1), "%")),
+            color = "black",
+            size = 16,
+            position = position_stack(vjust = 0.5)) +
+  labs(
+    title = "RMD",
+    x = "",
+    y = "Percentage"
+  ) +
+  theme(axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()) + ggeasy::easy_add_legend_title("RMD") + 
+    theme_minimal(base_size = 16)
+
+
+```
+
+## Questionnaire Responses
+
+-   What topics would you like to see discussed?
+
+    -   Bayesian modeling
+
+    -   MLM
+
+    -   How to use R
+
+    -   Non-parametric analyses
+
+    -   Power Analysis/Determination
+
+## This semester
+
+::: columns
+::: {.column width="50%"}
+-   Data analysis
+
+    -   R
+
+    -   Github
+
+    -   Manipulating, cleaning, and visualizing data
+:::
+
+::: {.column width="50%"}
+-   Modeling
+
+    -   Shift from traditional way stats is taught in psychology
+
+        -   General linear model (GLM)
+
+            -   Regression
+
+            -   Null hypothesis significance testing framework
+:::
+:::
+
+## Instructor contact:
+
+-   Office: PSH 325
+
+-   Email: jg9120\@princeton.edu
+
+-   X: jgeller_phd
+
+-   Bluesky: jgeller1phd.bsky.social
+
+## Office hours
+
+-   M 1:00 P.M.- 3:00 P.M.; W 1:00 P.M. - 2:00 P.M. 🪑
+
+-   By appointment
+
+    -   Calendly: **https://calendly.com/jg9120/30min**
+
+## Course content
+
+-   Readings, assignments, and schedule:
+
+    -   https://psy503-f2023.netlify.app/
+
+-   Canvas:
+
+    -   Interactive textbook
+
+    -   Announcements
+
+-   I will post HTML versions of slides day of class (on website)
+
+    -   You can access the Quarto document from Github
+
+        -   https://github.com/jgeller112/PSY503-F2023
+
+## Required texts:
+
+-   CourseKata interactive textbook (free)
+
+    -   **Statistics and Data Science: A Modeling Approach**
+
+-   Articles
+
+-   Podcasts
+
+## Software
+
+::: columns
+::: {.column width="50%"}
+![](https://i2.wp.com/www.jumpingrivers.com/blog/quarto-rmarkdown-comparison/featured.png?w=400&ssl=1){fig-align="center"}
+
+![](https://re-docs.genomicsengland.co.uk/img/r_logo.png){fig-align="center"}
+:::
+
+::: {.column width="50%"}
+-   R is programming language and environment primarily focused on
+    statistical computing and data analysis
+
+-   **RStudio**: An integrated development environment (IDE) for R that
+    provides a more user-friendly interface and additional tools for
+    development
+
+-   **RMD/QMD**: open-source scientific and technical publishing
+    systemsthat allows you to embed code and explanatory text in the
+    same document
+:::
+:::
+
+## Software
+
+::: columns
+::: {.column width="50%"}
+![](https://foundations.projectpythia.org/_images/GitHub-logo.png){fig-align="center"}
+:::
+
+::: {.column width="50%"}
+-   **Repositories**: Users can create repositories to host project
+    files
+
+-   **Version Control**: A platform built on Git, used for version
+    control of code
+
+-   **Collaboration**: Allows multiple people to work on projects
+    simultaneously
+:::
+:::
+
+## Precept time
+
+::: callout-note
+Consider enrolling in PSY505
+
+-   Tuesdays 11:00 A.M. - 1:00 P.M.
+    -   Speakers and workshop focused
+
+    -   No HW or papers
+-   Free food!!!
+:::
+
+## My applied statistical goals for you
+
+-   Read papers and understand what researchers are doing
+
+-   Collaborate on projects
+
+-   Analyze data with R
+
+-   Create reproducible documents
+
+-   **Obtain a skill set that generalizes outside academia**
+
+## Assessments
+
+-   CourseKata readings
+
+-   Labs
+
+-   Final paper
+
+## Grades
+
+-   No points associated with assignments
+
+-   Self-evaluation
+
+    -   Did you meet learning outcomes for the class?
+
+    -   Did you turn in all your assignments?
+
+    -   Based on my feedback, how well did you think you did on
+        assignments?
+
+    -   How much time outside of class did spend preparing for class?
+
+    ::: callout-note
+    #### Grades
+
+    -   To me a letter grade of A would consist of finishing all the
+        labs, engaging with the material at a sufficient level (ie.,
+        reading assigned articles, doing independent research outside
+        class, asking questions during lecture), and generally being
+        present in class. All things considered, I will try (and will
+        most likely) honor your grade choice. I mainly want you to
+        provide an assessment of how you think you did this semester.
+    :::
+
+## CourseKata readings
+
+-   It is expected you will work your way through each chapter
+
+    -   **No need to do the surveys at the beginning of some of the
+        chapters**
+
+## Labs
+
+-   Every week (Wednesday) we will have a lab activity covering material
+    from that week
+
+-   Lab should be completed in .qmd and knitted into a HTML file
+    (\*\*reproducible\*\*)
+
+-   Labs will be pushed to individualized Github repository
+
+    -   Have until end of the week (Sunday at 11:59 P.M.)
+
+## Final Paper
+
+1.  Reproducible statistical analysis
+
+    -   Find open data (OSF is a good place to start) in your field of
+        interest
+
+    -   If you have published something or have a dataset, re-run in a
+        reproducible manner
+
+2.  Reproducible APA formatted paper using `papaja`
+
+3.  Power analysis
+
+    -   Run simulations for a hypothetical replication attempt
+
+::: callout-important
+More information can be found on the syllabus
+:::
+
+## Class Format
+
+#### Lectures (Monday)
+
+-   I'll highlight main concepts
+
+-   My role is to introduce you to the basics of each topic and get you
+    started with examples
+
+-   It is your responsibility to dig deeper when you need and / or want
+    to
+
+    -   Graduate studies -- learning to be independent and thinking on
+        your own!
+
+#### Lab (Wednesday)
+
+-   Wednesday will be reserved for working on activities related to the
+    topic
+
+-   Also a time to seek clarification on topics from me or your
+    classmates
+
+## Attendance
+
+-   No attendance requirements
+
+    ::: callout-caution
+    -   If you are sick please stay home
+    :::
+
+## Class environment
+
+I would like to create a learning environment for my students that
+supports a diversity of thoughts, perspectives and experiences, and
+honors your identities (including race, gender, class, sexuality,
+religion, ability, SES, etc. ) To help accomplish this:
+
+-   If you have a name and/or set of pronouns that differ from those
+    that appear in your official Princeton records, please let me know!
+
+-   If you feel like your performance in the class is being impacted by
+    your experiences outside of class, please don't hesitate to come and
+    talk with me. I want to be a resource for you. Remember that you can
+    also submit anonymous feedback (which will lead to me making a
+    general announcement to the class, if necessary to address your
+    concerns).
+
+-   I (like many people) am still in the process of learning about
+    diverse perspectives and identities. If something was said in class
+    (by anyone) that made you feel uncomfortable, please talk to me
+    about it. (Again, anonymous feedback is always an option).
+
+## Class Questions
+
+Any general questions about course content or assignments should be
+posted on the class
+\[GitHub\](https://github.com/jgeller112/PSY503-F2023) Issues. There is
+a chance another student has already asked a similar question, so please
+check the other posts before adding a new question. If you know the
+answer to a question posted in the discussion forum, I encourage you to
+respond!
+
+## Schedule
+
+\<https://psy503-f2023.netlify.app/schedule/\>
+
+# Questions?
