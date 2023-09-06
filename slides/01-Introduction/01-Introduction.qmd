@@ -143,14 +143,14 @@ class_tally <- class %>%
   tally() %>%
   mutate(perc = n / sum(n) * 100) # For label positioning
 
-ggplot(class_tally, aes(x = "Data Analysis", y = perc, fill = Data_Analysis)) +
+ggplot(class_tally, aes(x = "", y = perc, fill = Data_Analysis)) +
   geom_bar(stat = "identity") +
   geom_text(aes(y = perc, label = paste0(round(perc, 1), "%")),
             color = "black",
             size = 16,
             position = position_stack(vjust = 0.5)) +
   labs(
-    title = "Stacked Bar Plot of Data Analysis Categories",
+    title = "Data Analysis",
     x = NULL,
     y = "Percentage"
   ) +
@@ -169,7 +169,7 @@ class_tally <- class %>%
   tally() %>%
   mutate(perc = n / sum(n) * 100) # For label positioning
 
-ggplot(class_tally, aes(x = "Experience Writing Code", y = perc, fill = How.much.experience.do.you.have.writing.code. )) +
+ggplot(class_tally, aes(x = "", y = perc, fill = How.much.experience.do.you.have.writing.code. )) +
   geom_bar(stat = "identity") +
   geom_text(aes(y = perc, label = paste0(round(perc, 1), "%")),
             color = "black",
@@ -194,14 +194,14 @@ class_tally <- class %>%
   tally() %>%
   mutate(perc = n / sum(n) * 100) # For label positioning
 
-ggplot(class_tally, aes(x = "Math Code", y = perc, fill = Math )) +
+ggplot(class_tally, aes(x = "", y = perc, fill = Math )) +
   geom_bar(stat = "identity") +
   geom_text(aes(y = perc, label = paste0(round(perc, 1), "%")),
             color = "black",
             size = 16,
             position = position_stack(vjust = 0.5)) +
   labs(
-    title = "Stacked Bar Plot of Math Feelings",
+    title = "Math Feelings",
     x = "",
     y = "Percentage"
   ) +
@@ -257,7 +257,7 @@ class_tally <- class %>%
   tally() %>%
   mutate(perc = n / sum(n) * 100) # For label positioning
 
-ggplot(class_tally, aes(x = "RMD", y = perc, fill = RMD )) +
+ggplot(class_tally, aes(x = "", y = perc, fill = RMD )) +
   geom_bar(stat = "identity") +
   geom_text(aes(y = perc, label = paste0(round(perc, 1), "%")),
             color = "black",
@@ -295,7 +295,7 @@ ggplot(class_tally, aes(x = "", y = perc, fill = R )) +
     y = "Percentage"
   ) +
   theme(axis.text.x=element_blank(),
-        axis.ticks.x=element_blank()) + ggeasy::easy_add_legend_title("RMD") + 
+        axis.ticks.x=element_blank()) + ggeasy::easy_add_legend_title("R") + 
     theme_minimal(base_size = 16)
 ```
 
@@ -535,8 +535,8 @@ More information can be found on the syllabus
 -   It is your responsibility to dig deeper when you need and / or want
     to
 
-    -   Graduate studies -- learning to be independent and thinking on
-        your own!
+    -    Learning to be independent and thinking on your own is part of
+        graduate school
 
 #### Lab (Wednesday)
 
