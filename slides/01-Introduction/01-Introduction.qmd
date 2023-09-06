@@ -437,11 +437,15 @@ Consider enrolling in PSY505
 -   Free food!!!
 :::
 
-## My applied statistical goals for you
+## My statistical goals for you
 
 -   Read papers and understand what researchers are doing
 
--   Collaborate on projects
+    -   Understand the logic and rationale behind statistical approaches
+
+-   Reason your way out of any statistical jam
+
+-   NOT rely on performing low-level arithmetic or memorizing equations
 
 -   Analyze data with R
 
