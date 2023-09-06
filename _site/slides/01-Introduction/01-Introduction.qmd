@@ -127,7 +127,7 @@ This is not beer
 
 ![](images/lond_tea-01.JPG){fig-align="center"}
 
-## Questionaire
+## Questionnaire
 
 ```{r}
 ####| echo = FALSE,
@@ -143,14 +143,14 @@ class_tally <- class %>%
   tally() %>%
   mutate(perc = n / sum(n) * 100) # For label positioning
 
-ggplot(class_tally, aes(x = "Data Analysis", y = perc, fill = Data_Analysis)) +
+ggplot(class_tally, aes(x = "", y = perc, fill = Data_Analysis)) +
   geom_bar(stat = "identity") +
   geom_text(aes(y = perc, label = paste0(round(perc, 1), "%")),
             color = "black",
             size = 16,
             position = position_stack(vjust = 0.5)) +
   labs(
-    title = "Stacked Bar Plot of Data Analysis Categories",
+    title = "Data Analysis",
     x = NULL,
     y = "Percentage"
   ) +
@@ -160,7 +160,7 @@ ggplot(class_tally, aes(x = "Data Analysis", y = perc, fill = Data_Analysis)) +
 
 ```
 
-## Questionaire
+## Questionnaire
 
 ```{r}
 
@@ -169,7 +169,7 @@ class_tally <- class %>%
   tally() %>%
   mutate(perc = n / sum(n) * 100) # For label positioning
 
-ggplot(class_tally, aes(x = "Experience Writing Code", y = perc, fill = How.much.experience.do.you.have.writing.code. )) +
+ggplot(class_tally, aes(x = "", y = perc, fill = How.much.experience.do.you.have.writing.code. )) +
   geom_bar(stat = "identity") +
   geom_text(aes(y = perc, label = paste0(round(perc, 1), "%")),
             color = "black",
@@ -186,7 +186,7 @@ ggplot(class_tally, aes(x = "Experience Writing Code", y = perc, fill = How.much
 
 ```
 
-## Questionaire
+## Questionnaire
 
 ```{r}
 class_tally <- class %>%
@@ -194,14 +194,14 @@ class_tally <- class %>%
   tally() %>%
   mutate(perc = n / sum(n) * 100) # For label positioning
 
-ggplot(class_tally, aes(x = "Math Code", y = perc, fill = Math )) +
+ggplot(class_tally, aes(x = "", y = perc, fill = Math )) +
   geom_bar(stat = "identity") +
   geom_text(aes(y = perc, label = paste0(round(perc, 1), "%")),
             color = "black",
             size = 16,
             position = position_stack(vjust = 0.5)) +
   labs(
-    title = "Stacked Bar Plot of Math Feelings",
+    title = "Math Feelings",
     x = "",
     y = "Percentage"
   ) +
@@ -213,10 +213,12 @@ ggplot(class_tally, aes(x = "Math Code", y = perc, fill = Math )) +
 
 ```
 
-## Questionaire
+## Math
 
-::: columns
-::: {.column width="50%"}
+![](images/nomath.png){width="14.24in"}
+
+## Questionnaire
+
 ```{r}
 
 class_tally <- class %>%
@@ -224,32 +226,24 @@ class_tally <- class %>%
   tally() %>%
   mutate(perc = n / sum(n) * 100) # For label positioning
 
-ggplot(class_tally, aes(x = "Nervous", y = perc, fill = Nervous )) +
+ggplot(class_tally, aes(x = "", y = perc, fill = Nervous )) +
   geom_bar(stat = "identity") +
   geom_text(aes(y = perc, label = paste0(round(perc, 1), "%")),
             color = "black",
             size = 16,
             position = position_stack(vjust = 0.5)) +
   labs(
-    title = "Stacked Bar Plot Nervous",
+    title = "Nervous",
     x = "",
     y = "Percentage"
   ) +
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank()) + ggeasy::easy_add_legend_title("Nervous") + 
-    theme_minimal(base_size = 16)
-
-
+     theme_minimal(base_size = 16)
 
 ```
-:::
 
-::: {.column width="50%"}
-![](images/nomath.png){width="14.24in"}
-:::
-:::
-
-## Questionaire
+## Questionnaire
 
 ```{r}
 ####| echo = FALSE,
@@ -263,7 +257,7 @@ class_tally <- class %>%
   tally() %>%
   mutate(perc = n / sum(n) * 100) # For label positioning
 
-ggplot(class_tally, aes(x = "RMD", y = perc, fill = RMD )) +
+ggplot(class_tally, aes(x = "", y = perc, fill = RMD )) +
   geom_bar(stat = "identity") +
   geom_text(aes(y = perc, label = paste0(round(perc, 1), "%")),
             color = "black",
@@ -281,7 +275,31 @@ ggplot(class_tally, aes(x = "RMD", y = perc, fill = RMD )) +
 
 ```
 
-## Questionnaire Responses
+## Questionnaire
+
+```{r}
+class_tally <- class %>%
+  group_by(R) %>%
+  tally() %>%
+  mutate(perc = n / sum(n) * 100) # For label positioning
+
+ggplot(class_tally, aes(x = "", y = perc, fill = R )) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(y = perc, label = paste0(round(perc, 1), "%")),
+            color = "black",
+            size = 16,
+            position = position_stack(vjust = 0.5)) +
+  labs(
+    title = "R",
+    x = "",
+    y = "Percentage"
+  ) +
+  theme(axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()) + ggeasy::easy_add_legend_title("R") + 
+    theme_minimal(base_size = 16)
+```
+
+## Questionnaire
 
 -   What topics would you like to see discussed?
 
@@ -291,9 +309,9 @@ ggplot(class_tally, aes(x = "RMD", y = perc, fill = RMD )) +
 
     -   How to use R
 
-    -   Non-parametric analyses
+    -   Linear modeling
 
-    -   Power Analysis/Determination
+    -   Longitudinal analyses (GCA)
 
 ## This semester
 
@@ -315,9 +333,7 @@ ggplot(class_tally, aes(x = "RMD", y = perc, fill = RMD )) +
 
         -   General linear model (GLM)
 
-            -   Regression
-
-            -   Null hypothesis significance testing framework
+            -   Regression all the way down
 :::
 :::
 
@@ -377,7 +393,7 @@ ggplot(class_tally, aes(x = "RMD", y = perc, fill = RMD )) +
 :::
 
 ::: {.column width="50%"}
--   R is programming language and environment primarily focused on
+-   **R**: programming language and environment primarily focused on
     statistical computing and data analysis
 
 -   **RStudio**: An integrated development environment (IDE) for R that
@@ -421,11 +437,15 @@ Consider enrolling in PSY505
 -   Free food!!!
 :::
 
-## My applied statistical goals for you
+## My statistical goals for you
 
 -   Read papers and understand what researchers are doing
 
--   Collaborate on projects
+    -   Understand the logic and rationale behind statistical approaches
+
+-   Reason your way out of any statistical jam
+
+-   NOT rely on performing low-level arithmetic or memorizing equations
 
 -   Analyze data with R
 
@@ -487,7 +507,7 @@ Consider enrolling in PSY505
 
     -   Have until end of the week (Sunday at 11:59 P.M.)
 
-## Final Paper
+## Final paper
 
 1.  Reproducible statistical analysis
 
@@ -519,8 +539,8 @@ More information can be found on the syllabus
 -   It is your responsibility to dig deeper when you need and / or want
     to
 
-    -   Graduate studies -- learning to be independent and thinking on
-        your own!
+    -    Learning to be independent and thinking on your own is part of
+        graduate school
 
 #### Lab (Wednesday)
 
@@ -572,6 +592,6 @@ respond!
 
 ## Schedule
 
-\<https://psy503-f2023.netlify.app/schedule/\>
+<https://psy503-f2023.netlify.app/schedule/>
 
 # Questions?
