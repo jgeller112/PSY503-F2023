@@ -1,5 +1,0 @@
-"0","grad <- read.csv(here::here(""data"", ""graduate.school.csv"")) %>% "
-"0","  dplyr::select(-job.opportunities)"
-"0",""
-"0","grad1<-read.csv(here::here(""data"", ""graduate.school.csv""))"
-"0",""

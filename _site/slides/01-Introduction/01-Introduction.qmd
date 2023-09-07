@@ -278,6 +278,7 @@ ggplot(class_tally, aes(x = "", y = perc, fill = RMD )) +
 ## Questionnaire
 
 ```{r}
+
 class_tally <- class %>%
   group_by(R) %>%
   tally() %>%

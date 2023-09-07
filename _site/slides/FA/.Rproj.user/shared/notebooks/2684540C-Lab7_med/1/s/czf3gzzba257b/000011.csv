@@ -1,4 +1,0 @@
-"0",""
-"0","#c' path"
-"0","model4 <- lm(emobiasscore ~ mPFC.LAmyg_post + Group + mPFC.LAmyg_pre, data = data_nomiss)"
-"0","tidy(model4, digits=3)"

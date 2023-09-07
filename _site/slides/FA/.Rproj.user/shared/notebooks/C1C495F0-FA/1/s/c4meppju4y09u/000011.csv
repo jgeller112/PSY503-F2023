@@ -1,5 +1,0 @@
-"0","p_load(psych, tidyverse, corrplot,parameters)"
-"0",""
-"0","# Load the data"
-"0","data <- psych::bfi[, 1:25] # Select only the 25 first columns corresponding to the items"
-"0","data <- na.omit(data)"

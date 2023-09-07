@@ -1,7 +1,0 @@
-"0","library(semPlot)"
-"0",""
-"0",""
-"0","# Example of plotting the variables in specific locations"
-"0","locations = matrix(c(0, 0, .5, 0, -.5, .5, -.5, 0, -.5, -.5), ncol=2, byrow=2)"
-"0","labels = c(""Intent\nTo Apply"",""Application\nBehaviour"",""Perceived\nValue"",""External\nPressure"",""Perceived\nControl"")"
-"0","diagram = semPaths(fit, whatLabels=""std"", nodeLabels = labels, layout=locations, sizeMan = 12, rotation=2)"

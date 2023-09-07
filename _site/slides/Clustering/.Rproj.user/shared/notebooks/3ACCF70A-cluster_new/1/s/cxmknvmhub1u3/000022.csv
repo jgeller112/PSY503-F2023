@@ -1,3 +1,0 @@
-"0",""
-"0","hclust_avg <- hcut(dist_mat,k=2)"
-"0","fviz_silhouette(hclust_avg)"

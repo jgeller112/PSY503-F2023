@@ -1,5 +1,0 @@
-"0","library(cluster)"
-"0","km.res <- kmeans(iris.scaled, 2)"
-"0","sil <- silhouette(km.res$cluster,dist(iris.scaled))"
-"0",""
-"0","fviz_silhouette(sil)"

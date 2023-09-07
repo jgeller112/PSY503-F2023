@@ -1,5 +1,0 @@
-"0","model_parameters(model1_cont, exponentiate = FALSE) %>% "
-"0","  knitr::kable(digits = 3, format = ""markdown"")"
-"2","Error in model_parameters(model1_cont, exponentiate = FALSE) : 
-  object 'model1_cont' not found
-"

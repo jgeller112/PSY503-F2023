@@ -1,8 +1,0 @@
-"0","library(tidyverse)"
-"0","library(emmeans)"
-"0","library(ggeffects)"
-"0","library(foreign) # read dta file"
-"0",""
-"0","# load data"
-"0","dat <- read.dta(""https://stats.idre.ucla.edu/stat/data/ologit.dta"")"
-"0",""

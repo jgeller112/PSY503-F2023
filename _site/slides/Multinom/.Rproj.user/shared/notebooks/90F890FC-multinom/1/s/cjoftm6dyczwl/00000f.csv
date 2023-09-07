@@ -1,7 +1,0 @@
-"0",""
-"0","multi_an <- emmeans(model_full, ~ Education|HealthGen)"
-"0",""
-"0","coefs = contrast(regrid(multi_an, ""log""),""trt.vs.ctrl1"", by=""Education"")"
-"0",""
-"0","update(coefs, by = ""contrast"") %>%"
-"0","  kable(format = ""markdown"", digits = 3)"

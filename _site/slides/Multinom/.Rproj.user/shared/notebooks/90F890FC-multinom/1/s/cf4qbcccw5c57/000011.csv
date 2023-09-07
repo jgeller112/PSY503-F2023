@@ -1,7 +1,0 @@
-"0","pred_probs_plot <- ggemmeans(health_m, terms=c(""PhysActive"")) %>%   ggplot(., aes(x = x, y = predicted, fill = response.level)) + "
-"0","  geom_bar(stat = ""identity"" ) +"
-"0","    geom_text(aes(label = round(predicted, 3)), color=""white"", position = position_fill(vjust = 0.5),size=3)  + "
-"0","  easy_add_legend_title(""Response"") + "
-"0","  labs(x=""Physical Health"", ""Predicted Probablity"") + "
-"0","  theme(text = element_text(size = 30)) +  "
-"0","  scale_fill_viridis(discrete = TRUE)"

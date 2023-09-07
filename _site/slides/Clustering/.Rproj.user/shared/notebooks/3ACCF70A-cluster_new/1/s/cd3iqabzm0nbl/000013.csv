@@ -1,6 +1,0 @@
-"0",""
-"0","#hclust from stats package"
-"0","hclust_avg <- hclust(dist_mat, method = 'ward.D2')"
-"0",""
-"0","plot(hclust_avg, cex = 0.6, hang = -1)"
-"0",""

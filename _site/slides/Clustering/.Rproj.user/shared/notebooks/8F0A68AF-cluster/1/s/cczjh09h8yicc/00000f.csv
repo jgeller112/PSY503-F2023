@@ -1,6 +1,0 @@
-"0",""
-"0","hclust_avg <- hclust(dist_mat, method = 'ward')"
-"2","The ""ward"" method has been renamed to ""ward.D""; note new ""ward.D2""
-"
-"0","plot(hclust_avg, cex = 0.6, hang = -1)"
-"0",""

@@ -1,5 +1,0 @@
-"0","modificationindices(fit) %>%"
-"0","  knitr::kable(round(., digits=2))"
-"2","Error in Math.data.frame(list(lhs = c(""perceived.value"", ""external.pressure"",  : 
-  non-numeric-alike variable(s) in data frame: lhs, op, rhs
-"

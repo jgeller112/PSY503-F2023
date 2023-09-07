@@ -1,6 +1,0 @@
-"0","#| fig.align: center"
-"0",""
-"0","fviz_dend(x = hclust_avg, cex = 0.8, lwd = 0.8, k = 2,"
-"0","          rect = TRUE, "
-"0","          rect_border = ""gray"", "
-"0","          rect_fill = FALSE)"

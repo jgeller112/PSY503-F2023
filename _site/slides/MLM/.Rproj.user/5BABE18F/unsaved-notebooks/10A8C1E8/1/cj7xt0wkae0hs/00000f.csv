@@ -1,8 +1,0 @@
-"0",""
-"0","eye_agg <- eye %>%"
-"0","  group_by(subject, vocoded)%>%"
-"0","  summarize(mean_pupil=mean(mean_pupil))"
-"2","`summarise()` has grouped output by 'subject'. You can override using the `.groups` argument."
-"0","lm_model <- lm(mean_pupil ~ vocoded, data = eye_agg)"
-"0",""
-"0","tidy(lm_model)"

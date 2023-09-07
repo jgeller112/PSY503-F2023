@@ -1,2 +1,0 @@
-"0","#####PUT ON GIT"
-"0","hh_data <- read_csv(here::here(""data"", ""tobii_aoi_study1.csv""))"

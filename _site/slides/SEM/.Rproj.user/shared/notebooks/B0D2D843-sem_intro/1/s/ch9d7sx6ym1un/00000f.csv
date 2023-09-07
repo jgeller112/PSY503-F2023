@@ -1,5 +1,0 @@
-"0","r=report_model(fit)"
-"2","Error: Oops, objects of class [lavaan] are not supported (yet) by report_model() :(
-
-Want to help? Check out https://easystats.github.io/report/articles/new_models.html
-"

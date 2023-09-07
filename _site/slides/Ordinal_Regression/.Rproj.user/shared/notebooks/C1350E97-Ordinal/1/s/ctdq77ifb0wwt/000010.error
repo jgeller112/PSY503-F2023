@@ -1,1 +1,0 @@
-{"frames":[],"message":"Error in clm(apply ~ pared, data = dat, link = \"logit\") : \n  could not find function \"clm\"\n"}

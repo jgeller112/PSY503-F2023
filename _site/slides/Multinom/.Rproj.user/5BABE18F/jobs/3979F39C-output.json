@@ -1,8 +1,0 @@
-[1,"Installing 'Stat2Data' ...\n"]
-[2,"trying URL 'https://cran.rstudio.com/bin/macosx/big-sur-arm64/contrib/4.2/Stat2Data_2.0.0.tgz'\n"]
-[2,"Content type 'application/x-gzip' length 1178064 bytes (1.1 MB)\n="]
-[2,"======================"]
-[2,"===========================\ndownloaded 1.1 MB\n\n"]
-[1,"The downloaded binary packages are in\n"]
-[1,"\t/var/folders/gq/bc6tnhj94nbbbgscpx3_1pg40000gn/T//RtmpVA9IKx/downloaded_packages\n"]
-[2,"\n\n✔ Package 'Stat2Data' successfully installed.\n"]

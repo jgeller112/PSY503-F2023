@@ -1,4 +1,0 @@
-"0","#a path"
-"0",""
-"0","model2 <- lm(mPFC.LAmyg_post ~ Group + mPFC.LAmyg_pre, data = data_nomiss)"
-"0","tidy(model2, digit=3)"

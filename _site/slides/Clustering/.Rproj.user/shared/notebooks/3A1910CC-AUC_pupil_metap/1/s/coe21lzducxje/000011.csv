@@ -1,5 +1,0 @@
-"0",""
-"0","ps_data <- read.csv(here::here(""pupilSizeDF_TimeCourse.csv""))"
-"2","Warning: cannot open file '/Users/jasongeller/Documents/psy504-advanced-stats/slides/Clustering/pupilSizeDF_TimeCourse.csv': No such file or directory"
-"2","Error in file(file, ""rt"") : cannot open the connection
-"

@@ -1,5 +1,0 @@
-"0","clust_data <- clust-data %>%
-  select(-speaker)
-"
-"2","Error: object 'clust' not found
-"
