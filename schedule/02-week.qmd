@@ -9,8 +9,6 @@ date: 2023-09-11
 
 ## After class
 
-- [Cheat sheet](https://dmirman.github.io/RCheatSheet.pdf) - Most used functions cheat sheet 
-
 - [RStudio Cheat sheets](https://posit.co/resources/cheatsheets/)
 
 
