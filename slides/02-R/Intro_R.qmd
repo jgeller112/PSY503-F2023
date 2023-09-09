@@ -1034,7 +1034,7 @@ df %>%
 ## Exercise
 
 > See if you can use the logical operators to manipulate our penguins
-> data using `%`
+> data using `%>%`
 
 -   All of the penguin data from year 2007
 
