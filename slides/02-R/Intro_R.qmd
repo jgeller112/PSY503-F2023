@@ -35,10 +35,9 @@ execute:
 #| echo: false
 #| 
 library(tidyverse)
-library(titanic)
+library(palmerpenguins)
 library(gt)
 library(grateful)
-
 
 
 ```
@@ -56,15 +55,15 @@ knitr::kable(pkgs)
 
 ::: columns
 ::: {.column width="50%"}
--   Get you started with R
-
--   Load data in R
+-   Get you familiar with R
 
 -   Explain some basic terminology and concepts
 
 -   Learn how to run commands and save scripts
 
 -   Manipulate data
+
+-   Load and save data
 :::
 :::
 
@@ -92,15 +91,16 @@ knitr::include_graphics("nocluedog.png")
 
 -   You can learn R!
 
--   You will get frustrated.
+-   You will get frustrated
 
--   You will get errors that don't help or make sense.
+-   You will get errors that don't help or make sense
 
-    -   Google is your friend.
+    -   Google is your friend
         -   Try Googling the specific error message first
         -   Then try googling your specific function and the error
         -   Try a bunch of different search terms.
     -   ChatGPT (use wisely)
+    -   Me :)
 
 # Outline
 
@@ -110,9 +110,7 @@ knitr::include_graphics("nocluedog.png")
 
 -   R commands, data structures, and functions
 
-    -   Tidyverse & the Pipe Operator
-
-    -   Multiple Functions
+-   Tidyverse & the Pipe Operator
 
 -   Reading in data
 
@@ -173,8 +171,6 @@ knitr::include_graphics("nocluedog.png")
 -   *`R commands, data structures, and functions`*
 
 -   Tidyverse & the pipe operator
-
--   Multiple functions
 
 -   Reading in data
 
@@ -246,22 +242,21 @@ x=4 #assign 4 to x
 
 ## Assignment
 
--   A variable is a symbol or object that stands for another value (just
-    like "X" in algebra)
+-   Few different way to assign values to objects
 
 ```{r}
 
+#left arrow operator
 x <- 4
-
-x
 
 ```
 
 -   The arrow `<-` is called an ASSIGNMENT OPERATOR, and tells R to save
-    an object called x that has the value of 4. This is similar to
-    saving a value in a graphing calculator
+    an object called x that has the value of 4.
 
 -   Can use `=` if you want
+
+-   Even `->` (please dont do this)
 
 ## Objects and values
 
@@ -300,7 +295,7 @@ x <- c("cat", "bat")
 gender <- c("male", "female")
 ```
 
--   factors
+-   Factors
 
 ```{r}
 
@@ -316,6 +311,81 @@ gender
 
 x==7
 
+```
+
+## Data frames
+
+> A data frame is like an Excel spreadsheet. It is two-dimensional with
+> rows and columns.
+
+::: columns
+::: {.column width="50%"}
+-   Instead of creating a number of vectors we store all the vectors
+    into a single DF
+
+-   Can store numeric data (phone number, postal code, coordinates,
+    etc.), float data (internet IP address, etc.), logical data (wants
+    to receive ads: FALSE/TRUE, etc.), etc
+:::
+
+::: {.column width="50%"}
+```{r}
+
+
+car_model <- c("Ford Fusion", "Hyundai Accent", "Toyota Corolla")
+car_price <- c(25000, 16000, 18000)
+car_mileage <- c(27, 36, 32)
+
+cars_df <- data.frame(model=car_model, price=car_price, mileage=car_mileage)
+
+cars_df %>%
+  knitr::kable()
+
+
+
+```
+:::
+:::
+
+## Tibbles
+
+-   Modern take on data frames
+
+    -   Tidy data!
+
+        -   Each variable forms a column
+
+        -   Each observation forms a row
+
+        -   Each cell is a single measurement
+
+## Tibbles
+
+::: columns
+::: {.column width="50%"}
+-   Never changes input's type
+-   Never adjusts the names of variables
+-   It evaluates arguments lazily and sequentially
+:::
+
+::: {.column width="50%"}
+-   differences
+
+    -   Only prints first 6 rows
+:::
+:::
+
+## Matrices
+
+-   Matrices are vectors with dimensions (like a 2X5)
+
+-   All the data *must be the same type*
+
+```{r}
+myMatrix <- matrix(data = 1:10,
+                   nrow = 5,
+                   ncol = 2)
+myMatrix
 ```
 
 ## Indexing
@@ -367,16 +437,10 @@ str(output)
 -   Typing in a simple calculation show us the result
 
 ```{r}
+#add
 608+ 28
-
-```
-
-```{r}
+#subtract
 11527-283
-
-```
-
-```{r}
 # divison
 400/65
 #multiplication
@@ -471,9 +535,7 @@ knitr::include_graphics("help.png")
 
 -   R commands & functions
 
-    -   `Tidyverse & the Pipe Operator`
-
--   Multiple Functions
+-   `Tidyverse & the pipe operator`
 
 -   Reading in data
 
@@ -542,22 +604,6 @@ a %>%
 
 -   `|>` pipe is slowly becoming more popular
 
-# Outline
-
--   Why R
-
--   IDE
-
--   R commands & functions
-
-    -   Tidyverse & the Pipe Operator
-
--   `Multiple Functions`
-
--   Reading in data
-
--   Saving R scripts
-
 ## Multiple functions
 
 -   Pipe operator makes it easy to do multiple functions in a row
@@ -585,9 +631,7 @@ a %>%
 
 -   R commands & functions
 
-    -   Tidyverse & the pipe operator
-
--   Multiple functions
+-   Tidyverse & the pipe operator
 
 -   `Reading in data`
 
@@ -606,40 +650,6 @@ knitr::include_graphics("readr.png")
 ```
 
 -   General form: `dataframe.name <-read_csv('filename')`
-
-## Data frames
-
-> A data frame is like an Excel spreadsheet. It is two-dimensional with
-> rows and columns.
-
-::: columns
-::: {.column width="50%"}
--   Instead of creating a number of vectors we store all the vectors
-    into a single DF
-
--   Can store numeric data (phone number, postal code, coordinates,
-    etc.), float data (internet IP address, etc.), logical data (wants
-    to receive ads: FALSE/TRUE, etc.), etc
-:::
-
-::: {.column width="50%"}
-```{r}
-
-
-car_model <- c("Ford Fusion", "Hyundai Accent", "Toyota Corolla")
-car_price <- c(25000, 16000, 18000)
-car_mileage <- c(27, 36, 32)
-
-cars_df <- data.frame(model=car_model, price=car_price, mileage=car_mileage)
-
-cars_df %>%
-  knitr::kable()
-
-
-
-```
-:::
-:::
 
 ## Reading other file types
 
@@ -663,49 +673,6 @@ library(haven)
 
 fac<-  read_spss('/Users/jg/Desktop/experiment.spss')
 
-```
-
-## Tibbles
-
--   Modern take on data frames
-
-    -   Tidy data!
-
-        -   Each variable forms a column
-
-        -   Each observation forms a row
-
-        -   Each cell is a single measurement
-
-## Tibbles
-
-::: columns
-::: {.column width="50%"}
--   Never changes input's type
--   Never adjusts the names of variables
--   It evaluates arguments lazily and sequentially
-:::
-
-::: {.column width="50%"}
--   Differences
-
-    -   Printing
-:::
-
-## 
-:::
-
-## Matrices
-
--   Matrices are vectors with dimensions (like a 2X3)
-
--   All the data *must be the same type*
-
-```{r}
-myMatrix <- matrix(data = 1:10,
-                   nrow = 5,
-                   ncol = 2)
-myMatrix
 ```
 
 ## Working directories
@@ -755,16 +722,14 @@ here::here()
 
 -   Object names are case-sensitive
 
--   Typing in data to call an object named Data will fail
-
 -   Object names can contain letters, numbers, underscores "\_" and
     periods "."
 
--   In most cases you should use snake_case to name objects
+    -   In most cases you should use snake_case to name objects
+
+    -   use_an_underscore_between_words
 
 -   Avoid periods
-
--   use_an_underscore_between_words
 
 -   Names should be short and descriptive, with descriptive being the
     most important feature
@@ -776,7 +741,7 @@ here::here()
 ## Loading the data
 
 -   You can download data directly from OSF or Github
-    -   https://osf.io/qh9rb/
+    -   https://osf.io/cmtxa
 
 The faculty dataset contains aggregated data per faculty:
 
@@ -787,27 +752,11 @@ The faculty dataset contains aggregated data per faculty:
 -   costs: amount of costs dataset entails demographic and
     school-related information on imaginary students, such as
 
-## Load the data
-
--   CSV
-
-```{r}
-library(kableExtra)
-
-fac=read.csv(here::here("slides", "02-R", "datasets", "faculty.csv"))
-
-fac %>% 
-  gt()
-
-```
+## 
 
 ## Load data from OSF
 
 ```{r}
-
-# try using the url 
-
-
 ```
 
 ## Looking at data
@@ -823,7 +772,6 @@ fac%>%
 
 ```{r}
 library(skimr)
-
 fac%>%
   skim() %>% 
  gt()
@@ -856,7 +804,6 @@ fac%>%
 ```{r}
 
 fac # whole dataset
-
 head(fac)
 tail(fac)
 ```
@@ -874,7 +821,21 @@ library("janitor")
 tabyl(fac$students)
 ```
 
-# Manipulation Tools
+# Outline
+
+-   `Why R`
+
+-   IDE
+
+-   R commands, data structures, and functions
+
+-   Tidyverse & the Pipe Operator
+
+-   Reading in data
+
+-   `Manipulating data`
+
+-   Saving R scripts
 
 ## Manipulating data
 
@@ -882,15 +843,16 @@ tabyl(fac$students)
 
 -   Isolating data:
 
-    -   select()
-    -   filter()
-    -   arrange()
+    -   `select`
+    -   `filter`
+    -   `arrange`
+    -   `mutate`
 
 ## Select
 
 ![](select.svg){fig-align="center"}
 
-## PalmerPenguins data
+## Palmer Penguins data
 
 ```{r}
 #install.packages("titanic") # get titanic data
@@ -949,20 +911,11 @@ pull(select(df, sex))
 
 ```{r}
 df %>% 
-filter(sex=="male", year < 2007) %>% head()
+filter(sex=="male") %>%
+  head()
 ```
 
 Note, no `$` or subsetting is necessary
-
-## Filter
-
-`==` (tests if equal)
-
-`=` (returns error)
-
-```{r, eval=FALSE}
-head(filter(df, sex="female", year < 2008))
-```
 
 ## Filter
 
@@ -982,8 +935,8 @@ You can have multiple logical conditions using the following:
 -   Using `=` instead of `==`
 
 ```{r}
-
-filter(df, Survived==1)
+#| eval: false
+filter(df, sex=1)
 
 ```
 
@@ -997,19 +950,15 @@ filter(df, Name=="John")
 
 ```
 
-## Arrange
+## Exercise
 
-![](arrange.svg){fig-align="center"}
-
-## Arrange
-
--   The `arrange` function can reorder rows
-
--   By default, `arrange` orders in ascending order:
+-   Return a df that only has NA for `sex`
 
 ```{r}
-arrange(df, Survived) %>%
-  head()
+arrange(df, year) %>%
+  head() %>%
+  relocate(year)
+
 ```
 
 ## Mutate
@@ -1020,18 +969,18 @@ arrange(df, Survived) %>%
 
 ```{r}
 df %>% 
-  mutate(spec_island=paste(species,island, sep="_"))
-
-df %>%
-  tibble()
+  #combines what is in species and #what is island together with #underscore
+  mutate(spec_island=paste(species,island, sep="_")) %>%
+  head()
 ```
 
 ## Creating conditional (if-else) variables
 
-A general function for creating new variables based on existing
-variables is the `ifelse()` function, which "returns a value with the
-same shape as test which is filled with elements selected from either
-yes or no depending on whether the element of test is `TRUE` or `FALSE`.
+-   A general function for creating new variables based on existing
+    variables is the `ifelse()` function, which returns a value with the
+    same shape as test which is filled with elements selected from
+    either yes or no depending on whether the element of test is `TRUE`
+    or `FALSE`.
 
 ```{r}
 #| eval: false
@@ -1046,37 +995,41 @@ ifelse(test, yes, no)
 
 ## Adding columns
 
-Combined with `ifelse(condition, TRUE, FALSE)`, it can give you:
+-   Mutate combined with `ifelse(condition, TRUE, FALSE)`, it can give
+    you:
 
 ```{r}
 
 df = mutate(df, 
-            ticket_type = ifelse(
-              Pclass==1,
-              "First Class", ifelse(
-              Pclass== 2, "Business Class", 
-              "Economy")
+            island_num = ifelse(
+              island=="Biscoe",
+              "first_island", ifelse(
+              island== "Dream", "second_island", 
+              "third_island")
             )
 )
-head(df$money)
+head(df$island_num)
 ```
 
 ## Case_when
 
 ::: columns
 ::: {.column width="50%"}
-![](images/case_when.PNG){fig-align="center"}
+![](images/case_when.PNG){fig-align="center" width="605" height="416"}
 :::
 
 ::: {.column width="50%"}
 ```{r}
 df = mutate(df, 
-            ticket_type = case_when(
-              Pclass==1 ~ "First CLass",
-              Pclass==2 ~ "Buiness Class",
-              TRUE ~ "Economy"
+            island_num = case_when(
+              island=="Biscoe" ~ "first_island",
+              island=="Dream" ~ "second_island",
+              TRUE ~ "third_island"
             ))
-head(df$ticket_type)
+df %>%
+  select(island_num) %>%
+  head() %>%
+  knitr::kable()
 
 ```
 :::
@@ -1085,9 +1038,9 @@ head(df$ticket_type)
 ## Exercise
 
 > See if you can use the logical operators to manipulate our penguins
-> data, use `%`
+> data using `%`
 
--   All of the penguin data from 2007
+-   All of the penguin data from year 2007
 
 -   All of the female penguins
 
@@ -1095,7 +1048,7 @@ head(df$ticket_type)
 
 -   Order from smallest to largest flipper
 
--   Only the flipper length and species columns
+-   Select only the flipper length and species columns
 
 # Outline
 
@@ -1105,9 +1058,7 @@ head(df$ticket_type)
 
 -   R commands & functions
 
-    -   Tidyverse & the pipe operator
-
--   Multiple functions
+-   Tidyverse & the pipe operator
 
 -   Reading in data
 

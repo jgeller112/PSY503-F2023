@@ -3,9 +3,16 @@ title: "Week 2"
 subtitle: "Introduction to R"
 date: 2023-09-11
 ---
-## Before Class
+## Before class
 
 - Chapters 1 and 2: Statistics and Data Science: A Modeling Approach
+
+## After class
+
+- [Cheat sheet](https://dmirman.github.io/RCheatSheet.pdf) - Most used functions cheat sheet 
+
+- [RStudio Cheat sheets](https://posit.co/resources/cheatsheets/)
+
 
 
 
