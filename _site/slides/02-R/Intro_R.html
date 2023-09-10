@@ -11,7 +11,7 @@
   <meta name="generator" content="quarto-1.3.361">
 
   <meta name="author" content="Jason Geller, PH.D.">
-  <meta name="dcterms.date" content="2023-09-09">
+  <meta name="dcterms.date" content="2023-09-10">
   <title>Crash Course in R</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -404,7 +404,7 @@ Jason Geller, PH.D.
 </div>
 </div>
 
-  <p class="date">2023-09-09</p>
+  <p class="date">2023-09-10</p>
 </section>
 <section id="packages" class="slide level2">
 <h2>Packages</h2>
@@ -451,17 +451,15 @@ Jason Geller, PH.D.
 </section>
 <section id="objective" class="slide level2">
 <h2>Objective</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
 <ul>
-<li><p>Get you familiar with R</p></li>
-<li><p>Explain some basic terminology and concepts</p></li>
-<li><p>Learn how to run commands and save scripts</p></li>
+<li><p>Get you familiar with R</p>
+<ul>
+<li><p>Understand basic terminology and concepts</p></li>
+<li><p>Learn how to run commands</p></li>
 <li><p>Manipulate data</p></li>
-<li><p>Load and save data</p></li>
+<li><p>Load and save data/scripts/QMD/RMD</p></li>
+</ul></li>
 </ul>
-</div>
-</div>
 
 <img data-src="lover.png" style="width:30.0%" class="r-stretch quarto-figure-center"></section>
 <section id="its-scary" class="slide level2">
@@ -477,7 +475,7 @@ Jason Geller, PH.D.
 <ul>
 <li>Google is your friend
 <ul>
-<li>Try Googling the specific error message first</li>
+<li>Try googling the specific error message first</li>
 <li>Then try googling your specific function and the error</li>
 <li>Try a bunch of different search terms.</li>
 </ul></li>
@@ -493,7 +491,7 @@ Jason Geller, PH.D.
 <li><p><code>Why R</code></p></li>
 <li><p>IDE</p></li>
 <li><p>R commands, data structures, and functions</p></li>
-<li><p>Tidyverse &amp; the Pipe Operator</p></li>
+<li><p>Tidyverse &amp; the pipe operator</p></li>
 <li><p>Reading in data</p></li>
 <li><p>Manipulating data</p></li>
 <li><p>Saving data</p></li>
@@ -744,26 +742,12 @@ Levels: female male</code></pre>
 <li><p>Each cell is a single measurement</p></li>
 </ul></li>
 </ul></li>
+<li><p>Only prints few rows</p></li>
+<li><p>Never changes your input’s type or name</p></li>
 </ul>
 </section>
-<section id="tibbles-1" class="slide level2">
-<h2>Tibbles</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<ul>
-<li>Never changes input’s type</li>
-<li>Never adjusts the names of variables</li>
-<li>It evaluates arguments lazily and sequentially</li>
-</ul>
-</div><div class="column" style="width:50%;">
-<ul>
-<li><p>differences</p>
-<ul>
-<li>Only prints first 6 rows</li>
-</ul></li>
-</ul>
-</div>
-</div>
+<section id="section" class="slide level2">
+<h2></h2>
 </section>
 <section id="matrices" class="slide level2">
 <h2>Matrices</h2>
@@ -978,10 +962,7 @@ Levels: female male</code></pre>
 <section id="exercise" class="slide level2">
 <h2>Exercise</h2>
 <ol type="1">
-<li><p>Open a blank new script</p>
-<p>1.1 File -&gt; New File &gt; R Script</p>
-<p>1.2 Ctrl + Shift + N</p>
-<p>1.3 Click on new script icon</p></li>
+<li><p>Open a blank new script</p></li>
 <li><p>To paste strings together you can use the <code>paste</code>() function (e.g., paste(“Hello”, “World”)). Use ?paste or Google “paste function in R” to get an idea of how to use this function.</p>
 <p>2.1 Create three vectors. One vector should have three first names. The second vector should have 3 last names. Finally, the third vector should have 3 ages. Use the <code>paste</code> function to string together these vectors separated by a <code>_</code></p></li>
 <li><p>Modify the function below and instead of returning the sum, return the mean</p>
@@ -1197,7 +1178,7 @@ Levels: female male</code></pre>
 <li>costs: amount of costs dataset entails demographic and school-related information on imaginary students, such as</li>
 </ul>
 </section>
-<section id="section" class="slide level2">
+<section id="section-1" class="slide level2">
 <h2></h2>
 </section>
 <section id="load-data-from-osf" class="slide level2">
@@ -1235,12 +1216,12 @@ Levels: female male</code></pre>
 <span id="cb48-4"><a href="#cb48-4"></a> <span class="fu">gt</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 
-<div id="lgkkxobyiq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="hkuyjxlnvy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#lgkkxobyiq .gt_table {
+#hkuyjxlnvy .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1265,7 +1246,7 @@ Levels: female male</code></pre>
   border-left-color: #D3D3D3;
 }
 
-#lgkkxobyiq .gt_heading {
+#hkuyjxlnvy .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1277,12 +1258,12 @@ Levels: female male</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#lgkkxobyiq .gt_caption {
+#hkuyjxlnvy .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#lgkkxobyiq .gt_title {
+#hkuyjxlnvy .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1294,7 +1275,7 @@ Levels: female male</code></pre>
   border-bottom-width: 0;
 }
 
-#lgkkxobyiq .gt_subtitle {
+#hkuyjxlnvy .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1306,13 +1287,13 @@ Levels: female male</code></pre>
   border-top-width: 0;
 }
 
-#lgkkxobyiq .gt_bottom_border {
+#hkuyjxlnvy .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#lgkkxobyiq .gt_col_headings {
+#hkuyjxlnvy .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1327,7 +1308,7 @@ Levels: female male</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#lgkkxobyiq .gt_col_heading {
+#hkuyjxlnvy .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1347,7 +1328,7 @@ Levels: female male</code></pre>
   overflow-x: hidden;
 }
 
-#lgkkxobyiq .gt_column_spanner_outer {
+#hkuyjxlnvy .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1359,15 +1340,15 @@ Levels: female male</code></pre>
   padding-right: 4px;
 }
 
-#lgkkxobyiq .gt_column_spanner_outer:first-child {
+#hkuyjxlnvy .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#lgkkxobyiq .gt_column_spanner_outer:last-child {
+#hkuyjxlnvy .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#lgkkxobyiq .gt_column_spanner {
+#hkuyjxlnvy .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1379,7 +1360,7 @@ Levels: female male</code></pre>
   width: 100%;
 }
 
-#lgkkxobyiq .gt_group_heading {
+#hkuyjxlnvy .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1405,7 +1386,7 @@ Levels: female male</code></pre>
   text-align: left;
 }
 
-#lgkkxobyiq .gt_empty_group_heading {
+#hkuyjxlnvy .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1420,15 +1401,15 @@ Levels: female male</code></pre>
   vertical-align: middle;
 }
 
-#lgkkxobyiq .gt_from_md > :first-child {
+#hkuyjxlnvy .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#lgkkxobyiq .gt_from_md > :last-child {
+#hkuyjxlnvy .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#lgkkxobyiq .gt_row {
+#hkuyjxlnvy .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1447,7 +1428,7 @@ Levels: female male</code></pre>
   overflow-x: hidden;
 }
 
-#lgkkxobyiq .gt_stub {
+#hkuyjxlnvy .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1460,7 +1441,7 @@ Levels: female male</code></pre>
   padding-right: 5px;
 }
 
-#lgkkxobyiq .gt_stub_row_group {
+#hkuyjxlnvy .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1474,11 +1455,11 @@ Levels: female male</code></pre>
   vertical-align: top;
 }
 
-#lgkkxobyiq .gt_row_group_first td {
+#hkuyjxlnvy .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#lgkkxobyiq .gt_summary_row {
+#hkuyjxlnvy .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1488,16 +1469,16 @@ Levels: female male</code></pre>
   padding-right: 5px;
 }
 
-#lgkkxobyiq .gt_first_summary_row {
+#hkuyjxlnvy .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#lgkkxobyiq .gt_first_summary_row.thick {
+#hkuyjxlnvy .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#lgkkxobyiq .gt_last_summary_row {
+#hkuyjxlnvy .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1507,7 +1488,7 @@ Levels: female male</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#lgkkxobyiq .gt_grand_summary_row {
+#hkuyjxlnvy .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1517,7 +1498,7 @@ Levels: female male</code></pre>
   padding-right: 5px;
 }
 
-#lgkkxobyiq .gt_first_grand_summary_row {
+#hkuyjxlnvy .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1527,11 +1508,11 @@ Levels: female male</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#lgkkxobyiq .gt_striped {
+#hkuyjxlnvy .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#lgkkxobyiq .gt_table_body {
+#hkuyjxlnvy .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1540,7 +1521,7 @@ Levels: female male</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#lgkkxobyiq .gt_footnotes {
+#hkuyjxlnvy .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1554,7 +1535,7 @@ Levels: female male</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#lgkkxobyiq .gt_footnote {
+#hkuyjxlnvy .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -1563,7 +1544,7 @@ Levels: female male</code></pre>
   padding-right: 5px;
 }
 
-#lgkkxobyiq .gt_sourcenotes {
+#hkuyjxlnvy .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1577,7 +1558,7 @@ Levels: female male</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#lgkkxobyiq .gt_sourcenote {
+#hkuyjxlnvy .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1585,64 +1566,64 @@ Levels: female male</code></pre>
   padding-right: 5px;
 }
 
-#lgkkxobyiq .gt_left {
+#hkuyjxlnvy .gt_left {
   text-align: left;
 }
 
-#lgkkxobyiq .gt_center {
+#hkuyjxlnvy .gt_center {
   text-align: center;
 }
 
-#lgkkxobyiq .gt_right {
+#hkuyjxlnvy .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#lgkkxobyiq .gt_font_normal {
+#hkuyjxlnvy .gt_font_normal {
   font-weight: normal;
 }
 
-#lgkkxobyiq .gt_font_bold {
+#hkuyjxlnvy .gt_font_bold {
   font-weight: bold;
 }
 
-#lgkkxobyiq .gt_font_italic {
+#hkuyjxlnvy .gt_font_italic {
   font-style: italic;
 }
 
-#lgkkxobyiq .gt_super {
+#hkuyjxlnvy .gt_super {
   font-size: 65%;
 }
 
-#lgkkxobyiq .gt_footnote_marks {
+#hkuyjxlnvy .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#lgkkxobyiq .gt_asterisk {
+#hkuyjxlnvy .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#lgkkxobyiq .gt_indent_1 {
+#hkuyjxlnvy .gt_indent_1 {
   text-indent: 5px;
 }
 
-#lgkkxobyiq .gt_indent_2 {
+#hkuyjxlnvy .gt_indent_2 {
   text-indent: 10px;
 }
 
-#lgkkxobyiq .gt_indent_3 {
+#hkuyjxlnvy .gt_indent_3 {
   text-indent: 15px;
 }
 
-#lgkkxobyiq .gt_indent_4 {
+#hkuyjxlnvy .gt_indent_4 {
   text-indent: 20px;
 }
 
-#lgkkxobyiq .gt_indent_5 {
+#hkuyjxlnvy .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
