@@ -44,8 +44,12 @@ library(grateful)
 
 ```{r}
 #| echo: false
-#| 
+
 pkgs <- cite_packages(output = "table", out.dir = ".")
+
+# use to test if you have necessary packages
+pkgs_load <- pull(select(pkgs, Package)) %>%
+  lapply(FUN=require, character.only=T)
 
 knitr::kable(pkgs[1])
 
@@ -249,11 +253,11 @@ x <- 4
 ```
 
 -   The arrow `<-` is called an ASSIGNMENT OPERATOR, and tells R to save
-    an object called x that has the value of 4.
+    an object called x that has the value of 4
+
+    -   Even `->` (please don't do this)
 
 -   Can use `=` if you want
-
--   Even `->` (please dont do this)
 
 ## Objects and values
 
@@ -770,28 +774,6 @@ fac%>%
 
 ## Looking at data
 
--   Select specific columns
-
-    -   use \$ operator to grab one column
-
-        ```{r}
-        #| eval = FALSE
-        fac
-
-        ```
-
-```{r}
-#| eval = FALSE
-
-fac%>% 
-  select(column_name) %>%
-  summary() %>% 
- 
-
-```
-
-## Looking at data
-
 ```{r}
 
 fac # whole dataset
@@ -836,7 +818,6 @@ tabyl(fac$students)
 
     -   `select`
     -   `filter`
-    -   `arrange`
     -   `mutate`
     -   `summarize`
 
@@ -872,6 +853,8 @@ select(df, sex, year) %>%
 ## Select helpers
 
 ![](select_helpers.svg){fig-align="center"}
+
+## 
 
 ## Select columns
 
@@ -1021,8 +1004,6 @@ df %>%
 
 -   Get flipper length \> 150
 
--   Order from smallest to largest flipper
-
 -   Select only the flipper length and species columns
 
 ## Summarize
@@ -1031,8 +1012,9 @@ df %>%
 
     -   Use with `group_by`
 
-```{r}
+![](2471e3f8-348e-470c-a162-3eea0606ff96_rw_3840.png){fig-align="center"}
 
+```{r}
 
 
 
