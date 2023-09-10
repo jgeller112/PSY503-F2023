@@ -58,13 +58,13 @@ knitr::kable(pkgs[1])
 ::: {.column width="50%"}
 -   Get you familiar with R
 
--   Explain some basic terminology and concepts
+    -   Understand basic terminology and concepts
 
--   Learn how to run commands and save scripts
+    -   Learn how to run commands and save scripts
 
--   Manipulate data
+    -   Manipulate data
 
--   Load and save data
+    -   Load and save data
 :::
 :::
 
@@ -97,7 +97,7 @@ knitr::include_graphics("nocluedog.png")
 -   You will get errors that don't help or make sense
 
     -   Google is your friend
-        -   Try Googling the specific error message first
+        -   Try googling the specific error message first
         -   Then try googling your specific function and the error
         -   Try a bunch of different search terms.
     -   ChatGPT (use wisely)
