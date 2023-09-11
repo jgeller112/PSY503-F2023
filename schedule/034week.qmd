@@ -1,10 +1,12 @@
 ---
 title: "Week 4"
-subtitle: "Distributions and Visualizations"
+subtitle: "Probablity Distributions and Visualizations"
 date: 2023-09-25
 ---
+
 ## Before Class
 
-- Ch.3 and Ch.4 Statistics and Data Science: A Modeling Approach
+-   Ch.3 and Ch.4 Statistics and Data Science: A Modeling Approach
 
-- 
+-   Imai
+    <https://psy503-found-stats.netlify.app/readings_pdf/imai%20probability%20chapter.pdf>
