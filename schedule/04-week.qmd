@@ -9,6 +9,9 @@ date: 2023-09-25
 
 - Ch.3 and Ch.4 Statistics and Data Science: A Modeling Approach
 
+- Imai (optional but good for probablity review)
+    <https://psy503-found-stats.netlify.app/readings_pdf/imai%20probability%20chapter.pdf
+
 ### Articles
 
 - Hehman, E., & Xie, S. Y. (2021). [Doing Better Data Visualization.](https://journals.sagepub.com/doi/full/10.1177/25152459211045334).Advances in Methods and Practices in Psychological Science, 4(4), 25152459211045336. https://doi.org/10.1177/25152459211045334
