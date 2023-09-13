@@ -11,6 +11,6 @@ In Lab 1, you will be introduced to Github, R and RStudio.
 For this assignment, you will pull a repository I have created, add information to the assignment, and push your work to a Github repository.
 
 
-To access Lab 1, please go here: [Access to assignment](https://classroom.github.com/a/HNV2lUtEu).
+To access Lab 1, please go here: [Access to assignment](https://classroom.github.com/a/HNV2lUtE).
 
 To push and pull to your repository you can use Github Desktop, or do it within RStudio. If the latter, you will need to follow the directions from the Quarto blog presentation (https://psy504-advanced-stats.netlify.app/slides/quarto/quarto#/github-in-rstudio).
