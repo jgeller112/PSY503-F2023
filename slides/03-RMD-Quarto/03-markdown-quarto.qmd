@@ -1,12 +1,12 @@
 ---
-title: "Markdown/Quarto"
+title: "RMD/Quarto"
 subtitle: "Princeton University"
-author: "Jason Geller, PH.D."
+author: "Jason Geller, PH.D.(He/Him)"
 date: 'Updated:`r Sys.Date()`'
 footer: "PSY 503: Foundations of Statistics in Psychology"
 format: 
   revealjs:
-    theme: psy504.css
+    theme: blood
     multiplex: true
     transition: fade
     slide-number: true
@@ -14,10 +14,12 @@ format:
     chalkboard: true
 execute:
   freeze: auto
-  echo: true
+  echo: false
   message: false
   warning: false
   fig-align: "center"
+  fig-height: 4
+  fig-width: 8
 editor_options: 
   chunk_output_type: inline
 editor: 
@@ -37,45 +39,35 @@ library(emo)
 
 -   **Markdown:** a simple text-only format for writing documents
 -   **R markdown:** a tool for mixing R code with markdown
--   **Papaja:** Tool for writing APA style articles
+    -   **Quarto**
+-   **Papaja:** Tool for writing APA style articles in RMD
+-   **Apaquarto**: Tool for writing APA style articles in QMD
 
-# Installing R Markdown
+## Installing R Markdown
 
--   First things first
+-   If you load `tidyverse` you are good to go!
+-   Do install `tinytex`
 
 ```{r}
 #| echo = TRUE,
 #| eval = FALSE
 
-install.packages("rmarkdown")
-
-if(!requireNamespace("tinytex", quietly = TRUE)) install.packages("tinytex")
-
+install.packages('tinytex')
 tinytex::install_tinytex()
+# to uninstall TinyTeX, run tinytex::uninstall_tinytex() 
 
 ```
 
-## Installing R Markdown
-
-```{r}
-#| echo = FALSE,
-#| out.width = "100%"
-knitr::include_graphics("open_rmd.png", dpi = 350)
-```
-
-## R markdown is a "chimera"
+## RMD is a "chimera"
 
 ::: columns
 ::: {.column width="50%"}
-```{r}
-#| echo = FALSE
-knitr::include_graphics("img/chimera.jpg", dpi = 350)
-```
+![](img/chimera.jpg){fig-align="center"}
 :::
 
 ::: {.column width="50%"}
 ::: {.column width="50%"}
-### On the input side...
+On the input side:
 
 -   Write text in markdown
 -   Insert code using R
@@ -85,82 +77,65 @@ knitr::include_graphics("img/chimera.jpg", dpi = 350)
 :::
 :::
 
-```{}
-```
-
-:::
-
-## R markdown is a "chimera"
+## RMD is a "chimera"
 
 ::: columns
 ::: {.column width="50%"}
-```{r}
-knitr::include_graphics("img/chimera.jpg", dpi = 350)
-```
+
+![](img/chimera.jpg)
 :::
 
 ::: {.column width="50%"}
-On the output side...
+On the output side:
 
--   Output to HTML
--   Output to PDF
--   Output to Word
--   Many other variations too
+-   HTML
 
-## 
+-   DOC
+
+-   PDF
+:::
 :::
 
-## 
-:::
+# The Problem
 
 ## Word
 
-```{r}
-#| echo = FALSE
-knitr::include_graphics("img/word_document_surface.png", dpi = 300)
-```
+![](img/word_document_surface.png){fig-align="center"}
 
 ## Inside
 
-```{r}
-#| echo = FALSE
-knitr::include_graphics("img/word_document_inside.png", dpi = 150)
-```
+![](img/word_document_inside.png){fig-align="center"}
 
-## Word documents are complicated
+## Word issues
 
 -   A .docx file is a compressed folder with lots of files
--   Your text is buried in with a lot of formatting information
+    -   Your text is buried in with a lot of formatting information
+-   Not reproducible
+    -   Code is divorced from writing
+-   Difficult to maintain
+    -   Errors!
+-   What do I share?
+    -   Lack of transparency
+
+## HTML documents are also complicated
 
 ::: columns
 ::: {.column width="50%"}
-```{r}
-#| echo = FALSE,
-#| out.height = "80%"
-knitr::include_graphics("img/html_document_surface.png")
-
-```
+![](img/html_document_surface.png){fig-align="center"}
 :::
 
 ::: {.column width="50%"}
-```{r}
-
-#| echo = FALSE
-knitr::include_graphics("img/html_document_inside.png", dpi = 150)
-
-```
+![](img/html_document_inside.png){fig-align="center"}
 :::
 :::
 
-## HTML documents are complicated
+## Microsoft Excel hids errors
 
--   Looks simple because I removed most formatting
--   Still unpleasant to look at
+\- Francesa Gino
 
-```{r}
-#| echo = FALSE
-#knitr::include_graphics("img/blogdown.png", dpi = 1000)
-```
+![](https://poetsandquants.com/wp-content/uploads/sites/5/2023/08/Francesca-Gino.jpg){fig-align="center"}
+
+# Why Markdown?
 
 ## What do we want?
 
@@ -169,49 +144,26 @@ knitr::include_graphics("img/html_document_inside.png", dpi = 150)
 -   Something that... allows **formatting**
 -   Something that... can **build** to something pretty
 
-# Here's an example of a markdown document...
+## Here's an example of a markdown document...
 
-# Introduction
+![](images/Screen%20Shot%202023-09-14%20at%2010.34.26%20AM.png){fig-align="center"}
 
-Welcome to my **awesome** class. You will learn all kinds of useful
-things about R markdown.
-
-## Why should you care? - Markdown is simple and reproducible - You can make it pretty if you want to - The R Markdown variant lets you add R code
-
-# Introduction
+## Introduction
 
 Welcome to my **awesome** class. You will learn all kinds of useful
 things about R markdown.
 
-## Why should you care?
+# Okaaaaay, but this seems boring?
 
--   Markdown is simple and reproducible
--   You can make it pretty if you want to
--   The R Markdown variant lets you add R code
-
-## Notice the theme!
-
--   My slides are written using Quarto(...sort of)
--   So the markdown output you see here matches the slides theme
--   I'll talk about modifying themes later
-
-# What does this have to do with open science?
-
--   Using Markdown to generate publications, reports, websites, etc.
-    will: \* Make dynamically updating them with new results easier \*
-    Reduce errors from manually entering results \* Create new venues
-    for science communication
-
--   Using Markdown to organize your code will: \* Allow you to organize
-    and annotate your analyses \* Make it easier for others to tell what
-    you did, aiding reproducibility
+# Let me show you where it can take you
 
 ## Professional websites
 
 ```{r}
 #| echo = FALSE,
 #| out.height = "70%",
-#| out.width = "50%"
+#| out.width = "50%", 
+#| fig.align = "center"
 knitr::include_graphics("img/example_professional_site.png")
 ```
 
@@ -220,25 +172,24 @@ knitr::include_graphics("img/example_professional_site.png")
 ```{r}
 #| echo = FALSE,
 #| out.height = "70%",
-#| out.width = "50%"
+#| out.width = "50%", 
+#| fig.align = "center"
+
 knitr::include_graphics("img/example_visual_blog.png")
 ```
 
 ## Books
 
-```{r}
-#| echo = FALSE,
-#| out.height = "70%",
-#| out.width = "80%"
-knitr::include_graphics("img/example_book.png")
-```
+![](img/lakens_book.png){fig-align="center"}
 
 ## Academic papers
 
 ```{r}
 #| echo = FALSE,
 #| out.height = "70%",
-#| out.width = "60%"
+#| out.width = "60%", 
+#| fig.align = "center"
+
 knitr::include_graphics("img/example_papers.png")
 ```
 
@@ -247,19 +198,15 @@ knitr::include_graphics("img/example_papers.png")
 ```{r}
 #| echo = FALSE,
 #| out.height = "70%",
-#| out.width = "80%"
+#| out.width = "80%", 
+#| fig.align = "center"
+
 knitr::include_graphics("img/example_slides.png")
 ```
 
-```{r}
-#| echo = FALSE
-#knitr::include_graphics("img/blogdown.png", dpi = 1000)
-```
+## Resumes/CVs
 
-```{r}
-#| echo = FALSE
-#knitr::include_graphics("img/blogdown.png", dpi = 1000)
-```
+![](img/modern-cv.webp){fig-align="center"}
 
 # Formatting
 
@@ -283,7 +230,7 @@ knitr::include_graphics("img/example_slides.png")
 
 ...and on
 
-## Lists
+## Creating lists
 
 You may also want to use a bulleted list!
 
@@ -306,37 +253,23 @@ You may also want to use a bulleted list!
 
 ## Emphasis
 
--   To emphasize your point you might want to use *italics* or **bold**.
+![](img/emp.jpg){fig-align="center"}
 
--   To have something appear as code (using a monospace font), surround
-    everything that is code with ticks \`like this\`, so that it shows
-    up `like this`.
+## Hyperlinks
 
-## Inserting local images
+-   \<https:://placekitten.com/200/300\>
 
-| \### What you type...                         |
-|:----------------------------------------------|
-| \### What you get... ![](./img/rmarkdown.png) |
-| \## Inserting images from the web             |
+-   \[Kittens\](https:://placekitten.com/200/300)
 
-\### What you type...
+## Images
 
-```         
-![(https://placekitten.com/200/300)
-```
+-   Local images
 
-## 
+    -   \![\](./img/)
 
-\### What you get... ![](https://placekitten.com/200/300)
+    -   \![\]https:://placekitten.com/200/300)
 
-|     |
-|:----|
-|     |
-
-```{r}
-#| echo = FALSE
-#knitr::include_graphics("img/blogdown.png", dpi = 1000)
-```
+# R Markdown
 
 ## What do we want?
 
@@ -345,7 +278,9 @@ You may also want to use a bulleted list!
     data vis)
 -   Something that... can **build** to HTML, PDF, Word, etc
 
-## Let's dissect the document we just wrote!
+# Live Demo
+
+# Let's dissect the document we just wrote!
 
 ```{r}
 #| echo = FALSE,
@@ -363,7 +298,7 @@ knitr::include_graphics("img/my_first_rmd_plain.png", dpi = 200)
 knitr::include_graphics("img/my_first_rmd_yaml.png", dpi = 200)
 ```
 
-<h2>The part inside <code>\`\`\`{r}</code> is R code</h2>
+## Code chunk
 
 ```{r}
 #| echo = FALSE,
@@ -379,11 +314,6 @@ knitr::include_graphics("img/my_first_rmd_r.png", dpi = 200)
 #| out.height = "70%",
 #| out.width = "60%"
 knitr::include_graphics("img/my_first_rmd_markdown.png", dpi = 200)
-```
-
-```{r}
-#| echo = FALSE
-#knitr::include_graphics("img/blogdown.png", dpi = 1000)
 ```
 
 ## The YAML header is used for customisation
@@ -407,7 +337,7 @@ knitr::include_graphics("img/my_first_rmd_yaml.png", dpi = 200)
 
 title: "My First R Markdown Document"
 author: "Jason Geller"
-date: "10/02/2021"
+date: "9/15/2021"
 output: html_document
 ```
 
@@ -447,31 +377,21 @@ output:
     toc_float: true
 ```
 
-, inverse
-
-.hand\[Do it yourself!
-
 -   Practice editing the YAML header
 -   Try creating different outputs and themes
 -   Try creating a floating table of contents
 -   Try to get it to not float!
 
-, inverse
+## Code chunks
 
-background-image: url("img/silhouette.jpg") background-size: cover
+![](img/code_chunks.jpeg){fig-align="center"}
 
-.pull-left-narrow\[ .huge-bisque-number\[8 .pull-right-wide\[
-<br><br><br> .larger\[.embolden\[Inserting equations
-
-```{r}
-#| echo = FALSE
-#knitr::include_graphics("img/blogdown.png", dpi = 1000)
-```
+# Equations
 
 ## An overview
 
 -   Anything inside dollar signs `$` is treated as "inline" maths
--   Anything inside two dollar `$$` is a standalone equation
+-   `$$` is a standalone equation
 -   Whitespace matters: `$x$` is an equation, `$x $` is not
 -   Equations follow "LaTeX" rules
 
@@ -479,43 +399,48 @@ background-image: url("img/silhouette.jpg") background-size: cover
 
 -   This $x^2$ is inline
 
--   This \$x\^2\$ is inline
-
 -   This equation is standalone
-    \$\$
-    a\^2 + b\^2 = c\^2
-    \$\$
+    $$\bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i$$
 
-# Hiding the Mess
+## R markdown advantages
 
--   Options for code chunks
+-   Explicitly link R code to output
 
--   At the start of your document in a code chunk or within each chunk
-    `{r}`
+-   Wide variety of formats
 
-```{r}
-#| echo = FALSE,
-#| out.width = "100%"
-knitr::include_graphics("cleanup_code.jpeg", dpi = 1000)
-```
+-   Increases transparency
+
+-   Increases efficiency
 
 # Hello Quarto!
 
 -   Quarto is the next generation of RMarkdown
 
-> ### Quarto^®^ is an open-source scientific and technical publishing system built on [Pandoc](https://pandoc.org/)
-
-## Big Universe
+## Big universe
 
 -   RMarkdown for EVERYONE
 
-![](horst_quarto_schematic.png){fig-align="center"}
+![](img/horst_quarto_schematic.png){fig-align="center"}
 
 ## What is a Quarto?
 
-![](samplesheet.jpeg){fig-align="center"}
+![](https://psy504-advanced-stats.netlify.app/slides/quarto/samplesheet.jpeg){fig-align="center"}
 
 # Formatting
+
+## Visual editor
+
+-   One fairly new feature (and one reason we're using RStudio today!)
+    is their new [visual markdown
+    editor](https://rstudio.github.io/visual-markdown-editing/). It's
+    basically an ultra powerful hybrid of Markdown and Microsoft Word.
+    But be warned, it's a little buggy if you frequently switch editing
+    modes.
+
+-   People write whole books in Markdown, and this may make that seem a
+    little more achievable. For example, the new visual editor allows
+    [easy citation management with a Zotero
+    library](https://www.rstudio.com/blog/rstudio-1-4-preview-citations/)
 
 # Header 1
 
@@ -574,6 +499,8 @@ You may also want to use a bulleted list!
 For example, this R code:
 
 ```{r}
+#| echo: true
+#| 
 # reticulate library allows you to run both 
 # R and python in the same .qmd
 library(reticulate)
@@ -582,6 +509,8 @@ library(reticulate)
 ```
 
 ```{python}
+#| echo: true
+#| 
 
 fruits = ['apple', 'banana', 'cherry']
 
@@ -589,9 +518,7 @@ fruits[0]
 
 ```
 
-# Callout Blocks
-
-## Callout Blocks
+## Callout blocks
 
 -   Call-out blocks highlight sections of text that interrupt the flow
     of your regular text. Maybe it's a definition, a warning, or a
@@ -606,7 +533,7 @@ fruits[0]
     Say things here
     :::
 
-# Callout Blocks
+## Callout blocks
 
 ::: callout-note
 ## Note
@@ -615,7 +542,7 @@ Note that there are five types of callouts, including: `note`, `tip`,
 `warning`, `caution`, and `important`.
 :::
 
-# Callout Blocks
+## Callout blocks
 
 ::: callout-warning
 ## Warning
@@ -651,12 +578,13 @@ the user. You can use \`collapse="true"\` to collapse it by default or
 default.
 :::
 
-## Code Chunks
+## Code chunks
 
 -   `{r, eval=TRUE}` has been replaced with `#| eval = TRUE`
 
 ```{r}
-#| eval = FALSE
+#| echo: true
+#| eval: false
 print("Don't Run Me")
 ```
 
@@ -674,8 +602,7 @@ columns
 ## Element 1
 
 ```{r}
-#| fig.width: 8
-#| fig.heigh: 4
+#| echo: true
 
 library(ggplot2)
 fig = ggplot(airquality, aes(Temp, Ozone)) + 
@@ -687,41 +614,27 @@ fig = ggplot(airquality, aes(Temp, Ozone)) +
 ## Element 2
 
 ```{r}
+#| fig-width: 8
+#| fig-heigh: 4
+#| echo: true
+#| fig-align: "center"
 
 fig
 ```
 :::
 
-# Visual Editor
-
--One fairly new feature (and one reason we're using RStudio today!) is
-their new [visual markdown
-editor](https://rstudio.github.io/visual-markdown-editing/). It's
-basically an ultra powerful hybrid of Markdown and Microsoft Word. But
-be warned, it's a little buggy if you frequently switch editing modes.
-
--People write whole books in Markdown, and this may make that seem a
-little more achievable. For example, the new visual editor allows [easy
-citation management with a Zotero
-library](https://www.rstudio.com/blog/rstudio-1-4-preview-citations/)
-(if we have time, I'll show you this on my computer).
-
-# Cheat Sheet
+## Cheat Sheet
 
 -   https://www.markdownguide.org/cheat-sheet/
 
-# Papaja
+## Papaja
+
+![](img/papaja_hex.png){fig-align="center"}
+
+## Installing papaja
 
 ```{r}
-#| echo = FALSE,
-#| out.width = "100%"
-knitr::include_graphics("papaja_hex.png", dpi = 1000)
-```
-
-# Installing Papaja
-
-```{r}
-
+#| echo: true
 # Install latest CRAN release
 #install.packages("papaja")
 
@@ -737,13 +650,9 @@ knitr::include_graphics("papaja_hex.png", dpi = 1000)
 
 ```
 
-# Open Papaja
+## Open papaja
 
-```{r}
-#| echo = FALSE,
-#| out.width = "100%"
-knitr::include_graphics("open_papaja.png", dpi = 1000)
-```
+![](img/open_papaja.png){fig-align="center"}
 
 ## APAQUARTO
 
@@ -751,20 +660,18 @@ knitr::include_graphics("open_papaja.png", dpi = 1000)
 
     -   Still in active development
 
-```{=html}
 <!-- -->
-```
+
 -   <https://github.com/wjschne/apaquarto>
 
-## Papaja Videos
+## Papaja videos
 
 ::: columns
 ::: {.column width="50%"}
-
 {{< video https://www.youtube.com/watch?v=dmB6sHDbs7Q&t=1s width="400" height="300" >}}
 :::
 
 ::: {.column width="50%"}
-{{< video https://www.youtube.com/watch?v=dmB6sHDbs7Q&t=1s width="400" height="300"  >}}
+{{< video https://www.youtube.com/watch?v=dmB6sHDbs7Q&t=1s width="400" height="300" >}}
 :::
 :::
