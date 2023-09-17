@@ -1,7 +1,7 @@
 ---
-title: "Week 4b"
+title: "Week 5a"
 subtitle: "Modeling, Normal Distribution,and Z-scores"
-date: 2023-09-27
+date: 2023-10-02
 ---
 
 ## Before Class
