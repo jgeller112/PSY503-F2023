@@ -1,5 +1,5 @@
 ---
-title: "RMD/Quarto"
+title: "RMD/QMD"
 subtitle: "Princeton University"
 author: "Jason Geller, PH.D.(He/Him)"
 date: 'Updated:`r Sys.Date()`'
@@ -110,12 +110,23 @@ On the output side:
 
 -   A .docx file is a compressed folder with lots of files
     -   Your text is buried in with a lot of formatting information
+
+. . .
+
 -   Not reproducible
     -   Code is divorced from writing
 -   Difficult to maintain
     -   Errors!
 -   What do I share?
     -   Lack of transparency
+
+## 
+
+## Microsoft Excel hids errors
+
+\- Francesca Gino
+
+![](https://poetsandquants.com/wp-content/uploads/sites/5/2023/08/Francesca-Gino.jpg){fig-align="center"}
 
 ## HTML documents are also complicated
 
@@ -128,12 +139,6 @@ On the output side:
 ![](img/html_document_inside.png){fig-align="center"}
 :::
 :::
-
-## Microsoft Excel hids errors
-
-\- Francesa Gino
-
-![](https://poetsandquants.com/wp-content/uploads/sites/5/2023/08/Francesca-Gino.jpg){fig-align="center"}
 
 # Why Markdown?
 
@@ -675,3 +680,9 @@ fig
 {{< video https://www.youtube.com/watch?v=dmB6sHDbs7Q&t=1s width="400" height="300" >}}
 :::
 :::
+
+## Acknowledgments 
+
+-   Slides partially influenced by the queen Danielle J Navarro
+
+![](img/djn.jpeg){fig-align="center"}
