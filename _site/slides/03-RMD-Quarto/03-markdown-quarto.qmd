@@ -67,7 +67,7 @@ tinytex::install_tinytex()
 
 ::: {.column width="50%"}
 ::: {.column width="50%"}
-On the input side:
+Input side:
 
 -   Write text in markdown
 -   Insert code using R
@@ -86,7 +86,7 @@ On the input side:
 :::
 
 ::: {.column width="50%"}
-On the output side:
+Output side:
 
 -   HTML
 
@@ -628,9 +628,10 @@ fig
 ```
 :::
 
-## Cheat Sheet
+## Cheat Sheets
 
 -   https://www.markdownguide.org/cheat-sheet/
+-   https://rstudio.github.io/cheatsheets/html/quarto.html
 
 ## Papaja
 
