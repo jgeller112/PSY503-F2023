@@ -11,7 +11,7 @@
   <meta name="generator" content="quarto-1.3.361">
 
   <meta name="author" content="Jason Geller, PH.D.">
-  <meta name="dcterms.date" content="2023-08-21">
+  <meta name="dcterms.date" content="2023-09-18">
   <title>Probablity Distributions and Visualization</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -404,24 +404,14 @@ Jason Geller, PH.D.
 </div>
 </div>
 
-  <p class="date">2023-08-21</p>
+  <p class="date">2023-09-18</p>
 </section>
 <section id="outline" class="slide level2">
 <h2>Outline</h2>
 <ul>
 <li><p>Probability - What is it?</p></li>
 <li><p>Random variables</p></li>
-<li><p>Probablity distributions</p>
-<ul>
-<li><p>Discrete</p>
-<ul>
-<li>PMF</li>
-</ul></li>
-<li><p>Continuous</p>
-<ul>
-<li>CDF</li>
-</ul></li>
-</ul></li>
+<li><p>Probability distributions</p></li>
 <li><p>DGP</p></li>
 <li><p><code>ggplot</code> primer</p></li>
 <li><p>Visualizing uncertainty</p></li>
@@ -430,14 +420,9 @@ Jason Geller, PH.D.
 <section id="packages" class="slide level2">
 <h2>Packages</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(pacman)</span>
-<span id="cb1-2"><a href="#cb1-2"></a></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">p_load</span>(<span class="st">"tidyverse"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">library</span>(grateful)</span>
-<span id="cb2-2"><a href="#cb2-2"></a>pkgs <span class="ot">&lt;-</span> <span class="fu">cite_packages</span>(<span class="at">output =</span> <span class="st">"table"</span>, <span class="at">out.dir =</span> <span class="st">"."</span>)</span>
-<span id="cb2-3"><a href="#cb2-3"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(pkgs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(grateful)</span>
+<span id="cb1-2"><a href="#cb1-2"></a>pkgs <span class="ot">&lt;-</span> <span class="fu">cite_packages</span>(<span class="at">output =</span> <span class="st">"table"</span>, <span class="at">out.dir =</span> <span class="st">"."</span>)</span>
+<span id="cb1-3"><a href="#cb1-3"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(pkgs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table>
 <colgroup>
@@ -460,7 +445,7 @@ Jason Geller, PH.D.
 </tr>
 <tr class="even">
 <td style="text-align: left;">colorspace</td>
-<td style="text-align: left;">2.0.3</td>
+<td style="text-align: left;">2.1.0</td>
 <td style="text-align: left;"><span class="citation" data-cites="colorspace2009b">@colorspace2009b</span>; <span class="citation" data-cites="colorspace2009c">@colorspace2009c</span>; <span class="citation" data-cites="colorspace2020a">@colorspace2020a</span></td>
 </tr>
 <tr class="odd">
@@ -535,7 +520,7 @@ Jason Geller, PH.D.
 </tr>
 <tr class="odd">
 <td style="text-align: left;">scales</td>
-<td style="text-align: left;">1.2.0</td>
+<td style="text-align: left;">1.2.1</td>
 <td style="text-align: left;"><span class="citation" data-cites="scales">@scales</span></td>
 </tr>
 <tr class="even">
@@ -561,7 +546,6 @@ Jason Geller, PH.D.
 <li><p>You are going to roll some dice twice. What is the chance you roll double 1s?</p></li>
 <li><p>What is the chance that a live specimen of the New Jersey Devil will be found?</p></li>
 <li><p>Who is more likely to be a victim of a street robbery, a young man or an old lady?</p></li>
-<li><p>Yesterday the whether forecaster said that there was a 30% chance of rain today, and it rained today. Was she right or wrong?</p></li>
 </ol>
 </section>
 <section id="what-is-probability-theory" class="slide level2">
@@ -580,13 +564,14 @@ Jason Geller, PH.D.
 <li>Let’s flip a fair coin</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>coinflips <span class="ot">&lt;-</span> <span class="cf">function</span>(x) { flip<span class="ot">=</span><span class="fu">rbinom</span>(x, <span class="dv">1</span>, <span class="fl">0.5</span>) </span>
-<span id="cb3-2"><a href="#cb3-2"></a>flip<span class="ot">=</span><span class="fu">ifelse</span>(flip<span class="sc">==</span><span class="dv">1</span>, <span class="st">"Tails"</span>, <span class="st">"Heads"</span>) </span>
-<span id="cb3-3"><a href="#cb3-3"></a></span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="fu">return</span>(flip) </span>
-<span id="cb3-5"><a href="#cb3-5"></a>}</span>
-<span id="cb3-6"><a href="#cb3-6"></a></span>
-<span id="cb3-7"><a href="#cb3-7"></a><span class="fu">coinflips</span>(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>coinflips <span class="ot">&lt;-</span> <span class="cf">function</span>(x) { </span>
+<span id="cb2-2"><a href="#cb2-2"></a>  flip<span class="ot">=</span><span class="fu">rbinom</span>(x, <span class="dv">1</span>, <span class="fl">0.5</span>) </span>
+<span id="cb2-3"><a href="#cb2-3"></a>flip<span class="ot">=</span><span class="fu">ifelse</span>(flip<span class="sc">==</span><span class="dv">1</span>, <span class="st">"Tails"</span>, <span class="st">"Heads"</span>) </span>
+<span id="cb2-4"><a href="#cb2-4"></a></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="fu">return</span>(flip) </span>
+<span id="cb2-6"><a href="#cb2-6"></a>}</span>
+<span id="cb2-7"><a href="#cb2-7"></a></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="fu">coinflips</span>(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Heads"</code></pre>
 </div>
@@ -612,8 +597,11 @@ Jason Geller, PH.D.
 <section id="random-processes" class="slide level2">
 <h2>Random processes</h2>
 <ul>
-<li>Random processes are <strong>mechanisms</strong> that produce outcomes… from <strong>a world/set of possible</strong> outcomes… with some degree of <strong>uncertainty</strong> but with <strong>regularity</strong></li>
+<li>Random processes are mechanisms that produce outcomes… from a world/set of possible outcomes… with some degree of uncertainty but with regularity</li>
 </ul>
+</section>
+<section id="frequentist" class="slide level2">
+<h2>Frequentist</h2>
 </section>
 <section id="what-is-a-random-variable" class="slide level2">
 <h2>What is a random variable?</h2>
@@ -624,8 +612,8 @@ Jason Geller, PH.D.
 <ul>
 <li><p>Sample space?</p>
 <ul>
-<li><p>One possible outcome: <span class="math inline">\(\omega = \{\mathrm{Tyler, \: Stats}\}\)</span></p></li>
-<li><p>Another possible outcome: <span class="math inline">\(\omega = \{\mathrm{Sana, \: Sev}\}\)</span></p></li>
+<li><p>One possible outcome: <span class="math inline">\(\omega = \{\mathrm{Ari, \: Alex}\}\)</span></p></li>
+<li><p>Another possible outcome: <span class="math inline">\(\omega = \{\mathrm{Aditi, \: Brooke}\}\)</span></p></li>
 </ul></li>
 </ul></li>
 </ul></li>
@@ -664,7 +652,7 @@ Jason Geller, PH.D.
 </ul>
 </section>
 <section id="discrete-random-variables-definition" class="slide level2">
-<h2>Discrete random variables: Definition</h2>
+<h2>Discrete random variables: definition</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <ul>
@@ -679,6 +667,9 @@ Jason Geller, PH.D.
 </div>
 </div>
 </div>
+</section>
+<section id="section" class="slide level2">
+<h2></h2>
 </section>
 <section id="continuous-random-variables-definition" class="slide level2">
 <h2>Continuous random variables: Definition</h2>
@@ -698,45 +689,53 @@ Jason Geller, PH.D.
 </section>
 <section id="probability-mass-function-pmf" class="slide level2">
 <h2>Probability Mass Function (PMF)</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
 <ul>
-<li><p>Let <span class="math inline">\(X\)</span> be a discrete rv</p></li>
+<li><p>Let <span class="math inline">\(X\)</span> be a discrete random variable</p></li>
 <li><p>The <em>probability mass function (PMF)</em> of <span class="math inline">\(X\)</span> summarizes the probability of each outcome <span class="math inline">\(x\)</span></p></li>
 <li><p>PMF: function <span class="math inline">\(p\)</span> given by <span class="math display">\[p(x) = P(X = x)\]</span> for all possible values of <span class="math inline">\(x\)</span></p></li>
 </ul>
-</div><div class="column" style="width:50%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Binomial Distribution Parameters</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a>n <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a>p <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
-<span id="cb5-4"><a href="#cb5-4"></a></span>
-<span id="cb5-5"><a href="#cb5-5"></a><span class="co"># Data Generation</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="dv">0</span><span class="sc">:</span>n)</span>
-<span id="cb5-7"><a href="#cb5-7"></a>df<span class="sc">$</span>probability <span class="ot">&lt;-</span> <span class="fu">dbinom</span>(df<span class="sc">$</span>x, <span class="at">size =</span> n, <span class="at">prob =</span> p)</span>
-<span id="cb5-8"><a href="#cb5-8"></a></span>
-<span id="cb5-9"><a href="#cb5-9"></a><span class="co"># Plot using ggplot2</span></span>
-<span id="cb5-10"><a href="#cb5-10"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> probability)) <span class="sc">+</span></span>
-<span id="cb5-11"><a href="#cb5-11"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"skyblue"</span>) <span class="sc">+</span> <span class="co"># Use geom_col for bar plots with predefined width</span></span>
-<span id="cb5-12"><a href="#cb5-12"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"PMF of Binomial(10, 0.5)"</span>, <span class="at">x =</span> <span class="st">"x"</span>, <span class="at">y =</span> <span class="st">"Probability"</span>) <span class="sc">+</span></span>
-<span id="cb5-13"><a href="#cb5-13"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-4-1.png" width="1152"></p>
-</div>
-</div>
-</div>
-</div>
+</section>
+<section id="example-dessert-tonight" class="slide level2">
+<h2>Example: Dessert tonight</h2>
+<ul>
+<li>Coin flips!</li>
+</ul>
 </section>
 <section id="cumulative-distribution-function-cdf-definition" class="slide level2">
-<h2>Cumulative Distribution Function (CDF): Definition</h2>
+<h2>Cumulative distribution function (CDF): definition</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
 <ul>
 <li><p>The CDF of a random variable is the function <span class="math inline">\(F\)</span> such that <span class="math inline">\(F(x) = P(X \leq x)\)</span></p></li>
-<li><p>CDF tells us the probability that an outcome below a specific outcome occurs</p>
-<ul>
-<li>e.g., probability of less than 30 tables showing up if you accepted 34 reservations</li>
-<li></li>
-</ul></li>
+<li><p>CDF tells us the probability that an outcome below a specific outcome occurs</p></li>
+<li><p>Sums to 1</p></li>
 </ul>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="co"># Generate a random dataset</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="fu">set.seed</span>(<span class="dv">666</span>)</span>
+<span id="cb4-5"><a href="#cb4-5"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(<span class="dv">100</span>))</span>
+<span id="cb4-6"><a href="#cb4-6"></a></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="co"># Calculate the cumulative distribution</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> </span>
+<span id="cb4-9"><a href="#cb4-9"></a>  <span class="fu">arrange</span>(x) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-10"><a href="#cb4-10"></a>  <span class="fu">mutate</span>(<span class="at">cdf =</span> <span class="fu">row_number</span>() <span class="sc">/</span> <span class="fu">n</span>())</span>
+<span id="cb4-11"><a href="#cb4-11"></a></span>
+<span id="cb4-12"><a href="#cb4-12"></a><span class="co"># Create the CDF plot</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> cdf)) <span class="sc">+</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb4-15"><a href="#cb4-15"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb4-16"><a href="#cb4-16"></a>  <span class="fu">ggtitle</span>(<span class="st">"CDF of Random Data"</span>) <span class="sc">+</span></span>
+<span id="cb4-17"><a href="#cb4-17"></a>  <span class="fu">xlab</span>(<span class="st">"Data Points"</span>) <span class="sc">+</span></span>
+<span id="cb4-18"><a href="#cb4-18"></a>  <span class="fu">ylab</span>(<span class="st">"CDF"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-4-1.png" width="768"></p>
+</div>
+</div>
+</div>
+</div>
 </section>
 <section id="probablity-density-function-pdf-definition" class="slide level2">
 <h2>Probablity Density Function (PDF): Definition</h2>
@@ -796,8 +795,12 @@ Jason Geller, PH.D.
 </div>
 </div>
 </section>
-<section id="sampling-in-r" class="slide level2">
-<h2>Sampling in R</h2>
+<section id="probability-distributions" class="slide level2">
+<h2>Probability distributions</h2>
+
+<img data-src="https://psy503-found-stats.netlify.app/slides/04-models/distribs.png" width="843" class="r-stretch quarto-figure-center"></section>
+<section id="sampling" class="slide level2">
+<h2>Sampling</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <ul>
@@ -805,15 +808,16 @@ Jason Geller, PH.D.
 <ul>
 <li><p>Uniform distribution</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>dice<span class="ot">=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">6</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a></span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="fu">sample</span>(dice, <span class="dv">6</span>, <span class="at">replace=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>dice<span class="ot">=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">6</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="co"># sample replace</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="fu">sample</span>(dice, <span class="dv">6</span>, <span class="at">replace=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1 3 3 4 6 2</code></pre>
+<pre><code>[1] 6 6 2 1 2 4</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">sample</span>(dice, <span class="dv">6</span>, <span class="at">replace=</span><span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># same wo replace</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="fu">sample</span>(dice, <span class="dv">6</span>, <span class="at">replace=</span><span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 6 3 4 2 5 1</code></pre>
+<pre><code>[1] 1 5 2 6 3 4</code></pre>
 </div>
 </div></li>
 </ul></li>
@@ -828,6 +832,7 @@ Jason Geller, PH.D.
 </div>
 <aside class="notes">
 <p>Once we have an idea about the DGP we can simulate data to see if it conforms to expectations.</p>
+<p>Sampling helps us build up our intuitions about probablity distribiutions</p>
 <p>The book talks about dice rolls.</p>
 <p>What are some others?</p>
 <style type="text/css">
@@ -842,36 +847,21 @@ Jason Geller, PH.D.
           display:block!important;
       }</style></aside>
 </section>
-<section id="sampling-in-r-1" class="slide level2">
-<h2>Sampling in R</h2>
+<section id="sources-of-variance" class="slide level2">
+<h2>Sources of Variance</h2>
 <ul>
-<li>Let’s look at another example</li>
+<li>There is uncertainty associated with the DGP</li>
 </ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>population <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Hannah"</span>, <span class="st">"Noah"</span>, <span class="st">"Emma"</span>, <span class="st">"Ben"</span>, <span class="st">"Mia"</span>)</span>
-<span id="cb10-2"><a href="#cb10-2"></a></span>
-<span id="cb10-3"><a href="#cb10-3"></a>combinations <span class="ot">&lt;-</span> <span class="fu">combn</span>(population, <span class="dv">4</span>)</span>
-<span id="cb10-4"><a href="#cb10-4"></a></span>
-<span id="cb10-5"><a href="#cb10-5"></a>sample_number <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="co"># draw a random integer from 1 to 5</span></span>
-<span id="cb10-6"><a href="#cb10-6"></a>sample_number</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 4</code></pre>
-</div>
-</div>
-<div class="fragment">
-<ul>
-<li>What is the DGP here?</li>
-</ul>
-</div>
 </section>
 <section id="randomness" class="slide level2">
 <h2>Randomness</h2>
 <ul>
-<li><p>Probability is used to characterize uncertainty/randomness</p>
-<div class="columns">
+<li><ul>
+<li><ul>
+<li><div class="columns">
 <div class="column" style="width:50%;">
 <ul>
-<li><code>shuffle</code></li>
+<li><code>shuffle</code> function</li>
 </ul>
 </div><div class="column" style="width:50%;">
 <div class="quarto-figure quarto-figure-center">
@@ -881,34 +871,42 @@ Jason Geller, PH.D.
 </div>
 </div>
 </div></li>
+</ul></li>
+</ul></li>
 </ul>
 </section>
 <section>
 <section id="visualizing-variance" class="title-slide slide level1 center">
 <h1>Visualizing Variance</h1>
-
-</section>
-<section id="ggplot2" class="slide level2">
-<h2><code>ggplot2</code></h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="/slides/02-R/images/ggplot.PNG"></p>
+</figure>
+</div>
+</div><div class="column" style="width:50%;">
 <ul>
 <li><p><code>ggplot2</code> is tidyverse’s data visualization package</p></li>
 <li><p>The gg in <code>ggplot2</code> stands for Grammar of Graphics</p></li>
 <li><p>It is inspired by the book Grammar of Graphics by Leland Wilkinson</p></li>
 <li><p>A grammar of graphics is a tool that enables us to concisely describe the components of a graphic</p></li>
 </ul>
+</div>
+</div>
 </section>
-<section id="ggplot2-1" class="slide level2">
+<section id="ggplot2" class="slide level2">
 <h2><code>ggplot2</code></h2>
 
 <img data-src="images/ggplot_aes.png" class="r-stretch quarto-figure-center"></section>
-<section id="ggplot2-2" class="slide level2">
+<section id="ggplot2-1" class="slide level2">
 <h2><code>ggplot2</code></h2>
 <p>Let’s start with a blank canvas</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">ggplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">ggplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-7-1.png" width="1152" class="r-stretch"></section>
+<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-6-1.png" width="768" class="r-stretch"></section>
 <section id="ggplot2---data" class="slide level2">
 <h2><code>ggplot2</code> - Data</h2>
 <div class="columns">
@@ -920,13 +918,13 @@ Jason Geller, PH.D.
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">library</span>(palmerpenguins)</span>
-<span id="cb13-2"><a href="#cb13-2"></a><span class="fu">ggplot</span>(<span class="at">data=</span>penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>bill_length_mm, <span class="at">y =</span> flipper_length_mm))<span class="sc">+</span></span>
-<span id="cb13-3"><a href="#cb13-3"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">library</span>(palmerpenguins)</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="fu">ggplot</span>(<span class="at">data=</span>penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>bill_length_mm, <span class="at">y =</span> flipper_length_mm))<span class="sc">+</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-8-1.png" width="1152"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-7-1.png" width="768"></p>
 </figure>
 </div>
 </div>
@@ -943,12 +941,12 @@ Jason Geller, PH.D.
 </ul></li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb14" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>bill_length_mm, <span class="at">y =</span> flipper_length_mm)) <span class="sc">+</span></span>
-<span id="cb14-2"><a href="#cb14-2"></a>          <span class="fu">geom_point</span>()<span class="sc">+</span></span>
-<span id="cb14-3"><a href="#cb14-3"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>bill_length_mm, <span class="at">y =</span> flipper_length_mm)) <span class="sc">+</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a>          <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-9-1.png" width="1152" class="r-stretch quarto-figure-center"></section>
+<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-8-1.png" width="768" class="r-stretch quarto-figure-center"></section>
 <section id="ggplot2---layers-1" class="slide level2">
 <h2><code>ggplot2</code> - Layers</h2>
 <ul>
@@ -958,62 +956,62 @@ Jason Geller, PH.D.
 </ul></li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb15" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>    <span class="fu">ggplot</span>(<span class="at">data=</span>penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>bill_length_mm, <span class="at">y =</span> flipper_length_mm)) <span class="sc">+</span></span>
-<span id="cb15-2"><a href="#cb15-2"></a>      <span class="fu">geom_smooth</span>()<span class="sc">+</span></span>
-<span id="cb15-3"><a href="#cb15-3"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>    <span class="fu">ggplot</span>(<span class="at">data=</span>penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>bill_length_mm, <span class="at">y =</span> flipper_length_mm)) <span class="sc">+</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a>      <span class="fu">geom_smooth</span>()<span class="sc">+</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-10-1.png" width="1152" class="r-stretch quarto-figure-center"></section>
+<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-9-1.png" width="768" class="r-stretch quarto-figure-center"></section>
 <section id="ggplot2-layers" class="slide level2">
 <h2><code>ggplot2</code> Layers</h2>
 <ul>
 <li>Maybe a linear line</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb16" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>    <span class="fu">ggplot</span>(<span class="at">data=</span>penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>bill_length_mm, <span class="at">y =</span> flipper_length_mm)) <span class="sc">+</span></span>
-<span id="cb16-2"><a href="#cb16-2"></a>      <span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">"lm"</span>)<span class="sc">+</span></span>
-<span id="cb16-3"><a href="#cb16-3"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>    <span class="fu">ggplot</span>(<span class="at">data=</span>penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>bill_length_mm, <span class="at">y =</span> flipper_length_mm)) <span class="sc">+</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a>      <span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">"lm"</span>)<span class="sc">+</span></span>
+<span id="cb13-3"><a href="#cb13-3"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-11-1.png" width="1152" class="r-stretch quarto-figure-center"></section>
+<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-10-1.png" width="768" class="r-stretch quarto-figure-center"></section>
 <section id="ggplot2---layers-2" class="slide level2">
 <h2><code>ggplot2</code> - Layers</h2>
 <ul>
 <li>It might be nice to see the raw data WITH the line. We can combine geoms!</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb17" data-code-line-numbers="2-3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>    <span class="fu">ggplot</span>(<span class="at">data=</span>penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>bill_length_mm, <span class="at">y =</span> flipper_length_mm)) <span class="sc">+</span></span>
-<span id="cb17-2"><a href="#cb17-2"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb17-3"><a href="#cb17-3"></a>      <span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">"lm"</span>)<span class="sc">+</span></span>
-<span id="cb17-4"><a href="#cb17-4"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14" data-code-line-numbers="2-3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>    <span class="fu">ggplot</span>(<span class="at">data=</span>penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>bill_length_mm, <span class="at">y =</span> flipper_length_mm)) <span class="sc">+</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb14-3"><a href="#cb14-3"></a>      <span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">"lm"</span>)<span class="sc">+</span></span>
+<span id="cb14-4"><a href="#cb14-4"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-12-1.png" width="1152" class="r-stretch quarto-figure-center"></section>
+<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-11-1.png" width="768" class="r-stretch quarto-figure-center"></section>
 <section id="ggplot2---size" class="slide level2">
 <h2><code>ggplot2</code> - Size</h2>
 <ul>
 <li>Points are a bit small. Let’s make them bigger!</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb18" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>    <span class="fu">ggplot</span>(<span class="at">data=</span>penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>bill_length_mm, <span class="at">y =</span> flipper_length_mm)) <span class="sc">+</span></span>
-<span id="cb18-2"><a href="#cb18-2"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span> </span>
-<span id="cb18-3"><a href="#cb18-3"></a>      <span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">"lm"</span>)<span class="sc">+</span></span>
-<span id="cb18-4"><a href="#cb18-4"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>    <span class="fu">ggplot</span>(<span class="at">data=</span>penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>bill_length_mm, <span class="at">y =</span> flipper_length_mm)) <span class="sc">+</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span> </span>
+<span id="cb15-3"><a href="#cb15-3"></a>      <span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">"lm"</span>)<span class="sc">+</span></span>
+<span id="cb15-4"><a href="#cb15-4"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-13-1.png" width="1152" class="r-stretch quarto-figure-center"></section>
+<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-12-1.png" width="768" class="r-stretch quarto-figure-center"></section>
 <section id="ggplot2---color" class="slide level2">
 <h2><code>ggplot2</code> - Color</h2>
 <ul>
 <li>How could we add information about different types of penguins?</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb19" data-code-line-numbers="1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>    <span class="fu">ggplot</span>(<span class="at">data=</span>penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>bill_length_mm, <span class="at">y =</span> flipper_length_mm, <span class="at">color=</span>species)) <span class="sc">+</span></span>
-<span id="cb19-2"><a href="#cb19-2"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">4</span>)<span class="sc">+</span></span>
-<span id="cb19-3"><a href="#cb19-3"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16" data-code-line-numbers="1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>    <span class="fu">ggplot</span>(<span class="at">data=</span>penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>bill_length_mm, <span class="at">y =</span> flipper_length_mm, <span class="at">color=</span>species)) <span class="sc">+</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">4</span>)<span class="sc">+</span></span>
+<span id="cb16-3"><a href="#cb16-3"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-14-1.png" width="1152" class="r-stretch quarto-figure-center"></section>
+<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-13-1.png" width="768" class="r-stretch quarto-figure-center"></section>
 <section id="ggplot2--axes" class="slide level2">
 <h2><code>ggplot2</code>- Axes</h2>
 <ul>
@@ -1023,14 +1021,14 @@ Jason Geller, PH.D.
 </ul></li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb20" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>    <span class="fu">ggplot</span>(<span class="at">data=</span>penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>bill_length_mm, <span class="at">y =</span> flipper_length_mm, <span class="at">color=</span>species)) <span class="sc">+</span></span>
-<span id="cb20-2"><a href="#cb20-2"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span> </span>
-<span id="cb20-3"><a href="#cb20-3"></a>  <span class="fu">xlab</span>(<span class="st">"Bill Length in milimters"</span>) <span class="sc">+</span> </span>
-<span id="cb20-4"><a href="#cb20-4"></a>  <span class="fu">ylab</span>(<span class="st">"Flipper Length in milimeters"</span>)<span class="sc">+</span></span>
-<span id="cb20-5"><a href="#cb20-5"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>    <span class="fu">ggplot</span>(<span class="at">data=</span>penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>bill_length_mm, <span class="at">y =</span> flipper_length_mm, <span class="at">color=</span>species)) <span class="sc">+</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span> </span>
+<span id="cb17-3"><a href="#cb17-3"></a>  <span class="fu">xlab</span>(<span class="st">"Bill Length in milimters"</span>) <span class="sc">+</span> </span>
+<span id="cb17-4"><a href="#cb17-4"></a>  <span class="fu">ylab</span>(<span class="st">"Flipper Length in milimeters"</span>)<span class="sc">+</span></span>
+<span id="cb17-5"><a href="#cb17-5"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-15-1.png" width="1152" class="r-stretch quarto-figure-center"></section>
+<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-14-1.png" width="768" class="r-stretch quarto-figure-center"></section>
 <section id="ggplot2---title" class="slide level2">
 <h2><code>ggplot2</code> - Title</h2>
 <div class="columns">
@@ -1040,17 +1038,17 @@ Jason Geller, PH.D.
 <li><p>Add title</p></li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb21" data-code-line-numbers="5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>title <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>bill_length_mm, <span class="at">y =</span> flipper_length_mm, <span class="at">color=</span>species)) <span class="sc">+</span></span>
-<span id="cb21-2"><a href="#cb21-2"></a>          <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span> </span>
-<span id="cb21-3"><a href="#cb21-3"></a>          <span class="fu">xlab</span>(<span class="st">"Bill Length in milimters"</span>) <span class="sc">+</span> </span>
-<span id="cb21-4"><a href="#cb21-4"></a>          <span class="fu">ylab</span>(<span class="st">"Flipper Length in milimeters"</span>) <span class="sc">+</span> </span>
-<span id="cb21-5"><a href="#cb21-5"></a>          <span class="fu">ggtitle</span>(<span class="st">"Palmer Penguins: Bill length vs Flipper length"</span>) <span class="sc">+</span></span>
-<span id="cb21-6"><a href="#cb21-6"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18" data-code-line-numbers="5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>title <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>bill_length_mm, <span class="at">y =</span> flipper_length_mm, <span class="at">color=</span>species)) <span class="sc">+</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a>          <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span> </span>
+<span id="cb18-3"><a href="#cb18-3"></a>          <span class="fu">xlab</span>(<span class="st">"Bill Length in milimters"</span>) <span class="sc">+</span> </span>
+<span id="cb18-4"><a href="#cb18-4"></a>          <span class="fu">ylab</span>(<span class="st">"Flipper Length in milimeters"</span>) <span class="sc">+</span> </span>
+<span id="cb18-5"><a href="#cb18-5"></a>          <span class="fu">ggtitle</span>(<span class="st">"Palmer Penguins: Bill length vs Flipper length"</span>) <span class="sc">+</span></span>
+<span id="cb18-6"><a href="#cb18-6"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-17-1.png" width="1152"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-16-1.png" width="768"></p>
 </div>
 </div>
 </div>
@@ -1061,19 +1059,19 @@ Jason Geller, PH.D.
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb22" data-code-line-numbers="6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>theme_plot <span class="ot">&lt;-</span>  <span class="fu">ggplot</span>(<span class="at">data=</span>penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>bill_length_mm, <span class="at">y =</span> flipper_length_mm, <span class="at">color=</span>species)) <span class="sc">+</span></span>
-<span id="cb22-2"><a href="#cb22-2"></a>              <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span> </span>
-<span id="cb22-3"><a href="#cb22-3"></a>              <span class="fu">xlab</span>(<span class="st">"Bill Length in milimters"</span>) <span class="sc">+</span> </span>
-<span id="cb22-4"><a href="#cb22-4"></a>              <span class="fu">ylab</span>(<span class="st">"Flipper Length in milimeters"</span>) <span class="sc">+</span> </span>
-<span id="cb22-5"><a href="#cb22-5"></a>              <span class="fu">ggtitle</span>(<span class="st">"Palmer Penguins: Bill length vs Flipper length"</span>) <span class="sc">+</span> </span>
-<span id="cb22-6"><a href="#cb22-6"></a>              <span class="fu">theme_dark</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19" data-code-line-numbers="6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>theme_plot <span class="ot">&lt;-</span>  <span class="fu">ggplot</span>(<span class="at">data=</span>penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>bill_length_mm, <span class="at">y =</span> flipper_length_mm, <span class="at">color=</span>species)) <span class="sc">+</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a>              <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span> </span>
+<span id="cb19-3"><a href="#cb19-3"></a>              <span class="fu">xlab</span>(<span class="st">"Bill Length in milimters"</span>) <span class="sc">+</span> </span>
+<span id="cb19-4"><a href="#cb19-4"></a>              <span class="fu">ylab</span>(<span class="st">"Flipper Length in milimeters"</span>) <span class="sc">+</span> </span>
+<span id="cb19-5"><a href="#cb19-5"></a>              <span class="fu">ggtitle</span>(<span class="st">"Palmer Penguins: Bill length vs Flipper length"</span>) <span class="sc">+</span> </span>
+<span id="cb19-6"><a href="#cb19-6"></a>              <span class="fu">theme_dark</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-19-1.png" width="1152"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-18-1.png" width="768"></p>
 </figure>
 </div>
 </div>
@@ -1096,20 +1094,20 @@ Jason Geller, PH.D.
 <p><img data-src="https://github.com/BlakeRMills/MetBrewer/blob/main/PaletteImages/VanGogh2.png?raw=true"></p>
 </div><div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">library</span>(MetBrewer)</span>
-<span id="cb23-2"><a href="#cb23-2"></a><span class="co">#| code-line-numbers: "6"</span></span>
-<span id="cb23-3"><a href="#cb23-3"></a><span class="co">#| fig-align: center</span></span>
-<span id="cb23-4"><a href="#cb23-4"></a></span>
-<span id="cb23-5"><a href="#cb23-5"></a><span class="fu">ggplot</span>(<span class="at">data=</span>penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>bill_length_mm, <span class="at">y =</span> flipper_length_mm, <span class="at">color=</span>species)) <span class="sc">+</span></span>
-<span id="cb23-6"><a href="#cb23-6"></a>              <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span> </span>
-<span id="cb23-7"><a href="#cb23-7"></a>              <span class="fu">xlab</span>(<span class="st">"Bill Length in milimters"</span>) <span class="sc">+</span> </span>
-<span id="cb23-8"><a href="#cb23-8"></a>              <span class="fu">ylab</span>(<span class="st">"Flipper Length in milimeters"</span>) <span class="sc">+</span> </span>
-<span id="cb23-9"><a href="#cb23-9"></a>              <span class="fu">ggtitle</span>(<span class="st">"Palmer Penguins: Bill length vs Flipper length"</span>) <span class="sc">+</span> <span class="co"># Changes legend title, and selects a colour-palette</span></span>
-<span id="cb23-10"><a href="#cb23-10"></a>  <span class="fu">scale_colour_manual</span>(</span>
-<span id="cb23-11"><a href="#cb23-11"></a>                    <span class="at">values =</span> MetBrewer<span class="sc">::</span><span class="fu">met.brewer</span>(<span class="st">"VanGogh2"</span>,<span class="dv">3</span>)) <span class="sc">+</span> </span>
-<span id="cb23-12"><a href="#cb23-12"></a>              <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">library</span>(MetBrewer)</span>
+<span id="cb20-2"><a href="#cb20-2"></a><span class="co">#| code-line-numbers: "6"</span></span>
+<span id="cb20-3"><a href="#cb20-3"></a><span class="co">#| fig-align: center</span></span>
+<span id="cb20-4"><a href="#cb20-4"></a></span>
+<span id="cb20-5"><a href="#cb20-5"></a><span class="fu">ggplot</span>(<span class="at">data=</span>penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>bill_length_mm, <span class="at">y =</span> flipper_length_mm, <span class="at">color=</span>species)) <span class="sc">+</span></span>
+<span id="cb20-6"><a href="#cb20-6"></a>              <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span> </span>
+<span id="cb20-7"><a href="#cb20-7"></a>              <span class="fu">xlab</span>(<span class="st">"Bill Length in milimters"</span>) <span class="sc">+</span> </span>
+<span id="cb20-8"><a href="#cb20-8"></a>              <span class="fu">ylab</span>(<span class="st">"Flipper Length in milimeters"</span>) <span class="sc">+</span> </span>
+<span id="cb20-9"><a href="#cb20-9"></a>              <span class="fu">ggtitle</span>(<span class="st">"Palmer Penguins: Bill length vs Flipper length"</span>) <span class="sc">+</span> <span class="co"># Changes legend title, and selects a colour-palette</span></span>
+<span id="cb20-10"><a href="#cb20-10"></a>  <span class="fu">scale_colour_manual</span>(</span>
+<span id="cb20-11"><a href="#cb20-11"></a>                    <span class="at">values =</span> MetBrewer<span class="sc">::</span><span class="fu">met.brewer</span>(<span class="st">"VanGogh2"</span>,<span class="dv">3</span>)) <span class="sc">+</span> </span>
+<span id="cb20-12"><a href="#cb20-12"></a>              <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-20-1.png" width="1152"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-19-1.png" width="768"></p>
 </div>
 </div>
 </div>
@@ -1125,31 +1123,31 @@ Jason Geller, PH.D.
 </figure>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="co"># install.packages("remotes")</span></span>
-<span id="cb24-2"><a href="#cb24-2"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"MatthewBJane/theme_park"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="co"># install.packages("remotes")</span></span>
+<span id="cb21-2"><a href="#cb21-2"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"MatthewBJane/theme_park"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="fu">library</span>(<span class="st">"ThemePark"</span>)</span>
-<span id="cb25-2"><a href="#cb25-2"></a></span>
-<span id="cb25-3"><a href="#cb25-3"></a><span class="st">`</span><span class="at">X variable</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">50</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
-<span id="cb25-4"><a href="#cb25-4"></a><span class="st">`</span><span class="at">Y variable</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">50</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
-<span id="cb25-5"><a href="#cb25-5"></a></span>
-<span id="cb25-6"><a href="#cb25-6"></a></span>
-<span id="cb25-7"><a href="#cb25-7"></a><span class="fu">ggplot</span>(<span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">X variable</span><span class="st">`</span>, <span class="at">y =</span> <span class="st">`</span><span class="at">Y variable</span><span class="st">`</span>), <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
-<span id="cb25-8"><a href="#cb25-8"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">'lm'</span>, <span class="at">color =</span> barbie_theme_colors[<span class="st">"medium"</span>]) <span class="sc">+</span></span>
-<span id="cb25-9"><a href="#cb25-9"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb25-10"><a href="#cb25-10"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Barbie Scatter Plot'</span>) <span class="sc">+</span></span>
-<span id="cb25-11"><a href="#cb25-11"></a>  <span class="fu">theme_barbie</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">library</span>(<span class="st">"ThemePark"</span>)</span>
+<span id="cb22-2"><a href="#cb22-2"></a></span>
+<span id="cb22-3"><a href="#cb22-3"></a><span class="st">`</span><span class="at">X variable</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">50</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb22-4"><a href="#cb22-4"></a><span class="st">`</span><span class="at">Y variable</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">50</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb22-5"><a href="#cb22-5"></a></span>
+<span id="cb22-6"><a href="#cb22-6"></a></span>
+<span id="cb22-7"><a href="#cb22-7"></a><span class="fu">ggplot</span>(<span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">X variable</span><span class="st">`</span>, <span class="at">y =</span> <span class="st">`</span><span class="at">Y variable</span><span class="st">`</span>), <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb22-8"><a href="#cb22-8"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">'lm'</span>, <span class="at">color =</span> barbie_theme_colors[<span class="st">"medium"</span>]) <span class="sc">+</span></span>
+<span id="cb22-9"><a href="#cb22-9"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb22-10"><a href="#cb22-10"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Barbie Scatter Plot'</span>) <span class="sc">+</span></span>
+<span id="cb22-11"><a href="#cb22-11"></a>  <span class="fu">theme_barbie</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-22-1.png" width="1152"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-21-1.png" width="768"></p>
 </figure>
 </div>
 </div>
 </div>
-</div><section id="section" class="slide level2">
+</div><section id="section-1" class="slide level2">
 <h2></h2>
 </section>
 </div>
@@ -1174,61 +1172,55 @@ Jason Geller, PH.D.
 <h2>Histograms</h2>
 <ul>
 <li><p>Put data into equally spaced buckets (or bins), plot how many rows are in each bucket</p>
-<p>::: columns ::: {.column width=“50%”}</p></li>
-</ul>
+<div class="columns">
+<div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="fu">library</span>(gapminder)</span>
-<span id="cb26-2"><a href="#cb26-2"></a>gapminder_2002 <span class="ot">&lt;-</span> gapminder <span class="sc">%&gt;%</span> </span>
-<span id="cb26-3"><a href="#cb26-3"></a>      <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2002</span>)</span>
-<span id="cb26-4"><a href="#cb26-4"></a></span>
-<span id="cb26-5"><a href="#cb26-5"></a>    fig<span class="ot">=</span><span class="fu">ggplot</span>(gapminder_2002,</span>
-<span id="cb26-6"><a href="#cb26-6"></a>           <span class="fu">aes</span>(<span class="at">x =</span> lifeExp)) <span class="sc">+</span></span>
-<span id="cb26-7"><a href="#cb26-7"></a>      <span class="fu">geom_histogram</span>()<span class="sc">+</span></span>
-<span id="cb26-8"><a href="#cb26-8"></a>      <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">library</span>(gapminder)</span>
+<span id="cb23-2"><a href="#cb23-2"></a>gapminder_2002 <span class="ot">&lt;-</span> gapminder <span class="sc">%&gt;%</span> </span>
+<span id="cb23-3"><a href="#cb23-3"></a>      <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2002</span>)</span>
+<span id="cb23-4"><a href="#cb23-4"></a></span>
+<span id="cb23-5"><a href="#cb23-5"></a>    fig<span class="ot">=</span><span class="fu">ggplot</span>(gapminder_2002,</span>
+<span id="cb23-6"><a href="#cb23-6"></a>           <span class="fu">aes</span>(<span class="at">x =</span> lifeExp)) <span class="sc">+</span></span>
+<span id="cb23-7"><a href="#cb23-7"></a>      <span class="fu">geom_histogram</span>()<span class="sc">+</span></span>
+<span id="cb23-8"><a href="#cb23-8"></a>      <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<pre><code>:::
-
-::: {.column width="50%"}
-
-::: {.cell}
-::: {.cell-output-display}
-![](Prob_dist_viz_files/figure-revealjs/unnamed-chunk-24-1.png){width=1152}
-:::
-:::
-
-:::
-:::</code></pre>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-23-1.png" width="768"></p>
+</div>
+</div>
+</div>
+</div></li>
+</ul>
 </section>
 <section id="ggdist" class="slide level2">
 <h2><code>ggdist</code></h2>
 <ul>
 <li><p>Put data into equally spaced buckets (or bins), plot how many rows are in each bucket</p>
-<p>::: columns ::: {.column width=“50%”}</p></li>
-</ul>
+<div class="columns">
+<div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="fu">library</span>(ggdist)</span>
-<span id="cb28-2"><a href="#cb28-2"></a>        gapminder_2002 <span class="ot">&lt;-</span> gapminder <span class="sc">%&gt;%</span> </span>
-<span id="cb28-3"><a href="#cb28-3"></a>          <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2002</span>)</span>
-<span id="cb28-4"><a href="#cb28-4"></a></span>
-<span id="cb28-5"><a href="#cb28-5"></a>        fig<span class="ot">=</span><span class="fu">ggplot</span>(gapminder_2002,</span>
-<span id="cb28-6"><a href="#cb28-6"></a>               <span class="fu">aes</span>(<span class="at">x =</span> lifeExp)) <span class="sc">+</span></span>
-<span id="cb28-7"><a href="#cb28-7"></a>          <span class="fu">geom_dots</span>()<span class="sc">+</span></span>
-<span id="cb28-8"><a href="#cb28-8"></a>      <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="fu">library</span>(ggdist)</span>
+<span id="cb24-2"><a href="#cb24-2"></a>        gapminder_2002 <span class="ot">&lt;-</span> gapminder <span class="sc">%&gt;%</span> </span>
+<span id="cb24-3"><a href="#cb24-3"></a>          <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2002</span>)</span>
+<span id="cb24-4"><a href="#cb24-4"></a></span>
+<span id="cb24-5"><a href="#cb24-5"></a>        fig<span class="ot">=</span><span class="fu">ggplot</span>(gapminder_2002,</span>
+<span id="cb24-6"><a href="#cb24-6"></a>               <span class="fu">aes</span>(<span class="at">x =</span> lifeExp)) <span class="sc">+</span></span>
+<span id="cb24-7"><a href="#cb24-7"></a>          <span class="fu">geom_dots</span>()<span class="sc">+</span></span>
+<span id="cb24-8"><a href="#cb24-8"></a>      <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<pre><code>:::
-
-::: {.column width="50%"}
-
-::: {.cell}
-::: {.cell-output-display}
-![](Prob_dist_viz_files/figure-revealjs/unnamed-chunk-26-1.png){width=1152}
-:::
-:::
-
-:::
-:::</code></pre>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-25-1.png" width="768"></p>
+</div>
+</div>
+</div>
+</div></li>
+</ul>
 </section>
-<section id="section-1" class="slide level2">
+<section id="section-2" class="slide level2">
 <h2></h2>
 </section>
 <section id="histograms-bin-width" class="slide level2">
@@ -1240,31 +1232,31 @@ Jason Geller, PH.D.
 <div class="tab-content">
 <div id="tabset-1-1">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="fu">ggplot</span>(gapminder_2002, <span class="fu">aes</span>(<span class="at">x =</span> lifeExp)) <span class="sc">+</span></span>
-<span id="cb30-2"><a href="#cb30-2"></a>   <span class="fu">geom_dots</span>(<span class="at">binwidth =</span> .<span class="dv">2</span>, <span class="at">layout=</span><span class="st">"bin"</span>) <span class="sc">+</span></span>
-<span id="cb30-3"><a href="#cb30-3"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="fu">ggplot</span>(gapminder_2002, <span class="fu">aes</span>(<span class="at">x =</span> lifeExp)) <span class="sc">+</span></span>
+<span id="cb25-2"><a href="#cb25-2"></a>   <span class="fu">geom_dots</span>(<span class="at">binwidth =</span> .<span class="dv">2</span>, <span class="at">layout=</span><span class="st">"bin"</span>) <span class="sc">+</span></span>
+<span id="cb25-3"><a href="#cb25-3"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-27-1.png" width="768"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-26-1.png" width="768"></p>
 </div>
 </div>
 </div>
 <div id="tabset-1-2">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="fu">ggplot</span>(gapminder_2002, <span class="fu">aes</span>(<span class="at">x =</span> lifeExp)) <span class="sc">+</span></span>
-<span id="cb31-2"><a href="#cb31-2"></a>   <span class="fu">geom_dots</span>(<span class="at">binwidth =</span> <span class="dv">50</span>, <span class="at">layout=</span><span class="st">"bin"</span>) <span class="sc">+</span></span>
-<span id="cb31-3"><a href="#cb31-3"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="fu">ggplot</span>(gapminder_2002, <span class="fu">aes</span>(<span class="at">x =</span> lifeExp)) <span class="sc">+</span></span>
+<span id="cb26-2"><a href="#cb26-2"></a>   <span class="fu">geom_dots</span>(<span class="at">binwidth =</span> <span class="dv">50</span>, <span class="at">layout=</span><span class="st">"bin"</span>) <span class="sc">+</span></span>
+<span id="cb26-3"><a href="#cb26-3"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-28-1.png" width="768"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-27-1.png" width="768"></p>
 </div>
 </div>
 </div>
 <div id="tabset-1-3">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a> <span class="fu">ggplot</span>(gapminder_2002, <span class="fu">aes</span>(<span class="at">x =</span> lifeExp)) <span class="sc">+</span></span>
-<span id="cb32-2"><a href="#cb32-2"></a>      <span class="fu">geom_dots</span>(<span class="at">binwidth =</span> <span class="dv">2</span>, <span class="at">layout=</span><span class="st">"bin"</span>) <span class="sc">+</span></span>
-<span id="cb32-3"><a href="#cb32-3"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a> <span class="fu">ggplot</span>(gapminder_2002, <span class="fu">aes</span>(<span class="at">x =</span> lifeExp)) <span class="sc">+</span></span>
+<span id="cb27-2"><a href="#cb27-2"></a>      <span class="fu">geom_dots</span>(<span class="at">binwidth =</span> <span class="dv">2</span>, <span class="at">layout=</span><span class="st">"bin"</span>) <span class="sc">+</span></span>
+<span id="cb27-3"><a href="#cb27-3"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-29-1.png" width="768"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-28-1.png" width="768"></p>
 </div>
 </div>
 </div>
@@ -1284,11 +1276,11 @@ Jason Geller, PH.D.
 </ul>
 </div><div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="fu">ggplot</span>(gapminder_2002, <span class="fu">aes</span>(<span class="at">x =</span> lifeExp)) <span class="sc">+</span></span>
-<span id="cb33-2"><a href="#cb33-2"></a>   <span class="fu">geom_dots</span>(<span class="at">binwidth =</span> <span class="dv">2</span>, <span class="at">layout=</span><span class="st">"bin"</span>, <span class="at">color=</span><span class="st">"green"</span>) <span class="sc">+</span></span>
-<span id="cb33-3"><a href="#cb33-3"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="fu">ggplot</span>(gapminder_2002, <span class="fu">aes</span>(<span class="at">x =</span> lifeExp)) <span class="sc">+</span></span>
+<span id="cb28-2"><a href="#cb28-2"></a>   <span class="fu">geom_dots</span>(<span class="at">binwidth =</span> <span class="dv">2</span>, <span class="at">layout=</span><span class="st">"bin"</span>, <span class="at">color=</span><span class="st">"green"</span>) <span class="sc">+</span></span>
+<span id="cb28-3"><a href="#cb28-3"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-30-1.png" width="1152"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-29-1.png" width="768"></p>
 </div>
 </div>
 </div>
@@ -1306,11 +1298,11 @@ Jason Geller, PH.D.
 </ul>
 </div><div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a><span class="fu">ggplot</span>(gapminder_2002, <span class="fu">aes</span>(<span class="at">x =</span> lifeExp)) <span class="sc">+</span></span>
-<span id="cb34-2"><a href="#cb34-2"></a>   <span class="fu">geom_dots</span>(<span class="at">binwidth =</span> <span class="dv">2</span>, <span class="at">layout=</span><span class="st">"bin"</span>, <span class="at">color=</span><span class="st">"white"</span>, <span class="at">boundary=</span><span class="dv">50</span>) <span class="sc">+</span></span>
-<span id="cb34-3"><a href="#cb34-3"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="fu">ggplot</span>(gapminder_2002, <span class="fu">aes</span>(<span class="at">x =</span> lifeExp)) <span class="sc">+</span></span>
+<span id="cb29-2"><a href="#cb29-2"></a>   <span class="fu">geom_dots</span>(<span class="at">binwidth =</span> <span class="dv">2</span>, <span class="at">layout=</span><span class="st">"bin"</span>, <span class="at">color=</span><span class="st">"white"</span>, <span class="at">boundary=</span><span class="dv">50</span>) <span class="sc">+</span></span>
+<span id="cb29-3"><a href="#cb29-3"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-31-1.png" width="1152"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-30-1.png" width="768"></p>
 </div>
 </div>
 </div>
@@ -1321,11 +1313,11 @@ Jason Geller, PH.D.
 <ul>
 <li><p>Use calculus to find the probability of each x value</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="fu">ggplot</span>(gapminder_2002, <span class="fu">aes</span>(<span class="at">x =</span> lifeExp)) <span class="sc">+</span></span>
-<span id="cb35-2"><a href="#cb35-2"></a>  <span class="fu">geom_density</span>(<span class="at">fill =</span> <span class="st">"grey60"</span>, <span class="at">color =</span> <span class="st">"grey30"</span>)<span class="sc">+</span></span>
-<span id="cb35-3"><a href="#cb35-3"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="fu">ggplot</span>(gapminder_2002, <span class="fu">aes</span>(<span class="at">x =</span> lifeExp)) <span class="sc">+</span></span>
+<span id="cb30-2"><a href="#cb30-2"></a>  <span class="fu">geom_density</span>(<span class="at">fill =</span> <span class="st">"grey60"</span>, <span class="at">color =</span> <span class="st">"grey30"</span>)<span class="sc">+</span></span>
+<span id="cb30-3"><a href="#cb30-3"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-32-1.png" width="1152"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-31-1.png" width="768"></p>
 </div>
 </div></li>
 </ul>
@@ -1340,12 +1332,12 @@ Jason Geller, PH.D.
 </ul></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a><span class="fu">ggplot</span>(gapminder_2002, <span class="fu">aes</span>(<span class="at">x =</span> lifeExp)) <span class="sc">+</span></span>
-<span id="cb36-2"><a href="#cb36-2"></a>  <span class="fu">geom_density</span>(<span class="at">fill =</span> <span class="st">"grey60"</span>, <span class="at">color =</span> <span class="st">"grey30"</span>)<span class="sc">+</span></span>
-<span id="cb36-3"><a href="#cb36-3"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="fu">ggplot</span>(gapminder_2002, <span class="fu">aes</span>(<span class="at">x =</span> lifeExp)) <span class="sc">+</span></span>
+<span id="cb31-2"><a href="#cb31-2"></a>  <span class="fu">geom_density</span>(<span class="at">fill =</span> <span class="st">"grey60"</span>, <span class="at">color =</span> <span class="st">"grey30"</span>)<span class="sc">+</span></span>
+<span id="cb31-3"><a href="#cb31-3"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-33-1.png" width="1152" class="r-stretch"></section></section>
+<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-32-1.png" width="768" class="r-stretch"></section></section>
 <section>
 <section id="boxplots" class="title-slide slide level1 center">
 <h1>Boxplots</h1>
@@ -1358,15 +1350,15 @@ Jason Geller, PH.D.
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a>box <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(gapminder_2002,</span>
-<span id="cb37-2"><a href="#cb37-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> lifeExp)) <span class="sc">+</span></span>
-<span id="cb37-3"><a href="#cb37-3"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
-<span id="cb37-4"><a href="#cb37-4"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>box <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(gapminder_2002,</span>
+<span id="cb32-2"><a href="#cb32-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> lifeExp)) <span class="sc">+</span></span>
+<span id="cb32-3"><a href="#cb32-3"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
+<span id="cb32-4"><a href="#cb32-4"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-35-1.png" width="1152"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-34-1.png" width="768"></p>
 </div>
 </div>
 </div>
@@ -1385,13 +1377,13 @@ Jason Geller, PH.D.
 <section id="bar-charts" class="slide level2">
 <h2>Bar charts</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a><span class="fu">library</span>(fivethirtyeight)</span>
-<span id="cb38-2"><a href="#cb38-2"></a><span class="co"># Using ggplot2 to plot the data</span></span>
-<span id="cb38-3"><a href="#cb38-3"></a>candy_rankings <span class="sc">%&gt;%</span></span>
-<span id="cb38-4"><a href="#cb38-4"></a>  <span class="co"># Sorting the data to have the highest percentages at the top</span></span>
-<span id="cb38-5"><a href="#cb38-5"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>winpercent) <span class="sc">%&gt;%</span></span>
-<span id="cb38-6"><a href="#cb38-6"></a>  <span class="co"># Taking the top n candies (optional, you can remove the following line if you want all)</span></span>
-<span id="cb38-7"><a href="#cb38-7"></a>  <span class="fu">top_n</span>(<span class="dv">20</span>, <span class="at">wt =</span> winpercent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="fu">library</span>(fivethirtyeight)</span>
+<span id="cb33-2"><a href="#cb33-2"></a><span class="co"># Using ggplot2 to plot the data</span></span>
+<span id="cb33-3"><a href="#cb33-3"></a>candy_rankings <span class="sc">%&gt;%</span></span>
+<span id="cb33-4"><a href="#cb33-4"></a>  <span class="co"># Sorting the data to have the highest percentages at the top</span></span>
+<span id="cb33-5"><a href="#cb33-5"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>winpercent) <span class="sc">%&gt;%</span></span>
+<span id="cb33-6"><a href="#cb33-6"></a>  <span class="co"># Taking the top n candies (optional, you can remove the following line if you want all)</span></span>
+<span id="cb33-7"><a href="#cb33-7"></a>  <span class="fu">top_n</span>(<span class="dv">20</span>, <span class="at">wt =</span> winpercent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 20 × 13
    competitorname              chocolate fruity caramel peanutyalmondy nougat
@@ -1424,7 +1416,7 @@ Jason Geller, PH.D.
 <section id="bar-plots" class="slide level2">
 <h2>Bar plots</h2>
 
-<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-37-1.png" width="1152" class="r-stretch"></section></section>
+<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-36-1.png" width="768" class="r-stretch"></section></section>
 <section>
 <section id="exploring-multiple-groups" class="title-slide slide level1 center">
 <h1>Exploring Multiple Groups</h1>
@@ -1449,7 +1441,7 @@ single variable across groups</strong></p></li>
 </div><div class="column" style="width:50%;">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-38-1.png" width="1152"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-37-1.png" width="768"></p>
 </div>
 </div>
 </div>
@@ -1463,18 +1455,18 @@ single variable across groups</strong></p></li>
 <li>This looks bad and is hard to read</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(gapminder_2002,</span>
-<span id="cb40-2"><a href="#cb40-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> lifeExp,</span>
-<span id="cb40-3"><a href="#cb40-3"></a>           <span class="at">fill =</span> continent)) <span class="sc">+</span></span>
-<span id="cb40-4"><a href="#cb40-4"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">5</span>, </span>
-<span id="cb40-5"><a href="#cb40-5"></a>                 <span class="at">color =</span> <span class="st">"white"</span>, </span>
-<span id="cb40-6"><a href="#cb40-6"></a>                 <span class="at">boundary =</span> <span class="dv">50</span>)<span class="sc">+</span></span>
-<span id="cb40-7"><a href="#cb40-7"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(gapminder_2002,</span>
+<span id="cb35-2"><a href="#cb35-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> lifeExp,</span>
+<span id="cb35-3"><a href="#cb35-3"></a>           <span class="at">fill =</span> continent)) <span class="sc">+</span></span>
+<span id="cb35-4"><a href="#cb35-4"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">5</span>, </span>
+<span id="cb35-5"><a href="#cb35-5"></a>                 <span class="at">color =</span> <span class="st">"white"</span>, </span>
+<span id="cb35-6"><a href="#cb35-6"></a>                 <span class="at">boundary =</span> <span class="dv">50</span>)<span class="sc">+</span></span>
+<span id="cb35-7"><a href="#cb35-7"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-40-1.png" width="1152"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-39-1.png" width="768"></p>
 </div>
 </div>
 </div>
@@ -1488,20 +1480,20 @@ single variable across groups</strong></p></li>
 <li>Facet with a different variable</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(gapminder_2002,</span>
-<span id="cb41-2"><a href="#cb41-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> lifeExp,</span>
-<span id="cb41-3"><a href="#cb41-3"></a>           <span class="at">fill =</span> continent)) <span class="sc">+</span></span>
-<span id="cb41-4"><a href="#cb41-4"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">5</span>, </span>
-<span id="cb41-5"><a href="#cb41-5"></a>                 <span class="at">color =</span> <span class="st">"white"</span>, </span>
-<span id="cb41-6"><a href="#cb41-6"></a>                 <span class="at">boundary =</span> <span class="dv">50</span>) <span class="sc">+</span></span>
-<span id="cb41-7"><a href="#cb41-7"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
-<span id="cb41-8"><a href="#cb41-8"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(continent))<span class="sc">+</span></span>
-<span id="cb41-9"><a href="#cb41-9"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(gapminder_2002,</span>
+<span id="cb36-2"><a href="#cb36-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> lifeExp,</span>
+<span id="cb36-3"><a href="#cb36-3"></a>           <span class="at">fill =</span> continent)) <span class="sc">+</span></span>
+<span id="cb36-4"><a href="#cb36-4"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">5</span>, </span>
+<span id="cb36-5"><a href="#cb36-5"></a>                 <span class="at">color =</span> <span class="st">"white"</span>, </span>
+<span id="cb36-6"><a href="#cb36-6"></a>                 <span class="at">boundary =</span> <span class="dv">50</span>) <span class="sc">+</span></span>
+<span id="cb36-7"><a href="#cb36-7"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb36-8"><a href="#cb36-8"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(continent))<span class="sc">+</span></span>
+<span id="cb36-9"><a href="#cb36-9"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-42-1.png" width="1152"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-41-1.png" width="768"></p>
 </div>
 </div>
 </div>
@@ -1512,29 +1504,29 @@ single variable across groups</strong></p></li>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a>gapminder_intervals <span class="ot">&lt;-</span> gapminder <span class="sc">%&gt;%</span> </span>
-<span id="cb42-2"><a href="#cb42-2"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2002</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb42-3"><a href="#cb42-3"></a>  <span class="fu">mutate</span>(<span class="at">africa =</span> </span>
-<span id="cb42-4"><a href="#cb42-4"></a>           <span class="fu">ifelse</span>(continent <span class="sc">==</span> <span class="st">"Africa"</span>, </span>
-<span id="cb42-5"><a href="#cb42-5"></a>                  <span class="st">"Africa"</span>, </span>
-<span id="cb42-6"><a href="#cb42-6"></a>                  <span class="st">"Not Africa"</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb42-7"><a href="#cb42-7"></a>  <span class="fu">mutate</span>(<span class="at">age_buckets =</span> </span>
-<span id="cb42-8"><a href="#cb42-8"></a>           <span class="fu">cut</span>(lifeExp, </span>
-<span id="cb42-9"><a href="#cb42-9"></a>               <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">30</span>, <span class="dv">90</span>, <span class="at">by =</span> <span class="dv">5</span>))) <span class="sc">%&gt;%</span> </span>
-<span id="cb42-10"><a href="#cb42-10"></a>  <span class="fu">group_by</span>(africa, age_buckets) <span class="sc">%&gt;%</span> </span>
-<span id="cb42-11"><a href="#cb42-11"></a>  <span class="fu">summarize</span>(<span class="at">total =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a>gapminder_intervals <span class="ot">&lt;-</span> gapminder <span class="sc">%&gt;%</span> </span>
+<span id="cb37-2"><a href="#cb37-2"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2002</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb37-3"><a href="#cb37-3"></a>  <span class="fu">mutate</span>(<span class="at">africa =</span> </span>
+<span id="cb37-4"><a href="#cb37-4"></a>           <span class="fu">ifelse</span>(continent <span class="sc">==</span> <span class="st">"Africa"</span>, </span>
+<span id="cb37-5"><a href="#cb37-5"></a>                  <span class="st">"Africa"</span>, </span>
+<span id="cb37-6"><a href="#cb37-6"></a>                  <span class="st">"Not Africa"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb37-7"><a href="#cb37-7"></a>  <span class="fu">mutate</span>(<span class="at">age_buckets =</span> </span>
+<span id="cb37-8"><a href="#cb37-8"></a>           <span class="fu">cut</span>(lifeExp, </span>
+<span id="cb37-9"><a href="#cb37-9"></a>               <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">30</span>, <span class="dv">90</span>, <span class="at">by =</span> <span class="dv">5</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb37-10"><a href="#cb37-10"></a>  <span class="fu">group_by</span>(africa, age_buckets) <span class="sc">%&gt;%</span> </span>
+<span id="cb37-11"><a href="#cb37-11"></a>  <span class="fu">summarize</span>(<span class="at">total =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a><span class="fu">ggplot</span>(gapminder_intervals, </span>
-<span id="cb43-2"><a href="#cb43-2"></a>       <span class="fu">aes</span>(<span class="at">y =</span> age_buckets,</span>
-<span id="cb43-3"><a href="#cb43-3"></a>           <span class="at">x =</span> <span class="fu">ifelse</span>(africa <span class="sc">==</span> <span class="st">"Africa"</span>, </span>
-<span id="cb43-4"><a href="#cb43-4"></a>                      total, <span class="sc">-</span>total),</span>
-<span id="cb43-5"><a href="#cb43-5"></a>           <span class="at">fill =</span> africa)) <span class="sc">+</span></span>
-<span id="cb43-6"><a href="#cb43-6"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="dv">1</span>, <span class="at">color =</span> <span class="st">"white"</span>)<span class="sc">+</span></span>
-<span id="cb43-7"><a href="#cb43-7"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a><span class="fu">ggplot</span>(gapminder_intervals, </span>
+<span id="cb38-2"><a href="#cb38-2"></a>       <span class="fu">aes</span>(<span class="at">y =</span> age_buckets,</span>
+<span id="cb38-3"><a href="#cb38-3"></a>           <span class="at">x =</span> <span class="fu">ifelse</span>(africa <span class="sc">==</span> <span class="st">"Africa"</span>, </span>
+<span id="cb38-4"><a href="#cb38-4"></a>                      total, <span class="sc">-</span>total),</span>
+<span id="cb38-5"><a href="#cb38-5"></a>           <span class="at">fill =</span> africa)) <span class="sc">+</span></span>
+<span id="cb38-6"><a href="#cb38-6"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="dv">1</span>, <span class="at">color =</span> <span class="st">"white"</span>)<span class="sc">+</span></span>
+<span id="cb38-7"><a href="#cb38-7"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-44-1.png" width="1152"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-43-1.png" width="768"></p>
 </div>
 </div>
 </div>
@@ -1545,17 +1537,17 @@ single variable across groups</strong></p></li>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a>p4 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">filter</span>(gapminder_2002, </span>
-<span id="cb44-2"><a href="#cb44-2"></a>              continent <span class="sc">!=</span> <span class="st">"Oceania"</span>),</span>
-<span id="cb44-3"><a href="#cb44-3"></a>       <span class="fu">aes</span>(<span class="at">x =</span> lifeExp,</span>
-<span id="cb44-4"><a href="#cb44-4"></a>           <span class="at">fill =</span> continent)) <span class="sc">+</span></span>
-<span id="cb44-5"><a href="#cb44-5"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
-<span id="cb44-6"><a href="#cb44-6"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>p4 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">filter</span>(gapminder_2002, </span>
+<span id="cb39-2"><a href="#cb39-2"></a>              continent <span class="sc">!=</span> <span class="st">"Oceania"</span>),</span>
+<span id="cb39-3"><a href="#cb39-3"></a>       <span class="fu">aes</span>(<span class="at">x =</span> lifeExp,</span>
+<span id="cb39-4"><a href="#cb39-4"></a>           <span class="at">fill =</span> continent)) <span class="sc">+</span></span>
+<span id="cb39-5"><a href="#cb39-5"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb39-6"><a href="#cb39-6"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-46-1.png" width="1152"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-45-1.png" width="768"></p>
 </div>
 </div>
 </div>
@@ -1566,22 +1558,22 @@ single variable across groups</strong></p></li>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a><span class="fu">library</span>(ggridges)</span>
-<span id="cb45-2"><a href="#cb45-2"></a>p5 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">filter</span>(gapminder_2002, </span>
-<span id="cb45-3"><a href="#cb45-3"></a>              continent <span class="sc">!=</span> <span class="st">"Oceania"</span>),</span>
-<span id="cb45-4"><a href="#cb45-4"></a>       <span class="fu">aes</span>(<span class="at">x =</span> lifeExp,</span>
-<span id="cb45-5"><a href="#cb45-5"></a>           <span class="at">fill =</span> continent,</span>
-<span id="cb45-6"><a href="#cb45-6"></a>           <span class="at">y =</span> continent)) <span class="sc">+</span></span>
-<span id="cb45-7"><a href="#cb45-7"></a>  <span class="fu">geom_density_ridges</span>()<span class="sc">+</span></span>
-<span id="cb45-8"><a href="#cb45-8"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a><span class="fu">library</span>(ggridges)</span>
+<span id="cb40-2"><a href="#cb40-2"></a>p5 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">filter</span>(gapminder_2002, </span>
+<span id="cb40-3"><a href="#cb40-3"></a>              continent <span class="sc">!=</span> <span class="st">"Oceania"</span>),</span>
+<span id="cb40-4"><a href="#cb40-4"></a>       <span class="fu">aes</span>(<span class="at">x =</span> lifeExp,</span>
+<span id="cb40-5"><a href="#cb40-5"></a>           <span class="at">fill =</span> continent,</span>
+<span id="cb40-6"><a href="#cb40-6"></a>           <span class="at">y =</span> continent)) <span class="sc">+</span></span>
+<span id="cb40-7"><a href="#cb40-7"></a>  <span class="fu">geom_density_ridges</span>()<span class="sc">+</span></span>
+<span id="cb40-8"><a href="#cb40-8"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-48-1.png" width="1152"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-47-1.png" width="768"></p>
 </div>
 </div>
-<section id="section-2" class="slide level2">
+<section id="section-3" class="slide level2">
 <h2></h2>
 </section>
 </div>
@@ -1600,20 +1592,20 @@ single variable across groups</strong></p></li>
 <li>Barplots</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/z3tt/DataViz-Teaching/master/data/weissgerber-data.csv"</span></span>
-<span id="cb46-2"><a href="#cb46-2"></a>data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(url)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/z3tt/DataViz-Teaching/master/data/weissgerber-data.csv"</span></span>
+<span id="cb41-2"><a href="#cb41-2"></a>data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(url)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a>g <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> value, <span class="at">color =</span> group, <span class="at">fill =</span> group)) <span class="sc">+</span></span>
-<span id="cb47-2"><a href="#cb47-2"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>) <span class="sc">+</span></span>
-<span id="cb47-3"><a href="#cb47-3"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha =</span> .<span class="dv">5</span>, <span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">outlier.size =</span> <span class="dv">5</span>) <span class="sc">+</span> </span>
-<span id="cb47-4"><a href="#cb47-4"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)<span class="sc">+</span></span>
-<span id="cb47-5"><a href="#cb47-5"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span>
-<span id="cb47-6"><a href="#cb47-6"></a></span>
-<span id="cb47-7"><a href="#cb47-7"></a>g</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a>g <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> value, <span class="at">color =</span> group, <span class="at">fill =</span> group)) <span class="sc">+</span></span>
+<span id="cb42-2"><a href="#cb42-2"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>) <span class="sc">+</span></span>
+<span id="cb42-3"><a href="#cb42-3"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha =</span> .<span class="dv">5</span>, <span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">outlier.size =</span> <span class="dv">5</span>) <span class="sc">+</span> </span>
+<span id="cb42-4"><a href="#cb42-4"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)<span class="sc">+</span></span>
+<span id="cb42-5"><a href="#cb42-5"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span>
+<span id="cb42-6"><a href="#cb42-6"></a></span>
+<span id="cb42-7"><a href="#cb42-7"></a>g</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-50-1.png" width="1152"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-49-1.png" width="768"></p>
 </div>
 </div>
 </div>
@@ -1632,20 +1624,20 @@ single variable across groups</strong></p></li>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a>g <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> value)) <span class="sc">+</span></span>
-<span id="cb48-2"><a href="#cb48-2"></a>       <span class="fu">geom_violin</span>(</span>
-<span id="cb48-3"><a href="#cb48-3"></a>        <span class="fu">aes</span>(<span class="at">fill =</span> group, <span class="at">fill =</span> <span class="fu">after_scale</span>(colorspace<span class="sc">::</span><span class="fu">lighten</span>(fill, .<span class="dv">5</span>))),</span>
-<span id="cb48-4"><a href="#cb48-4"></a>        <span class="at">size =</span> <span class="fl">1.2</span>, <span class="at">bw =</span> .<span class="dv">8</span></span>
-<span id="cb48-5"><a href="#cb48-5"></a>      ) <span class="sc">+</span></span>
-<span id="cb48-6"><a href="#cb48-6"></a>      <span class="fu">theme</span>(<span class="at">legend.position =</span>  <span class="st">"none"</span>)<span class="sc">+</span></span>
-<span id="cb48-7"><a href="#cb48-7"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a>g <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> value)) <span class="sc">+</span></span>
+<span id="cb43-2"><a href="#cb43-2"></a>       <span class="fu">geom_violin</span>(</span>
+<span id="cb43-3"><a href="#cb43-3"></a>        <span class="fu">aes</span>(<span class="at">fill =</span> group, <span class="at">fill =</span> <span class="fu">after_scale</span>(colorspace<span class="sc">::</span><span class="fu">lighten</span>(fill, .<span class="dv">5</span>))),</span>
+<span id="cb43-4"><a href="#cb43-4"></a>        <span class="at">size =</span> <span class="fl">1.2</span>, <span class="at">bw =</span> .<span class="dv">8</span></span>
+<span id="cb43-5"><a href="#cb43-5"></a>      ) <span class="sc">+</span></span>
+<span id="cb43-6"><a href="#cb43-6"></a>      <span class="fu">theme</span>(<span class="at">legend.position =</span>  <span class="st">"none"</span>)<span class="sc">+</span></span>
+<span id="cb43-7"><a href="#cb43-7"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-52-1.png" width="1152"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-51-1.png" width="768"></p>
 </figure>
 </div>
 </div>
@@ -1658,20 +1650,20 @@ single variable across groups</strong></p></li>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1"></a><span class="co"># Create the plot</span></span>
-<span id="cb49-2"><a href="#cb49-2"></a>g<span class="ot">=</span><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> value, <span class="at">fill=</span>group)) <span class="sc">+</span></span>
-<span id="cb49-3"><a href="#cb49-3"></a>  <span class="co"># Half violin plot</span></span>
-<span id="cb49-4"><a href="#cb49-4"></a>  <span class="fu">stat_halfeye</span>()<span class="sc">+</span></span>
-<span id="cb49-5"><a href="#cb49-5"></a>  <span class="co"># Distributional boxplot (similar to standard boxplot but with more flexibility)</span></span>
-<span id="cb49-6"><a href="#cb49-6"></a>  <span class="fu">geom_boxplot</span>(<span class="at">width =</span> <span class="fl">0.1</span>, <span class="at">outlier.shape =</span> <span class="cn">NA</span>, <span class="at">fill =</span> <span class="st">"white"</span>)<span class="sc">+</span></span>
-<span id="cb49-7"><a href="#cb49-7"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a><span class="co"># Create the plot</span></span>
+<span id="cb44-2"><a href="#cb44-2"></a>g<span class="ot">=</span><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> value, <span class="at">fill=</span>group)) <span class="sc">+</span></span>
+<span id="cb44-3"><a href="#cb44-3"></a>  <span class="co"># Half violin plot</span></span>
+<span id="cb44-4"><a href="#cb44-4"></a>  <span class="fu">stat_halfeye</span>()<span class="sc">+</span></span>
+<span id="cb44-5"><a href="#cb44-5"></a>  <span class="co"># Distributional boxplot (similar to standard boxplot but with more flexibility)</span></span>
+<span id="cb44-6"><a href="#cb44-6"></a>  <span class="fu">geom_boxplot</span>(<span class="at">width =</span> <span class="fl">0.1</span>, <span class="at">outlier.shape =</span> <span class="cn">NA</span>, <span class="at">fill =</span> <span class="st">"white"</span>)<span class="sc">+</span></span>
+<span id="cb44-7"><a href="#cb44-7"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-54-1.png" width="1152"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-53-1.png" width="768"></p>
 </figure>
 </div>
 </div>
@@ -1682,31 +1674,31 @@ single variable across groups</strong></p></li>
 <section id="strip-plots" class="slide level2">
 <h2>Strip plots</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb50" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> value, <span class="at">fill=</span>group)) <span class="sc">+</span></span>
-<span id="cb50-2"><a href="#cb50-2"></a>  <span class="co"># raincloud plots</span></span>
-<span id="cb50-3"><a href="#cb50-3"></a>   <span class="fu">geom_jitter</span>(<span class="at">position=</span><span class="fu">position_jitter</span>(<span class="fl">0.2</span>)) <span class="sc">+</span> </span>
-<span id="cb50-4"><a href="#cb50-4"></a>  <span class="co">#removed legend</span></span>
-<span id="cb50-5"><a href="#cb50-5"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)<span class="sc">+</span></span>
-<span id="cb50-6"><a href="#cb50-6"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> value, <span class="at">fill=</span>group)) <span class="sc">+</span></span>
+<span id="cb45-2"><a href="#cb45-2"></a>  <span class="co"># raincloud plots</span></span>
+<span id="cb45-3"><a href="#cb45-3"></a>   <span class="fu">geom_jitter</span>(<span class="at">position=</span><span class="fu">position_jitter</span>(<span class="fl">0.2</span>)) <span class="sc">+</span> </span>
+<span id="cb45-4"><a href="#cb45-4"></a>  <span class="co">#removed legend</span></span>
+<span id="cb45-5"><a href="#cb45-5"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)<span class="sc">+</span></span>
+<span id="cb45-6"><a href="#cb45-6"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-55-1.png" width="1152" class="r-stretch quarto-figure-center"></section>
+<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-54-1.png" width="768" class="r-stretch quarto-figure-center"></section>
 <section id="strip-plots-1" class="slide level2">
 <h2>Strip plots</h2>
 <ul>
 <li><p>Add summary stats</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb51" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> value, <span class="at">fill=</span>group)) <span class="sc">+</span></span>
-<span id="cb51-2"><a href="#cb51-2"></a>   <span class="fu">geom_jitter</span>(<span class="at">position=</span><span class="fu">position_jitter</span>(<span class="fl">0.2</span>)) <span class="sc">+</span> </span>
-<span id="cb51-3"><a href="#cb51-3"></a>   <span class="fu">stat_summary</span>(<span class="at">fun.y=</span>median, <span class="at">geom=</span><span class="st">"point"</span>, <span class="at">shape=</span><span class="dv">18</span>,</span>
-<span id="cb51-4"><a href="#cb51-4"></a>                 <span class="at">size=</span><span class="dv">3</span>, <span class="at">color=</span><span class="st">"red"</span>)<span class="sc">+</span></span>
-<span id="cb51-5"><a href="#cb51-5"></a>  <span class="co">#removed legend</span></span>
-<span id="cb51-6"><a href="#cb51-6"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)<span class="sc">+</span></span>
-<span id="cb51-7"><a href="#cb51-7"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> value, <span class="at">fill=</span>group)) <span class="sc">+</span></span>
+<span id="cb46-2"><a href="#cb46-2"></a>   <span class="fu">geom_jitter</span>(<span class="at">position=</span><span class="fu">position_jitter</span>(<span class="fl">0.2</span>)) <span class="sc">+</span> </span>
+<span id="cb46-3"><a href="#cb46-3"></a>   <span class="fu">stat_summary</span>(<span class="at">fun.y=</span>median, <span class="at">geom=</span><span class="st">"point"</span>, <span class="at">shape=</span><span class="dv">18</span>,</span>
+<span id="cb46-4"><a href="#cb46-4"></a>                 <span class="at">size=</span><span class="dv">3</span>, <span class="at">color=</span><span class="st">"red"</span>)<span class="sc">+</span></span>
+<span id="cb46-5"><a href="#cb46-5"></a>  <span class="co">#removed legend</span></span>
+<span id="cb46-6"><a href="#cb46-6"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)<span class="sc">+</span></span>
+<span id="cb46-7"><a href="#cb46-7"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-56-1.png" width="1152"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-55-1.png" width="768"></p>
 </figure>
 </div>
 </div>
@@ -1725,17 +1717,17 @@ single variable across groups</strong></p></li>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1"></a><span class="fu">library</span>(ggrain)</span>
-<span id="cb52-2"><a href="#cb52-2"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> value, <span class="at">fill=</span>group)) <span class="sc">+</span></span>
-<span id="cb52-3"><a href="#cb52-3"></a>  <span class="co"># raincloud plots</span></span>
-<span id="cb52-4"><a href="#cb52-4"></a>  <span class="fu">geom_rain</span>() <span class="sc">+</span> </span>
-<span id="cb52-5"><a href="#cb52-5"></a>  <span class="co">#removed legend</span></span>
-<span id="cb52-6"><a href="#cb52-6"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)<span class="sc">+</span></span>
-<span id="cb52-7"><a href="#cb52-7"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a><span class="fu">library</span>(ggrain)</span>
+<span id="cb47-2"><a href="#cb47-2"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> value, <span class="at">fill=</span>group)) <span class="sc">+</span></span>
+<span id="cb47-3"><a href="#cb47-3"></a>  <span class="co"># raincloud plots</span></span>
+<span id="cb47-4"><a href="#cb47-4"></a>  <span class="fu">geom_rain</span>() <span class="sc">+</span> </span>
+<span id="cb47-5"><a href="#cb47-5"></a>  <span class="co">#removed legend</span></span>
+<span id="cb47-6"><a href="#cb47-6"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)<span class="sc">+</span></span>
+<span id="cb47-7"><a href="#cb47-7"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-57-1.png" width="1152"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-56-1.png" width="768"></p>
 </figure>
 </div>
 </div>
@@ -1751,22 +1743,22 @@ single variable across groups</strong></p></li>
 <li>Multiple Geoms</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1"></a><span class="fu">library</span>(gghalves)</span>
-<span id="cb53-2"><a href="#cb53-2"></a>p6 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">filter</span>(gapminder_2002, </span>
-<span id="cb53-3"><a href="#cb53-3"></a>              continent <span class="sc">!=</span> <span class="st">"Oceania"</span>),</span>
-<span id="cb53-4"><a href="#cb53-4"></a>       <span class="fu">aes</span>(<span class="at">y =</span> lifeExp,</span>
-<span id="cb53-5"><a href="#cb53-5"></a>           <span class="at">x =</span> continent,</span>
-<span id="cb53-6"><a href="#cb53-6"></a>           <span class="at">color =</span> continent)) <span class="sc">+</span></span>
-<span id="cb53-7"><a href="#cb53-7"></a>  <span class="fu">geom_half_boxplot</span>(<span class="at">side =</span> <span class="st">"l"</span>) <span class="sc">+</span></span>
-<span id="cb53-8"><a href="#cb53-8"></a>  <span class="fu">geom_half_point</span>(<span class="at">side =</span> <span class="st">"r"</span>) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position  =</span> <span class="st">"none"</span>)<span class="sc">+</span></span>
-<span id="cb53-9"><a href="#cb53-9"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a><span class="fu">library</span>(gghalves)</span>
+<span id="cb48-2"><a href="#cb48-2"></a>p6 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">filter</span>(gapminder_2002, </span>
+<span id="cb48-3"><a href="#cb48-3"></a>              continent <span class="sc">!=</span> <span class="st">"Oceania"</span>),</span>
+<span id="cb48-4"><a href="#cb48-4"></a>       <span class="fu">aes</span>(<span class="at">y =</span> lifeExp,</span>
+<span id="cb48-5"><a href="#cb48-5"></a>           <span class="at">x =</span> continent,</span>
+<span id="cb48-6"><a href="#cb48-6"></a>           <span class="at">color =</span> continent)) <span class="sc">+</span></span>
+<span id="cb48-7"><a href="#cb48-7"></a>  <span class="fu">geom_half_boxplot</span>(<span class="at">side =</span> <span class="st">"l"</span>) <span class="sc">+</span></span>
+<span id="cb48-8"><a href="#cb48-8"></a>  <span class="fu">geom_half_point</span>(<span class="at">side =</span> <span class="st">"r"</span>) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position  =</span> <span class="st">"none"</span>)<span class="sc">+</span></span>
+<span id="cb48-9"><a href="#cb48-9"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-59-1.png" width="1152"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-58-1.png" width="768"></p>
 </figure>
 </div>
 </div>
@@ -1779,19 +1771,19 @@ single variable across groups</strong></p></li>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1"></a>p7 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">filter</span>(gapminder_2002, </span>
-<span id="cb54-2"><a href="#cb54-2"></a>              continent <span class="sc">!=</span> <span class="st">"Oceania"</span>),</span>
-<span id="cb54-3"><a href="#cb54-3"></a>       <span class="fu">aes</span>(<span class="at">y =</span> lifeExp,</span>
-<span id="cb54-4"><a href="#cb54-4"></a>           <span class="at">x =</span> continent,</span>
-<span id="cb54-5"><a href="#cb54-5"></a>           <span class="at">color =</span> continent)) <span class="sc">+</span> </span>
-<span id="cb54-6"><a href="#cb54-6"></a>  <span class="fu">geom_rain</span>() <span class="sc">+</span> </span>
-<span id="cb54-7"><a href="#cb54-7"></a>  <span class="fu">coord_flip</span>()<span class="sc">+</span></span>
-<span id="cb54-8"><a href="#cb54-8"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1"></a>p7 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">filter</span>(gapminder_2002, </span>
+<span id="cb49-2"><a href="#cb49-2"></a>              continent <span class="sc">!=</span> <span class="st">"Oceania"</span>),</span>
+<span id="cb49-3"><a href="#cb49-3"></a>       <span class="fu">aes</span>(<span class="at">y =</span> lifeExp,</span>
+<span id="cb49-4"><a href="#cb49-4"></a>           <span class="at">x =</span> continent,</span>
+<span id="cb49-5"><a href="#cb49-5"></a>           <span class="at">color =</span> continent)) <span class="sc">+</span> </span>
+<span id="cb49-6"><a href="#cb49-6"></a>  <span class="fu">geom_rain</span>() <span class="sc">+</span> </span>
+<span id="cb49-7"><a href="#cb49-7"></a>  <span class="fu">coord_flip</span>()<span class="sc">+</span></span>
+<span id="cb49-8"><a href="#cb49-8"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-61-1.png" width="1152"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-60-1.png" width="768"></p>
 </div>
 </div>
 </div>
@@ -1805,19 +1797,19 @@ single variable across groups</strong></p></li>
 <li>Stacked barplots</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1"></a><span class="co"># Create a new variable for the combination of chocolate and fruity</span></span>
-<span id="cb55-2"><a href="#cb55-2"></a>    candy_rankings <span class="ot">&lt;-</span> candy_rankings <span class="sc">%&gt;%</span></span>
-<span id="cb55-3"><a href="#cb55-3"></a>      <span class="fu">mutate</span>(<span class="at">category =</span> <span class="fu">case_when</span>(</span>
-<span id="cb55-4"><a href="#cb55-4"></a>        chocolate <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> fruity <span class="sc">==</span> <span class="dv">0</span> <span class="sc">~</span> <span class="st">"Chocolate Only"</span>,</span>
-<span id="cb55-5"><a href="#cb55-5"></a>        chocolate <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span> fruity <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"Fruity Only"</span>,</span>
-<span id="cb55-6"><a href="#cb55-6"></a>        chocolate <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> fruity <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"Both Chocolate and Fruity"</span>,</span>
-<span id="cb55-7"><a href="#cb55-7"></a>        <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"Neither Chocolate nor Fruity"</span></span>
-<span id="cb55-8"><a href="#cb55-8"></a>      ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a><span class="co"># Create a new variable for the combination of chocolate and fruity</span></span>
+<span id="cb50-2"><a href="#cb50-2"></a>    candy_rankings <span class="ot">&lt;-</span> candy_rankings <span class="sc">%&gt;%</span></span>
+<span id="cb50-3"><a href="#cb50-3"></a>      <span class="fu">mutate</span>(<span class="at">category =</span> <span class="fu">case_when</span>(</span>
+<span id="cb50-4"><a href="#cb50-4"></a>        chocolate <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> fruity <span class="sc">==</span> <span class="dv">0</span> <span class="sc">~</span> <span class="st">"Chocolate Only"</span>,</span>
+<span id="cb50-5"><a href="#cb50-5"></a>        chocolate <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span> fruity <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"Fruity Only"</span>,</span>
+<span id="cb50-6"><a href="#cb50-6"></a>        chocolate <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> fruity <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"Both Chocolate and Fruity"</span>,</span>
+<span id="cb50-7"><a href="#cb50-7"></a>        <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"Neither Chocolate nor Fruity"</span></span>
+<span id="cb50-8"><a href="#cb50-8"></a>      ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-63-1.png" width="1152"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-62-1.png" width="768"></p>
 </div>
 </div>
 </div>

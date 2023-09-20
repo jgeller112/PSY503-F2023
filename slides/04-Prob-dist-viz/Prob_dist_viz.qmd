@@ -18,8 +18,8 @@ execute:
   message: false
   warning: false
   fig-align: center
-  fig-width: 12
-  fig-height: 8
+  fig-width: 8
+  fig-height: 6
   editor_options: 
   chunk_output_type: inline
   code-overflow: wrap
@@ -34,15 +34,7 @@ execute:
 
 -   Random variables
 
--   Probablity distributions
-
-    -   Discrete
-
-        -   PMF
-
-    -   Continuous
-
-        -   CDF
+-   Probability distributions
 
 -   DGP
 
@@ -82,9 +74,6 @@ knitr::kable(pkgs)
 5.  Who is more likely to be a victim of a street robbery, a young man
     or an old lady?
 
-6.  Yesterday the whether forecaster said that there was a 30% chance of
-    rain today, and it rained today. Was she right or wrong?
-
 ## What is probability theory?
 
 -   Probability is the study of **random processes**
@@ -93,6 +82,17 @@ knitr::kable(pkgs)
 
     ![](https://psy503-found-stats.netlify.app/slides/05-probability/probability-line.svg){width="790"}
 
+## Frequentist interpretation of probability
+
+-   Probablities are based on long run frequency of events
+
+    -   Flipping a coin and getting heads is 50%
+
+        -   You will get heads 50% of the time if coin is *flipped over
+            and over again*
+
+        -   <https://seeing-theory.brown.edu/basic-probability/index.html>
+
 ## Random processes: intuition
 
 ::: columns
@@ -100,7 +100,8 @@ knitr::kable(pkgs)
 -   Let's flip a fair coin
 
 ```{r}
-coinflips <- function(x) { flip=rbinom(x, 1, 0.5) 
+coinflips <- function(x) { 
+  flip=rbinom(x, 1, 0.5) 
 flip=ifelse(flip==1, "Tails", "Heads") 
 
 return(flip) 
@@ -131,9 +132,9 @@ THEN
 
 ## Random processes
 
--   Random processes are **mechanisms** that produce outcomes... from
-    **a world/set of possible** outcomes... with some degree of
-    **uncertainty** but with **regularity**
+-   Random processes are mechanisms that produce outcomes... from a
+    world/set of possible outcomes... with some degree of uncertainty
+    but with regularity
 
 ## What is a random variable?
 
@@ -145,10 +146,10 @@ THEN
         -   Sample space?
 
             -   One possible outcome:
-                $\omega = \{\mathrm{Tyler, \: Stats}\}$
+                $\omega = \{\mathrm{Ari, \: Alex}\}$
 
             -   Another possible outcome:
-                $\omega = \{\mathrm{Sana, \: Sev}\}$
+                $\omega = \{\mathrm{Aditi, \: Brooke}\}$
 
 -   Can this be considered a random variable?
 
@@ -203,6 +204,8 @@ THEN
 :::
 :::
 
+## 
+
 ## Continuous random variables: Definition
 
 ::: columns
@@ -218,37 +221,65 @@ THEN
 
 ## Probability Mass Function (PMF)
 
-::: columns
-::: {.column width="50%"}
--   Let $X$ be a discrete rv
+-   Let $X$ be a discrete random variable
 
 -   The *probability mass function (PMF)* of $X$ summarizes the
     probability of each outcome $x$
 
 -   PMF: function $p$ given by $$p(x) = P(X = x)$$ for all possible
     values of $x$
-:::
 
-::: {.column width="50%"}
+## Example: Dessert tonight
+
+-   Coin flips!
+
+-   Imagine that you started a strict diet a few days ago. You are at a
+    dinner partyat your friend's who made your favorite dessert. You are
+    very tempted and make the decision to flip a coin three times. The
+    number of times that the flip coin returns tail determines the
+    number of bites of the dessert you will have. Before you start
+    flipping the coin, you want to learn more about your chances
+    of not having dessert tonight. To do that, you decide to look at the
+    possible outcomes. You let 𝑋 be the number of times a series of
+    three coin flips returns tails (T). The support of 𝑋 is {0, 1, 2,
+    3}.
+
+## Dessert tonight
+
 ```{r}
-
-# Binomial Distribution Parameters
-n <- 10
-p <- 0.5
-
-# Data Generation
-df <- data.frame(x = 0:n)
-df$probability <- dbinom(df$x, size = n, prob = p)
-
-# Plot using ggplot2
-ggplot(df, aes(x = x, y = probability)) +
-  geom_col(fill = "skyblue") + # Use geom_col for bar plots with predefined width
-  labs(title = "PMF of Binomial(10, 0.5)", x = "x", y = "Probability") +
-  theme_minimal()
+outcomes <- c('H', 'T')
+sample_space <- expand.grid(outcomes, outcomes, outcomes)
+sample_space
 
 ```
-:::
-:::
+
+## PMF: Dessert tonight
+
+```{r}
+#| echo: false
+#| 
+
+# Define parameters
+n <- 3
+p <- 0.5
+
+# Calculate probabilities
+x <- 0:n
+probabilities <- dbinom(x, n, p)
+
+# Plot PMF
+df <- data.frame(x, probabilities)
+ggplot(df, aes(x=x, y=probabilities)) +
+    geom_bar(stat="identity", fill="skyblue") +
+    labs(title="PMF of number of heads in 3 coin flips",
+         x="Number of heads",
+         y="Probability") +
+    theme_minimal() +
+    geom_text(aes(label=sprintf("%.2f", probabilities)), vjust=-0.5)
+
+
+
+```
 
 ## Cumulative distribution function (CDF): definition
 
@@ -265,7 +296,8 @@ ggplot(df, aes(x = x, y = probability)) +
 
 ::: {.column width="50%"}
 ```{r}
-#| echo:false
+
+#| echo: false
 
 # Generate a random dataset
 set.seed(666)
@@ -288,7 +320,7 @@ ggplot(data, aes(x = x, y = cdf)) +
 :::
 :::
 
-## Probablity Density Function (PDF): Definition
+## Probability Density Function (PDF): Definition
 
 ::: columns
 ::: {.column width="50%"}
@@ -351,7 +383,16 @@ Link probability distributions to the data generating process (GDP)
 :::
 :::
 
-## Sampling in R
+## Probability distributions
+
+![](https://psy503-found-stats.netlify.app/slides/04-models/distribs.png){fig-align="center"
+width="843"}
+
+## Sampling
+
+-   With (bootstrapping)
+
+-   Without
 
 ::: columns
 ::: {.column width="50%"}
@@ -362,8 +403,9 @@ Link probability distributions to the data generating process (GDP)
         ```{r}
 
         dice=1:6
-
+        # sample replace
         sample(dice, 6, replace=TRUE)
+        # same wo replace
         sample(dice, 6, replace=FALSE)
 
         ```
@@ -379,43 +421,37 @@ width="649" height="364"}
 Once we have an idea about the DGP we can simulate data to see if it
 conforms to expectations.
 
+Sampling helps us build up our intuitions about probablity
+distribiutions
+
 The book talks about dice rolls.
 
 What are some others?
 :::
 
-## Sampling in R
+## Sources of Variance
 
--   Let's look at another example
+-   There is uncertainty associated with the DGP
 
-```{r}
+::: panel-tabset
+## 
 
-population <- c("Hannah", "Noah", "Emma", "Ben", "Mia")
+![](images/var.png){fig-align="center"}
 
-combinations <- combn(population, 4)
+## 
 
-sample_number <- sample(x = 1:5, size = 1) # draw a random integer from 1 to 5
-sample_number
+![](images/var1.png)
 
-```
+## 
 
-. . .
-
--   What is the DGP here?
+![](images/var3.png){fig-align="center"}
+:::
 
 ## Randomness
 
--   DGP to characterize uncertainty/randomness
+-   Shuffling (permutation tests)
 
-    ::: columns
-    ::: {.column width="50%"}
-    -   `shuffle` function
-    :::
-
-    ::: {.column width="50%"}
-    ![](https://i.postimg.cc/rVNs1G7M/image.png){fig-align="center"}
-    :::
-    :::
+    -   
 
 # Visualizing Variance
 
