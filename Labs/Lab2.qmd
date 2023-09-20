@@ -6,6 +6,6 @@ toc: true
 toc_float: true
 ---
 
-In Lab 2 you will gain experience working with RMD and QMD.  Specifically, you will work with `papaja` and `apaquarto` to create a reproducible APA manuscript.
+In Lab 2 you will gain experience working with RMD and QMD.  Specifically, you will work with `papaja` and `apaquarto` to create a reproducible APA manuscript. 
 
 To access Lab 2, please go here: [Click Here](https://classroom.github.com/a/ngGlshr8)
