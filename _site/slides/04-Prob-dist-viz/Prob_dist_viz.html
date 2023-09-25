@@ -825,15 +825,15 @@ Jason Geller, Ph.D.(he/him)
 <span id="cb7-2"><a href="#cb7-2"></a></span>
 <span id="cb7-3"><a href="#cb7-3"></a><span class="fu">sample</span>(x, <span class="dv">6</span>, <span class="at">replace=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 5 5 3 4 6 2</code></pre>
+<pre><code>[1] 6 3 1 2 1 3</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">sample</span>(x, <span class="dv">6</span>, <span class="at">replace=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 6 5 6 5 6 3</code></pre>
+<pre><code>[1] 4 5 1 5 3 3</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">sample</span>(x, <span class="dv">6</span>, <span class="at">replace=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 5 2 5 1 1 1</code></pre>
+<pre><code>[1] 5 4 3 2 5 1</code></pre>
 </div>
 </div>
 </div>
@@ -1065,12 +1065,9 @@ Jason Geller, Ph.D.(he/him)
 </section>
 <section id="ggplot2---title" class="slide level2">
 <h2><code>ggplot2</code> - Title</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
 <ul>
 <li><p>Let’s clean up our plot</p></li>
-<li><p>Add title</p></li>
-</ul>
+<li><p>Add title</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb22" data-code-line-numbers="5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>bill_length_mm, <span class="at">y =</span> flipper_length_mm, <span class="at">color=</span>species)) <span class="sc">+</span></span>
 <span id="cb22-2"><a href="#cb22-2"></a>          <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span> </span>
@@ -1085,15 +1082,8 @@ Jason Geller, Ph.D.(he/him)
 </figure>
 </div>
 </div>
-</div>
-</div><div class="column" style="width:50%;">
-<div class="cell">
-<div class="cell-output-display">
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-19-1.png" width="768"></p>
-</div>
-</div>
-</div>
-</div>
+</div></li>
+</ul>
 </section>
 <section id="ggplot2---themes" class="slide level2">
 <h2><code>ggplot2</code> - Themes</h2>
@@ -1107,7 +1097,7 @@ Jason Geller, Ph.D.(he/him)
 <span id="cb23-7"><a href="#cb23-7"></a>theme_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-20-1.png" width="768" class="r-stretch quarto-figure-center"></section>
+<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-19-1.png" width="768" class="r-stretch quarto-figure-center"></section>
 <section id="ggplot2---color-themes" class="slide level2">
 <h2><code>ggplot2</code> - Color themes</h2>
 <div class="columns">
@@ -1137,7 +1127,7 @@ Jason Geller, Ph.D.(he/him)
 <span id="cb24-11"><a href="#cb24-11"></a>                    <span class="at">values =</span> MetBrewer<span class="sc">::</span><span class="fu">met.brewer</span>(<span class="st">"VanGogh2"</span>,<span class="dv">3</span>)) <span class="sc">+</span> </span>
 <span id="cb24-12"><a href="#cb24-12"></a>              <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-21-1.png" width="768"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-20-1.png" width="768"></p>
 </div>
 </div>
 </div>
@@ -1172,7 +1162,7 @@ Jason Geller, Ph.D.(he/him)
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-23-1.png" width="768"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-22-1.png" width="768"></p>
 </figure>
 </div>
 </div>
@@ -1214,7 +1204,7 @@ Jason Geller, Ph.D.(he/him)
 <span id="cb27-7"><a href="#cb27-7"></a>      <span class="fu">geom_histogram</span>()<span class="sc">+</span></span>
 <span id="cb27-8"><a href="#cb27-8"></a>      <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-24-1.png" width="768"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-23-1.png" width="768"></p>
 </div>
 </div>
 </div>
@@ -1240,7 +1230,7 @@ Jason Geller, Ph.D.(he/him)
 </div><div class="column" style="width:50%;">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-26-1.png" width="768"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-25-1.png" width="768"></p>
 </div>
 </div>
 </div>
@@ -1262,7 +1252,7 @@ Jason Geller, Ph.D.(he/him)
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-27-1.png" width="768"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-26-1.png" width="768"></p>
 </figure>
 </div>
 </div>
@@ -1276,7 +1266,7 @@ Jason Geller, Ph.D.(he/him)
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-28-1.png" width="768"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-27-1.png" width="768"></p>
 </figure>
 </div>
 </div>
@@ -1290,7 +1280,7 @@ Jason Geller, Ph.D.(he/him)
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-29-1.png" width="768"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-28-1.png" width="768"></p>
 </figure>
 </div>
 </div>
@@ -1316,7 +1306,7 @@ Jason Geller, Ph.D.(he/him)
 <span id="cb32-2"><a href="#cb32-2"></a>   <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">2</span>, <span class="at">color=</span><span class="st">"green"</span>) <span class="sc">+</span></span>
 <span id="cb32-3"><a href="#cb32-3"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-30-1.png" width="768"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-29-1.png" width="768"></p>
 </div>
 </div>
 </div>
@@ -1337,7 +1327,7 @@ Jason Geller, Ph.D.(he/him)
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-31-1.png" width="768"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-30-1.png" width="768"></p>
 </figure>
 </div>
 </div>
@@ -1359,7 +1349,7 @@ Jason Geller, Ph.D.(he/him)
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-32-1.png" width="768"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-31-1.png" width="768"></p>
 </figure>
 </div>
 </div>
@@ -1383,7 +1373,7 @@ Jason Geller, Ph.D.(he/him)
 <span id="cb35-2"><a href="#cb35-2"></a>  <span class="fu">geom_density</span>(<span class="at">fill =</span> <span class="st">"grey60"</span>, <span class="at">color =</span> <span class="st">"grey30"</span>)<span class="sc">+</span></span>
 <span id="cb35-3"><a href="#cb35-3"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-33-1.png" width="768"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-32-1.png" width="768"></p>
 </div>
 </div>
 </div>
@@ -1409,7 +1399,7 @@ Jason Geller, Ph.D.(he/him)
 </div><div class="column" style="width:50%;">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-35-1.png" width="768"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-34-1.png" width="768"></p>
 </div>
 </div>
 </div>
@@ -1467,7 +1457,7 @@ Jason Geller, Ph.D.(he/him)
 <section id="bar-plots-1" class="slide level2">
 <h2>Bar plots</h2>
 
-<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-37-1.png" width="768" class="r-stretch"></section>
+<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-36-1.png" width="768" class="r-stretch"></section>
 <section id="exploring-quantitative-variables" class="slide level2">
 <h2>Exploring quantitative variables</h2>
 <ul>
@@ -1484,7 +1474,7 @@ Jason Geller, Ph.D.(he/him)
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-38-1.png" width="768"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-37-1.png" width="768"></p>
 </figure>
 </div>
 </div>
@@ -1522,7 +1512,7 @@ single variable across groups</strong></p></li>
 <span id="cb39-8"><a href="#cb39-8"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-39-1.png" width="768" class="r-stretch quarto-figure-center"></section>
+<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-38-1.png" width="768" class="r-stretch quarto-figure-center"></section>
 <section id="multiple-histograms-1" class="slide level2">
 <h2>Multiple histograms</h2>
 <div class="cell" data-layout-align="center">
@@ -1537,7 +1527,7 @@ single variable across groups</strong></p></li>
 <span id="cb40-9"><a href="#cb40-9"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-40-1.png" width="768" class="r-stretch quarto-figure-center"></section>
+<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-39-1.png" width="768" class="r-stretch quarto-figure-center"></section>
 <section id="pyramid-histograms" class="slide level2">
 <h2>Pyramid histograms</h2>
 <div class="columns">
@@ -1565,7 +1555,7 @@ single variable across groups</strong></p></li>
 <span id="cb42-6"><a href="#cb42-6"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="dv">1</span>, <span class="at">color =</span> <span class="st">"white"</span>)<span class="sc">+</span></span>
 <span id="cb42-7"><a href="#cb42-7"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-42-1.png" width="768"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-41-1.png" width="768"></p>
 </div>
 </div>
 </div>
@@ -1586,7 +1576,7 @@ single variable across groups</strong></p></li>
 </div><div class="column" style="width:50%;">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-44-1.png" width="768"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-43-1.png" width="768"></p>
 </div>
 </div>
 </div>
@@ -1605,7 +1595,7 @@ single variable across groups</strong></p></li>
 <span id="cb44-8"><a href="#cb44-8"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-45-1.png" width="768" class="r-stretch quarto-figure-center"></section>
+<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-44-1.png" width="768" class="r-stretch quarto-figure-center"></section>
 <section id="multiple-box-plots" class="slide level2">
 <h2>Multiple Box plots</h2>
 <div class="columns">
@@ -1625,7 +1615,7 @@ single variable across groups</strong></p></li>
 <span id="cb46-4"><a href="#cb46-4"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>) <span class="sc">+</span> </span>
 <span id="cb46-5"><a href="#cb46-5"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span>  <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-47-1.png" width="768"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-46-1.png" width="768"></p>
 </div>
 </div>
 </div>
@@ -1648,7 +1638,7 @@ single variable across groups</strong></p></li>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-48-1.png" width="768"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-47-1.png" width="768"></p>
 </figure>
 </div>
 </div>
@@ -1674,7 +1664,7 @@ single variable across groups</strong></p></li>
 <span id="cb48-8"><a href="#cb48-8"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-49-1.png" width="768" class="r-stretch quarto-figure-center"></section>
+<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-48-1.png" width="768" class="r-stretch quarto-figure-center"></section>
 <section id="strip-plots" class="slide level2">
 <h2>Strip plots</h2>
 <div class="cell" data-layout-align="center">
@@ -1686,7 +1676,7 @@ single variable across groups</strong></p></li>
 <span id="cb49-6"><a href="#cb49-6"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-50-1.png" width="768" class="r-stretch quarto-figure-center"></section>
+<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-49-1.png" width="768" class="r-stretch quarto-figure-center"></section>
 <section id="strip-plots-1" class="slide level2">
 <h2>Strip plots</h2>
 <ul>
@@ -1702,7 +1692,7 @@ single variable across groups</strong></p></li>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-51-1.png" width="768"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-50-1.png" width="768"></p>
 </figure>
 </div>
 </div>
@@ -1731,7 +1721,7 @@ single variable across groups</strong></p></li>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-52-1.png" width="768"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-51-1.png" width="768"></p>
 </figure>
 </div>
 </div>
@@ -1752,7 +1742,7 @@ single variable across groups</strong></p></li>
 <span id="cb52-8"><a href="#cb52-8"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-53-1.png" width="768" class="r-stretch quarto-figure-center"></section>
+<img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-52-1.png" width="768" class="r-stretch quarto-figure-center"></section>
 <section id="multiple-geoms" class="slide level2">
 <h2>Multiple Geoms</h2>
 <div class="columns">
@@ -1776,7 +1766,7 @@ single variable across groups</strong></p></li>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-55-1.png" width="768"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-54-1.png" width="768"></p>
 </figure>
 </div>
 </div>
@@ -1792,7 +1782,7 @@ single variable across groups</strong></p></li>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-56-1.png" width="768"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-55-1.png" width="768"></p>
 </figure>
 </div>
 </div>
@@ -1827,7 +1817,7 @@ single variable across groups</strong></p></li>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-57-1.png" width="768"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-56-1.png" width="768"></p>
 </figure>
 </div>
 </div>
@@ -1858,7 +1848,7 @@ single variable across groups</strong></p></li>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-58-1.png" width="768"></p>
+<p><img data-src="Prob_dist_viz_files/figure-revealjs/unnamed-chunk-57-1.png" width="768"></p>
 </figure>
 </div>
 </div>

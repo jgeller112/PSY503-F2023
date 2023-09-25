@@ -696,35 +696,21 @@ ggplot(data=penguins, mapping = aes(x=bill_length_mm, y = flipper_length_mm)) +
 
 ## `ggplot2` - Title
 
-::: columns
-::: {.column width="50%"}
 -   Let's clean up our plot
 
 -   Add title
 
-```{r}
-#| code-line-numbers: "5"
-#| fig-align: center
+    ```{r}
+    #| code-line-numbers: "5"
+    #| fig-align: center
+    ggplot(data=penguins, mapping = aes(x=bill_length_mm, y = flipper_length_mm, color=species)) +
+              geom_point(size = 4) + 
+              xlab("Bill Length in milimters") + 
+              ylab("Flipper Length in milimeters") + 
+             ggtitle("Palmer Penguins: Bill length vs Flipper length") +
+      theme_minimal(base_size = 16)
 
-ggplot(data=penguins, mapping = aes(x=bill_length_mm, y = flipper_length_mm, color=species)) +
-          geom_point(size = 4) + 
-          xlab("Bill Length in milimters") + 
-          ylab("Flipper Length in milimeters") + 
-         ggtitle("Palmer Penguins: Bill length vs Flipper length") +
-  theme_minimal(base_size = 16)
-
-
-```
-:::
-
-::: {.column width="50%"}
-```{r}
-#| echo: false
-#| 
-title
-```
-:::
-:::
+    ```
 
 ## `ggplot2` - Themes
 
