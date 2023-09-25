@@ -10,7 +10,7 @@ date: 2023-09-25
 - Ch.3 and Ch.4 Statistics and Data Science: A Modeling Approach
 
 - Imai (optional but good for probablity review)
-    <https://psy503-found-stats.netlify.app/readings_pdf/imai%20probability%20chapter.pdf
+    <https://psy503-found-stats.netlify.app/readings_pdf/imai%20probability%20chapter.pdf>
 
 ### Articles
 
@@ -18,4 +18,7 @@ date: 2023-09-25
 
 - Nordmann, E., McAleer, P., Toivo, W., Paterson, H., & DeBruine, L. M. (2022). [Data Visualization Using R for Researchers Who Do Not Use R.](https://journals.sagepub.com/doi/epub/10.1177/25152459221074654) Advances in Methods and Practices in Psychological Science, 5(2), 25152459221074656. https://doi.org/10.1177/25152459221074654
 
+## After Class
 
+
+- [class notes](/slides/04-Prob-dist-viz/04-Prob_dist_viz_notebook.html)
