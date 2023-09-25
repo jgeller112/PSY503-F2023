@@ -1,0 +1,1393 @@
+---
+title: "prob_class_viz"
+editor: visual
+execute:
+  freeze: auto
+  echo: true
+  message: false
+  warning: false
+  fig-align: "center"
+  fig-width: 8
+  fig-height: 4
+  editor_options: 
+  chunk_output_type: inline
+  code-overflow: wrap
+  html:
+    code-fold: true
+    code-tools: true
+  filters:
+  - webr
+---
+
+## Outline
+
+-   Probability - what is it?
+
+-   Random processes and variables
+
+-   Probability distributions
+
+-   DGP
+
+-   `ggplot` primer
+
+-   Visualizing variance
+
+## Packages
+
+```{webr-r}
+#| echo: false
+#| message: false
+library(pacman)
+p_load("tidyverse")
+
+```
+
+## Probability warm-up
+
+1.  What is probability of drawing the ace of spades from a fair deck of
+    cards?
+
+2.  What is the probability of drawing an ace of any suit?
+
+3.  You are going to roll some dice twice. What is the probability you
+    roll doubles?
+
+4.  What is the chance that a live specimen of the New Jersey Devil will
+    be found?
+
+5.  Who is more likely to be a victim of a street robbery, a young man
+    or an old woman?
+
+## Frequentist interpretation of probability
+
+-   Classical statistical inference is based off this interpretation
+
+<!-- -->
+
+-   The frequentist approach treats probabilities as relative
+    frequencies
+
+    -   If we say that the probability of rolling a 5 on a fair die is
+        1/6, we mean that, ***if the die were rolled an infinite number
+        of times***, 1/6 of all rolls would be a 5
+
+## What probability is not
+
+{{< video https://www.youtube.com/watch?v=WFoC3TR5rzI width="600" height="400" >}}
+
+## What is probability theory?
+
+-   Probability is the study of **random processes**
+
+    -   Probability is used to characterize **uncertainty/randomness**
+
+        ![](https://psy503-found-stats.netlify.app/slides/05-probability/probability-line.svg){width="790"}
+
+## Random processes: intuition
+
+```{webr-r}
+
+coinflips <- function(x) { 
+  flip=rbinom(x, 1, 0.5) 
+flip=ifelse(flip==1, "Tails", "Heads") 
+
+return(flip) 
+}
+
+coinflips(1)
+
+
+```
+
+::: columns
+::: {.column width="50%"}
+-   Let's flip a fair coin
+
+```{webr-r}
+coinflips <- function(x) { 
+  flip=rbinom(x, 1, 0.5) 
+flip=ifelse(flip==1, "Tails", "Heads") 
+
+return(flip) 
+}
+
+coinflips(1)
+
+```
+:::
+
+::: {.column width="50%"}
+1.  Can you tell me what the outcome will be?
+
+2.  If we were to flip a fair coin many many times, would you be able to
+    tell the proportion of times that we would obtain heads?
+:::
+:::
+
+. . .
+
+-   If answer to first question is "NO" AND Answer to second question is
+    "YES"
+    -   You are dealing with a random process
+
+## Random processes
+
+-   Random processes are mechanisms that produce outcomes... from a
+    world/set of possible outcomes... with some degree of uncertainty
+    but with regularity
+
+## Examples of random processes
+
+-   Random assignment in experiments
+
+. . .
+
+-   Random dram of a sample of n individuals from a population of N
+    individuals
+
+. . .
+
+-   Rolling a die
+
+## What is a random variable?
+
+-   A variable that depends on a random process
+
+    -   Think about the following random phenomenon: "randomly selecting
+        2 students in this class room"
+
+        -   Sample space?
+
+            -   One possible outcome:
+                $\omega = \{\mathrm{Ari, \: Alex}\}$
+
+            -   Another possible outcome:
+                $\omega = \{\mathrm{Aditi, \: Brooke}\}$
+
+## What is a random variable?
+
+-   Can this be considered a random variable?
+
+. . .
+
+-   No. Random variables are always numeric
+
+-   We operate on random variables using math
+
+## Illustration
+
+-   Random variables are mappings from events to numbers
+
+-   Formally, a random variable is defined as a function that maps the
+    sample space $\Omega$ of a random generative process into the real
+    line (or into real numbers)
+
+![](images/coin_toss.jpg){fig-align="center"}
+
+## Probability distribution functions
+
+-   Two types of random variables
+
+    -   Discrete
+
+    -   Continuous
+
+-   The **distribution** of a random variable $X$ describes the
+    likelihood of the values that $X$ can take
+
+## Discrete random variables: definition
+
+::: columns
+::: {.column width="50%"}
+-   Discrete random variables are defined on a range that is a countable
+    set
+
+-   i.e., they can only take on a **finite** or **countably infinite**
+    number of different values
+:::
+
+::: {.column width="50%"}
+![](images/discont.jpg){fig-align="center"}
+:::
+:::
+
+## Probability mass function (PMF)
+
+-   Let $X$ be a discrete random variable
+
+-   The *probability mass function (PMF)* of $X$ summarizes the
+    probability of each outcome $x$
+
+-   PMF: function $p$ given by $$P(X = x)$$
+
+    -   $X$ = RV
+
+    -   $x$ = value
+
+## Example: Dessert tonight
+
+Imagine that you started a strict diet a few days ago. You are at a
+dinner party at your friend's who made your favorite dessert. You are
+very tempted and make the decision to flip a coin three times. The
+number of times that the flip coin returns tail determines the number of
+bites of the dessert you will have. Before you start flipping the coin,
+you want to learn more about your chances of not having dessert tonight.
+To do that, you decide to look at the possible outcomes. You let 𝑋 be
+the number of times a series of three coin flips returns tails (T). The
+support of 𝑋 is {0, 1, 2, 3}.
+
+## Dessert tonight
+
+```{webr-r}
+outcomes <- c('H', 'T')
+sample_space <- expand.grid(outcomes, outcomes, outcomes)
+sample_space
+
+```
+
+## PMF: Dessert tonight
+
+```{webr-r}
+#| echo: false
+#| fig-align: "center"
+#| 
+
+# Define parameters
+n <- 3
+p <- 0.5
+
+# Calculate probabilities
+x <- 0:n
+probabilities <- dbinom(x, n, p)
+
+# Plot PMF
+df <- data.frame(x, probabilities)
+ggplot(df, aes(x=x, y=probabilities)) +
+    geom_bar(stat="identity", fill="skyblue") +
+    labs(title="PMF of number of tails in 3 coin flips",
+         x="Number of tails",
+         y="Probability") +
+    theme_minimal() +
+    geom_text(aes(label=sprintf("%.2f", probabilities)), vjust=-0.5)
+
+
+
+```
+
+## Cumulative distribution function (CDF): definition
+
+::: columns
+::: {.column width="50%"}
+-   The CDF of a random variable is the function $F$ such that
+
+    -   $F(x) = P(X \leq x)$
+
+-   CDF tells us the probability that an outcome below a specific
+    outcome occurs
+
+-   Sums to 1
+:::
+
+::: {.column width="50%"}
+```{webr-r}
+#| echo: false
+#| 
+
+# Generate a random dataset
+set.seed(666)
+data <- data.frame(x = rnorm(100))
+
+# Calculate the cumulative distribution
+data <- data %>% 
+  arrange(x) %>% 
+  mutate(cdf = row_number() / n())
+
+# Create the CDF plot
+ggplot(data, aes(x = x, y = cdf)) +
+  geom_line() +
+  geom_point() +
+  ggtitle("CDF of Random Data") +
+  xlab("Data Points") +
+  ylab("CDF")
+
+```
+:::
+:::
+
+## Continuous random variables: Definition
+
+::: columns
+::: {.column width="50%"}
+-   A continuous random variable is a variable that can take on an
+    infinite number of values within a given range or interval
+:::
+
+::: {.column width="50%"}
+![](images/discont.jpg){fig-align="center"}
+:::
+:::
+
+## Probability Density Function (PDF): Definition
+
+::: columns
+::: {.column width="50%"}
+-   PDF is continuous version of PMF
+-   The PDF of a random continuous variable is the function $F$ such
+    that $F(x) = P(a \geq X \geq b)$
+-   PDF tells us the probability of range of outcomes
+:::
+
+::: {.column width="50%"}
+-   What is probability of observing IQ between 100 and 125?
+
+![](https://psy503-found-stats.netlify.app/slides/05-probability/basics_of_probability_theory_files/figure-html/unnamed-chunk-28-1.png){fig-align="center"
+width="687"}
+:::
+:::
+
+## CDF
+
+-   ::: {.column width="50%"}
+    $F(x) = P(X \leq x)$
+    :::
+
+    ![](https://psy503-found-stats.netlify.app/slides/05-probability/basics_of_probability_theory_files/figure-html/unnamed-chunk-29-1.png){width="896"}
+
+## Summarizing random variables
+
+-   PMFs, PDFs, CDFs are very useful tools to summarize information from
+    rvs.
+
+-   Many other ways to summarize random variables!
+
+    -   e.g., mean, median, standard deviation, etc.
+
+## Our goal as statisticians
+
+::: columns
+::: {.column width="50%"}
+![](https://bookdown.org/cristobalmoya/iscs_materials/img/producing_data_inferences.png){fig-align="center"
+width="706" height="367"}
+:::
+
+::: {.column width="50%"}
+Link probability distributions to the data generating process (DGP)
+
+-   The data generating process (GDP) represents the "real-world"
+    process of how data comes about
+
+-   Probability distributions are mathematical models used to model and
+    understand the DGP
+:::
+:::
+
+## DGP
+
+::: columns
+::: {.column width="50%"}
+-   **Bottom-up**: This approach begins with the observed data. By
+    examining the data distribution, one might make educated guesses or
+    inferences about the underlying processes that produced it
+
+-   **Top-down**: This approach relies on pre-existing knowledge or
+    theories about the system or phenomenon in question to inform our
+    understanding of the DGP
+:::
+
+::: {.column width="50%"}
+![](https://psy503-found-stats.netlify.app/slides/04-models/distribs.png){fig-align="center"
+width="750" height="482"}
+:::
+:::
+
+## Bootstrapping
+
+-   ::: columns
+    ::: {.column width="50%"}
+    -   Sampling with replacement
+
+        -   A computer based method for deriving the probability
+            distribution for any random variable
+
+        -   How to do it
+
+            -   Run your analysis a bunch of times with a slightly
+                different set of observations each time
+    :::
+
+    ::: {.column width="50%"}
+    -   Dice roll
+
+    ```{webr-r}
+
+    x=1:6
+
+    sample(x, 6, replace=TRUE)
+    sample(x, 6, replace=TRUE)
+    sample(x, 6, replace=TRUE)
+
+
+    ```
+    :::
+    :::
+
+::: notes
+Once we have an idea about the DGP we can simulate data to see if it
+conforms to expectations.
+
+Sampling helps us build up our intuitions about probability
+distributions
+
+The book talks about dice rolls.
+
+What are some others?
+:::
+
+## Bootstrapping
+
+```{webr-r}
+#| echo: false
+
+library(ggplot2)
+library(dplyr)
+
+# Simulated dice rolls (replace this with your actual data if you have one)
+set.seed(123)
+dice_rolls <- sample(1:6, 1000, replace=TRUE)
+
+# Bootstrap the rolls
+n_bootstraps <- 1000
+bootstrap_samples <- replicate(n_bootstraps, sample(dice_rolls, length(dice_rolls), replace=TRUE))
+
+# Calculate the mean occurrence of each roll in the bootstrapped samples
+bootstrap_probabilities <- colMeans(sapply(1:6, function(i) rowMeans(bootstrap_samples == i)))
+
+# Create data frame for plotting
+dice_df <- data.frame(
+  roll = 1:6,
+  probability = bootstrap_probabilities
+)
+
+# Plotting with ggplot2
+ggplot(dice_df, aes(x=roll, y=probability)) +
+  geom_bar(stat="identity") +
+  labs(title="Bootstrapped Dice Roll Probabilities",
+       x="Dice Roll",
+       y="Probability") +
+  ylim(0, 1) +
+  scale_x_continuous(breaks=1:6)
+```
+
+## Sources of Variance
+
+-   There is uncertainty associated with the DGP
+
+::: panel-tabset
+## Types of Error
+
+![](images/var.png){fig-align="center"}
+
+## Unexplained Error
+
+![](images/var1.png){fig-align="center"}
+
+## Sources of Unexplained Error
+
+![](images/var3.png){fig-align="center"}
+:::
+
+## Randomness
+
+-   Shuffling (permutation tests)
+
+    ::: columns
+    ::: {.column width="50%"}
+    ```{webr-r}
+
+    knitr::include_url("https://www.jwilber.me/permutationtest/", height = "800px")
+
+
+    ```
+    :::
+
+    ::: {.column width="50%"}
+    ![](images/Screen%20Shot%202023-09-18%20at%202.21.43%20PM.png)
+    :::
+    :::
+
+## Visualizing variance
+
+::: columns
+::: {.column width="50%"}
+![](images/ggplot.jpg){fig-align="center"}
+:::
+
+::: {.column width="50%"}
+-   `ggplot2` is tidyverse's data visualization package (`plotnine` in
+    Python uses similar syntax)
+
+-   The gg in `ggplot2` stands for Grammar of Graphics
+
+    -   It is inspired by the book Grammar of Graphics by Leland
+        Wilkinson
+
+    -   A grammar of graphics is a tool that enables us to concisely
+        describe the components of a graphic
+:::
+:::
+
+## `ggplot2`
+
+![](images/ggplot_aes.png){fig-align="center"}
+
+## `ggplot2`
+
+Let's start with a blank canvas
+
+```{webr-r}
+ggplot()
+```
+
+## `ggplot2` - Data
+
+::: columns
+::: {.column width="50%"}
+![](https://allisonhorst.github.io/palmerpenguins/logo.png){fig-align="center"}
+:::
+
+::: {.column width="50%"}
+```{webr-r}
+#| fig-align: "center"
+
+library(palmerpenguins)
+ggplot(data=penguins, mapping = aes(x=bill_length_mm, y = flipper_length_mm))+
+  theme_minimal(base_size = 16)
+```
+:::
+:::
+
+## `ggplot2` - Layers
+
+-   Let's add a geom
+
+    -   `geom_point` adds a dot for each raw data point
+
+```{webr-r}
+#| code-line-numbers: "2"
+#| fig-align: "center"
+
+ggplot(data=penguins, mapping = aes(x=bill_length_mm, y = flipper_length_mm)) +
+          geom_point()+
+  theme_minimal(base_size = 16)
+
+```
+
+## `ggplot2` - Layers
+
+-   Let's add another geom
+
+    -   `geom_smooth` plots a smoothed line for the data
+
+```{webr-r}
+#| code-line-numbers: "2"
+#| fig-align: "center"
+
+    ggplot(data=penguins, mapping = aes(x=bill_length_mm, y = flipper_length_mm)) +
+      geom_smooth()+
+  theme_minimal(base_size = 16)
+
+
+```
+
+## `ggplot2` Layers
+
+-   Maybe a linear line
+
+```{webr-r}
+#| code-line-numbers: "2"
+#| fig-align: center
+
+    ggplot(data=penguins, mapping = aes(x=bill_length_mm, y = flipper_length_mm)) +
+      geom_smooth(method="lm")+
+  theme_minimal(base_size = 16)
+
+
+```
+
+## `ggplot2` - Layers
+
+-   It might be nice to see the raw data WITH the line. We can combine
+    geoms!
+
+```{webr-r}
+#| code-line-numbers: "2-3"
+#| fig-align: center
+    ggplot(data=penguins, mapping = aes(x=bill_length_mm, y = flipper_length_mm)) +
+  geom_point() + 
+      geom_smooth(method="lm")+
+  theme_minimal(base_size = 16)
+
+
+```
+
+## `ggplot2` - Size
+
+-   Points are a bit small. Let's make them bigger!
+
+```{webr-r}
+#| code-line-numbers: "2"
+#| fig-align: center
+
+    ggplot(data=penguins, mapping = aes(x=bill_length_mm, y = flipper_length_mm)) +
+  geom_point(size = 2, alpha=.3) + 
+      geom_smooth(method="lm")+
+  theme_minimal(base_size = 16)
+
+```
+
+## `ggplot2` - Color
+
+-   How could we add information about different types of penguins?
+
+```{webr-r}
+#| code-line-numbers: "1"
+#| fig-align: center
+
+    ggplot(data=penguins, mapping = aes(x=bill_length_mm, y = flipper_length_mm, color=species)) +
+  geom_point(size = 4)+
+  theme_minimal(base_size = 16)
+
+```
+
+## `ggplot2`- Axes
+
+-   Let's clean up our plot
+
+    -   Add clearer axis labels
+
+```{webr-r}
+#| code-line-numbers: "3"
+#| fig-align: center
+
+    ggplot(data=penguins, mapping = aes(x=bill_length_mm, y = flipper_length_mm, color=species)) +
+  geom_point(size = 4) + 
+  xlab("Bill Length in milimters") + 
+  ylab("Flipper Length in milimeters")+
+  theme_minimal(base_size = 16)
+
+```
+
+## `ggplot2` - Title
+
+::: columns
+::: {.column width="50%"}
+-   Let's clean up our plot
+
+-   Add title
+
+```{webr-r}
+#| code-line-numbers: "5"
+#| fig-align: center
+
+title <- ggplot(data=penguins, mapping = aes(x=bill_length_mm, y = flipper_length_mm, color=species)) +
+          geom_point(size = 4) + 
+          xlab("Bill Length in milimters") + 
+          ylab("Flipper Length in milimeters") + 
+          ggtitle("Palmer Penguins: Bill length vs Flipper length") +
+  theme_minimal(base_size = 16)
+
+```
+:::
+
+::: {.column width="50%"}
+```{webr-r}
+#| echo: false
+#| 
+title
+```
+:::
+:::
+
+## `ggplot2` - Themes
+
+```{webr-r}
+#| code-line-numbers: "6"
+#| fig-align: center
+
+theme_plot <-  ggplot(data=penguins, mapping = aes(x=bill_length_mm, y = flipper_length_mm, color=species)) +
+              geom_point(size = 4) + 
+              xlab("Bill Length in milimters") + 
+              ylab("Flipper Length in milimeters") + 
+              ggtitle("Palmer Penguins: Bill length vs Flipper length") + 
+              theme_dark(base_size = 16)
+theme_plot
+```
+
+## `ggplot2` - Themes
+
+::: columns
+::: {.column width="50%"}
+![](https://github.com/BlakeRMills/MetBrewer/raw/main/PaletteImages/Hex/MetBrewerHex.jpg){fig-align="center"
+width="262"}
+
+![](https://github.com/BlakeRMills/MetBrewer/blob/main/PaletteImages/VanGogh2.png?raw=true){fig-align="center"
+width="334"}
+:::
+
+::: {.column width="50%"}
+```{webr-r}
+library(MetBrewer)
+#| code-line-numbers: "6"
+#| fig-align: center
+
+ggplot(data=penguins, mapping = aes(x=bill_length_mm, y = flipper_length_mm, color=species)) +
+              geom_point(size = 4) + 
+              xlab("Bill Length in milimters") + 
+              ylab("Flipper Length in milimeters") + 
+              ggtitle("Palmer Penguins: Bill length vs Flipper length") + # Changes legend title, and selects a colour-palette
+  scale_colour_manual(
+                    values = MetBrewer::met.brewer("VanGogh2",3)) + 
+              theme_minimal(base_size = 16)
+```
+:::
+:::
+
+## `ggplot2` - Themes
+
+::: columns
+::: {.column width="50%"}
+![](https://user-images.githubusercontent.com/52077481/255932691-4c2e2885-d879-46e6-b61d-b253d8382597.png){fig-align="center"}
+
+```{webr-r}
+# install.packages("remotes")
+#remotes::install_github("MatthewBJane/ThemePark")
+
+```
+:::
+
+::: {.column width="50%"}
+```{webr-r}
+#| fig-align: center
+
+library("ThemePark")
+
+`X variable` <- rnorm(50, 0, 1)
+`Y variable` <- rnorm(50, 0, 1)
+
+
+ggplot(data = data.frame(x = `X variable`, y = `Y variable`), aes(x = x, y = y)) +
+  geom_smooth(method = 'lm', color = barbie_theme_colors["medium"]) +
+  geom_point() +
+  labs(title = 'Barbie Scatter Plot') +
+  theme_barbie()
+
+
+```
+:::
+:::
+
+## Visualizing Variance
+
+## Disclaimer
+
+\- More information is always better!
+
+-   Avoid visualizing single numbers when you have a whole distribution
+    of numbers
+
+![](https://pbs.twimg.com/media/Ei5qvgNVoAAV1Ay.png){fig-align="center"}
+
+# Histograms
+
+## Histograms
+
+-   Put data into equally spaced buckets (or bins), plot how many rows
+    are in each bucket
+
+    ::: columns
+    ::: {.column width="50%"}
+    ```{webr-r}
+
+    library(gapminder)
+    gapminder_2002 <- gapminder %>% 
+          filter(year == 2002)
+
+    ggplot(gapminder_2002,
+               aes(x = lifeExp)) +
+          geom_histogram()+
+          theme_minimal(base_size = 16)
+    ```
+    :::
+    :::
+
+------------------------------------------------------------------------
+
+## `ggdist`
+
+-   Put data into equally spaced buckets (or bins), plot how many rows
+    are in each bucket
+
+    ::: columns
+    ::: {.column width="50%"}
+    ```{webr-r}
+
+    library(ggdist)
+            gapminder_2002 <- gapminder %>% 
+              filter(year == 2002)
+
+            fig=ggplot(gapminder_2002,
+                   aes(x = lifeExp)) +
+              geom_dots()+
+          theme_minimal(base_size = 16)
+    ```
+    :::
+
+    ::: {.column width="50%"}
+    ```{webr-r}
+    #| echo: false
+
+    fig
+    ```
+    :::
+    :::
+
+------------------------------------------------------------------------
+
+## Histograms: Bin width
+
+-   Range of values in each bar or dot
+
+    ::: panel-tabset
+    ## Narrow
+
+    ```{webr-r}
+    #| code-line-numbers: "2"
+    #| fig-align: "center"
+    ggplot(gapminder_2002, aes(x = lifeExp)) +
+       geom_histogram(binwidth = .2) +
+      theme_minimal(base_size = 16)
+    ```
+
+    ## Big
+
+    ```{webr-r}
+    #| code-line-numbers: "2"
+    #| fig-align: "center"
+
+    ggplot(gapminder_2002, aes(x = lifeExp)) +
+       geom_histogram(binwidth = 20) +
+      theme_minimal(base_size = 16)
+
+    ```
+
+    ## Perfect
+
+    ```{webr-r}
+    #| code-line-numbers: "2"
+    #| fig-align: "center"
+
+     ggplot(gapminder_2002, aes(x = lifeExp)) +
+          geom_histogram(binwidth = 2) +
+      theme_minimal(base_size = 16)
+    ```
+    :::
+
+------------------------------------------------------------------------
+
+## Histogram tips
+
+::: columns
+::: {.column width="50%"}
+-   Add a border to the bars<br>for readability
+
+    -   `geom_histogram(..., color = "green")`
+:::
+
+::: {.column width="50%"}
+```{webr-r}
+#| code-line-numbers: "2"
+
+ggplot(gapminder_2002, aes(x = lifeExp)) +
+   geom_histogram(binwidth = 2, color="green") +
+  theme_minimal(base_size = 16)
+```
+:::
+:::
+
+## Histogram tips
+
+::: columns
+::: {.column width="50%"}
+-   Set the boundary
+:::
+
+::: {.column width="50%"}
+```{webr-r}
+#| code-line-numbers: "2"
+#| fig-align: "center"
+
+ggplot(gapminder_2002, aes(x = lifeExp)) +
+   geom_histogram(binwidth = 2, color="white", boundary=50) +
+  theme_minimal(base_size = 16)
+
+```
+:::
+:::
+
+## Density plots
+
+-   Use calculus to find the probability of each x value
+
+    ```{webr-r}
+    #| fig-align: "center"
+    #|code-line-numbers: "2"
+
+
+    ggplot(gapminder_2002, aes(x = lifeExp)) +
+      geom_density(fill = "grey60", color = "grey30")+
+      theme_minimal(base_size = 16)
+    ```
+
+## Density plots: Kernels and bandwidths
+
+::: columns
+::: {.column width="50%"}
+-   Different options for calculus change the plot shape
+
+    -   Kernels - Smooth data points
+
+    -   bandwidth - how wide
+:::
+
+::: {.column width="50%"}
+```{webr-r}
+ggplot(gapminder_2002, aes(x = lifeExp)) +
+  geom_density(fill = "grey60", color = "grey30")+
+  theme_minimal(base_size = 16)
+
+```
+:::
+:::
+
+# Boxplots
+
+## Boxplots
+
+-   Show specific distributional numbers
+
+    ::: columns
+    ::: {.column width="50%"}
+    ```{webr-r}
+    #| code-line-numbers: "2"
+    #| fig-align: center
+
+    box <- ggplot(gapminder_2002,
+           aes(x = lifeExp)) +
+      geom_boxplot()+
+      theme_minimal(base_size = 16)
+
+    ```
+    :::
+
+    ::: {.column width="50%"}
+    ```{webr-r}
+    #| echo: false
+    box
+
+    ```
+    :::
+    :::
+
+## Five number summary
+
+![](boxplot-explanation-1.png){fig-align="center"}
+
+# Categorical Variables
+
+## Bar charts
+
+```{webr-r}
+
+library(fivethirtyeight)
+# Using ggplot2 to plot the data
+candy_rankings %>%
+  # Sorting the data to have the highest percentages at the top
+  arrange(-winpercent) %>%
+  # Taking the top n candies (optional, you can remove the following line if you want all)
+  top_n(20, wt = winpercent)
+```
+
+## Bar plots
+
+```{webr-r}
+#| echo: false
+# Using ggplot2 to plot the data
+candy_rankings %>%
+  # Sorting the data to have the highest percentages at the top
+  arrange(-winpercent) %>%
+  # Taking the top n candies (optional, you can remove the following line if you want all)
+  top_n(20, wt = winpercent) %>%
+  ggplot(aes(x = reorder(competitorname, -winpercent), y = winpercent)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = scales::percent(winpercent/100, accuracy = 1)), 
+            hjust = -0.1, size = 3) +  # Adjust hjust for text position
+  coord_flip() +
+  labs(title = "Candy Rankings",
+       x = "Candy Name",
+       y = "Percentage of People Who Voted For Them") +
+  theme_minimal()
+
+```
+
+# Exploring quantitative variables
+
+-   Scatter plots
+
+![](https://indrajeetpatil.github.io/ggstatsplot/reference/figures/logo.png){fig-align="center"
+width="196"}
+
+```{webr-r}
+#| echo: false
+#| fig-align: "center"
+
+library(ggstatsplot)
+
+ggscatterstats(
+  data = movies_long, ## data frame from which variables are taken
+  x = budget, ## predictor/independent variable
+  y = rating, ## dependent variable
+  xlab = "Budget (in millions of US dollars)", ## label for the x-axis
+  ylab = "Rating on IMDB", ## label for the y-axis
+  label.var = title, ## variable to use for labeling data points
+  label.expression = rating < 5 & budget > 100, ## expression for deciding which points to label
+  results.subtitle = FALSE, 
+  point.label.args = list(alpha = 0.7, size = 4, color = "grey50"),
+  xfill = "#CC79A7", ## fill for marginals on the x-axis
+  yfill = "#009E73", ## fill for marginals on the y-axis
+  title = "Relationship between movie budget and IMDB rating",
+  caption = "Source: www.imdb.com")
+
+
+```
+
+# Categorical x Continuous
+
+## Exploring multiple groups
+
+-   **Visualize the distribution of a\
+    single variable across groups**
+
+-   **Add a `fill` aesthetic or use faceting!**
+
+## Multiple histograms
+
+-   This looks bad and is hard to read
+
+```{webr-r}
+#| fig-align: "center"
+#| code-line-numbers: "3"
+
+ggplot(gapminder_2002,
+       aes(x = lifeExp,
+           fill = continent)) +
+  geom_histogram(binwidth = 5, 
+                 color = "white", 
+                 boundary = 50) +
+  guides(fill = "none") +
+  theme_minimal(base_size = 16)
+
+```
+
+## Multiple histograms
+
+```{webr-r}
+#| fig-align: "center"
+#| code-line-numbers: "8"
+
+ ggplot(gapminder_2002,
+       aes(x = lifeExp,
+           fill = continent)) +
+  geom_histogram(binwidth = 5, 
+                 color = "white", 
+                 boundary = 50) +
+  guides(fill = "none") +
+  facet_wrap(vars(continent))+
+  theme_minimal(base_size = 16)
+
+```
+
+## Pyramid histograms
+
+::: columns
+::: {.column width="50%"}
+```{webr-r}
+
+gapminder_intervals <- gapminder %>% 
+  filter(year == 2002) %>% 
+  mutate(africa = 
+           ifelse(continent == "Africa", 
+                  "Africa", 
+                  "Not Africa")) %>% 
+  mutate(age_buckets = 
+           cut(lifeExp, 
+               breaks = seq(30, 90, by = 5))) %>% 
+  group_by(africa, age_buckets) %>% 
+  summarize(total = n())
+```
+:::
+
+::: {.column width="50%"}
+```{webr-r}
+
+ggplot(gapminder_intervals, 
+       aes(y = age_buckets,
+           x = ifelse(africa == "Africa", 
+                      total, -total),
+           fill = africa)) +
+  geom_col(width = 1, color = "white")+
+  theme_minimal(base_size = 16)
+```
+:::
+:::
+
+## **Multiple densities: Transparency**
+
+::: columns
+::: {.column width="50%"}
+```{webr-r}
+#| code-line-numbers: "5"
+#| fig-align: center
+p4 <- ggplot(filter(gapminder_2002, 
+              continent != "Oceania"),
+       aes(x = lifeExp,
+           fill = continent)) +
+  geom_density(alpha = 0.2)+
+  theme_minimal(base_size = 16)
+
+```
+:::
+
+::: {.column width="50%"}
+```{webr-r}
+#| echo: false
+
+p4
+
+```
+:::
+:::
+
+## **Multiple densities: Ridge plots**
+
+```{webr-r}
+#| fig-align: "center"
+#| code-line-numbers: "6"
+
+
+library(ggridges)
+ggplot(filter(gapminder_2002, 
+              continent != "Oceania"),
+       aes(x = lifeExp,
+           fill = continent,
+           y = continent)) +
+  geom_density_ridges()+
+  theme_minimal(base_size = 16)
+
+```
+
+## Multiple Box plots
+
+::: columns
+::: {.column width="50%"}
+-   Boxplots
+
+```{webr-r}
+
+url <- "https://raw.githubusercontent.com/z3tt/DataViz-Teaching/master/data/weissgerber-data.csv"
+data <- read_csv(url)
+```
+:::
+
+::: {.column width="50%"}
+```{webr-r}
+
+ggplot(data, aes(x = group, y = value, color = group, fill = group)) +
+  scale_y_continuous(breaks = 1:9) +
+  geom_boxplot(alpha = .5, size = 1.5, outlier.size = 5) + 
+  theme_minimal(base_size = 16) + 
+  theme(legend.position =  "none")
+
+
+```
+:::
+:::
+
+## Violin plots
+
+-   Density plot rotated 90 degrees and mirrored
+
+    ```{webr-r}
+    #| fig-align: "center"
+    #| code-line-numbers: "2:6"
+
+    ggplot(data, aes(x = group, y = value)) +
+      # create the violin plot
+           geom_violin(
+            aes(fill = group, fill = after_scale(colorspace::lighten(fill, .5))),
+            size = 1.2, bw = .8
+          ) +
+      theme_minimal(base_size = 16)+
+      # delete the legend information
+            theme(legend.position =  "none")
+
+
+    ```
+
+## Are violin plots bad?
+
+{{< video hhttps://www.youtube.com/watch?v=_0QMKFzW9fw width="600" height="400" >}}
+
+## Half violin plots + Box
+
+```{webr-r}
+#| fig-align: "center"
+#| code-line-numbers: "2:3"
+
+# Create the plot
+ggplot(data, aes(x = group, y = value, fill=group)) +
+  # Half violin plot with ggdist
+  stat_halfeye()+
+  # Distributional boxplot (similar to standard boxplot but with more flexibility)
+  geom_boxplot(width = 0.1, outlier.shape = NA, fill = "white")+
+  theme_minimal(base_size = 16) + 
+    theme(legend.position = "none")
+
+```
+
+## Strip plots
+
+```{webr-r}
+#| code-line-numbers: "2"
+#| fig-align: center
+
+ggplot(data, aes(x = group, y = value, fill=group)) +
+  # get the jitter points
+   geom_jitter(position=position_jitter(0.2)) + 
+  #removed legend
+  theme_minimal(base_size = 16) + 
+  theme(legend.position = "none")
+
+
+
+
+```
+
+## Strip plots
+
+-   Add summary stats
+
+    ```{webr-r}
+    #| code-line-numbers: "3"
+    #| fig-align: center
+
+
+    ggplot(data, aes(x = group, y = value, fill=group)) +
+       geom_jitter(position=position_jitter(0.2)) + 
+       stat_summary(fun.y=median, geom="point", shape=18,
+                     size=3, color="red")+
+      #removed legend
+      theme(legend.position = "none")+
+      theme_minimal(base_size = 16)
+
+
+    ```
+
+## Raincloud plots
+
+::: columns
+::: {.column width="50%"}
+Half violin plots + box + raw points
+
+![](https://github.com/jorvlan/open-visualizations/raw/master/R/package_figures/Rplot03.png){fig-align="center"
+width="365"}
+:::
+
+::: {.column width="50%"}
+```{webr-r}
+#| fig-align: center
+#| code-line-numbers: "3"
+
+library(ggrain)
+ggplot(data, aes(x = group, y = value, fill=group)) +
+  # raincloud plots
+  geom_rain() + 
+  #removed legend
+  theme_minimal(base_size = 16) + 
+  theme(legend.position = "none")
+
+```
+:::
+:::
+
+## Raincloud Plots
+
+```{webr-r}
+#| fig-align: center
+
+ggplot(filter(gapminder_2002, 
+              continent != "Oceania"),
+       aes(y = lifeExp,
+           x = continent,
+           color = continent)) + 
+  geom_rain() + 
+  coord_flip()+
+  theme_minimal(base_size = 16)
+
+```
+
+## Multiple Geoms
+
+::: columns
+::: {.column width="50%"}
+-   Multiple Geoms
+
+```{webr-r}
+library(gghalves)
+p6 <- ggplot(filter(gapminder_2002, 
+              continent != "Oceania"),
+       aes(y = lifeExp,
+           x = continent,
+           color = continent)) +
+  geom_half_boxplot(side = "l") +
+  geom_half_point(side = "r") + theme(legend.position  = "none")+
+  theme_minimal(base_size = 16)
+
+```
+:::
+
+::: {.column width="50%"}
+```{webr-r}
+#| echo: false
+#| fig-align: center
+
+p6
+```
+:::
+:::
+
+## Categorical vs. Categorical
+
+-   Stacked barplots
+
+    ```{webr-r}
+    #| echo: false
+    #| fig-align: "center"
+    #| 
+    # Create a new variable for the combination of chocolate and fruity
+    library(openintro)
+
+    ggplot(data=loans_full_schema, aes(x=homeownership, fill=application_type)) + 
+      geom_bar()
+
+    ```
