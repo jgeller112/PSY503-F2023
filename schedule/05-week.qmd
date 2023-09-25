@@ -1,5 +1,5 @@
 ---
-title: "Week 5"
+title: "Week 5b"
 subtitle: "Statistical Inference, NHST, and CIs"
 date: 2023-10-02
 ---
