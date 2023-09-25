@@ -21,4 +21,4 @@ date: 2023-09-25
 ## After Class
 
 
-- [class notes](/slides/04-Prob-dist-viz/04-Prob_dist_viz_notebook.html)
+- [class notes](/class_notes/04/04-Prob_dist_viz_notebook.qmd)
