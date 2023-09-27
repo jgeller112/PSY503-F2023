@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jason Geller, Ph.D.(he/him)">
-<meta name="dcterms.date" content="2023-09-26">
+<meta name="dcterms.date" content="2023-09-27">
 <meta name="description" content="Explore advanced statistical methods in psychology">
 
 <title>Foundations of Statistical Methods in Psychology - Lab 3 Answers</title>
@@ -113,7 +113,7 @@ ul.task-list li input[type="checkbox"] {
   const initializeWebRTimerStart = performance.now();
 
   // Determine if we need to install R packages
-  var installRPackagesList = ['tidyverse', 'ggrain'];
+  var installRPackagesList = ['tidyverse', 'ggrain', 'moderndive'];
   // Check to see if we have an empty array, if we do set to skip the installation.
   var setupRPackages = !(installRPackagesList.indexOf("") !== -1);
 
@@ -414,7 +414,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 26, 2023</p>
+      <p class="date">September 27, 2023</p>
     </div>
   </div>
   
@@ -474,8 +474,8 @@ ul.task-list li input[type="checkbox"] {
     editor = monaco.editor.create(editorDiv, {
       value: `
 library(tidyverse)
-library(moderndive)
-library(ggrain)`,
+library(ggrain)
+library(moderndive)`,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -680,7 +680,6 @@ library(ggrain)`,
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
       value: `
-
 bb2021 <- read.csv("https://raw.githubusercontent.com/mllewis/cumulative-science/master/static/data/bb_2021_hr_clean.csv")
 
 head(bb2021)`,
@@ -1114,7 +1113,7 @@ first_df %>%
   };
 </script></li>
 </ul></li>
-<li><p>What is the mean number of observations per individual trial? (hint: you’ll need to use both <code>group_by</code> and <code>ungroup</code>).</p>
+<li><p>What is the overall mean number of observations per individual trial? (hint: you’ll need to use both <code>group_by</code> and <code>ungroup</code>).</p>
 <button class="btn btn-default btn-webr" disabled="" type="button" id="webr-run-button-4">Loading
   webR...</button>
 <div id="webr-editor-4"></div>
@@ -3457,7 +3456,8 @@ ggplot(trial_means, aes(x = trial_id, y = mean, color = trial_type, size=)) +
   runButton.onclick = function () {
     executeCode(editor.getValue());
   };
-</script>
+</script></li>
+</ol>
 <button class="btn btn-default btn-webr" disabled="" type="button" id="webr-run-button-15">Loading
   webR...</button>
 <div id="webr-editor-15"></div>
@@ -3478,15 +3478,14 @@ ggplot(trial_means, aes(x = trial_id, y = mean, color = trial_type, size=)) +
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
       value: `
-bb2021 %>%
-  group_by(trial_type, trial_id) %>%
-  summarize(hr_means = mean(zhr_pt), num_trial = n_distinct(participant_id)) %>%
-  ggplot(mapping = aes(x = trial_id, y = hr_means, color = trial_type, size = num_trial)) +
-  geom_point() +
-  geom_line(size = 0.5) +
-  ggtitle("Mean heart rate by trial number") +
-  ylab("mean")
-`,
+    bb2021 %>%
+      group_by(trial_type, trial_id) %>%
+      summarize(hr_means = mean(zhr_pt), num_trial = n_distinct(participant_id)) %>%
+      ggplot(mapping = aes(x = trial_id, y = hr_means, color = trial_type, size = num_trial)) +
+      geom_point() +
+      geom_line(size = 0.5) +
+      ggtitle("Mean heart rate by trial number") +
+      ylab("mean")`,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -3670,8 +3669,9 @@ bb2021 %>%
   runButton.onclick = function () {
     executeCode(editor.getValue());
   };
-</script></li>
-<li><p>Make a beautiful, clear plot that answers a question you might be interested in from the paper. <em>Make sure to include a descriptive title and it is publication ready.</em></p></li>
+</script>
+<ol start="15" type="1">
+<li>Make a beautiful, clear plot that answers a question you might be interested in from the paper. <em>Make sure to include a descriptive title and it is publication ready.</em></li>
 </ol>
 
 

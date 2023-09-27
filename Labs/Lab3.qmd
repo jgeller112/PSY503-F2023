@@ -20,7 +20,7 @@ To access Lab 3, please go here: [Click here](https://classroom.github.com/a/eJY
 
 ## Lab Answers 
 
-- Will post later today. 
+- [Check here](/Labs/lab_ans/viz_ans_webr.qmd)
 
 
 
