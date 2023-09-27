@@ -1,0 +1,270 @@
+---
+title: "Lab 3 Answers"
+subtitle: "Princeton University"
+author: "Jason Geller, Ph.D.(he/him)"
+date: 'Updated:`r Sys.Date()`'
+format: html
+toc: true
+toc_float: true
+html:
+    code-fold: true
+    code-tools: true
+engine: knitr
+webr: 
+  packages: ["tidyverse", "ggrain"]
+filters:
+  - webr
+---
+
+## Lab 3
+
+The data for this lab was taken from @bainbridge2020. The paper can be accessed here:
+
+<https://www.nature.com/articles/s41562-020-00963-z.epdf?sharing_token=jMnyW68w1ly_jP-7uAQkSNRgN0jAjWel9jnR3ZoTv0MCXZ4r7jrUALP4MF0GLxgMsZKEaFOrpxew-I7taYTt0yYa41WX3rCZIACffMyBDz-5K7wJceE9lopzU0bffcHEIKaH5l_LxD5aPdg99A8STR1rqgOzBjKjgcxkg6zsKeA%3D>
+
+If you're curious, you can explore all their raw data by going to the repository associated with the paper, [here](https://github.com/themusiclab/infant-relax/)).
+
+There are seven variables in the data and each variable is described below. The first six rows of the data frame are also displayed below.
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Data Columns                                                                                                                                                                                                                                                                            |
++=========================================================================================================================================================================================================================================================================================+
+| -   **participant_id** - Unique identifier for each infant.                                                                                                                                                                                                                             |
+|                                                                                                                                                                                                                                                                                         |
+| -   **age** - Age of infant as continuous variable in months.                                                                                                                                                                                                                           |
+|                                                                                                                                                                                                                                                                                         |
+| -   **age_cat** - Age of each participant as discrete variable in months.                                                                                                                                                                                                               |
+|                                                                                                                                                                                                                                                                                         |
+| -   **trial_type** - Trial type (lullaby vs. non-lullaby). They also had "preference" trials in the experiment. Those trials are not included in this dataset.                                                                                                                          |
+|                                                                                                                                                                                                                                                                                         |
+| -   **trial_id** - Trial identifier. Note that the number of trials varies across participants. For some participants there are data for 6 trials, while for others there are data for only 4.                                                                                          |
+|                                                                                                                                                                                                                                                                                         |
+| -   **obs_num** - For each trial, they measured heart rate roughly every .4 seconds. This variable tells you which observation in a trial you're looking at (.4 seconds after the trial started would be coded as `1`, .8 seconds after the trial started would be coded as `2`, etc.). |
+|                                                                                                                                                                                                                                                                                         |
+| -   **zhr_pt** - This is the heart rate at a given observation, normalized relative to the previous trial.                                                                                                                                                                              |
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+```{webr-r}
+
+library(tidyverse)
+library(moderndive)
+library(ggrain)
+
+```
+
+```{webr-r}
+
+
+bb2021 <- read.csv("https://raw.githubusercontent.com/mllewis/cumulative-science/master/static/data/bb_2021_hr_clean.csv")
+
+head(bb2021)
+```
+
+1.  Let's start by trying to understand the structure of the dataset. Calculate the following:\
+
+    -   The age of the youngest (minimum) child in the dataset.\
+    -   The age of the oldest (maximum) child in the dataset.\
+    -   The total number of observations represented in the data.
+
+2.  Create a data frame with only the first observation from the first trial for each participant. Uses this data frame to answer the following questions:\
+
+    -   How many participants are present in the dataset?\
+
+    -   How many 7-month-olds are there?\
+
+    -   Arrange the dataframe from youngest to oldest. What's the participant_id for the youngest infant?\
+
+    -   Arrange the dataframe from oldest to youngest. What's the participant_id for the oldest infant?
+
+        ```{webr-r}
+
+        #[a]
+
+        first_df <- bb2021 %>%
+          filter(obs_num == 1, trial_id == 1) 
+
+        nrow(first_df)
+        #[b]
+
+        first_df %>% 
+          group_by(age_cat) %>% 
+          summarize(n = n())
+        #[c]
+
+        first_df %>% 
+          arrange(age) %>%
+          head()
+        #[d]
+
+        first_df %>% 
+          arrange(-age) %>% 
+          head()
+        ```
+
+3.  What is the mean number of observations per individual trial? (hint: you'll need to use both `group_by` and `ungroup`).
+
+    ```{webr-r}
+
+    bb2021 %>%
+      group_by(participant_id, trial_id) %>%
+      summarize(n = n()) %>%
+      ungroup() %>%
+      summarize(mean = mean(n))
+
+    ```
+
+4.  How many observations are there in the lullaby condition and the non-lullaby condition?
+
+    ```{webr-r}
+
+    bb2021 %>%
+      group_by(trial_type) %>%
+      summarize(n = n())
+
+    ```
+
+5.  Next, let's examine the dependent variable, heart rate. Create a new variable called `hr_round` that is the heart rate value rounded to the nearest hundredth (use the function `round()`).
+
+    ```{webr-r}
+
+    bb2021 <- bb2021 %>%
+      mutate(hr_round=round(zhr_pt, 2))
+
+    ```
+
+6.  Plot a histogram of `hr_round`. Be sure to add appropriate labels and a title to your plot. What distribution would you say this looks like?
+
+    ```{webr-r}
+
+    bb2021 %>%
+      ggplot(aes(x = hr_round)) +
+      geom_histogram() +
+      ggtitle("Heart Rate Distribution")
+
+
+    ```
+
+7.  The histogram generated from the bb2021 data for the `hr_round` variable appears to be fairly normal. For a more comprehensive view, let's perform bootstrapping on this dataset 10,000 times and examine the resulting histogram.
+
+    Firstly, extract only the `hr_round` variable from the bb2021 data. Following this, use the `rep_sample_n` function from the moderndive package (ensure it is installed) to bootstrap the dataset. If you are unfamiliar with this function, it allows for easy bootstrapping without the need to write loops. Set the function to randomly sample 100 rows (size = 100) and repeat this process 10,000 times (reps=10000). This will result in a large data frame.
+
+    Upon completion, plot the histogram for all the bootstrapped values. How does it compare to the original?
+
+    ```{webr-r}
+    library(moderndive) #get rep_sample_n fucntion
+    virtual_samples <- bb2021  %>% 
+      select(hr_round) %>%
+      rep_sample_n(size = 100, reps = 10000, replace=TRUE) %>%
+       ggplot(aes(x = hr_round)) +
+      geom_histogram() +
+      ggtitle("Heart Rate Distribution")
+
+
+
+    ```
+
+8.  Plot a density plot of `hr_round.`
+
+    ```{webr-r}
+    bb2021 %>%
+      ggplot(aes(x = hr_round)) +
+      geom_density() +
+      ggtitle("Heart Rate Distribution")
+
+
+    ```
+
+9.  Calculate the mean heart rate for each participant on each trial type. Save it to a new dataframe called `participant_means`.
+
+    ```{webr-r}
+    participant_means<- bb2021 %>%
+      group_by(participant_id, trial_type) %>%
+      summarize(mean = mean(hr_round))
+
+
+    ```
+
+10. Use `participant_means` to create a violin plot showing the distribution of heart rates in the lullaby and non-lullaby conditions. Your plot should be a simplified version of Figure 2a in the paper with (a) two violins, (b) each violin a different color, and (c) points showing the underlying data. Get rid of the legend.
+
+    ::: callout-tip
+    The order that you add geoms to your plot matters here. It did not matter for simple class experiment.
+    :::
+
+    ```{webr-r}
+
+    ggplot(participant_means, aes(x = trial_type, y = mean, color = trial_type)) +
+      geom_violin() +
+      geom_point()
+
+    ```
+
+11. Pick a theme for your figure. Also, add two different colors to it.
+
+12. Now make a rain cloud plot of the figure. Look at vignette here for an idea how to create them using `geom_rain`: https://www.njudd.com/raincloud-ggrain/
+
+    ```{webr-r}
+
+
+    library(ggrain)
+    ggplot(participant_means, aes(trial_type,  mean, color= trial_type)) +
+      geom_rain(alpha = .5, rain.side = 'f1x1', id.long.var = "participant_id") +
+      theme_classic() +
+      scale_fill_manual(values=c("dodgerblue", "darkorange")) +
+      guides(fill = 'none', color = 'none')
+    #> Warning: Duplicated aesthetics after name
+    #> standardisation: alpha
+
+
+
+    ```
+
+13. Use `participant_means` and plot the data with a strip chart. Use `stat_summary` to plot the mean for each condition.
+
+    ::: callout-tip
+    `- position = position_jitter` controls how far apart points are.
+    :::
+
+    ```{webr-r}
+    # position = position_jitter(width = .2))
+    ggplot(participant_means, aes(trial_type,  mean, color= trial_type)) +
+      geom_jitter(alpha=1, position = position_jitter(width = .2))
+
+
+    ```
+
+14. Create the plot below showing the mean heart rate by condition across trials. Next, change the point size such that it corresponds to the number of trials represented.
+
+    ![](ggplot_fig.png)
+
+    ```{webr-r}
+
+    trial_means <- bb2021 %>%
+      group_by(trial_type, trial_id) %>%
+      summarise(mean = mean(zhr_pt),
+                n = n(), 
+                .groups = "keep")  
+
+    ggplot(trial_means, aes(x = trial_id, y = mean, color = trial_type, size=)) +
+      geom_line() +
+      geom_point() + #aes(size = n)
+      ggtitle("Mean heart rate by trial number")
+
+
+
+    ```
+
+    ```{webr-r}
+
+    bb2021 %>%
+      group_by(trial_type, trial_id) %>%
+      summarize(hr_means = mean(zhr_pt), num_trial = n_distinct(participant_id)) %>%
+      ggplot(mapping = aes(x = trial_id, y = hr_means, color = trial_type, size = num_trial)) +
+      geom_point() +
+      geom_line(size = 0.5) +
+      ggtitle("Mean heart rate by trial number") +
+      ylab("mean")
+
+
+    ```
+
+15. Make a beautiful, clear plot that answers a question you might be interested in from the paper. *Make sure to include a descriptive title and it is publication ready.*

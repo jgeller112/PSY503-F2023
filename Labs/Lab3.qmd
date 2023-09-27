@@ -1,17 +1,26 @@
 ---
 title: "Lab 3: Summarizing and Visualizing Data"
 author: "Jason Geller, Ph.D."
-date: 2023 02 21
+date: 2023 09 27
 toc: true
 toc_float: true
 ---
 
-By the end of this assignment, you should:
+In this lab, students will get practice with: 
 
-- Understand how to read in data using read_csv
-- Understand how to derive information from data (summarize, mutate, group_by)
-- Understand how to make and modify a basic plot using ggplot
+- Data wrangling and pre-processing
+- Exploratory data analysis
+- Bootstrapping
+- Data visualization with ggplot2
 
-This assignment focuses on data from apaper examining the role that songs play in soothing infants (Bainbridge & Bertolo et al., 2021). To get started, you should give the paper a read and broadly understand the question the paper is trying to answer and the methods that they used (note that the methods are described in detail at the end of the paper). 
+This assignment focuses on real data from a paper examining the role that songs play in soothing infants (Bainbridge & Bertolo et al., 2021). To get started, you should give the paper a read and broadly understand the question the paper is trying to answer and the methods that they used (note that the methods are described in detail at the end of the paper). 
 
-To access Lab 3, please go here: [Click here](https://classroom.github.com/a/1mxcXffF)
+To access Lab 3, please go here: [Click here](https://classroom.github.com/a/eJYDLepp)
+
+
+## Lab Answers 
+
+- Will post later today. 
+
+
+
