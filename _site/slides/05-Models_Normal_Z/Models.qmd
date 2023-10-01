@@ -1,0 +1,1160 @@
+---
+title: "Monsters, Models, and Normal Distributions"
+subtitle: "Princeton University"
+author: "Jason Geller, PH.D.(he/him)"
+date: 'Updated:`r Sys.Date()`'
+footer: "PSY 503: Foundations of Statistics in Psychology"
+format: 
+  revealjs:
+    theme: blood
+    multiplex: true
+    transition: fade
+    slide-number: true
+    incremental: false 
+    chalkboard: true
+    fontsize: "25pt"
+execute:
+  freeze: auto
+  echo: true
+  message: false
+  warning: false
+  fig-align: center
+  fig-width: 12
+  fig-height: 8
+  editor_options: 
+  chunk_output_type: inline
+  code-overflow: wrap
+  html:
+    code-fold: true
+    code-tools: true
+filters: 
+    - webr
+---
+
+## Outline
+
+-   Thinking about models
+
+-   The normal distribution
+
+-   *Z*-scores
+
+    -   How to compute *Z*-scores
+        -   *Z*-score practice
+
+## Packages
+
+```{r}
+#| echo: false
+#| message: false
+library(pacman)
+p_load("tidyverse", "ggdist", "tigerstats", "knitr")
+
+```
+
+```{r}
+library(grateful)
+pkgs <- cite_packages(output = "table", out.dir = ".")
+
+pkgs
+```
+
+## What is a statistical model?
+
+<br>
+
+<br>
+
+<br>
+
+-   **Statistical modeling** = "making **models** of **distributions**"
+
+## What is a model?
+
+> Models are simplifications of things in the real world
+
+![](images/titanic.jpeg){fig-align="center"}
+
+## What is a model?
+
+![](images/map.jpg){fig-align="center"}
+
+## Distributions
+
+```{r}
+#| echo = FALSE,
+#| out.height = "25%",
+#| out.width = "75%",
+#| fig.cap = "",
+#| fig.show = "hold",
+#| fig.align = "center"
+
+knitr::include_graphics('images/distribs.png')
+
+
+```
+
+## Basic Structure of a Model
+
+$$data = model + error$$
+
+1.  Data
+
+2.  Model
+
+    -   Use our model to predict the value of the data for any given
+        observation:
+
+        $$\widehat{data_i} = model_i$$
+
+3.  Error (predicted - observed)
+
+$$error_i = data_i - \widehat{data_i}$$
+
+::: notes
+The "hat" over the data denotes that it's our prediction rather than the
+actual value of the data.This means that the predicted value of the data
+for observation is equal to the value of the model for that observation.
+Once we have a prediction from the model, we can then compute the error:
+
+That is, the error for any observation is the difference between the
+observed value of the data and the predicted value of the data from the
+model.
+:::
+
+## Models as Monsters
+
+::: columns
+::: {.column width="50%"}
+-   The Golem of Prague
+    -   The golem was a powerful clay robot
+    -   Brought to life by writing emet ("truth") on its forehead
+    -   Obeyed commands literally
+    -   Powerful, but no wisdom
+    -   In some versions, Rabbi Judah Loew ben Bezalel built a golem to
+        protect
+        -   But he lost control, causing innocent deaths
+:::
+
+::: {.column width="50%"}
+![](images/golem.jpg){fig-align="center"}
+:::
+:::
+
+## Statistical golems
+
+-   Statistical (and scientific) models are our golems
+-   We build them from basic parts
+-   They are powerful---we can use them to understand the world and make
+    predictions
+-   They are animated by "truth" (data), but they themselves are neither
+    true nor false
+-   The model describes the golem, not the world
+-   They are mindless automatons that simply run their programs
+-   The model doesn't describe the world or tell us what scientific
+    conclusion to draw---that's on us
+-   We need to be careful about how we build, interpret, and apply
+    models
+
+## Choosing a Statistical Model
+
+::: columns
+::: {.column width="50%"}
+-   Cookbook approach
+    -   Do Smarties make us smarties?
+        -   Take 200 7-year-olds
+            -   Randomly assign to 2 groups
+                -   Control: Normal breakfast
+                -   Treatment: Normal breakfast + 1 packet of Smarties
+                -   Outcome: Age-appropriate general reasoning test
+    -   What statistical analysis do I run?
+:::
+
+::: {.column width="50%"}
+![](images/test_selection.png){fig-align="center"}
+:::
+:::
+
+## Choosing a Statistical Model
+
+::: columns
+::: {.column width="50%"}
+-   Cookbook approach
+
+    -   Every one of these tests is the same model
+
+    -   The general linear model (**GLM**)
+
+```{=html}
+<!-- -->
+```
+-   The cookbook approach makes it hard to think clearly about
+    relationship between our question and the statistics
+:::
+
+::: {.column width="50%"}
+![](images/test_selection.png){fig-align="center"}
+:::
+:::
+
+## The General Linear Model
+
+-   General mathematical framework
+
+    -   Regression all the way down
+
+    -   Highly flexible
+
+        -   Can fit qualitative (categorical) and quantitative
+            predictors
+
+    -   Easy to interpret
+
+    -   Helps understand interrelatedness to other models
+
+    -   Easy to build to more complex models
+
+## The General Linear Model
+
+-   Modeling comparison approach
+
+-   Think in terms of models and not tests
+
+-   Model is determined by question, not data
+
+-   What do alternative models say about the world?
+
+-   Let's build a model for this experiment
+
+## A simple model
+
+-   General reasoning scores
+
+```{r}
+
+# The Data
+control_group= c(92, 97, 123, 101, 102, 126, 107, 81, 90, 93, 118, 105, 106, 102, 92, 127, 107, 71, 111, 93, 84, 97, 85, 89, 91, 75, 113, 102, 83, 119, 106, 96, 113, 113, 112, 110, 108, 99, 95, 94, 90, 97, 81, 133, 118, 83, 94, 93, 112, 99, 104, 100, 99, 121, 97, 123, 77, 109, 102, 103, 106, 92, 95, 85, 84, 105, 107, 101, 114, 131, 93, 65, 115, 89, 90, 115, 96, 82, 103, 98, 100, 106, 94, 110, 97, 105, 116, 107, 95, 117, 115, 108, 104, 91, 120, 91, 133, 123, 96, 85)
+
+
+treat_group= c(99, 114, 106, 105, 96, 109, 98, 85, 104, 124, 101, 119, 86, 109, 118, 115, 112, 100, 97, 95, 112, 96, 103, 106, 138, 100, 114, 111, 96, 109, 132, 117, 111, 104, 79, 127, 88, 121, 139, 88, 121, 106, 86, 87, 86, 102, 88, 120, 142, 91, 122, 122, 115, 95, 108, 106, 118, 104, 125, 104, 126, 94, 91, 159, 104, 114, 120, 103, 118, 116, 107, 111, 109, 142, 99, 94, 111, 115, 117, 103, 94, 129, 105, 97, 106, 107, 127, 111, 121, 103, 113, 105, 111, 97, 90, 140, 119, 91, 101, 92)
+
+df <- tibble(treatment=treat_group, control=control_group)
+
+df_candy <- df %>%
+  pivot_longer(treatment:control, names_to = "cond", values_to = "values")
+```
+
+## A Simple Model: Data
+
+```{r}
+#| echo: false
+#| 
+# Create data frame
+df <- data.frame(
+  Scores  = c(101, 114, 131, 9)
+)
+
+knitr::kable(df)
+```
+
+## Building a Model - Notation
+
+::: columns
+::: {.column width="50%"}
+-   Small Roman letters
+
+    -   Individual observed data points
+
+        -   $y_1$, $y_2$, $y_3$, $y_4$, ..., $y_n$
+
+            -   The scores for person 1, person 2, person 3, etc.
+
+        -   $y_i$
+
+            -   The score for the "ith" person
+:::
+
+::: {.column width="50%"}
+-   Big Roman letters
+
+    -   A "random variable"
+
+    -   The model for data we could observe, but haven't yet
+
+-   $Y_1$
+
+    -   The model for person 1
+    -   The yet-to-be-observed score of person 1
+:::
+:::
+
+## Building a Model - Notation
+
+::: columns
+::: {.column width="50%"}
+-   Greek letters
+
+    -   Population parameters
+
+    -   Unobservable parameters
+
+-   μ
+
+    -   mu
+
+        -   "mew" - Used to describe means
+
+-   σ
+
+    -   Sigma
+
+    -   Used to describe a standard deviation
+:::
+
+::: {.column width="50%"}
+![](images/mew.png){fig-align="center" width="370"}
+:::
+:::
+
+## Building a Model - Notation
+
+-   Roman letters
+
+    -   Sample specific statistics
+
+        -   $\bar{X}$ - sample mean
+
+        -   s - standard deviation from the sample
+
+    -   Data estimates
+
+        -   $b_0$
+
+        -   $e$
+
+## A simple model
+
+<br>
+
+<br>
+
+$$
+Y_i = \beta_0 + \epsilon
+$$
+
+$$
+Y_i= b_0 + e
+$$
+
+-   Null or empty model
+
+    -   Makes the same prediction for each observation
+
+## Figuring out $b_0$
+
+-   Goal of any model is to find an estimator that minimizes the error
+    -   How we define error will determine the best estimator
+
+```{r}
+#| fig-align: center
+#| echo: false
+#| 
+library(cowplot)
+
+# Create data frame
+df <- data.frame(
+  Scores = c(101, 114, 131, 98)
+)
+
+# Calculate differences for annotations
+df$Diff_Mean5 = (df$Scores - 123)
+df$Diff_Mean7 = (df$Scores - 130)
+
+# Plot for Mean 5
+plot_mean5 <- ggplot(df, aes(x = Scores, y = Scores)) +
+  geom_point(color = "black") +
+  geom_segment(aes(yend = 123, xend = Scores), color = "blue") +
+  geom_hline(yintercept = 123, color = "blue", linetype = "solid") +
+  geom_text(aes(label = sprintf("Diff: %.1f", Diff_Mean5)), vjust = -0.5, hjust = -0.1, size = 5) + # Increased text size
+  labs(title = "Error from Mean 123", 
+       x = "Scores", y = "Scores on Test") +
+  theme_minimal()
+
+# Plot for Mean 7
+plot_mean7 <- ggplot(df, aes(x = Scores, y = Scores)) +
+  geom_point(color = "black") +
+  geom_segment(aes(yend = 130, xend = Scores), color = "red") +
+  geom_hline(yintercept = 130, color = "red", linetype = "solid") +
+  geom_text(aes(label = sprintf("Diff: %.1f", Diff_Mean7)), vjust = -0.5, hjust = -0.1, size = 5) + # Increased text size
+  labs(title = "Error from Mean 130", 
+       x = "Scores", y = "Scores on Test") +
+  theme_minimal()
+
+# Combine plots
+combined_plot <- plot_grid(plot_mean5, plot_mean7, labels = c("A", "B"), ncol = 1)
+
+# Display combined plot
+print(combined_plot)
+
+
+```
+
+# Types of Errors
+
+## **Count of Errors**
+
+-   It simply counts the number of instances where the prediction was
+    incorrect $$\text{Count} = \sum_{i=1}^{n} I(y_i \neq \hat{y}_i)$$
+-   Mode is best estimate for $b_0$
+
+## **Sum of errors (residuals)**
+
+-   The sum of the differences between observed values and predicted
+    values. In an ideal case with no bias, this would be zero.
+
+$$SE = \sum_{i=1}^{n} (y_i - \hat{y}_i)$$
+
+## **Sum of absolute errors**
+
+-   Measures the total absolute difference between observed and
+    predicted values. It gives a sense of the average magnitude of
+    errors without considering direction
+
+$$SAE = \sum_{i=1}^{n} |y_i - \hat{y}_i|$$
+
+-   Median is best estimate for $b_0$
+
+## **Sum of squares (SS)**
+
+-   This measures the total squared difference between observed and
+    predicted values
+
+-   Most commonly used in regression analysis (what we will be using)
+
+$$SS = \sum_{i=1}^{n} (y_i - \hat{y}_i)^2$$
+
+## The mean
+
+-   Mean is the best estimator of $b_0$
+
+    $$\frac{1}{n} \sum_{i=i}^{n} x_{i}$$
+
+-   Mean has really nice
+    proprieties$$SR = \sum_{i=1}^{n} (y_i - \hat{y}_i)$$
+
+    -   SSR minimized at mean
+
+## SSR minimized at mean
+
+```{r}
+#| echo: false
+#| fig-align: center
+# Load necessary libraries
+library(ggplot2)
+
+# 1. Generate a random sample of data points
+set.seed(42)  # For reproducibility
+data_points <- rnorm(100, mean = 50, sd = 10)
+
+# 2. Calculate sum of squared deviations for a range of possible estimates
+estimates <- seq(30, 70, by = 0.5)
+ssq <- sapply(estimates, function(est) sum((data_points - est)^2))
+
+# Data frame for plotting
+df <- data.frame(Estimate = estimates, SSQ = ssq)
+
+# 3. Plot
+p <- ggplot(df, aes(x = Estimate, y = SSQ)) +
+    geom_line() +
+    geom_vline(aes(xintercept = mean(data_points)), linetype = "dashed", color = "red") +
+    labs(title = "Sum of Squared Deviations vs. Estimates",
+         x = "Estimate Value",
+         y = "Sum of Squared Deviations",
+         subtitle = paste("Red dashed line indicates the mean at", round(mean(data_points), 2))) +
+    theme_minimal()
+
+print(p)
+
+```
+
+## Describing error
+
+-   We should have some overall description of the accuracy of model's
+    predictions
+
+    -   SSR
+
+        -   Standard deviation
+
+            $$
+            s^2 = \text{MSE} = \frac{1}{n-p} \sum_{i=1}^{n} (Y_i - \hat{Y}_i)^2
+            $$
+
+$$
+\text{SD} = \sqrt{\text{MSE}}
+$$
+
+## Statistical Modeling: An Example
+
+-   Let's look at general reasoning scores
+
+```{r}
+#| fig-align: center
+
+  df_candy  %>%
+  ggplot(aes(x=values)) +
+  geom_dotsinterval()
+
+
+
+```
+
+
+
+## Building a model - concrete example
+
+```{r}
+#| fig-align: center
+
+  df_candy  %>%
+  ggplot(aes(x=values)) +
+  geom_dotsinterval()
+
+```
+
+## Building a Model - Concrete example
+
+$$
+\hat{scores} = b_0 + e
+$$
+
+-   What is the overall mean of the dataset?
+
+```{r}
+# calcuate the mean
+
+```
+
+## Building a Model - Concrete example
+
+-   `lm` function in R can fit an empty model
+
+```{r}
+library(broom)
+
+null_model <- lm(values~NULL, data=df_candy)
+
+null_model
+
+```
+
+-   $b_0$ = Intercept = Estimate = Mean
+
+## Building a Model - Concrete example
+
+-   `broom` is a helper package that provides us with lots of useful
+    functions to get things like residuals, predicted values, etc)
+
+```{r}
+
+null_model <- lm(values~NULL, data=df_candy)
+
+null_model %>%
+  broom::augment()
+
+```
+
+## Building a model - Concrete example
+
+-   Can get SS a few different ways
+
+```{r}
+null_model %>% 
+  broom::augment()%>%
+  # take the sum of the resid column squared
+  summarise(SS=(sum(.resid^2)))
+
+```
+
+## Building a model - Concrete 
+
+![](images/ed835-scooby-glm-small.webp){fig-align="center"}
+
+## Building a model - Concrete example
+
+```{r}
+
+aov(lm(null_model))
+
+```
+
+```{r}
+library(supernova)
+
+supernova(null_model)
+
+```
+
+## Building a model - concrete example
+
+-   Mean squared error (MSE)
+
+```{r}
+
+null_model %>% 
+  broom::augment()%>%
+  summarise(SS=(sum(.resid^2)), MSE_v=SS/(199), MSE_sd= sqrt(MSE_v))
+
+supernova(null_model)
+
+```
+
+## Building a model - Concrete example
+
+-   Predictions from the model
+
+```{r}
+#| fig-align: center
+
+
+null_model %>%
+  augment() %>%
+
+ggplot(aes(x = .fitted, y=values)) + 
+  geom_point() +
+  theme_minimal(base_size = 16) + 
+  labs(y = "Observed", x = "Predicted") 
+```
+
+## A More Complex Model
+
+-   Do you think the empty model is a good model?
+
+. . .
+
+```{r}
+
+
+  df_candy  %>%
+  ggplot(aes(x=values, fill=cond)) +
+  geom_density() 
+
+
+
+
+```
+
+## What Makes a Model "Good"
+
+::: columns
+::: {.column width="50%"}
+-   We want it to describe our data well
+
+-   We want it to generalize to new datasets
+
+    -   We want error to be as low as possible
+:::
+
+::: {.column width="50%"}
+![Taken from Poldrack
+(2023)](images/goodbadmodel.png){fig-align="center"}
+:::
+:::
+
+## Can a Model Be Too Good?
+
+-   Yes!
+
+    -   Overfitting
+
+        -   A model with little to no error will not generalize to new
+            datasets
+
+![](images/fittin.png)
+
+## Normal distribution
+
+::: columns
+::: {.column width="50%"}
+-   Error in linear models is assumed to distributed as normal
+
+$$
+\epsilon \sim N(\mu, \sigma)
+$$
+
+-   Normal is called a Gaussian distribution
+
+-   If we assume a variable is at least normally distributed can make
+    many inferences!
+
+-   Most of the statistical models assume normal distribution
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: false
+#| 
+
+# Create data
+x <- seq(-5, 5, by = 0.1)
+y <- dnorm(x)
+
+df <- data.frame(x, y)
+
+# Plot
+ggplot(df, aes(x, y)) + 
+  geom_line() + 
+  theme_minimal() + 
+  labs(title = "Probability Density Function of the Normal Distribution", 
+       x = "x", 
+       y = "Density")
+
+```
+:::
+:::
+
+## Normal distribution
+
+::: columns
+::: {.column width="50%"}
+-   Normal(μ, σ)
+
+    -   Parameters:
+
+        -   $\mu$ = Mean
+
+            -   Mean is the center of the distribution
+:::
+
+::: {.column width="50%"}
+-   $\sigma$ Standard deviation
+
+    -   Variance is average squared deviation from the mean
+        -   $\sigma = \sqrt(s^2)$
+            -   On average, how far is each point from the mean
+                (spread)?
+:::
+:::
+
+## Building a Model - Normal Distribution
+
+::: columns
+::: {.column width="50%"}
+-   Properties of a normal distribution
+
+    -   Shape
+        -   Unimodal
+        -   Symmetric
+        -   Asymptotic
+:::
+
+::: {.column width="50%"}
+```{r}
+
+# Create data
+x <- seq(-5, 5, by = 0.1)
+y <- dnorm(x)
+
+df <- data.frame(x, y)
+
+# Plot
+ggplot(df, aes(x, y)) + 
+  geom_line() + 
+  theme_minimal() + 
+  labs(title = "Probability Density Function of the Normal Distribution", 
+       x = "x", 
+       y = "Density")
+
+
+```
+:::
+:::
+
+## Building a Model - Normal Distribution
+
+::: columns
+::: {.column width="50%"}
+-   The PDF of a normal distribution is given by:
+
+$f(x) = \frac{1}{\sqrt{2\pi \sigma}}\exp\left[-\frac{(x-\mu)^2}{2\sigma^2}\right]$
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: false
+#| fig-align: center
+
+library(ggplot2)
+
+# Create a data frame with a sequence of values
+x <- seq(-10, 10, by = 0.1)
+df <- data.frame(
+  x = rep(x, times = 4),
+  y = c(dnorm(x, mean = 0, sd = 1),
+        dnorm(x, mean = 0, sd = 2),
+        dnorm(x, mean = -3, sd = 1),
+        dnorm(x, mean = 3, sd = 0.5)),
+  group = factor(rep(1:4, each = length(x)))
+)
+
+# Plot
+ggplot(df, aes(x = x, y = y, color = group)) + 
+  geom_line() +
+  scale_color_manual(name = "Distribution", 
+                     values = c("blue", "red", "green", "purple"),
+                     labels = c("µ=0, σ=1", 
+                                "µ=0, σ=2", 
+                                "µ=-3, σ=1",
+                                "µ=3, σ=0.5")) +
+  labs(title = "Variability in the Normal Distribution",
+       x = "Value",
+       y = "Density") +
+  theme_minimal()
+```
+:::
+:::
+
+## Normal Distribution
+
+-   Skew
+
+![](images/skew2.png){fig-align="center"}
+
+## Normal Distribution
+
+![](images/kur2.png){fig-align="center"}
+
+## Normal Distribution
+
+::: columns
+::: {.column width="50%"}
+-   $Y_1$ ∼ $N(\mu, \sigma)$
+
+    -   $Y_1$ ∼ Normal(100, 15)
+
+    -   $Y_2$ ∼ Normal(100, 15)
+
+    -   $Y_n$ ∼ Normal(100, 15)
+
+-   Or for all observations,
+
+    -   \$Y_i\$ ∼ Normal(100, 15)
+:::
+
+::: {.column width="50%"}
+. . .
+
+-   Everyone's score comes from the same distribution
+
+. . .
+
+-   The average score should be around 100
+
+. . .
+
+-   Scores should be spread out by 15
+
+. . .
+
+-   Scores should follow bell-shaped curve
+:::
+:::
+
+## 
+
+## Probability and Standard Normal Distribution: *Z*-Scores
+
+::: columns
+::: {.column width="50%"}
+```{r}
+#| echo: false
+
+library(ggplot2)
+
+# Create a data frame with a sequence of values
+x <- seq(-10, 10, by = 0.1)
+df <- data.frame(
+  x = rep(x, times = 4),
+  y = c(dnorm(x, mean = 0, sd = 1),
+        dnorm(x, mean = 0, sd = 2),
+        dnorm(x, mean = -3, sd = 1),
+        dnorm(x, mean = 3, sd = 0.5)),
+  group = factor(rep(1:4, each = length(x)))
+)
+
+# Plot
+ggplot(df, aes(x = x, y = y, color = group)) + 
+  geom_line() +
+  scale_color_manual(name = "Distribution", 
+                     values = c("blue", "red", "green", "purple"),
+                     labels = c("µ=0, σ=1", 
+                                "µ=0, σ=2", 
+                                "µ=-3, σ=1",
+                                "µ=3, σ=0.5")) +
+  labs(title = "Variability in the Normal Distribution",
+       x = "Value",
+       y = "Density") +
+  theme_minimal()
+
+```
+:::
+
+::: {.column width="50%"}
+$$Z(x) = \frac{x - \mu}{\sigma}$$- Z-score /standard score tells us how
+far away any data point is from the mean, in units of standard deviation
+
+-   Conversions
+
+-   Solve for X
+
+\$$X = z*\sigma - \mu$\$
+:::
+:::
+
+## Standard Normal Distribution
+
+::: columns
+::: {.column width="50%"}
+-   Properties of Standard Normal
+    -   Empirical Rule
+        -   68.27% of the data falls within one standard deviation
+            (sigma) of the mean
+        -   95.45% falls within two sigma
+        -   99.73% falls within three sigma
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: false
+#| fig-align: center
+
+# Define mean and standard deviation
+mu <- 0
+sigma <- 1
+
+# Create a sequence of x values
+x <- seq(-4, 4, length=1000)
+
+# Calculate the normal distribution
+y <- dnorm(x, mean=mu, sd=sigma)
+
+# Create the ggplot
+p <- ggplot(data.frame(x=x, y=y), aes(x=x, y=y)) +
+  geom_line() +
+  geom_vline(xintercept = mu, linetype="dashed") +
+  geom_vline(xintercept = mu + sigma, color="blue") +
+  geom_vline(xintercept = mu - sigma, color="blue") +
+  geom_vline(xintercept = mu + 2*sigma, color="green") +
+  geom_vline(xintercept = mu - 2*sigma, color="green") +
+  geom_vline(xintercept = mu + 3*sigma, color="red") +
+  geom_vline(xintercept = mu - 3*sigma, color="red") +
+  annotate("text", x = mu, y = max(y), label = "μ", vjust = -1) +
+  annotate("text", x = mu + sigma, y = max(y), label = "μ + σ", vjust = -1) +
+  annotate("text", x = mu - sigma, y = max(y), label = "μ - σ", vjust = -1) +
+  annotate("text", x = mu + 2*sigma, y = max(y), label = "μ + 2σ", vjust = -1) +
+  annotate("text", x = mu - 2*sigma, y = max(y), label = "μ - 2σ", vjust = -1) +
+  annotate("text", x = mu + 3*sigma, y = max(y), label = "μ + 3σ", vjust = -1) +
+  annotate("text", x = mu - 3*sigma, y = max(y), label = "μ - 3σ", vjust = -1) + 
+  theme_minimal(base_size = 16)
+
+p
+
+
+
+```
+:::
+:::
+
+## Z tables
+
+-   NO MORE TABLES
+
+![](images/ztab.jpg){fig-align="center"}
+
+## Using R
+
+-   dnorm(): *Z*-score to density (height) (PDF)
+-   pnorm(): *Z*-score to area (CDF)
+-   qnorm(): area to *Z*-score
+
+## Using R
+
+-   `pnorm`: *Z*-score to area (CDF)
+
+$$P(X >= x) or P(X <= x)$$
+
+> If you calculated a Z-score you can find the probability of a Z-score
+> less than(lower.tail=TRUE) or greater than (lower.tail=FALSE) by using
+> pnorm(Z).
+
+## Using R: `pnorm`
+
+```{r}
+
+mu <- 70
+sigma <- 10
+X <- 80
+
+```
+
+1.  What is the z-score?
+
+2.  What percentage is above this z-score?
+
+```{r}
+
+```
+
+-   Above
+
+```{r}
+
+```
+
+## Using R: `pnorm`
+
+-   Percentage below IQ score of 55?
+
+```{r}
+
+mu <- 100
+sigma <- 15
+X <- 55
+
+
+
+```
+
+-   Percentage above IQ score of 55?
+
+```{r}
+
+mu <- 100
+sigma <- 15
+X <- 55
+z <- (X-mu)/sigma
+pnorm(z, lower.tail = FALSE)
+
+```
+
+## Using R: `pnorm`
+
+-   Percentage between IQ score of 120 and 159?
+
+```{r}
+mu <- 100
+sigma <- 15
+X1 <- 159
+X2<-120
+
+
+pnorm(X1, mu, sigma)-pnorm(X2, mu, sigma)
+
+```
+
+## Package `PnormGC`
+
+-   Suppose that you have a normal random variable X μ=70 and σ=3.
+    Probability X will turn out to be less than 66.
+
+```{r}
+#| fig-align: center
+
+library(tigerstats)
+
+pnormGC(bound=66,region="below",mean=70,sd=3, graph=TRUE)
+
+```
+
+## Package `PnormGC`
+
+What about $P(X>69)$
+
+```{r}
+#| fig-align: center
+
+
+pnormGC(bound=69,region="above",
+        mean=70,sd=3,graph=TRUE)
+
+```
+
+## Package `PnormGC`
+
+-   The probability that X is between 68 and 72: $P(68<X<72)$
+
+```{r}
+ pnormGC(bound=c(68,72),region="between",
+        mean=70,sd=3,graph=TRUE)
+```
+
+## Using R: `qnorm`
+
+-   qnorm(): area to *z*-scores
+
+-   With a mean 70 and standard deviation 10, what is the score for
+    which 5% lies above?
+
+```{r}
+qnorm(.05, lower.tail = FALSE)
+```
+
+## Practice `pnorm`
+
+Suppose that BMI measures for men age 60 in a Heart Study population is
+normally distributed with a mean (μ) = 29 and standard deviation (σ) =
+6. You are asked to compute the probability that a 60 year old man in
+this population will have a BMI less than 30.
+
+-   What is the z-score?
+
+-   What is the probability a 60 year old man in this population will
+    have a BMI between 30 and 40.
+
+```{r}
+
+mu <- 29
+sigma <- 6
+X <- 30
+
+```
+
+## Practice: `qnorm`
+
+Suppose that SAT scores are normally distributed, and that the mean SAT
+score is 1000, and the standard deviation of all SAT scores is 100. How
+high must you score so that only 10% of the population scores higher
+than you?
+
+```{r}
+qnorm(.10, 1000, 100, lower.tail = FALSE)
+```
+
+## Z-scores in practice
+
+-   Standardization
+    -   Scaling your measures so they are are comparable
+    -   Does not change anything about the data!
+
+```{r}
+library(easystats)
+x=c(5, 6, 7, 8, 9, 10, 15, 16)
+datawizard::standardize(x)
+
+```
+
+## Standardized Measures
+
+-   IQ
+
+    -   $\mu = 100$ $\sigma = 15$
+
+-   SAT
+
+    -   $\mu =500$ $\sigma = 100$
+
+-   T-score
+
+    -   $\mu = 50$ $\sigma = 10$
+
+-   New score = New SD(*z*) + New mean
