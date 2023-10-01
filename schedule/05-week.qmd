@@ -5,11 +5,7 @@ date: 2023-10-04
 ---
 ## Before Class
 
-- Ch.10 and 12 Statistics and Data Science: A Modeling Approach
-
-### Additional Resources
-
-- [Ch.1 Improving Your Statistical Inferences](https://lakens.github.io/statistical_inferences/01-pvalue.html)
+- Ch.10 Statistics and Data Science: A Modeling Approach
 
 - [Ch.7 Improving Your Statistical Inferences](https://lakens.github.io/statistical_inferences/07-CI.html)
 
