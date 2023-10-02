@@ -666,12 +666,13 @@ ggplot(aes(x = .fitted, y=values)) +
 ## Normal distribution
 
 ::: columns
+
 ::: {.column width="50%"}
--   Error in linear models is assumed to distributed as normal
 -   Sometimes called a Gaussian distribution
 -   If we assume a variable is at least normally distributed can make
     many inferences!
 -   Most of the statistical models assume normal distribution
+-   Error in linear models is assumed to distributed as normal
 :::
 
 ::: {.column width="50%"}
