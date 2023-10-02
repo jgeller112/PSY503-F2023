@@ -38,7 +38,7 @@ on Sunday (unless otherwise stated)</li>
 | 3 | 9/20/23 | Lab 2 |  |  | [{{< fa pen-ruler >}}](/Labs/Lab2.qmd) |
 | 4 | 9/25/23 | Probability Distributions and Visualization | [{{< fa book-open-reader >}}](/schedule/04-week.qmd) | [{{< fa laptop-code >}}](/slides/04-Prob-dist-viz/Prob_dist_viz.html) |  |
 | 4 | 9/27/23 | Lab 3 |  |  | [{{< fa pen-ruler >}}](/Labs/Lab3.qmd) |
-| 5 | 10/2/23 | Basics of Modeling, Normal Distribution, and Z-scores | [{{< fa book-open-reader >}}](/schedule/04b-week.qmd) | {{< fa laptop-code >}} |  |
+| 5 | 10/2/23 | Basics of Modeling, Normal Distribution, and Z-scores | [{{< fa book-open-reader >}}](/schedule/04b-week.qmd) | [{{< fa laptop-code >}}](/slides/05-Models_Normal_Z/05-Models-Monsters-Dis.html) |  |
 | 5 | 10/4/23 | Statistical Inference: Sampling Distributions, Uncertainty, NHST, p-values, CIs | [{{< fa book-open-reader >}}](/schedule/05-week.qmd) | {{< fa laptop-code >}} |  |
 | 6 | 10/9/23 | GLM 1: Numerical and Categorical Explanatory Models | [{{< fa book-open-reader >}}](/schedule/06-week.qmd) | {{< fa laptop-code >}} |  |
 | 6 | 10/11/23 | Lab 4 |  |  | {{< fa pen-ruler >}} |
