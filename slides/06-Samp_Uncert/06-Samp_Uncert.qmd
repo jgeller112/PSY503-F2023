@@ -117,10 +117,14 @@ What proportion of this bowl's balls are red?
         <https://docs.google.com/spreadsheets/d/18aXkkXOrUiulmCibtEQuVP36UsmdBWQ5AQZqv-oXQ4c/edit?usp=sharing>
 
 ```{r}
+library(tidyverse)
+
 bowl <- read.csv("https://raw.githubusercontent.com/jgeller112/psy503-psych_stats/master/static/assignment/data/bowl.csv")
 
-virtual_shovel <- bowl %>% 
-  sample_n(size = 10)
+
+
+
+
 
 ```
 
@@ -130,7 +134,7 @@ virtual_shovel <- bowl %>%
 #| eval: false
 
 
-reds <- c(0.2, 0.5, 0.4, 0.6, 0.3)
+reds <- c(0.3, 0.2, 0.3, 0.4, 0.6, 0.8, 0.1, 0.4, 0.6, 0.3, 0.4, 0.6, 0.5, 0.2, 0.5, 0.6, 0.5, 0.5, 0.3, 0.2, 0.1, 0.2, 0.2, 0.5, 0.4, 0.4)
 
 
 prop_red <- data.frame(Value = reds)
@@ -140,6 +144,19 @@ ggplot(prop_red, aes(x = Value)) +
   labs(x = "Proportion of 10 balls that were red", 
        y = "Count",
        title = "Distribution of proportions red") 
+
+
+reds <- c(0.38, 0.36, 0.48, 0.38, 0.4, 0.32, 0.3, 0.46, 0.44, 0.44, 0.28, 0.32, 0.3, 0.38, 0.42, 0.4, 0.46, 0.36, 0.38, 0.26, 0.5, 0.42, 0.44, 0.48, 0.42)
+
+prop_red <- data.frame(Value = reds)
+
+
+ggplot(prop_red, aes(x = Value)) +
+  geom_histogram(binwidth = 0.1, fill = "blue", color = "black", alpha = 0.7) +
+  labs(x = "Proportion of 50 balls that were red", 
+       y = "Count",
+       title = "Distribution of proportions red") 
+
 
 
 
@@ -159,10 +176,21 @@ What proportion of this bowl's balls are red?
     -   Enter in Google sheets document
         <https://docs.google.com/spreadsheets/d/18aXkkXOrUiulmCibtEQuVP36UsmdBWQ5AQZqv-oXQ4c/edit?usp=sharing>
 
+```{r}
+
+virtual_shovel <- bowl %>% 
+  sample_n(size = 50) %>%
+  summarise(reds=sum(color=="red"), red_prob=reds/50)
+
+virtual_shovel
+```
+
 ## Activity - Sampling Distributions
 
 ```{r}
 #| eval: false
+
+
 
 prop_red <-as.data.frame(prop_red)
 
@@ -693,17 +721,11 @@ df_candy  %>%
 df_candy  %>%
   group_by(cond) %>%
   summarize(mean=mean(values), 
-            sd = sd(values), 
-            n = n(), 
-            moe=qt(1-.05/2, n-1)*sd/sqrt(n), upper=mean + moe, 
-            lower=mean - moe)
-
-
-```
-
-```{r}
-# calculate cis manually
-
+            sd= sd(values), 
+            n= n(), 
+            moe=qt(1 - .05/2, n-1)*sd/sqrt(n),
+            upper=mean+ moe, 
+            lower=mean-moe)
 
 
 ```
@@ -711,13 +733,34 @@ df_candy  %>%
 ## Candy Experiment Revisited
 
 -   Let's plot our CIs
+    -   Summary
 
 ```{r}
 #
+df_candy  %>%
+  group_by(cond) %>%
+  summarize(mean=mean(values), 
+            sd= sd(values), 
+            n= n(), 
+            moe=qt(1 - .05/2, n-1)*sd/sqrt(n),
+            upper=mean+ moe, 
+            lower=mean-moe) %>% 
+ggplot(aes(x=cond, y=mean)) + 
+  geom_pointrange(aes(ymin=lower, ymax=upper))
 
 
+```
 
+## Candy Experiment Revisited
 
+-   CIs with Raw data
+
+```{r}
+
+df_candy  %>%
+  group_by(cond) %>%
+  ggplot(aes(x=cond, y=values)) +
+  stat_summary(fun.data="mean_cl_boot")
 
 ```
 
