@@ -1,0 +1,6 @@
+try{
+bep_k("ws9Tlc");
+
+bep_l();
+}catch(e){_DumpException(e)}
+// Google Inc.
