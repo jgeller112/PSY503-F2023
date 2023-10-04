@@ -1,0 +1,702 @@
+---
+title: "Statistical Inference: Populations, Sampling Distributions, and Uncertainty"
+subtitle: "Princeton University"
+author: "Jason Geller, PH.D.(he/him)"
+date: 'Updated:`r Sys.Date()`'
+footer: "PSY 503: Foundations of Statistics in Psychology"
+format: html
+execute:
+  freeze: auto
+  echo: true
+  message: false
+  warning: false
+  fig-align: center
+  fig-width: 12
+  fig-height: 8
+  editor_options: 
+  chunk_output_type: inline
+  code-overflow: wrap
+  html:
+    code-fold: true
+    code-tools: true
+filters:
+  - webr
+---
+
+## Where are we going?
+
+-   Today:
+
+    -   Sampling distributions
+    -   Uncertainty (confidence intervals, margin of error)
+
+-   Monday:
+
+    -   Null hypothesis significance testing (p-values, null hypotheses)
+
+## Packages
+
+```{r}
+#| echo: false
+#| 
+library(pacman)
+p_load("tidyverse", "moderndive")
+
+```
+
+```{webr-r}
+webr::install("tidyverse")
+webr::install("gapminder")
+webr::install("moderndive")
+webr::install("broom")
+
+
+library(tidyverse)
+library(gapminder)
+library(broom)
+library(moderndive)
+
+```
+
+## Population
+
+> Entire collection of **units** interested in studying
+
+-   Clearly defined
+-   Typically large
+
+![](images/legopop.jpeg){fig-align="center"}
+
+## Sample
+
+> Smaller subsets of population
+
+![](images/legobat.jpeg){fig-align="center"}
+
+## Statistical Inference
+
+::: columns
+::: {.column width="50%"}
+![](images/mod10-big_picture_inference.gif){fig-align="center"}
+:::
+
+::: {.column width="50%"}
+Estimation
+
+-   Parameters and Statistics
+
+    -   **Parameter**
+
+        -   Characteristics of the population
+
+    -   **Statistics**: Estimates of population parameters
+
+        -   **This is a random variable! We can create a sampling
+            distribution from this**
+:::
+:::
+
+## Activity - Sampling Distributions
+
+There is a large bowl of balls that contains red and white balls.
+Importantly, we know that 37.5% of the balls are red
+
+What proportion of this bowl's balls are red?
+
+1.  Pull a random sample of 10 5x
+
+2.  Tell me how many of reds you pulled from each sample (prop)
+
+    -   Enter in Google sheets document
+        <https://docs.google.com/spreadsheets/d/18aXkkXOrUiulmCibtEQuVP36UsmdBWQ5AQZqv-oXQ4c/edit?usp=sharing>
+
+```{webr-r}
+bowl <- read.csv("https://raw.githubusercontent.com/jgeller112/psy503-psych_stats/master/static/assignment/data/bowl.csv")
+
+virtual_shovel <- bowl %>% 
+  sample_n(size = 10)
+
+```
+
+## Activity - Sampling Distributions
+
+```{webr-r}
+#| eval: false
+
+prop_red <-as.data.frame(prop_red)
+
+ggplot(prop_red, aes(x = prop_red)) +
+  geom_histogram(binwidth = 0.05, boundary = 0.4, color = "white") +
+  labs(x = "Proportion of 10  balls that were red", 
+       title = "Distribution of proportions red") 
+
+```
+
+## Activity - Sampling Distributions
+
+There is a large bowl of balls that contains red and white balls.
+Importantly, we know that 37.5% of the balls are red
+
+What proportion of this bowl's balls are red?
+
+1.  Pull a random sample of 50 5x
+
+2.  Tell me how many of reds you pulled (prop)
+
+    -   Enter in Google sheets document
+        <https://docs.google.com/spreadsheets/d/18aXkkXOrUiulmCibtEQuVP36UsmdBWQ5AQZqv-oXQ4c/edit?usp=sharing>
+
+## Activity - Sampling Distributions
+
+```{webr-r}
+#| eval: false
+
+prop_red <-as.data.frame(prop_red)
+
+ggplot(prop_red, aes(x = prop_red)) +
+  geom_histogram(binwidth = 0.05, boundary = 0.4, color = "white") +
+  labs(x = "Proportion of 50 balls that were red", 
+       title = "Distribution of proportions red") 
+
+```
+
+## 10,000 times
+
+```{webr-r}
+library(moderndive) #get rep_sample_n fucntion
+virtual_samples <- bowl %>% 
+  rep_sample_n(size = 50, reps = 10000)
+
+virtual_prop_red <- virtual_samples %>% 
+  group_by(replicate) %>% 
+  summarize(red = sum(color == "red")) %>% 
+  mutate(prop_red = red / 50)
+
+```
+
+## 10,000 Times
+
+```{r}
+#| eval: false
+ggplot(virtual_prop_red, aes(x = prop_red)) +
+  geom_histogram(binwidth = 0.05, boundary = 0.4, color = "white") +
+  geom_vline(xintercept =.37, colour="green", linetype = "longdash")+
+  labs(x = "Proportion of 50 balls that were red", 
+       title = "Distribution of 10,000 proportions red") 
+
+```
+
+## Key points
+
+-   Two samples from the same population will tend to have somewhat
+    different means
+
+    -   Conversely, two different sample means does NOT mean that they
+        come from different populations
+
+    -   The variance of the sampling distribution of means gets smaller
+        as the sample size increases
+
+    -   Mores samples give better estimate of population mean
+
+## Sampling Distribution
+
+-   The probability distribution of a given statistic (e.g., mean) taken
+    from a random sample
+
+    -   Distribution of statistics (e.g., mean) that would be produced
+        in an infinite repeated random sampling (with replacement) (**in
+        theory**)
+
+-   **IMPORTANT**: Can be any statistic (proportion, mean, standard
+    deviation)
+
+## Constructing Sampling Distribution
+
+1.  Randomly draw n sample points from a finite population with size N
+
+2.  Compute statistic of interest
+
+3.  List different observed values of the statistic with their
+    corresponding frequencies
+
+## Properties of Estimators
+
+-   Unbiased
+
+    -   Parameter value = estimate from sampling distribution
+
+-   Efficient
+
+    -   More precise
+
+-   Consistency
+
+    -   Sampling distribution becomes narrower if we increase sample
+        size
+
+## Example: Sampling Distribution of the Mean
+
+-   Scores on a statistics test
+
+![Taken from Andy Field's "Adventures in
+Statistics"](images/sampling.jpg){fig-align="center"}
+
+## Sampling Error (Standard Error)
+
+![](images/sampling_error.jpg)
+
+## Sampling Error (Standard Error)
+
+-   How certain are we that our estimate represents the mean of the
+    population?
+
+    -   Say it with me: The standard deviation of the sampling
+        distribution is the standard error
+
+    -   It tells us how much variability there is between sample
+        estimate and population parameter
+
+$$SEM = \sigma/\sqrt(N)$$
+
+## SEM
+
+-   What does smaller SEM tell us about our estimate?
+    -   Estimate is likely to be closer to population mean
+
+![](images/sampuncert.png){fig-align="center"}
+
+## Sampling Distributions
+
+::: callout-note
+Sampling distributions are theoretical, and the researcher does not
+select an infinite number of samples. Instead, they conduct repeated
+sampling from a larger population, and use the central limit theorem to
+build the sampling distribution
+:::
+
+## A Tale of a Theorem and a Law: Magic
+
+-   Central Limit Theorem
+
+    -   Properties:
+
+        1.  The distribution of the sample mean approaches the normal
+            distribution as the sample size increases
+
+        2.  The standard deviation of the sampling distribution will be
+            equal to the SD of the population divided by the square root
+            of the sample size. s= $\sigma/\sqrt(n)$
+
+Important: **about the shape of distribution**
+
+## Central Limit Theorem
+
+-   Why is the Central Limit Theorem so important to the study of
+    sampling distribution?
+
+    -   Kicks in regardless of the distribution of the random variable
+
+    -   We can use the normal distribution to tell us how far off our
+        own sample mean is from all other possible means, and use this
+        to inform decisions and estimates in null hypothesis statistical
+        testing
+
+## Central Limit Theorem
+
+Certain conditions must be met for the CLT to apply:
+
+-   Independence: Sampled observations must be independent. This is
+    difficult to verify, but is more likely if
+
+    -   Random sampling / assignment is used
+
+-   Sample size / skew: Either the population distribution is normal, or
+    if the population distribution is skewed, the sample size is large
+    (\> 30)
+
+    -   The more skewed the population distribution, the larger sample
+        size we need for the CLT to apply
+
+## Real Data
+
+```{r, message=FALSE, warning=FALSE, fig.align='center', eval=FALSE}
+data("gapminder", package = "dslabs") 
+gapminder_2015 <- gapminder %>% 
+  filter(year == 2015, !is.na(infant_mortality))
+ggplot(gapminder_2015) +
+  geom_histogram(aes(x = infant_mortality), color = "black")  +
+  xlab("Infant mortality per 1,000 live births") +
+  ylab("Number of countries")
+```
+
+```{r, message=FALSE, echo=FALSE, warning=FALSE, fig.align='center', out.width="100%"}
+data("gapminder", package = "dslabs") 
+gapminder_2015 <- gapminder %>% 
+  filter(year == 2015, !is.na(infant_mortality))
+ggplot(gapminder_2015) +
+  geom_histogram(aes(x = infant_mortality), color = "black")  +
+  xlab("Infant mortality per 1,000 live births") +
+  ylab("Number of countries")
+```
+
+## R Simulations
+
+```{r,message=FALSE, warning=FALSE}
+library(infer)
+library(cowplot)
+
+sample_5 <- rep_sample_n(gapminder_2015, size = 5, reps = 10000) %>% 
+  group_by(replicate) %>% 
+  summarise(mean_infant_mortality = mean(infant_mortality)) %>% 
+  mutate(n = 5)
+
+sample_30 <- rep_sample_n(gapminder_2015, size = 30, reps = 10000) %>% 
+  group_by(replicate) %>% 
+  summarise(mean_infant_mortality = mean(infant_mortality)) %>% 
+  mutate(n = 30)
+
+sample_100 <- rep_sample_n(gapminder_2015, size = 100, reps = 10000) %>% 
+  group_by(replicate) %>% 
+  summarise(mean_infant_mortality = mean(infant_mortality)) %>% 
+  mutate(n = 100)
+
+all_samples <- bind_rows(sample_5, sample_30, sample_100)
+
+```
+
+## Larger N Equates Better Normal Approximation
+
+```{r, fig.align="center",out.width="70%", out.height="10%",  echo=FALSE}
+
+all1=ggplot(sample_5) +
+  geom_histogram(aes(x = mean_infant_mortality), color = "white", bins = 50) +
+  facet_wrap(~n, ncol = 1, scales = "free_y") +
+  xlab("Mean infant mortality") +
+  ylab("Number of samples")
+
+
+all2=ggplot(sample_30) +
+  geom_histogram(aes(x = mean_infant_mortality), color = "white", bins = 50) +
+  facet_wrap(~n, ncol = 1, scales = "free_y") +
+  xlab("Mean infant mortality") +
+  ylab("Number of samples")
+
+all3=ggplot(sample_100) +
+  geom_histogram(aes(x = mean_infant_mortality), color = "white", bins = 50) +
+  facet_wrap(~n, ncol = 1, scales = "free_y") +
+  xlab("Mean infant mortality") +
+  ylab("Number of samples")
+
+cowplot::plot_grid(all1, all2, all3)
+```
+
+## Law of Large Numbers
+
+-   **Law of large numbers (LLN)**
+
+    -   Implies that sample average $\bar{X_n}$ will better approximate
+        $\mathbb{E}[X]$ as sample size increases
+
+-   Super powerful: can be applied in most settings without knowledge of
+    the underlying probability distribution
+
+-   The Law of Large number justifies the use of *Monte Carlo*
+    simulations
+
+    -   Repeat simulation trials many many times and take the mean of
+        these trials
+
+**IMPORTANT**: **about the mean**
+
+# Measuring Uncertainty
+
+## From a point estimate to an interval
+
+-   Mean and SEM are point estimates
+
+-   What if we could create an interval that we are "reasonably
+    confident" contains the true population mean?
+
+## Estimation Error and MOE
+
+-   MOE (margin of error)
+
+    -   Largest likely estimation error
+
+$$MoE = 1.96 X SE$$
+
+-   Where did 1.96 come from?
+
+## Estimation Error and MOE
+
+![](images/N-CIs-1.png){fig-align="center"}
+
+## Combining Estimates Precision
+
+::: columns
+::: {.column width="50%"}
+-   CIs
+
+    -   Range of values that are likely to include the true value of the
+        parameter
+
+    -   Allows us to provide point estimate with precision (SE)
+:::
+
+::: {.column width="50%"}
+![](images/net.png){fig-align="center"}
+:::
+:::
+
+## Anatomy of a Confidence Interval
+
+> **Public support for Proposition A is 53%**
+
+-   53% support, 95% CI \[51, 55\]
+
+![](images/conf.jpg){fig-align="center"}
+
+## CIs - Activity
+
+<https://seeing-theory.brown.edu/frequentist-inference/index.html#section2>
+
+-   Start with a normal distribution to sample from
+
+1.  How do the lengths of the confidence intervals change with sample
+    size?
+
+2.  With confidence level?
+
+## CIs
+
+-   Sample size
+
+![](images/confIntReplicated.png){fig-align="center"}
+
+## CIs
+
+::: columns
+::: {.column width="50%"}
+-   95 is referred to as confidence level
+
+    -   i.e., How confident CI includes $\mu$
+
+-   Does not only have to be 95!
+
+    -   Greater C = longer CI
+:::
+
+::: {.column width="50%"}
+![](images/cisize.png){fig-align="center"}
+:::
+:::
+
+## How to Calculate CIs
+
+1\. Calculate the estimate from your sample
+
+2\. Calculate the standard error of your estimate
+
+3\. Determine the appropriate sampling distribution for your
+standardized estimate (e.g., normal)
+
+4.  Determine your desired level of confidence (e.g. 90%, 95%, 99%)
+
+-   Lower boundary = estimate - MoE (1.96 X \*\*SE\*\*)
+
+<!-- -->
+
+-   Higher boundary = estimate + MoE (1.96 X \*\*SE\*\*)
+
+$$
+\bar{x} \pm 1.96 \dfrac{\sigma}{\sqrt{n}}.
+$$
+
+## CI Interpretations
+
+> There is a 95% probablity that our interval includes the true
+> population mean
+
+. . .
+
+-   Nope! Frequentist CIs are often misinterpreted
+
+## CI Interpretations
+
+-   https://seeing-theory.brown.edu/frequentist-inference/index.html#section2
+
+1.  CI dance: One from the dance (most likely captures the parameter we
+    are estimating, **but it could not)**
+
+    -   General interpretation: They tell us if I collected a 100
+        samples in an identical way, and for each of them calculated the
+        mean and CI, then we would expect 95% of these samples to
+        contain true mean
+
+## CI Interpretations
+
+2\. Precision: MoE gives us a sense of precision
+
+3.  Prediction: CIs give useful information about replication
+
+-   E.g., If a replication is done, 83% chance (5 in 6 chance) 95% CI
+    will capture the next mean
+
+[^1]
+
+[^1]: Cumming & Calin-Jageman: Introduction to the New Statistics
+
+## CIs and P-values
+
+::: callout-note
+We can use CIs to test the significance of the effect. If they do not
+include 0, we can usually say p \< .05
+:::
+
+## What do we do when \$\\sigma\$ unknown?
+
+-   USE $s$ - SD of the sample
+
+$$
+Z(x) = \frac{x - \mu}{\sigma}
+$$
+
+$$s = \sqrt{\frac{1}{N-1} \sum_{i=1}^N (x_i - \overline{x})^2}$$
+
+## The $t$ Distribution
+
+-   Small samples: more conservative test
+
+-   *t*-distribution has fatter tails
+
+-   Coverage is more conservative
+
+```{r, echo=FALSE, fig.align='center', out.width="50%", out.height="10%"}
+
+# Generate a vector of 100 values between -6 and 6
+x <- seq(-6, 6, length = 100)
+  
+# Degrees of freedom
+df = c(1,4,10,30)
+colour = c("red", "orange", "green", "yellow","black")
+  
+# Plot a normal distribution
+plot(x, dnorm(x), type = "l", lty = 2, lwd=4, xlab = "t-value", ylab = "Density", 
+     main = "Comparison of t-distributions", col = "black")
+  
+# Add the t-distributions to the plot
+for (i in 1:4){
+  lines(x, dt(x, df[i]), col = colour[i])
+}
+  
+# Add a legend
+legend("topright", c("df = 1", "df = 4", "df = 10", "df = 30", "normal"), 
+       col = colour, title = "t-distributions", lty = c(1,1,1,1,2))
+```
+
+::: notes
+N-1 is non-biased (not going to concern ourselves with the proof). We
+are taking sample SD instead of pop SD. It is going to be biased if we
+dont.
+:::
+
+## Degrees of Freedom
+
+-   df = (N-1)
+
+-   What is DF you ask?
+
+    -   Number of separate independent pieces that can vary
+
+![](https://user-images.githubusercontent.com/18429968/193103949-421a3f0a-56b3-4fe2-b812-b7cea4c9bc19.gif)
+
+## Calculating CIs for $t$
+
+$$
+MoE = t_.95(df) \times s/\sqrt(N)
+$$
+
+```{webr-r}
+alpha <- 0.05
+df <- 10  # degrees of freedom
+t_value <- qt(1 - alpha/2, df)
+
+t_value
+```
+
+## Candy Experiment Revisited
+
+-   Let's calculate a confidence interval for the candy experiment
+
+```{webr-r}
+
+# The Data
+control_group= c(92, 97, 123, 101, 102, 126, 107, 81, 90, 93, 118, 105, 106, 102, 92, 127, 107, 71, 111, 93, 84, 97, 85, 89, 91, 75, 113, 102, 83, 119, 106, 96, 113, 113, 112, 110, 108, 99, 95, 94, 90, 97, 81, 133, 118, 83, 94, 93, 112, 99, 104, 100, 99, 121, 97, 123, 77, 109, 102, 103, 106, 92, 95, 85, 84, 105, 107, 101, 114, 131, 93, 65, 115, 89, 90, 115, 96, 82, 103, 98, 100, 106, 94, 110, 97, 105, 116, 107, 95, 117, 115, 108, 104, 91, 120, 91, 133, 123, 96, 85)
+
+
+treat_group= c(99, 114, 106, 105, 96, 109, 98, 85, 104, 124, 101, 119, 86, 109, 118, 115, 112, 100, 97, 95, 112, 96, 103, 106, 138, 100, 114, 111, 96, 109, 132, 117, 111, 104, 79, 127, 88, 121, 139, 88, 121, 106, 86, 87, 86, 102, 88, 120, 142, 91, 122, 122, 115, 95, 108, 106, 118, 104, 125, 104, 126, 94, 91, 159, 104, 114, 120, 103, 118, 116, 107, 111, 109, 142, 99, 94, 111, 115, 117, 103, 94, 129, 105, 97, 106, 107, 127, 111, 121, 103, 113, 105, 111, 97, 90, 140, 119, 91, 101, 92)
+
+df_candy <- tibble(treatment=treat_group, control=control_group) %>%
+  pivot_longer(treatment:control, names_to = "cond", values_to = "values") %>%
+  mutate(id=row_number())
+
+```
+
+## Candy Experiment Revisited
+
+-   Empty model
+
+```{webr-r}
+library(broom)
+ lm(values~NULL, data=df_candy) %>% 
+  tidy(conf.int=TRUE)
+
+```
+
+## Candy Experiment Revisited
+
+-   Let's get the means for each condition
+
+```{webr-r}
+
+df_candy  %>%
+  group_by(cond) %>%
+  summarise(mean_value=mean(values)) %>%
+  ggplot(aes(x=cond, y=mean_value)) + geom_point(size=4) + 
+  theme_minimal(base_size = 16)
+  
+
+```
+
+## Candy Experiment Revisited
+
+-   Let's calculate our CIs
+
+```{webr-r}
+# calculate cis manually
+
+
+```
+
+## Write-up
+
+-   95% CI \[lower, upper\]
+
+> People who completed the statistics test scored \*M\* = 75.00, 95% CI
+> \[70, 80\], which was higher than those who completed it as
+> themselves, \*M\*= 50.00, 95% CI \[35, 65\].
+
+## Summary
+
+-   Confidence intervals quantify uncertainty about our estimates of the
+    population mean based on a sample
+
+    -   Captures precision of the sampling process, not about our
+        beliefs about the value of the true population parameter
+
+-   Encourages thinking about plausible range of values instead of a
+    point estimate
+
+-   Larger samples, populations with smaller variances, and lower
+    confidence levels lead to smaller intervals
