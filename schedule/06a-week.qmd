@@ -1,0 +1,15 @@
+---
+title: "Week 6a"
+subtitle: " NHST and p-values"
+date: 2023-10-09
+---
+## Before Class
+
+- Ch.10 Statistics and Data Science: A Modeling Approach
+
+- [Ch.1 Improving Your Statistical Inferences](https://lakens.github.io/statistical_inferences/01-pvalue.html)
+
+
+## During Class
+
+
