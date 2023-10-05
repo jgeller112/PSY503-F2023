@@ -9,6 +9,7 @@ date: 2023-10-09
 
 - [Ch.1 Improving Your Statistical Inferences](https://lakens.github.io/statistical_inferences/01-pvalue.html)
 
+- [Fisher, Neyman-Pearson or NHST? A tutorial for teaching data testing](https://www.frontiersin.org/articles/10.3389/fpsyg.2015.00223/full)
 
 ## During Class
 
