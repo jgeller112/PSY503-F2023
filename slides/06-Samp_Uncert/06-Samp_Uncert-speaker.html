@@ -554,7 +554,7 @@ Jason Geller, PH.D.(he/him)
 <span id="cb5-5"><a href="#cb5-5"></a>virtual_shovel</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  reds red_prob
-1   18     0.36</code></pre>
+1   20      0.4</code></pre>
 </div>
 </div>
 </section>
@@ -1109,34 +1109,35 @@ Z(x) = \frac{x - \mu}{\sigma}
 <li>Summary</li>
 </ul></li>
 </ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="co">#</span></span>
-<span id="cb20-2"><a href="#cb20-2"></a>df_candy  <span class="sc">%&gt;%</span></span>
-<span id="cb20-3"><a href="#cb20-3"></a>  <span class="fu">group_by</span>(cond) <span class="sc">%&gt;%</span></span>
-<span id="cb20-4"><a href="#cb20-4"></a>  <span class="fu">summarize</span>(<span class="at">mean=</span><span class="fu">mean</span>(values), </span>
-<span id="cb20-5"><a href="#cb20-5"></a>            <span class="at">sd=</span> <span class="fu">sd</span>(values), </span>
-<span id="cb20-6"><a href="#cb20-6"></a>            <span class="at">n=</span> <span class="fu">n</span>(), </span>
-<span id="cb20-7"><a href="#cb20-7"></a>            <span class="at">moe=</span><span class="fu">qt</span>(<span class="dv">1</span> <span class="sc">-</span> .<span class="dv">05</span><span class="sc">/</span><span class="dv">2</span>, n<span class="dv">-1</span>)<span class="sc">*</span>sd<span class="sc">/</span><span class="fu">sqrt</span>(n),</span>
-<span id="cb20-8"><a href="#cb20-8"></a>            <span class="at">upper=</span>mean<span class="sc">+</span> moe, </span>
-<span id="cb20-9"><a href="#cb20-9"></a>            <span class="at">lower=</span>mean<span class="sc">-</span>moe) <span class="sc">%&gt;%</span> </span>
-<span id="cb20-10"><a href="#cb20-10"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>cond, <span class="at">y=</span>mean)) <span class="sc">+</span> </span>
-<span id="cb20-11"><a href="#cb20-11"></a>  <span class="fu">geom_pointrange</span>(<span class="fu">aes</span>(<span class="at">ymin=</span>lower, <span class="at">ymax=</span>upper))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>df_candy  <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a>  <span class="fu">group_by</span>(cond) <span class="sc">%&gt;%</span></span>
+<span id="cb20-3"><a href="#cb20-3"></a>  <span class="fu">summarize</span>(<span class="at">mean=</span><span class="fu">mean</span>(values), </span>
+<span id="cb20-4"><a href="#cb20-4"></a>            <span class="at">sd=</span> <span class="fu">sd</span>(values), </span>
+<span id="cb20-5"><a href="#cb20-5"></a>            <span class="at">n=</span> <span class="fu">n</span>(), </span>
+<span id="cb20-6"><a href="#cb20-6"></a>            <span class="at">moe=</span><span class="fu">qt</span>(<span class="dv">1</span> <span class="sc">-</span> .<span class="dv">05</span><span class="sc">/</span><span class="dv">2</span>, n<span class="dv">-1</span>)<span class="sc">*</span>sd<span class="sc">/</span><span class="fu">sqrt</span>(n),</span>
+<span id="cb20-7"><a href="#cb20-7"></a>            <span class="at">upper=</span>mean<span class="sc">+</span> moe, </span>
+<span id="cb20-8"><a href="#cb20-8"></a>            <span class="at">lower=</span>mean<span class="sc">-</span>moe) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-9"><a href="#cb20-9"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>cond, <span class="at">y=</span>mean)) <span class="sc">+</span> </span>
+<span id="cb20-10"><a href="#cb20-10"></a>  <span class="fu">geom_pointrange</span>(<span class="fu">aes</span>(<span class="at">ymin=</span>lower, <span class="at">ymax=</span>upper)) <span class="sc">+</span> </span>
+<span id="cb20-11"><a href="#cb20-11"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size=</span><span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="06-Samp_Uncert_files/figure-revealjs/unnamed-chunk-19-1.png" width="1152" class="r-stretch"></section>
+<img data-src="06-Samp_Uncert_files/figure-revealjs/unnamed-chunk-19-1.png" width="1152" class="r-stretch quarto-figure-center"></section>
 <section id="candy-experiment-revisited-5" class="slide level2">
 <h2>Candy Experiment Revisited</h2>
 <ul>
 <li>CIs with Raw data</li>
 </ul>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>df_candy  <span class="sc">%&gt;%</span></span>
 <span id="cb21-2"><a href="#cb21-2"></a>  <span class="fu">group_by</span>(cond) <span class="sc">%&gt;%</span></span>
 <span id="cb21-3"><a href="#cb21-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>cond, <span class="at">y=</span>values)) <span class="sc">+</span></span>
-<span id="cb21-4"><a href="#cb21-4"></a>  <span class="fu">stat_summary</span>(<span class="at">fun.data=</span><span class="st">"mean_cl_boot"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-4"><a href="#cb21-4"></a>  <span class="fu">stat_summary</span>(<span class="at">fun.data=</span><span class="st">"mean_cl_boot"</span>) <span class="sc">+</span></span>
+<span id="cb21-5"><a href="#cb21-5"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="06-Samp_Uncert_files/figure-revealjs/unnamed-chunk-20-1.png" width="1152" class="r-stretch"></section>
+<img data-src="06-Samp_Uncert_files/figure-revealjs/unnamed-chunk-20-1.png" width="1152" class="r-stretch quarto-figure-center"></section>
 <section id="write-up" class="slide level2">
 <h2>Write-up</h2>
 <ul>

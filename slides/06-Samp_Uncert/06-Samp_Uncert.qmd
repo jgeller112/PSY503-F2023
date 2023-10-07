@@ -736,7 +736,8 @@ df_candy  %>%
     -   Summary
 
 ```{r}
-#
+#| fig-align: center
+#| 
 df_candy  %>%
   group_by(cond) %>%
   summarize(mean=mean(values), 
@@ -746,7 +747,8 @@ df_candy  %>%
             upper=mean+ moe, 
             lower=mean-moe) %>% 
 ggplot(aes(x=cond, y=mean)) + 
-  geom_pointrange(aes(ymin=lower, ymax=upper))
+  geom_pointrange(aes(ymin=lower, ymax=upper)) + 
+  theme_minimal(base_size=16)
 
 
 ```
@@ -756,11 +758,14 @@ ggplot(aes(x=cond, y=mean)) +
 -   CIs with Raw data
 
 ```{r}
+#| fig-align: center
+
 
 df_candy  %>%
   group_by(cond) %>%
   ggplot(aes(x=cond, y=values)) +
-  stat_summary(fun.data="mean_cl_boot")
+  stat_summary(fun.data="mean_cl_boot") +
+  theme_minimal(base_size = 16)
 
 ```
 
