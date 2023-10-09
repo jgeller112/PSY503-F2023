@@ -1,0 +1,187 @@
+---
+title: "Statistical Inference: NHST"
+subtitle: "Princeton University"
+author: "Jason Geller, PH.D.(he/him)"
+date: 'Updated:`r Sys.Date()`'
+footer: "PSY 503: Foundations of Statistics in Psychology"
+format: html
+execute:
+  freeze: auto
+  echo: true
+  message: false
+  warning: false
+  fig-align: center
+  fig-width: 12
+  fig-height: 8
+  editor_options: 
+  chunk_output_type: inline
+  code-overflow: wrap
+  html:
+    code-fold: true
+    code-tools: true
+webr: 
+  packages: ['tidyverse', 'easystats', 'broom']
+filters:
+  - webr
+---
+
+# Applying NHST: Correlations
+
+## Dataset
+
+-   Mental Health and Drug Use:
+
+    -   CESD = depression measure
+    -   PIL total = measure of meaning in life
+    -   AUDIT total = measure of alcohol use
+    -   DAST total = measure of drug usage
+
+```{webr-r}
+
+master <- read.csv("https://raw.githubusercontent.com/jgeller112/psy503-psych_stats/master/static/slides/10-linear_modeling/data/regress.csv")
+
+```
+
+## Dataset
+
+-   CESD = depression measure
+
+-   PIL total = measure of meaning in life
+
+    -   What do you think relationship looks like?
+
+## Dataset
+
+```{webr-r}
+#| echo: false
+#| fig-align: center
+
+
+# Animation
+# Change the point sizes manually
+anim.1<- ggplot(master, aes(x=PIL_total, y=CESD_total))+
+   geom_point()
+
+anim.1
+
+
+```
+
+## Correlation (*r*)
+
+-   Quantifies relationship between two variables
+
+    -   Direction (positive or negative)
+
+    -   Strength
+
+        -   +1 is a perfect positive correlation
+
+        -   0 is no correlation (independence)
+
+        -   -1 is a perfect negative correlation
+
+## Correlations
+
+```{webr-r echo=FALSE,out.height="15%", out.width="70%",fig.cap="",fig.show='hold',fig.align='center'}
+
+knitr::include_graphics('images/corr.png')
+```
+
+## Effect Size Heuristics
+
+<br> <br>
+
+-   *r* \< 0.1 very small
+-   0.1 ≤ *r* \< 0.3 small
+-   0.3 ≤ *r* \< 0.5 moderate
+-   *r* ≥ 0.5 large
+
+## Covariance and Correlation
+
+-   Pearson's *r*
+
+<br> <br>
+
+$$covariance = \frac{\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})}{N - 1}$$
+$$r = \frac{covariance}{s_xs_y} = \frac{\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})}{(N - 1)s_x s_y}$$
+
+-   Let's go to R!
+
+## Statistical Test: Pearson's *r*
+
+-   $H_0$ *r* = 0
+
+-   $H_1$ *r* $\not=$ 0
+
+    -   $\alpha$ = .05
+
+$$\textit{t}_r =  \frac{r\sqrt{N-2}}{\sqrt{1-r^2}}$$
+
+```{webr-r}
+library(correlation) # easystats 
+cor_result <- 
+  cor_test(master,"PIL_total", "CESD_total")
+
+cor_result %>%
+knitr::kable()
+
+```
+
+## Scatter plot
+
+```{webr-r}
+#| fig-align: center
+#| 
+plot(cor_result,
+  point = list(
+    aes = list(color = "CESD_total", size = "PIL_total"),
+    alpha = 0.66
+  ),
+) +
+  theme_minimal(base_size = 16) +
+  see::scale_color_material_c(palette = "rainbow", guide = "none") +
+  scale_size_continuous(guide = "none") 
+```
+
+## Scatter plot
+
+```{webr-r}
+#| fig-align: center
+#| 
+
+library(ggstatsplot)
+
+ggstatsplot::ggscatterstats(master, 
+                            x= "PIL_total", 
+                            y="CESD_total", 
+                          ) + 
+  theme_minimal(base_size=16)
+
+```
+
+## Non-parametric Correlation
+
+-   Spearman's rank correlation coefficient :
+
+    $$
+    r_s = 1 - \frac{6 \sum d_i^2}{n(n^2 - 1)}
+    $$
+
+-   It assesses how well the relationship between two variables can be
+    described using a monotonic (increasing or decreasing) function
+
+-   Rank order method
+
+-   Range \[-1,+1\]
+
+## Statistical Test: Spearman's *r*
+
+```{webr-r}
+
+#run corr with spearman
+cor_result_s <- cor_test(master, "CESD_total", "PIL_total", method = "spearman") %>%
+knitr::kable()
+```
+
+## Correlation Write-up
