@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>PSY 503: Foundations of Statistics in Psychological Science</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Jason Geller, Ph.D. (he/him/his)" />
+    <meta name="date" content="2023-10-05" />
+    <script src="NHST_files/header-attrs/header-attrs.js"></script>
+    <link href="NHST_files/panelset/panelset.css" rel="stylesheet" />
+    <script src="NHST_files/panelset/panelset.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# PSY 503: Foundations of Statistics in Psychological Science
+]
+.subtitle[
+## NHST and <em>p</em>-values (Everything you ever wanted to know about <em>p</em>-values)
+]
+.author[
+### Jason Geller, Ph.D. (he/him/his)
+]
+.institute[
+### Princeton University
+]
+.date[
+### 2023-10-05
+]
+
+---
+
+
+
+
+
+<style>.panelset{--panel-tab-foreground: honeydew;--panel-tab-background: seagreen;}</style>
+&lt;style type="text/css"&gt;
+pre {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+pre[class] {
+  max-height: 100px;
+}
+&lt;/style&gt;
+
+
+&lt;style type="text/css"&gt;
+.scroll-100 {
+  max-height: 100px;
+  overflow-y: auto;
+  background-color: inherit;
+}
+&lt;/style&gt;
+---
+&lt;div style='position: relative; padding-bottom: 56.25%; padding-top: 35px; height: 0; overflow: hidden;'&gt;&lt;iframe sandbox='allow-scripts allow-same-origin allow-presentation' allowfullscreen='true' allowtransparency='true' frameborder='0' height='315' src='https://www.mentimeter.com/app/presentation/76b512b165aa6f452fef7e181a9eec73/1e265d7bc603/embed' style='position: absolute; top: 0; left: 0; width: 100%; height: 100%;' width='420'&gt;&lt;/iframe&gt;&lt;/div&gt;
+---
+
+class: center, inverse
+background-image:url("images/pworship.gif")
+
+---
+# Today
+
+- Null hypothesis significance testing (NHST)
+
+  - 1 vs 2 tailed tests
+  
+  - *p*-values
+
+  - Steps in NHST
+  
+  - Type 1 and Type 2 error
+
+  - *p*-value misconceptions
+  
+---
+Next Week
+
+- Parametric
+
+  - 1 sample, 2 sample (Welch’s), &amp; paired t-tests
+  
+- Non-parametric
+
+  - Mann-Witney U test (between)
+  - Wilcoxon signed-rank (paired)
+  
+- Correct for Multiple Comparisons
+---
+# Recap
+
+- Sampling Distribution: The probability distribution of a given statistic (e.g., mean) taken from a random sample
+
+- Constructing a Sampling Distribution
+
+  - Randomly draw n sample points from a finite population with size N
+  
+  - Compute statistic of interest
+
+  - List different observed values of the statistic with their corresponding frequencies
+
+
+---
+# Recap 
+
+&lt;img src="images/samperror.png" width="40%" style="display: block; margin: auto;" /&gt;
+- As n increases we become more confident (less spread) of our estimate of the  population mean
+---
+# Recap: CIs
+
+- CIs: Interval or range that encompasses true parameter value
+
+    - Level of confidence
+      - 95% is most common
+  
+Calculation  
+  - Lower: estimate - MoE
+  - Upper: estimate + MoE 
+
+---
+class: middle, cener
+# __Hypothesis Testing: The General Framework__
+---
+# Statistical Inference
+
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+
+1. Estimation
+
+--
+
+2. Test relationships (hypothesis testing)
+
+---
+class: middle, center 
+
+# Proof by contradiction
+
+&gt; To prove a mathematical statement, A, you assume temporarily that A is false. If that assumption leads to a contradiction, you conclude that A must actually be true
+
+???
+A is effect not A is no effect. P value allow us to provide evident against not A
+---
+# NHST 
+
+- Negate the conclusion: Begin by assuming the opposite – that there is no relationship between X and Y.
+
+- Analyze the consequences of this premise: If there is no relationship between X and Y in the population, what would the sampling distribution of the estimate of the relationship between X and Y look like?
+
+- Look for a contradiction: Compare the relationship between X and Y observed in your sample to this sampling distribution. How (un)likely is this observed relationship?
+
+  - If small, then there is evidence there is a relationship
+---
+# NHST
+
+- Null Hypothesis `\(H_0\)`: There is no significant difference 
+
+    - 0 in population
+    - No difference between two or more groups
+
+- Alternative Hypothesis `\(H_1\)`: There is a statistically significant difference 
+
+---
+# An Example
+
+Toftness, Carpenter, Geller, Lauber, Johnson, and  Armstrong (2017) 
+
+- Does fluency of the instructor lead to better learning of the material? 
+---
+# Null and Alternative Example
+
+- Does fluency of the instructor lead to better learning of the material? 
+
+  - Null Hypothesis: H0 : `\(\mu_f\)` = `\(\mu_d\)`
+  
+  - Alternative Hypothesis: HA: `\(\mu_f\)` `\(\not=\)` `\(\mu_d\)`
+---
+# Two-sided and One-sided Alternative Hypotheses
+
+- Two-tailed: H0 : `\(\mu_f\)` = `\(\mu_d\)` ; HA = `\(\mu_f\)` `\(\not=\)` `\(\mu_d\)`
+
+- One-tailed: H0 = `\(\mu_f\)` = `\(\mu_d\)` ; HA = `\(\mu_f\)` &gt; `\(\mu_d\)`
+
+- One-tailed: H0 = `\(\mu_f\)`  = `\(\mu_d\)` ; HA = `\(\mu_f\)` &lt; `\(\mu_d\)`
+
+- Only use a one-tailed / directional hypothesis if you have a strong theoretical prediction (for example, from a model) or you preregister it
+
+  -  Can gain statistical power
+  
+  - But sometimes findings are meaningful and interesting if they go in an unexpected  way
+  
+- We can accommodate both two-tailed and one-tailed tests statistically
+---
+---
+# Two Tailed Test
+
+&lt;img src="images/2tail.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+- The sum of the tails sums to α (0.025 in each tail for a two-tailed when α = 0.05)
+
+- See where the statistic lies relative to a ‘critical score’ that depends on defined alpha (same procedure used to calculate confidence intervals)
+
+- For the right and left tail, if the test statistic  &gt;  1.96  or less than -1.96 (critical value) reject null &amp; accept alternative
+
+---
+# One Tailed Test
+
+&lt;img src="images/1-tail.png" width="100%" style="display: block; margin: auto;" /&gt;
+- 0.05 in each tail
+
+- If statistic within rejection region = reject null &amp; accept alternative
+
+- Do you see why you get power with a one-sided / directional hypothesis?
+---
+# Should I use a one-tailed or two-tailed test?
+
+- Always use two-tailed when there is no directional expectation
+
+  - There are two competing predictions
+
+- Can use one-tailed when
+strong justification for directional prediction
+
+- Never follow up with one-tailed if two-tailed is not statistically significant
+---
+# Define your level of significance (α)
+
+- Level of significance (α): Probability of rejecting the NULL hypothesis due simply to chance
+
+  - α = 0.05
+  
+  - Some use others (e.g. 0.01, 0.0000003 particle discovery in high energy physics)
+  
+ - How do we determine what the probability of rejecting the null hypothesis given our data is?
+
+---
+class:middle center
+
+# What is a *p*-value?
+
+&gt; The probability of observing the sample data, or more extreme data, assuming the null hypothesis is true
+
+**How surprising something is**
+
+---
+# *p*-value
+
+&lt;img src="images/plike.png" width="100%" style="display: block; margin: auto;" /&gt;
+---
+# *p*-value: Schools of Thought
+
+- Ronald Fisher: 
+
+  - Quantifying evidence 
+  
+     - Smaller *p*-value provides stronger evidence against the null hypothesis 
+
+- Neyman and Pearson: 
+
+    - Null and Alternative hypotheses
+
+    - *p*-value is only used to check if it is smaller than the chosen `\(\alpha\)` level, but it does not matter how much smaller it is
+---
+# *p*-value: Schools of Thought
+
+&lt;img src="images/fisherneyman.png" width="100%" style="display: block; margin: auto;" /&gt;
+---
+# Steps for Hypothesis Testing
+
+1. State null hypothesis and alternative hypothesis
+
+2. Calculate the corresponding test statistic and compare the result against the “critical value”
+
+3. State your conclusion
+
+---
+# Steps for Hypothesis Testing
+
+- Step 1 
+
+  - Convert the research question to null and alternative hypotheses
+
+        - The null hypothesis ($H_0$) is a claim of “no difference in the population” 
+         - No difference between a population parameter and         hypothesized value: `\(H_0\)` : 𝛍 = 7.56 
+         - No difference between one population parameter and another: `\(H_0\)` : `\(\mu_f\)` = `\(\mu_d\)`
+          - *We usually want to reject this hypothesis*
+  
+- The alternative hypothesis ($H_1$) claims `\(H_0\)` is false: There is some difference
+
+---
+# Example
+
+- The problem: In the 1970s, 20–29 year old men in the U.S. had a mean μ body weight of 170 pounds. Standard deviation σ was 40 pounds. We test whether mean body weight in the population now differs.
+
+  - What is null here?
+  - What is alternative?
+
+---
+# Steps for Hypothesis Testing
+
+- Step 2
+
+  - Calculate the corresponding test statistic and compare the result against the “critical value”
+
+      - *t*, *z*, *F*
+
+         - Is the test statistic  &gt; or &lt; than critical value?
+
+  - A value of the test statistic is interesting if it has only a small chance of occurring when the null hypothesis is true
+---
+# Steps for Hypothesis Testing
+
+- Step 2 
+
+    - Define your level of significance (α)
+
+- α Interpretation: If we were do this experiment many many times, we would only expect 5% (or another level of significance) to be Type 1 Error
+---
+# Steps for Hypothesis Testing
+
+- Step 3 
+
+    - State your conclusion
+
+        - Reject the null *p* &lt; `\(\alpha\)`
+        - Fail to reject the null *p* &gt; `\(\alpha\)`
+
+**Never say we found no difference. Instead say you found no statistically significant difference. Can never affirm the null**
+---
+# *p*-value Conventions
+
+.pull-left[
+- Conventions:
+  - *p* &gt; 0.10: non-significant evidence against H0
+  - 0.05 &lt; *p* &lt; 0.10: marginally significant evidence
+  - *p* &lt; 0.05: significant evidence against H0 
+]
+
+.pull-right [
+&lt;img src="images/pfun.png" width="30%" style="display: block; margin: auto;" /&gt;
+]
+---
+# Type 1 and Type 2 Error Rates
+
+.pull-left[
+- You think the manipulation worked, but it really doesn’t
+  - Type 1 error
+  
+- You don’t think the manipulation worked, but it really does
+  - Type 2 error
+]
+
+.pull-right[
+
+&lt;img src="images/type12.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+# Type 1 and Type 2 Error Rates
+
+&lt;img src="images/outcomes.png" width="70%" style="display: block; margin: auto;" /&gt;
+---
+# Correctly reporting and interpreting p-values
+
+- Exact *p*-values!
+
+-  *p*-values reference the observed data and not a theory
+
+- Report `\(\alpha\)`
+
+- Do not use *p*-values as a measure of evidence
+
+---
+# *p*-value Misconceptions
+
+.pull-left[
+
+- A non-significant *p*-value does not mean that the null hypothesis is true
+
+  - "There was no difference" 
+  - "The null is true"
+]
+
+.pull-right[
+
+&lt;img src="images/nullnottrye.png" width="80%" style="display: block; margin: auto;" /&gt;
+]
+---
+# *p*-value Misconceptions
+
+  - A significant p-value means that the null hypothesis is false
+
+ - p &lt; .05, therefore there is an effect’, 
+ - or ‘there is a difference between the two groups, p &lt; .05’
+
+&lt;img src="images/mis2.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+---
+# *p*-value Misconceptions
+
+- A significant p-value does not mean that a practically important effect has been discovered 
+
+---
+# *p*-value Misconceptions
+
+.pull-left[
+-  If you have observed a significant finding, the probability that you have made a Type 1 error (a false positive) is 5%
+  - Type 1 error rate references all studies we will perform in the future where the null hypothesis is true
+  
+  - Not more than 5% of our observed mean differences will fall in the red tail areas.
+]
+
+.pull-right[
+&lt;img src="images/pdist.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+--- 
+# *p* value misconceptions
+
+- One minus the *p*-value is not the probability of observing another significant result when the experiment is replicated 
+
+- The dance of the *ps*
+
+---
+class: center, middle
+
+# Practice NHST
+
+---
+# 1 Sample t-test (1 tailed)
+
+- 1 sample t-test (1 tailed)
+`$$t(x) = \frac{\bar{X} - \mu}{s/\sqrt(n)}$$`
+  - where µ is some value we are comparing our sample to
+  
+- Find *t* 
+- Find *t* critical
+- Find *p*-value
+---
+# 1 Sample t-test (1 tailed)
+
+- Sample of 12 people lost 0.61 kg with standard deviation of s= 1.62 kg. Can we conclude their weight is less than than their original weight?
+
+  - What do we know?
+  - What are the hypotheses?
+
+`$$t(x) = \frac{\bar{X} - \mu}{s/\sqrt(n)}$$`
+---
+# 1 Sample *t* (1 tailed)
+
+
+```r
+t0 =( -0.61 - 0)/(1.62/(12)^(1/2))
+alpha =0.05
+tcrit0 = qt(alpha,12	- 1, lower.tail = TRUE) # (alpha, df) - NOTICE alpha!
+pval0 = pt(t0,12 - 1, lower.tail = TRUE) # looking at LEFT tail
+t0
+```
+
+```
+## [1] -1.304384
+```
+
+```r
+tcrit0
+```
+
+```
+## [1] -1.795885
+```
+
+```r
+pval0
+```
+
+```
+## [1] 0.1093673
+```
+---
+# What do we conclude?
+
+- Decision, conclusion, and *p* value
+
+---
+# 1 Sample *t* (Example 2)
+
+- Among 157 African-American men seen in the emergency department at the hospital,  the mean systolic blood pressure was 146 mm Hg with a standard deviation of 27. Can  we conclude based on this data that the mean systolic blood pressure for a population of  African-American men is greater than 140 (i.e., µ) at the 95% confidence level?
+
+  - What do we know?
+  - What are the hypotheses?
+
+`$$t(x) = \frac{\bar{X} - \mu}{s/\sqrt(n)}$$`
+
+
+
+
+---
+# 1 Sample *t* (Example 2)
+
+```r
+t0 =(146-140) /(27/(157)^(1/2))
+alpha =0.05
+tcrit0 = qt(alpha,157	- 1, lower.tail = FALSE) # (1-alpha, n - 1) - NOTICE 1-alpha!
+pval0 =pt (t0,157 - 1, lower.tail = FALSE) # looking at RIGHT tail (1 - p)!
+t0
+```
+
+```
+## [1] 2.784436
+```
+
+```r
+tcrit0
+```
+
+```
+## [1] 1.65468
+```
+
+```r
+pval0
+```
+
+```
+## [1] 0.003013078
+```
+---
+# 1 Sample *t* (Example 2)
+
+- Decision, Conclusion, and p-value?
+
+---
+# 1 Sample *t* (Example 2)
+
+- Use `t.test` function in R
+
+```r
+#####simulate data#######
+n1 =157
+alpha1 =0.05
+data1 &lt;- rnorm(n1,mean =146,sd=27)
+############ Run ttest#########
+
+res1 &lt;- t.test(data1,mu =140,alternative ="greater")
+#alternative options: "less", "greater", "two.sided"
+
+res1
+```
+
+```
+## 
+## 	One Sample t-test
+## 
+## data:  data1
+## t = 3.5689, df = 156, p-value = 0.0002383
+## alternative hypothesis: true mean is greater than 140
+## 95 percent confidence interval:
+##  144.2192      Inf
+## sample estimates:
+## mean of x 
+##  147.8663
+```
+---
+# 1 Sample *t* (Example 3)
+
+- A cookie company claims that there are 15 chocolate chips per cookie, but you aren’t  convinced. You take 10 cookies and count the number of chocolate chips in each cookie.  Here is what the data looks like: [13,14,15,17,18,19,21,20,19,20]. Are the number of  chocolate chips significantly different from 15?
+
+- What do we know?
+- What are the hypotheses?
+
+`$$t(x) = \frac{\bar{X} - \mu}{s/\sqrt(n)}$$`
+
+
+---
+
+
+```r
+data2 = c(13,14,15,17,18,19,21,20,19,20)
+
+res2 &lt;- t.test(data2,mu =15,alternative ="two.sided")
+res2
+```
+
+```
+## 
+## 	One Sample t-test
+## 
+## data:  data2
+## t = 2.9824, df = 9, p-value = 0.01539
+## alternative hypothesis: true mean is not equal to 15
+## 95 percent confidence interval:
+##  15.6279 19.5721
+## sample estimates:
+## mean of x 
+##      17.6
+```
+---
+
+- Decision, Conclusion, and p value
+
+---
+# 2 Sample Welch’s t-test
+
+- 2 sample tests are interested in whether there are differences between 2 groups
+
+- There are several traditional 2 sample t-tests, where the appropriate version  depending on equal or unequal sample size or variance (giant flow charts!)
+
+- Welch’s t-test gives gives equivalent answer to traditional t-test when there is an  equal sample size or variances, BUT can also handle unequal sample size and  variance.
+  - http://daniellakens.blogspot.com/2015/01/always-use-welchs-t-test-instead-of.html
+- Same t-statistic calculation and t-distribution, just have to apply correction for  degrees of freedom (df)
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"slideNumberFormat": "%current%",
+"highlightStyle": "github",
+"highlightLines": true,
+"ratio": "16:9",
+"countIncrementalSlides": true,
+"background-image": "url(\"lover.png\")",
+"background-size": "cover"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
