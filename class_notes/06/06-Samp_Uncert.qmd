@@ -19,6 +19,8 @@ execute:
   html:
     code-fold: true
     code-tools: true
+webr: 
+  packages: ['tidyverse', 'gapminder', 'moderndive', 'broom']
 filters:
   - webr
 ---
@@ -110,11 +112,17 @@ What proportion of this bowl's balls are red?
     -   Enter in Google sheets document
         <https://docs.google.com/spreadsheets/d/18aXkkXOrUiulmCibtEQuVP36UsmdBWQ5AQZqv-oXQ4c/edit?usp=sharing>
 
-```{webr-r}
+```{r}
+
+library(tidyverse)
+
 bowl <- read.csv("https://raw.githubusercontent.com/jgeller112/psy503-psych_stats/master/static/assignment/data/bowl.csv")
 
 virtual_shovel <- bowl %>% 
-  sample_n(size = 10)
+  sample_n(size = 10) %>%
+  summarise(reds=sum(color=="red"), red_prob=reds/10)
+
+virtual_shovel
 
 ```
 
