@@ -49,17 +49,19 @@ pkgs
 
 ## Today
 
--   Null hypothesis significance testing (NHST)
+-   Statistical Inference
 
-    -   1 vs 2 tailed tests
+    -   Null hypothesis significance testing (NHST)
 
-    -   *p*-values
+        -   1 vs 2 tailed tests
 
-    -   Steps in NHST
+        -   *p*-values
 
-    -   Type 1 and Type 2 error
+        -   Steps in NHST
 
-    -   *p*-value misconceptions
+        -   Type 1 and Type 2 error
+
+        -   *p*-value misconceptions
 
 -   Applying NHST to correlation data
 
@@ -419,7 +421,7 @@ knitr::include_graphics ('images/pfun.png')
 > **Misconception 1: A non-significant *p*-value means that the null
 > hypothesis is true**
 
--   Common to use:
+-   Common to say:
 
     -   *p* \> .05, the null hypothesis is true
 
@@ -432,11 +434,12 @@ knitr::include_graphics ('images/pfun.png')
 > **Misconception 2: A significant p-value means that the null
 > hypothesis is false**
 
--   Say instead:
+-   Common to use:
 
-    -   "A reliable difference"
+    -   *p* \< .05, the null hypothesis is false or the alternative is
+        true
 
-    -   "A statistical significant difference"
+    -   *p* \< .05, there is an effect
 
 ![](images/mis2.png){fig-align="center"}
 

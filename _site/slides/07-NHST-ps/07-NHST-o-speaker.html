@@ -11,7 +11,7 @@
   <meta name="generator" content="quarto-1.3.361">
 
   <meta name="author" content="Jason Geller, PH.D.(he/him)">
-  <meta name="dcterms.date" content="2023-10-08">
+  <meta name="dcterms.date" content="2023-10-09">
   <title>NHST and p-values (Everything you ever wanted to know about p-values)</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -405,7 +405,7 @@ Jason Geller, PH.D.(he/him)
 </div>
 </div>
 
-  <p class="date">2023-10-08</p>
+  <p class="date">2023-10-09</p>
 </section>
 <section id="packages" class="slide level2">
 <h2>Packages</h2>
@@ -434,6 +434,8 @@ Jason Geller, PH.D.(he/him)
 <section id="today" class="slide level2">
 <h2>Today</h2>
 <ul>
+<li><p>Statistical Inference</p>
+<ul>
 <li><p>Null hypothesis significance testing (NHST)</p>
 <ul>
 <li><p>1 vs 2 tailed tests</p></li>
@@ -441,6 +443,7 @@ Jason Geller, PH.D.(he/him)
 <li><p>Steps in NHST</p></li>
 <li><p>Type 1 and Type 2 error</p></li>
 <li><p><em>p</em>-value misconceptions</p></li>
+</ul></li>
 </ul></li>
 <li><p>Applying NHST to correlation data</p></li>
 </ul>
@@ -729,9 +732,10 @@ P(D|H_0)
 <ul>
 <li><p>Convert the research question to null and alternative hypotheses</p>
 <ul>
-<li>The null hypothesis (<span class="math inline">\(H_0\)</span>) is a claim of “no difference in the population”</li>
-<li>No difference between a population parameter and hypothesized value: <span class="math inline">\(H_0\)</span> : 𝛍 = 7.56</li>
+<li>The null hypothesis (<span class="math inline">\(H_0\)</span>) is a claim of “no difference in the population”
+<ul>
 <li>No difference between one population parameter and another: <span class="math inline">\(H_0\)</span> : <span class="math inline">\(\mu_f\)</span> = <span class="math inline">\(\mu_d\)</span></li>
+</ul></li>
 <li><em>We usually want to reject this hypothesis</em></li>
 </ul></li>
 </ul></li>
@@ -813,7 +817,7 @@ P(D|H_0)
 <p><strong>Misconception 1: A non-significant <em>p</em>-value means that the null hypothesis is true</strong></p>
 </blockquote>
 <ul>
-<li><p>Common to use:</p>
+<li><p>Common to say:</p>
 <ul>
 <li><p><em>p</em> &gt; .05, the null hypothesis is true</p></li>
 <li><p><em>p</em> &gt; .05, there is no effect</p></li>
@@ -827,10 +831,10 @@ P(D|H_0)
 <p><strong>Misconception 2: A significant p-value means that the null hypothesis is false</strong></p>
 </blockquote>
 <ul>
-<li><p>Say instead:</p>
+<li><p>Common to use:</p>
 <ul>
-<li><p>“A reliable difference”</p></li>
-<li><p>“A statistical significant difference”</p></li>
+<li><p><em>p</em> &lt; .05, the null hypothesis is false or the alternative is true</p></li>
+<li><p><em>p</em> &lt; .05, there is an effect</p></li>
 </ul></li>
 </ul>
 
