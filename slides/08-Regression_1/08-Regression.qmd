@@ -259,7 +259,7 @@ ggplot(some_data, aes(x=X, y=Y))+
                   ylim=c(0,10))
 ```
 
-## Example
+## Best fit line
 
 ::: columns
 ::: {.column width="50%"}
@@ -545,7 +545,7 @@ predict(model1, meaning)
 
 ## SS Unexplained (Sums of Squares Error)
 
-$$residual = y - \hat{Y} = Y - (x*\hat{\beta_x} + \hat{\beta_0})$$
+$$residual = y - \hat{y} = y - (x*\hat{\beta_x} + \hat{\beta_0})$$
 
 $$SS_{error} = \sum_{i=1}^n{(y_i - \hat{y_i})^2} = \sum_{i=1}^n{residuals^2}$$
 
@@ -582,7 +582,7 @@ some_data <- data.frame(Y= c(1,2,4,3,5,4,6,5),
 > Squared differences between the observed dependent variable and its
 > mean.
 
-$$SS_{total} = \sum{(y_i - \bar{Y})^2}$$
+$$SS_{total} = \sum{(y_i - \bar{y})^2}$$
 
 ```{r}
 #| echo: false
@@ -616,7 +616,7 @@ some_data <- data.frame(Y= c(1,2,4,3,5,4,6,5),
 > The sum of the differences between the predicted value and the mean of
 > the dependent variable
 
-$$SS_{Explained} = \sum (\hat{y_i} - \bar{Y})^2$$
+$$SS_{Explained} = \sum (\hat{y_i} - \bar{y})^2$$
 
 ```{r}
 #| echo: false
@@ -822,13 +822,16 @@ print(p1)
 
 ## F-Statistic, Explained Over Unexplained
 
--   F-statistics use measures of variance, which are sums of squares divided by relevant degrees of freedom
+-   F-statistics use measures of variance, which are sums of squares
+    divided by relevant degrees of freedom
 
 $$F = \frac{SS_{Explained}/df1 (p-1)}{SS_{Unexplained}/df2(n-p)} = \frac{MS_{Explained}}{MS_{Unexplained}}$$
 
--   `MS explained` represents the reduction in error achieved by the model 
+-   `MS explained` represents the reduction in error achieved by the
+    model
 
--   `MS unexplained` tells us how much variation is left over from the complex model
+-   `MS unexplained` tells us how much variation is left over from the
+    complex model
 
     -   If explained = unexplained, then F=1
 

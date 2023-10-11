@@ -607,8 +607,8 @@ Jason Geller, PH.D.(he/him)
 <h2>Visualize Errors as Squares</h2>
 
 <img data-src="08-Regression_files/figure-revealjs/unnamed-chunk-4-1.png" width="1152" class="r-stretch quarto-figure-center"></section>
-<section id="example" class="slide level2">
-<h2>Example</h2>
+<section id="best-fit-line" class="slide level2">
+<h2>Best fit line</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
@@ -742,7 +742,7 @@ Jason Geller, PH.D.(he/him)
 </section>
 <section id="ss-unexplained-sums-of-squares-error" class="slide level2">
 <h2>SS Unexplained (Sums of Squares Error)</h2>
-<p><span class="math display">\[residual = y - \hat{Y} = Y - (x*\hat{\beta_x} + \hat{\beta_0})\]</span></p>
+<p><span class="math display">\[residual = y - \hat{y} = y - (x*\hat{\beta_x} + \hat{\beta_0})\]</span></p>
 <p><span class="math display">\[SS_{error} = \sum_{i=1}^n{(y_i - \hat{y_i})^2} = \sum_{i=1}^n{residuals^2}\]</span></p>
 
 <img data-src="08-Regression_files/figure-revealjs/unnamed-chunk-18-1.png" width="1152" class="r-stretch quarto-figure-center"></section>
@@ -751,7 +751,7 @@ Jason Geller, PH.D.(he/him)
 <blockquote>
 <p>Squared differences between the observed dependent variable and its mean.</p>
 </blockquote>
-<p><span class="math display">\[SS_{total} = \sum{(y_i - \bar{Y})^2}\]</span></p>
+<p><span class="math display">\[SS_{total} = \sum{(y_i - \bar{y})^2}\]</span></p>
 
 <img data-src="08-Regression_files/figure-revealjs/unnamed-chunk-19-1.png" width="1152" class="r-stretch quarto-figure-center"></section>
 <section id="ss-explained-sums-of-squares-regression" class="slide level2">
@@ -759,7 +759,7 @@ Jason Geller, PH.D.(he/him)
 <blockquote>
 <p>The sum of the differences between the predicted value and the mean of the dependent variable</p>
 </blockquote>
-<p><span class="math display">\[SS_{Explained} = \sum (\hat{y_i} - \bar{Y})^2\]</span></p>
+<p><span class="math display">\[SS_{Explained} = \sum (\hat{y_i} - \bar{y})^2\]</span></p>
 
 <img data-src="08-Regression_files/figure-revealjs/unnamed-chunk-20-1.png" width="1152" class="r-stretch quarto-figure-center"></section>
 <section id="all-together" class="slide level2">
