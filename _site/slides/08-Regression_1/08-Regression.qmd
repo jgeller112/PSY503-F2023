@@ -13,7 +13,7 @@ format:
     slide-number: true
     incremental: false 
     chalkboard: true
-    fontsize: "25pt"
+    fontsize: "23pt"
 execute:
   freeze: auto
   echo: true
@@ -36,7 +36,7 @@ execute:
 #| echo: false
 #| 
 library(pacman)
-p_load("tidyverse", "easystats", "broom")
+p_load("tidyverse", "easystats", "broom", "supernova")
 
 ```
 
@@ -420,11 +420,13 @@ $$\hat{\beta_0} = \bar{y} - \hat{\beta_x}$$
 
 -   How would we interpret $b_0$?
 
-    ```{r}
-    #| echo: false
-    model1 %>%
-      tidy()
-    ```
+    -   $b_0$: `When x = 0, the b_0 = 56.39`
+
+        ```{r}
+        #| echo: false
+        model1 %>%
+          tidy()
+        ```
 
 ```{r}
 #| echo: false
@@ -446,11 +448,14 @@ anim.1
 
 -   How would we interpret $b_1$?
 
-    ```{r}
-    #| echo: false
-    model1 %>%
-      tidy()
-    ```
+    -   $b_1$:
+        `for one-unit increase in meaning, there is a -0.39 decrease in depression scores`
+
+        ```{r}
+        #| echo: false
+        model1 %>%
+          tidy()
+        ```
 
 ```{r, fig.align='center', echo=FALSE, out.width="100%"}
 #Animation
@@ -520,9 +525,8 @@ anim.1
     -   newdata = values to predict
 
 ```{r}
-
 #create a dataframe with value you want to predict
-meaning <- data.frame(PIL_total = c(60, 80, 90, 100))
+meaning <- data.frame(PIL_total = c(20,60, 80, 90, 100))
 
 predict(model1, meaning)
 
@@ -541,7 +545,7 @@ predict(model1, meaning)
 
 ## SS Unexplained (Sums of Squares Error)
 
-$$residual = y - \hat{y} = y - (x*\hat{\beta_x} + \hat{\beta_0})$$
+$$residual = y - \hat{Y} = Y - (x*\hat{\beta_x} + \hat{\beta_0})$$
 
 $$SS_{error} = \sum_{i=1}^n{(y_i - \hat{y_i})^2} = \sum_{i=1}^n{residuals^2}$$
 
@@ -578,7 +582,7 @@ some_data <- data.frame(Y= c(1,2,4,3,5,4,6,5),
 > Squared differences between the observed dependent variable and its
 > mean.
 
-$$SS_{total} = \sum{(Y_i - \bar{Y})^2}$$
+$$SS_{total} = \sum{(y_i - \bar{Y})^2}$$
 
 ```{r}
 #| echo: false
@@ -612,7 +616,7 @@ some_data <- data.frame(Y= c(1,2,4,3,5,4,6,5),
 > The sum of the differences between the predicted value and the mean of
 > the dependent variable
 
-$$SS_{Explained} = \sum (\hat{Y_i} - \bar{Y})^2$$
+$$SS_{Explained} = \sum (\hat{y_i} - \bar{Y})^2$$
 
 ```{r}
 #| echo: false
@@ -678,8 +682,11 @@ t_{N - p} = \frac{\hat{\beta} }{SE_{\hat{\beta}}}
 #| echo: false
 #| 
 model1 <- lm(CESD_total~PIL_total, data=master)
-tidy(model1) %>%
-  knitr::kable()
+tidy(model1)
+
+# calculate the critical value
+qt(1-.05/2, 266-2)
+
 
 ```
 
@@ -745,8 +752,6 @@ assump1=glance(model1) #model fit indices
 assump1 %>%
   knitr::kable()
 
-summary(model1)
-
 ```
 
 ## Fitted line with 95% CIs
@@ -757,7 +762,8 @@ summary(model1)
 # get cis for fitted values
 
 model1 %>%
-  augment(se_fit = TRUE, interval = "confidence")
+  augment(se_fit = TRUE, interval = "confidence") %>%
+  knitr::kable()
 
 ```
 :::
@@ -816,16 +822,19 @@ print(p1)
 
 ## F-Statistic, Explained Over Unexplained
 
--   F-statistics use measures of variance, which are sums of squares
-    divided by relevant degrees of freedom
+-   F-statistics use measures of variance, which are sums of squares divided by relevant degrees of freedom
 
 $$F = \frac{SS_{Explained}/df1 (p-1)}{SS_{Unexplained}/df2(n-p)} = \frac{MS_{Explained}}{MS_{Unexplained}}$$
 
--   If explained = unexplained, then F=1
+-   `MS explained` represents the reduction in error achieved by the model 
 
--   If explained \> then, F \>1
+-   `MS unexplained` tells us how much variation is left over from the complex model
 
--   If explained \< unexplained, F \< 1
+    -   If explained = unexplained, then F=1
+
+    -   If explained \> then, F \>1
+
+    -   If explained \< unexplained, F \< 1
 
 ## Calculating Mean Squares in R
 
@@ -835,9 +844,29 @@ SS_explained <- sum((assump$.fitted - mean(assump$CESD_total))^2)
 
 SS_unexplained <- sum((assump$CESD_total - assump$.fitted)^2)
 
+# calc mse explained
+MSE_e = SS_explained/1
+
+#clac mse unexplained
+MSE_un= SS_unexplained/265
+
+F=MSE_e/MSE_un
 #TSS?
 
 ```
+
+## F test
+
+```{r}
+
+supernova(model1)
+
+```
+
+-   F(1, 265) = 134.584, p \< .001.
+
+    -   Because it is significant the model is said to have explanatory
+        power
 
 ## Effect Size: $R^2$
 
@@ -1033,8 +1062,20 @@ structure.
 ## `easystats`: Performance
 
 ```{r}
-
+#| fig-align: center
 performance::check_model(model1, check=c("normality", "linearity", "homogeneity", "qq"))
+
+```
+
+## `easystats`: Performance
+
+-   Check model assumptions with tests
+
+```{r}
+
+performance::check_normality(model1) # check normal
+
+performance::check_heteroscedasticity(model1) # check non-constant variance
 
 ```
 
@@ -1065,19 +1106,6 @@ report(model1)
 
 ```
 
-# Your turn!
+# 
 
-## Dataset
-
--   Mental Health and Drug Use:
-
-    -   CESD = depression measure
-    -   PIL total = measure of meaning in life
-    -   AUDIT total = measure of alcohol use
-    -   DAST total = measure of drug usage
-
-```{r}
-
-master <- read.csv("https://raw.githubusercontent.com/jgeller112/psy503-psych_stats/master/static/slides/10-linear_modeling/data/regress.csv")
-
-```
+## 
