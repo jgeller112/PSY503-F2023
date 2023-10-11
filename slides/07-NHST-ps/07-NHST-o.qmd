@@ -490,7 +490,7 @@ knitr::include_graphics ('images/pfun.png')
 
 ```{r}
 
-master <- read_csv("https://raw.githubusercontent.com/jgeller112/psy503-psych_stats/master/static/slides/10-linear_modeling/data/regress.csv")
+master <- read.csv("https://raw.githubusercontent.com/jgeller112/psy503-psych_stats/master/static/slides/10-linear_modeling/data/regress.csv")
 
 ```
 
@@ -560,11 +560,22 @@ $$r = \frac{covariance}{s_xs_y} = \frac{\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{
 
 -   Let's go to R!
 
+
+```{r}
+
+
+master %>%
+select(CESD_total, PIL_total) %>%
+summarize(cov_xy=cov(CESD_total, PIL_total), sd_cesd=sd(CESD_total), sd_pil=sd(PIL_total), r=cov_xy/(sd_cesd*sd_pil))
+
+
+```
+
 ## Statistical Test: Pearson's *r*
 
--   $H_0$ *r* = 0
+-  $H_0$ *r* = 0
 
--   $H_1$ *r* $\not=$ 0
+-  $H_1$ *r* $\not=$ 0
 
     -   $\alpha$ = .05
 
@@ -575,8 +586,7 @@ library(correlation) # easystats
 cor_result <- 
   cor_test(master,"PIL_total", "CESD_total")
 
-cor_result %>%
-knitr::kable()
+cor_result
 
 ```
 
@@ -632,8 +642,13 @@ ggstatsplot::ggscatterstats(master,
 ```{r}
 
 #run corr with spearman
-cor_result_s <- cor_test(master, "CESD_total", "PIL_total", method = "spearman") %>%
-knitr::kable()
-```
 
+cor_result_s <- cor_test(master, "CESD_total", "PIL_total", method = "spearman")
+
+```
 ## Correlation Write-up
+
+We found a significant neg and large correlation between meaning in life and depression scores--as meaning in life increases depression scores decrease, r =, 95% CI[], p < .001.  
+
+
+

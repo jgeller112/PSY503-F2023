@@ -894,7 +894,7 @@ P(D|H_0)
 </ul></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>master <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://raw.githubusercontent.com/jgeller112/psy503-psych_stats/master/static/slides/10-linear_modeling/data/regress.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>master <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://raw.githubusercontent.com/jgeller112/psy503-psych_stats/master/static/slides/10-linear_modeling/data/regress.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="dataset-1" class="slide level2">
@@ -958,6 +958,15 @@ P(D|H_0)
 <ul>
 <li>Let’s go to R!</li>
 </ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>master <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="fu">select</span>(CESD_total, PIL_total) <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="fu">summarize</span>(<span class="at">cov_xy=</span><span class="fu">cov</span>(CESD_total, PIL_total), <span class="at">sd_cesd=</span><span class="fu">sd</span>(CESD_total), <span class="at">sd_pil=</span><span class="fu">sd</span>(PIL_total), <span class="at">r=</span>cov_xy<span class="sc">/</span>(sd_cesd<span class="sc">*</span>sd_pil))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     cov_xy  sd_cesd   sd_pil          r
+1 -76.38205 9.407968 13.98951 -0.5803539</code></pre>
+</div>
+</div>
 </section>
 <section id="statistical-test-pearsons-r" class="slide level2">
 <h2>Statistical Test: Pearson’s <em>r</em></h2>
@@ -970,89 +979,48 @@ P(D|H_0)
 </ul>
 <p><span class="math display">\[\textit{t}_r =  \frac{r\sqrt{N-2}}{\sqrt{1-r^2}}\]</span></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">library</span>(correlation) <span class="co"># easystats </span></span>
-<span id="cb4-2"><a href="#cb4-2"></a>cor_result <span class="ot">&lt;-</span> </span>
-<span id="cb4-3"><a href="#cb4-3"></a>  <span class="fu">cor_test</span>(master,<span class="st">"PIL_total"</span>, <span class="st">"CESD_total"</span>)</span>
-<span id="cb4-4"><a href="#cb4-4"></a></span>
-<span id="cb4-5"><a href="#cb4-5"></a>cor_result <span class="sc">%&gt;%</span></span>
-<span id="cb4-6"><a href="#cb4-6"></a>knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<table>
-<colgroup>
-<col style="width: 11%">
-<col style="width: 11%">
-<col style="width: 11%">
-<col style="width: 5%">
-<col style="width: 11%">
-<col style="width: 11%">
-<col style="width: 10%">
-<col style="width: 9%">
-<col style="width: 3%">
-<col style="width: 8%">
-<col style="width: 6%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Parameter1</th>
-<th style="text-align: left;">Parameter2</th>
-<th style="text-align: right;">r</th>
-<th style="text-align: right;">CI</th>
-<th style="text-align: right;">CI_low</th>
-<th style="text-align: right;">CI_high</th>
-<th style="text-align: right;">t</th>
-<th style="text-align: right;">df_error</th>
-<th style="text-align: right;">p</th>
-<th style="text-align: left;">Method</th>
-<th style="text-align: right;">n_Obs</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">PIL_total</td>
-<td style="text-align: left;">CESD_total</td>
-<td style="text-align: right;">-0.5803539</td>
-<td style="text-align: right;">0.95</td>
-<td style="text-align: right;">-0.6547816</td>
-<td style="text-align: right;">-0.4947789</td>
-<td style="text-align: right;">-11.60104</td>
-<td style="text-align: right;">265</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: left;">Pearson</td>
-<td style="text-align: right;">267</td>
-</tr>
-</tbody>
-</table>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">library</span>(correlation) <span class="co"># easystats </span></span>
+<span id="cb6-2"><a href="#cb6-2"></a>cor_result <span class="ot">&lt;-</span> </span>
+<span id="cb6-3"><a href="#cb6-3"></a>  <span class="fu">cor_test</span>(master,<span class="st">"PIL_total"</span>, <span class="st">"CESD_total"</span>)</span>
+<span id="cb6-4"><a href="#cb6-4"></a></span>
+<span id="cb6-5"><a href="#cb6-5"></a>cor_result</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Parameter1 | Parameter2 |     r |         95% CI | t(265) |         p
+---------------------------------------------------------------------
+PIL_total  | CESD_total | -0.58 | [-0.65, -0.49] | -11.60 | &lt; .001***
+
+Observations: 267</code></pre>
 </div>
 </div>
 </section>
 <section id="scatter-plot" class="slide level2">
 <h2>Scatter plot</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">plot</span>(cor_result,</span>
-<span id="cb5-2"><a href="#cb5-2"></a>  <span class="at">point =</span> <span class="fu">list</span>(</span>
-<span id="cb5-3"><a href="#cb5-3"></a>    <span class="at">aes =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">"CESD_total"</span>, <span class="at">size =</span> <span class="st">"PIL_total"</span>),</span>
-<span id="cb5-4"><a href="#cb5-4"></a>    <span class="at">alpha =</span> <span class="fl">0.66</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a>  ),</span>
-<span id="cb5-6"><a href="#cb5-6"></a>) <span class="sc">+</span></span>
-<span id="cb5-7"><a href="#cb5-7"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
-<span id="cb5-8"><a href="#cb5-8"></a>  see<span class="sc">::</span><span class="fu">scale_color_material_c</span>(<span class="at">palette =</span> <span class="st">"rainbow"</span>, <span class="at">guide =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
-<span id="cb5-9"><a href="#cb5-9"></a>  <span class="fu">scale_size_continuous</span>(<span class="at">guide =</span> <span class="st">"none"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-<img data-src="07-NHST-o_files/figure-revealjs/unnamed-chunk-10-1.png" width="1152" class="r-stretch quarto-figure-center"></section>
-<section id="scatter-plot-1" class="slide level2">
-<h2>Scatter plot</h2>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">library</span>(ggstatsplot)</span>
-<span id="cb6-2"><a href="#cb6-2"></a></span>
-<span id="cb6-3"><a href="#cb6-3"></a>ggstatsplot<span class="sc">::</span><span class="fu">ggscatterstats</span>(master, </span>
-<span id="cb6-4"><a href="#cb6-4"></a>                            <span class="at">x=</span> <span class="st">"PIL_total"</span>, </span>
-<span id="cb6-5"><a href="#cb6-5"></a>                            <span class="at">y=</span><span class="st">"CESD_total"</span>, </span>
-<span id="cb6-6"><a href="#cb6-6"></a>                          ) <span class="sc">+</span> </span>
-<span id="cb6-7"><a href="#cb6-7"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size=</span><span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">plot</span>(cor_result,</span>
+<span id="cb8-2"><a href="#cb8-2"></a>  <span class="at">point =</span> <span class="fu">list</span>(</span>
+<span id="cb8-3"><a href="#cb8-3"></a>    <span class="at">aes =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">"CESD_total"</span>, <span class="at">size =</span> <span class="st">"PIL_total"</span>),</span>
+<span id="cb8-4"><a href="#cb8-4"></a>    <span class="at">alpha =</span> <span class="fl">0.66</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a>  ),</span>
+<span id="cb8-6"><a href="#cb8-6"></a>) <span class="sc">+</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a>  see<span class="sc">::</span><span class="fu">scale_color_material_c</span>(<span class="at">palette =</span> <span class="st">"rainbow"</span>, <span class="at">guide =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a>  <span class="fu">scale_size_continuous</span>(<span class="at">guide =</span> <span class="st">"none"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="07-NHST-o_files/figure-revealjs/unnamed-chunk-11-1.png" width="1152" class="r-stretch quarto-figure-center"></section>
+<section id="scatter-plot-1" class="slide level2">
+<h2>Scatter plot</h2>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">library</span>(ggstatsplot)</span>
+<span id="cb9-2"><a href="#cb9-2"></a></span>
+<span id="cb9-3"><a href="#cb9-3"></a>ggstatsplot<span class="sc">::</span><span class="fu">ggscatterstats</span>(master, </span>
+<span id="cb9-4"><a href="#cb9-4"></a>                            <span class="at">x=</span> <span class="st">"PIL_total"</span>, </span>
+<span id="cb9-5"><a href="#cb9-5"></a>                            <span class="at">y=</span><span class="st">"CESD_total"</span>, </span>
+<span id="cb9-6"><a href="#cb9-6"></a>                          ) <span class="sc">+</span> </span>
+<span id="cb9-7"><a href="#cb9-7"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size=</span><span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="07-NHST-o_files/figure-revealjs/unnamed-chunk-12-1.png" width="1152" class="r-stretch quarto-figure-center"></section>
 <section id="non-parametric-correlation" class="slide level2">
 <h2>Non-parametric Correlation</h2>
 <ul>
@@ -1068,13 +1036,14 @@ r_s = 1 - \frac{6 \sum d_i^2}{n(n^2 - 1)}
 <section id="statistical-test-spearmans-r" class="slide level2">
 <h2>Statistical Test: Spearman’s <em>r</em></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co">#run corr with spearman</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a>cor_result_s <span class="ot">&lt;-</span> <span class="fu">cor_test</span>(master, <span class="st">"CESD_total"</span>, <span class="st">"PIL_total"</span>, <span class="at">method =</span> <span class="st">"spearman"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb7-3"><a href="#cb7-3"></a>knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="co">#run corr with spearman</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a></span>
+<span id="cb10-3"><a href="#cb10-3"></a>cor_result_s <span class="ot">&lt;-</span> <span class="fu">cor_test</span>(master, <span class="st">"CESD_total"</span>, <span class="st">"PIL_total"</span>, <span class="at">method =</span> <span class="st">"spearman"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="correlation-write-up" class="slide level2">
 <h2>Correlation Write-up</h2>
+<p>We found a significant neg and large correlation between meaning in life and depression scores–as meaning in life increases depression scores decrease, r =, 95% CI[], p &lt; .001.</p>
 <div class="footer footer-default">
 <p>PSY 503: Foundations of Statistics in Psychology</p>
 </div>

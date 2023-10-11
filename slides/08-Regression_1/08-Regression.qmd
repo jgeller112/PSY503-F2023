@@ -1,0 +1,1081 @@
+---
+title: "GLM I: Continuous/Numerical Predictors"
+subtitle: "Princeton University"
+author: "Jason Geller, PH.D.(he/him)"
+date: 'Updated:`r Sys.Date()`'
+footer: "PSY 503: Foundations of Statistics in Psychology"
+format: 
+  revealjs:
+    theme: blood
+    css: slide-style.css
+    multiplex: true
+    transition: fade
+    slide-number: true
+    incremental: false 
+    chalkboard: true
+    fontsize: "25pt"
+execute:
+  freeze: auto
+  echo: true
+  message: false
+  warning: false
+  fig-align: center
+  fig-width: 12
+  fig-height: 8
+  editor_options: 
+  chunk_output_type: inline
+  code-overflow: wrap
+  html:
+    code-fold: true
+    code-tools: true
+---
+
+## Packages
+
+```{r}
+#| echo: false
+#| 
+library(pacman)
+p_load("tidyverse", "easystats", "broom")
+
+```
+
+```{r}
+library(grateful)
+pkgs <- cite_packages(output = "table", out.dir = ".")
+
+pkgs
+```
+
+## Github
+
+-   Find QMD here:
+
+## Overview
+
+-   Intro to GLM/Regression analysis
+
+    -   Why regression?
+
+    -   How does it work?
+
+    -   Drawing lines
+
+    -   Error and more error
+
+-   Regression analysis in R
+
+    -   Fitting and interpreting a simple model
+
+    -   Sums of squares
+
+    -   Model fit and $R^2$
+
+    -   Testing assumptions
+
+## Purposes of Regression
+
+::: incremental
+-   **Prediction**
+
+    -   Useful if we want to forecast the future
+
+    -   Focus is on predicting future values of $Y$
+
+        -   Netflix trying to guess your next show
+
+        -   Predicting who will enroll in SNAP
+
+-   **Explanation**
+
+    -   Here we want to explain relationship of variables
+
+    -   Focus is on the **effect** of $X$ on $Y$
+
+        -   Estimating the effect of fluency on test performance
+:::
+
+## How does regression work?
+
+-   Assume $X$ and $Y$ are both theoretically continuous quantities
+
+    -   Make a scatter plot of the relationship between $X$ and $Y$
+
+<!-- -->
+
+-   Draw a line to approximate the relationship between $X$ and $Y$
+
+    -   And that could plausibly work for data not in the sample
+
+    -   Find the mathy parts of the line and then interpret the math
+
+# Lines, Math, and Regression
+
+## Components of Regression
+
+$$
+{y_i} = \beta_0 + \beta_1{X_i} +{\varepsilon_i}
+$$
+
+$$
+{y_i} = b_0 + b_1{X_i} + e
+$$
+
+::: incremental
+-   What we've been referring to thus far as ${Y}$
+
+    -   The **outcome variable**, **response variable**, or **dependent
+        variable**
+
+    -   The outcome is the thing we are trying to explain or predict
+
+-   What we've been referring to thus far as ${X}$
+
+-   The **explanatory variables**, **predictor variables**, or
+    **independent variables**
+
+    -   Explanatory variables are things we use to explain or predict
+        *variation* in $Y$
+:::
+
+## Drawing Lines with Math
+
+-   Remember $y = mx + b$ from high school algebra
+
+$$
+{y_i} = \beta_0 + \beta_1{X_i} +{\varepsilon_i}
+$$
+
+$$
+{y_i} = b_0 + b_1{X_i} + e
+$$
+
+-   $y_i$ is the expected response for the $i^{th}$ observation
+
+-   $b_0$ is the intercept, typically the expected value of $y$ when
+    $x = 0$
+
+-   $b_1$ is the slope coefficient, the average increase in $y$ for each
+    one unit increase in $x$
+
+-   $e_i$ is a random noise term
+
+## Slopes and Intercepts
+
+::: incremental
+-   The intercept $b_0$ captures the baseline value
+
+    -   Point at which the regression line crosses the Y-axis
+
+-   The slope $b_1$ captures the rate of **linear change** in $y$ as $x$
+    increases
+
+    -   Tells us how much we would expect y to change given a one-unit
+        change in x
+:::
+
+## The Best Fit Line and Least Squares
+
+-   Many lines could fit the data, but which is best?
+
+    -   The best fitting line is one that produces the "least squares",
+        or minimizes the squared difference between X and Y
+
+-   We use a method known as least squares to obtain estimates of $b_0$
+    and $b_1$
+
+## Gauss-Markov and Linear Regression
+
+::: incremental
+-   The Gauss-Markov theorem states that if a series of assumptions
+    hold, ordinary least squares is the the *best linear unbiased
+    estimator* (BLUE)
+
+    -   Best : smallest variance
+
+    -   Linear : linear observed output variables
+
+    -   Unbiased: unbiased
+
+    -   Estimator
+:::
+
+## Error
+
+```{r, echo=FALSE, fig.align='center', out.width="100%"}
+
+some_data <- data.frame(Y= c(1,2,4,3,5,4,6,5),
+                        X= c(3,5,4,2,6,7,8,9)) %>%
+  mutate(Y_pred = predict.lm(lm(Y~X))) %>%
+  mutate(Y_error = Y - Y_pred)
+
+ggplot(some_data, aes(x=X, y=Y))+
+  geom_point()+
+  geom_smooth(method='lm', se=FALSE)+
+  geom_point(aes(y=Y_pred), color='red') +
+  geom_segment(aes(xend = X, yend = Y-Y_error), alpha = .5)
+```
+
+## Visualize Errors as Squares
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| 
+
+some_data <- data.frame(Y= c(1,2,4,3,5,4,6,5),
+                        X= c(3,5,4,2,6,7,8,9)) %>%
+  mutate(Y_pred = predict.lm(lm(Y~X))) %>%
+  mutate(Y_error = Y - Y_pred)
+
+g=ggplot(some_data, aes(x=X, y=Y))+
+  geom_point()+
+  geom_smooth(method='lm', se=FALSE)+
+  geom_point(aes(y=Y_pred), color='red') +
+  geom_segment(aes(xend = X, yend = Y-Y_error), alpha = .5)+
+  geom_rect(aes(ymin=Y, 
+                ymax=Y_pred, 
+                xmin=X,
+                xmax=X+Y_error), 
+            alpha = .2)
+
+some_data <- data.frame(Y= c(1,2,4,3,5,4,6,5),
+                        X= c(3,5,4,2,6,7,8,9)) %>%
+  mutate(Y_pred = predict.lm(lm(Y~X))) %>%
+  mutate(Y_error = Y - Y_pred)
+
+ggplot(some_data, aes(x=X, y=Y))+
+  geom_point()+
+  geom_smooth(method='lm', se=FALSE)+
+  geom_point(aes(y=Y_pred), color='red') +
+  geom_segment(aes(xend = X, yend = Y-Y_error), alpha = .5)+
+  geom_rect(aes(ymin=Y, 
+                ymax=Y_pred, 
+                xmin=X,
+                xmax=X+Y_error), 
+            alpha = .2)+
+  coord_cartesian(xlim=c(0,10),
+                  ylim=c(0,10))
+```
+
+## Example
+
+::: columns
+::: {.column width="50%"}
+```{r}
+#| echo: false
+#| fig-align: center
+#| 
+library(ggplot2)
+library(gganimate)
+library(dplyr)
+
+d <- mtcars
+fit <- lm(mpg ~ hp, data = d)
+d$predicted <- predict(fit)   # Save the predicted values
+d$residuals <- residuals(fit) # Save the residual values
+
+coefs<-coef(lm(mpg ~ hp, data = mtcars))
+
+x<-d$hp
+move_line<-c(seq(-6,6,.5),seq(6,-6,-.5))
+total_error<-length(length(move_line))
+cnt<-0
+for(i in move_line){
+  cnt<-cnt+1
+  predicted_y <- coefs[2]*x + coefs[1]+i
+  error_y <- (predicted_y-d$mpg)^2
+  total_error[cnt]<-sqrt(sum(error_y)/32)
+}
+
+move_line_sims<-rep(move_line,each=32)
+total_error_sims<-rep(total_error,each=32)
+sims<-rep(1:50,each=32)
+
+d<-d %>% slice(rep(row_number(), 50))
+
+d<-cbind(d,sims,move_line_sims,total_error_sims)
+
+anim<-ggplot(d, aes(x = hp, y = mpg)) +
+  geom_abline(intercept = 30.09886+move_line_sims, slope = -0.06822828, aes(linetype='d'), color= 'red')+
+  lims(x = c(0,400), y = c(-10,40))+
+  geom_segment(aes(xend = hp, yend = predicted+move_line_sims, color="red"), alpha = .5) + 
+  geom_point() +
+  geom_rect(aes(ymin=predicted+move_line_sims, ymax=mpg, xmin=hp, xmax=hp+abs(predicted)+abs(residuals)+abs(move_line_sims), fill = total_error_sims), alpha = .2)+
+  scale_fill_gradient(low="lightgrey", high="red")+
+  geom_smooth(method = "lm", se = FALSE, color = "blue") + 
+  theme_classic()+
+  theme(legend.position="none")+
+  xlab("X")+ylab("Y")+
+  transition_manual(frames=sims)+
+  enter_fade() + 
+  exit_fade()+
+  ease_aes('sine-in-out')
+
+animate(anim,fps=5)
+
+```
+:::
+
+::: {.column width="50%"}
+-   Shows two concepts:
+
+    1.  Regression line is "best fit line"
+
+    2.  The "best fit line" is the one that minimizes the sum of the
+        squared deviations between each point and the line
+:::
+:::
+
+## Worse Fit Lines
+
+```{r}
+#| echo: false
+#| fig-align: center
+
+some_data <- data.frame(Y= c(1,2,4,3,5,4,6,5),
+                        X= c(3,5,4,2,6,7,8,9)) %>%
+  mutate(Y_pred = predict.lm(lm(Y~X)))
+
+some_data <- rbind(some_data,
+                   some_data,
+                   some_data,
+                   some_data) %>%
+  mutate(step = rep(1:4,each = 8),
+         Y_pred = Y_pred + rep(c(.5,1,1.5,2), each = 8)) %>%
+  mutate(Y_error = Y - Y_pred)
+
+ggplot(some_data, aes(x=X, y=Y))+
+  geom_smooth(method='lm', se=FALSE)+
+  geom_point(aes(y=Y_pred), color='red') +
+  geom_line(aes(x=X,y=Y_pred), color='red')+
+  geom_point()+
+  geom_segment(aes(xend = X, yend = Y-Y_error), alpha = .5)+
+  geom_rect(aes(ymin=Y, 
+                ymax=Y_pred, 
+                xmin=X,
+                xmax=X+Y_error), 
+            alpha = .2)+
+  coord_cartesian(xlim=c(0,10),
+                  ylim=c(0,10)) +
+  facet_wrap(~step)
+```
+
+## Simple Regression Example
+
+-   Depression scores and meaningfulness (in one's life)
+
+```{r}
+master <- read.csv("https://raw.githubusercontent.com/jgeller112/psy503-psych_stats/master/static/slides/10-linear_modeling/data/regress.csv")
+```
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| 
+
+# Animation
+# Change the point sizes manually
+anim.1<- ggplot(master, aes(PIL_total,CESD_total))+
+   geom_point()+
+  theme(legend.position="top")
+
+anim.1
+```
+
+## Simple Regression Example
+
+```{r, fig.align='center', out.width="100%", echo=FALSE}
+
+#Animation
+# Change the point sizes manually
+
+#manually
+anim.1<- ggplot(master, aes(PIL_total,CESD_total))+
+   geom_point()+
+  geom_smooth(method=lm, se=FALSE, fullrange=TRUE)
+
+
+anim.1
+```
+
+## `lm()` in R
+
+```{r}
+
+model1 <-lm(CESD_total~PIL_total, data=master)
+
+```
+
+## The Relation Between Correlation and Regression
+
+$$\hat{r} = \frac{covariance_{xy}}{s_x * s_y}$$
+
+$$\hat{\beta_x} =  \frac{\hat{r} * s_x * s_y}{s_x} = r * \frac{s_y}{s_x}$$
+
+$$\hat{\beta_0} = \bar{y} - \hat{\beta_x}$$
+
+## `lm()` in R
+
+-   How would we interpret $b_0$?
+
+    ```{r}
+    #| echo: false
+    model1 %>%
+      tidy()
+    ```
+
+```{r}
+#| echo: false
+#| fig-align: center
+
+anim.1<- ggplot(master, aes(PIL_total,CESD_total))+
+   geom_point()+
+  geom_smooth(method=lm, se=FALSE, fullrange=TRUE) + 
+  annotate("text",x=60,y=190,label=(paste0("slope==",coef(lm(master$CESD_total~master$PIL_total))[2])),parse=TRUE)+
+  geom_vline(xintercept=0, linetype="dotted") + 
+  geom_point(x=0, y=56, colour="red", size=5, shape=4) + 
+    theme_minimal(base_size=30)
+
+
+anim.1
+```
+
+## `lm()` in R
+
+-   How would we interpret $b_1$?
+
+    ```{r}
+    #| echo: false
+    model1 %>%
+      tidy()
+    ```
+
+```{r, fig.align='center', echo=FALSE, out.width="100%"}
+#Animation
+# Change the point sizes manually
+anim.1<- ggplot(master, aes(PIL_total,CESD_total))+
+   geom_point()+
+  geom_smooth(method=lm, se=FALSE, fullrange=TRUE) + 
+  theme(legend.position="top") +
+  annotate("text",x=60,y=190,label=(paste0("slope==",coef(lm(master$CESD_total~master$PIL_total))[2])),parse=TRUE)+
+  geom_vline(xintercept=0, linetype="dotted") + 
+  geom_point(x=0, y=56, colour="red", size=5, shape=4) + 
+  theme_minimal(base_size=16)
+
+anim.1
+```
+
+## `lm()` in R
+
+$$\hat{CESD_{total}} = 56 + (-.39)*PIL_{total}$$
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| 
+# Change the point sizes manually
+anim.1<- ggplot(master, aes(PIL_total,CESD_total))+
+   geom_point()+
+  geom_smooth(method=lm, se=FALSE, fullrange=TRUE) + 
+  theme(legend.position="top") +
+  annotate("text",x=60,y=190,label=(paste0("slope==",coef(lm(master$CESD_total~master$PIL_total))[2])),parse=TRUE)+
+  geom_vline(xintercept=0, linetype="dotted") + 
+  geom_point(x=0, y=56, colour="red", size=5, shape=4)+ 
+    theme_minimal(base_size = 16)
+
+
+anim.1
+```
+
+## `lm()` in R
+
+$$ \hat{CESD_{total}} = 56 + (-.39)*60$$
+
+```{r}
+#| echo: false
+#| fig-align: center
+
+
+anim.1<- ggplot(master, aes(PIL_total,CESD_total))+
+   geom_point()+
+  geom_smooth(method=lm, se=FALSE, fullrange=TRUE) + 
+  theme(legend.position="top") +
+  annotate("text",x=60,y=190,label=(paste0("slope==",coef(lm(master$CESD_total~master$PIL_total))[2])),parse=TRUE)+
+  geom_vline(xintercept=0, linetype="dotted") + 
+  geom_point(x=0, y=56, colour="red", size=8, shape=4)+ 
+  geom_point(x=60, y=33, colour="red", size=8, shape=4) + 
+  theme_minimal(base_size = 16)
+
+anim.1
+```
+
+## Predictions
+
+-   `predict` (object, newdata)
+
+    -   object = model
+
+    -   newdata = values to predict
+
+```{r}
+
+#create a dataframe with value you want to predict
+meaning <- data.frame(PIL_total = c(60, 80, 90, 100))
+
+predict(model1, meaning)
+
+```
+
+## Residuals, Fitted Values, and Model Fit
+
+<br> <br> <br>
+
+-   If we want to make inferences about the regression parameter
+    estimates, then we also need an estimate of their variability
+
+<!-- -->
+
+-   We also need to know how well are data fits the linear model
+
+## SS Unexplained (Sums of Squares Error)
+
+$$residual = y - \hat{y} = y - (x*\hat{\beta_x} + \hat{\beta_0})$$
+
+$$SS_{error} = \sum_{i=1}^n{(y_i - \hat{y_i})^2} = \sum_{i=1}^n{residuals^2}$$
+
+```{r}
+#| echo: false
+#| fig-align: center
+
+
+some_data <- data.frame(Y= c(1,2,4,3,5,4,6,5),
+                        X= c(3,5,4,2,6,7,8,9)) %>%
+  mutate(Y_pred = predict.lm(lm(Y~X))) %>%
+  mutate(Y_error = Y - Y_pred)
+
+(res_plot <- ggplot(some_data, aes(x=X, y=Y))+
+  geom_point()+
+  geom_smooth(method='lm', se=FALSE)+
+  geom_segment(aes(xend = X, yend = Y-Y_error), alpha = .5)+
+  geom_rect(aes(ymin=Y, 
+                ymax=Y_pred, 
+                xmin=X,
+                xmax=X+Y_error), 
+            alpha = .5,
+            fill = "red")+
+  coord_cartesian(xlim=c(0,10),
+                  ylim=c(0,10))+
+  theme_minimal(base_size=16)+
+  ggtitle("SS Unexplained (residual)")
+  )
+
+```
+
+## SS Total (Sums of Squares Total)
+
+> Squared differences between the observed dependent variable and its
+> mean.
+
+$$SS_{total} = \sum{(Y_i - \bar{Y})^2}$$
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| 
+
+some_data <- data.frame(Y= c(1,2,4,3,5,4,6,5),
+                        X= c(3,5,4,2,6,7,8,9)) %>%
+  mutate(Y_pred = mean(Y)) %>%
+  mutate(Y_error = Y - Y_pred)
+
+(total_plot <- ggplot(some_data, aes(x=X, y=Y))+
+  geom_point()+
+  geom_line(aes(y=Y_pred), color='black')+
+  geom_segment(aes(xend = X, yend = Y-Y_error), alpha = .5)+
+  geom_rect(aes(ymin=Y, 
+                ymax=Y_pred, 
+                xmin=X,
+                xmax=X+Y_error), 
+            alpha = .2)+
+  coord_cartesian(xlim=c(0,10),
+                  ylim=c(0,10))+
+  theme_minimal(base_size=16)+
+  ggtitle("SS Total")
+  )
+
+```
+
+## SS Explained (Sums of Squares Regression)
+
+> The sum of the differences between the predicted value and the mean of
+> the dependent variable
+
+$$SS_{Explained} = \sum (\hat{Y_i} - \bar{Y})^2$$
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| 
+
+some_data <- data.frame(Y= c(1,2,4,3,5,4,6,5),
+                        X= c(3,5,4,2,6,7,8,9)) %>%
+  mutate(Y_pred = predict.lm(lm(Y~X)),
+         Y_mean = mean(Y)) %>%
+  mutate(Y_error = Y - Y_pred,
+         Y_total = Y-Y_mean)
+
+(exp_plot <- ggplot(some_data, aes(x=X, y=Y))+
+  geom_point()+
+  geom_line(aes(y=Y_mean), color='black')+
+  geom_smooth(method='lm', se=FALSE)+
+  geom_segment(aes(xend = X, y = Y_mean, yend = Y_pred), color='black')+
+  geom_rect(aes(ymin=Y_mean, 
+                ymax=Y_pred, 
+               xmin=X,
+                xmax=X+(Y_pred - Y_mean)), 
+            alpha = .5,
+            fill = "blue")+
+  coord_cartesian(xlim=c(0,10),
+                  ylim=c(0,10))+
+  theme_minimal(base_size=16)+
+  ggtitle("SS Explained (by Regression of X)"))
+```
+
+## All Together
+
+```{r}
+#| fig-align: center
+#| echo: false
+library(patchwork)
+(total_plot +plot_spacer())/(exp_plot+res_plot)+
+  plot_annotation(title = 'SStotal = SSexplained + SSunexplained')
+```
+
+## `broom` Regression
+
+-   tidy(): coefficient table
+-   glance(): model summary
+-   augment(): adds information about each observation
+
+```{r}
+library(broom)
+
+```
+
+## Regression: NHST
+
+$$H_0\colon \ \beta_1=0$$ $$H_1\colon \ \beta_1\ne0$$
+
+$$\begin{array}{c}
+t_{N - p} = \frac{\hat{\beta} - \beta_{expected}}{SE_{\hat{\beta}}}\\
+t_{N - p} = \frac{\hat{\beta} - 0}{SE_{\hat{\beta}}}\\
+t_{N - p} = \frac{\hat{\beta} }{SE_{\hat{\beta}}}
+\end{array}$$
+
+```{r}
+#| echo: false
+#| 
+model1 <- lm(CESD_total~PIL_total, data=master)
+tidy(model1) %>%
+  knitr::kable()
+
+```
+
+## Calculate Standard Error
+
+$$MS_{error} = \frac{SS_{error}}{df} = \frac{\sum_{i=1}^n{(y_i - \hat{y_i})^2} }{N - p}$$
+
+$$
+SE_{model} = \sqrt{MS_{error}}
+$$
+
+$$SE_{\hat{\beta}_x} = \frac{SE_{model}}{\sqrt{{\sum{(x_i - \bar{x})^2}}}}$$
+
+```{r}
+#get mse with performance
+mse=performance_mse(model1)
+#sqrt
+SE<-sqrt(mse)
+#
+x_de<- sum((master$PIL_total - mean(master$PIL_total))^2)
+
+x_sqrt <- sqrt(x_de)
+
+SE <- SE/x_sqrt
+
+SE
+
+```
+
+## 95% CIs
+
+$$b_1 \pm t^\ast (SE_{b_1})$$
+
+```{r}
+#| echo: false
+#| 
+tidy(model1, conf.int = TRUE) %>%
+  knitr::kable()
+```
+
+```{r}
+#| fig-align: center
+#| 
+result <- model_parameters(model1) 
+plot(result) + theme_minimal(base_size=16)
+```
+
+## Getting Residuals and Predicted Values
+
+```{r}
+assump=augment(model1)# residuals and fitted values
+
+head(assump) %>%
+  knitr::kable()
+```
+
+## Model Fit
+
+```{r}
+
+assump1=glance(model1) #model fit indices
+
+assump1 %>%
+  knitr::kable()
+
+summary(model1)
+
+```
+
+## Fitted line with 95% CIs
+
+::: columns
+::: {.column width="50%"}
+```{r}
+# get cis for fitted values
+
+model1 %>%
+  augment(se_fit = TRUE, interval = "confidence")
+
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: false
+#| fig-align: center
+
+
+p1 <- augment(model1, se_fit = TRUE, interval = "confidence") %>%
+  ggplot(aes(x = PIL_total, y = CESD_total)) +
+  geom_point(colour = "black") +
+  geom_ribbon(aes(ymin=.lower, ymax=.upper), alpha=.5) + # This plots your custom confidence interval
+  labs(title = "95% Confidence Interval") +
+  theme_bw() +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5))
+
+print(p1)
+
+```
+:::
+:::
+
+## Regression Model
+
+-   How useful are each of the individual predictors for my model?
+
+    -   Use the coefficients and t-tests of the slopes
+
+-   Is my overall model *(i.e., the regression equation)* useful at
+    predicting the outcome variable?
+
+    -   Use the model summary, F-test, and $R^2$
+
+## Overall Model Significance
+
+-   Our overall model uses an *F*-test
+
+-   However, we can think about the hypotheses for the overall test
+    being:
+
+    -   $H_0$: We cannot predict the dependent variable (over and above
+        a model with only an intercept)
+
+    -   $H_1$: We can predict the dependent variable ( over and above a
+        model with only an intercept)
+
+-   Generally, this form does not include two tailed tests because the
+    math is squared, so it is impossible to get negative values in the
+    statistical test
+
+## F-distribution
+
+![](images/fdis.1.png){fig-align="center"}
+
+## F-Statistic, Explained Over Unexplained
+
+-   F-statistics use measures of variance, which are sums of squares
+    divided by relevant degrees of freedom
+
+$$F = \frac{SS_{Explained}/df1 (p-1)}{SS_{Unexplained}/df2(n-p)} = \frac{MS_{Explained}}{MS_{Unexplained}}$$
+
+-   If explained = unexplained, then F=1
+
+-   If explained \> then, F \>1
+
+-   If explained \< unexplained, F \< 1
+
+## Calculating Mean Squares in R
+
+```{r}
+#use augment to get fitted and resid information
+SS_explained <- sum((assump$.fitted - mean(assump$CESD_total))^2)
+
+SS_unexplained <- sum((assump$CESD_total - assump$.fitted)^2)
+
+#TSS?
+
+```
+
+## Effect Size: $R^2$
+
+-   Called PRE in book (not common)
+
+-   Coefficient of determination
+
+$$R^2 = 1 - \frac{SS_{\text{error}}}{SS_{\text{tot}}}$$
+$$R^2 = 1 - \frac{SS_{unexplained}}{SS_{Total}} = \frac{SS_{explained}}{SS_{Total}}$$
+
+-   Standardized effect size
+
+-   Amount of variance explained
+
+    -   $R^2$ of .4 means 40% of variance in the outcome variable ($Y$)
+        can be explained by the predictor ($X$)
+
+Range: 0-1
+
+## $R^2$
+
+```{r}
+
+glance(model1) %>%
+  knitr::kable()
+
+```
+
+-   $R^2$ of .34 34% of variance in depressions scores is explained by
+    meaning in life
+
+## $R^2_{adj}$
+
+$$R^2_{adj}$$
+
+$$R^2_{adj} = 1 - \frac{SS_{unexplained}}{SS_{Total}} = \frac{SS_{explained}(n-K)}{SS_{Total}(n-1)}$$
+where:
+
+n = Sample size
+
+K = \# of predictors
+
+# Model conditions
+
+## Assumptions
+
+1.  Linearity: There is a linear relationship between the response and
+    predictor variable
+
+2.  Constant Variance: The variability of the errors is equal for all
+    values of the predictor variable
+
+3.  Normality: The errors follow a normal distribution.
+
+4.  Independence: The errors are independent from each other.
+
+## Assumptions: Linearity
+
+-   Can use a scatter plot between two variables but common to use
+    residuals versus fits plot
+
+```{r}
+#| echo: false
+#| fig-align: center
+  ggplot(assump, aes(x = .fitted, y = .resid)) +
+  geom_point(size = 3, alpha = 0.7) +
+  geom_hline(yintercept = 0, color="red")+
+  theme_minimal(base_size=16)
+
+```
+
+## `r emo::ji("x")` Violation: Nonlinear pattern
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| 
+set.seed(1234)
+n <- 250
+x.fan <- seq(0,3.99,4/n)
+y.fan <- c(rnorm(n/8,3,1),rnorm(n/8,3.5,2),rnorm(n/8,4,2.5),rnorm(n/8,4.5,3),rnorm(n/4,5,4),rnorm((n/4)+2,6,5))
+
+x.curve <- c(runif(n-2, 0, 4), 2, 2.1)
+y.curve <- -2*x.curve^3 + rnorm(n, sd=9)
+
+df <- tibble(x.fan, y.fan, x.curve, y.curve)
+
+lm.fan <- lm(y.fan ~ x.fan, data = df)
+fan.aug <- augment(lm.fan)
+
+lm.curve <- lm(y.curve ~ x.curve, data = df)
+curve.aug <- augment(lm.curve)
+
+ggplot(data = curve.aug, aes(x = .fitted, y = .resid)) +
+  geom_point(alpha = 0.9) +
+  geom_hline(yintercept = 0, color = "red") +
+  labs(x = "Fitted value", 
+       y = "Residual") +
+  theme(axis.title=element_text(size=16))
+```
+
+## Assumptions: Normality of Errors
+
+```{r}
+#| fig-align: center
+#| echo: false
+#| 
+set.seed(1234)
+norm_data <- tibble(x = rnorm(1000,0,1))
+
+p1 <- ggplot(norm_data, aes(x = x)) +
+  geom_histogram() +
+  labs(title = "Histogram") +
+  theme(axis.title=element_text(size=14))
+
+p2 <- ggplot(norm_data, aes(sample = x)) +
+  stat_qq() + 
+  stat_qq_line() +
+  labs(title = "Normal Quantile Plot", 
+       x = "Theoretical quantile", 
+       y = "Observed quantile") +
+  theme(axis.title=element_text(size=14))
+
+p1 + p2
+```
+
+`r emo::ji("white_check_mark")`:Points fall along a straight diagonal
+line on the normal quantile plot.
+
+## Assumptions: Equal Variances
+
+-   Constant error
+    -   No correlation between predictor and residuals
+-   What are we looking for?
+    -   Random variation above and below 0
+    -   No patterns
+    -   Width of the band of points is constant
+
+## Assumptions: Equal Variances
+
+-   Good
+
+```{r}
+#| echo: false
+#| fig-align: center
+
+n=50
+fit<-runif(n)
+data.frame(fit=fit,
+                   e=rnorm(n) , type="good") %>%
+  ggplot(aes(x=fit, y=e)) +
+  geom_point() + 
+  geom_hline(yintercept = 0, color="red") + 
+  theme_minimal(base_size=18)
+
+```
+
+`r emo::ji("white_check_mark")` There is no distinguishable pattern or
+structure. The residuals are randomly scattered.
+
+## Assumptions: Equal Variances
+
+-   Bad
+
+```{r}
+#| echo: false
+#| fig-align: center
+
+n=50
+fit<-runif(n)
+data.frame(fit=fit,
+                   e=fit*rnorm(n) , type="good") %>%
+  ggplot(aes(x=fit, y=e)) +
+  geom_point() + 
+  geom_hline(yintercept = 0, color="red") + 
+  theme_minimal(base_size=18)
+
+```
+
+`r emo::ji("white_check_mark")` There is a distinguishable pattern or
+structure.
+
+## Assumption: Independence
+
+-   Let's pretend this one is met `r emo::ji("happy")`
+
+<!-- -->
+
+-   We can often check the independence assumption based on the context
+    of the data and how the observations were collected.
+
+## `easystats`: Performance
+
+```{r}
+
+performance::check_model(model1, check=c("normality", "linearity", "homogeneity", "qq"))
+
+```
+
+## Assumption violations: What can be done?
+
+-   Non-linearity?
+
+    -   Non-linear regression
+
+        -   Polynomials (e.g., $x^2$)
+
+-   Non-normality
+
+    -   Transformations (e.g., log)
+
+-   Heteroskedasticity
+
+    -   Use robust SEs
+
+## Reporting
+
+-   `report` function in `easystats` is greatest thing ever!
+
+```{r}
+#| warning: false
+#| 
+report(model1)
+
+```
+
+# Your turn!
+
+## Dataset
+
+-   Mental Health and Drug Use:
+
+    -   CESD = depression measure
+    -   PIL total = measure of meaning in life
+    -   AUDIT total = measure of alcohol use
+    -   DAST total = measure of drug usage
+
+```{r}
+
+master <- read.csv("https://raw.githubusercontent.com/jgeller112/psy503-psych_stats/master/static/slides/10-linear_modeling/data/regress.csv")
+
+```

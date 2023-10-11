@@ -41,7 +41,7 @@ on Sunday (unless otherwise stated)</li>
 | 5 | 10/2/23 | Basics of Modeling, Normal Distribution, and Z-scores | [{{< fa book-open-reader >}}](/schedule/04b-week.qmd) | [{{< fa laptop-code >}}](/slides/05-Models_Normal_Z/05-Models-Monsters-Dis.html) |  |
 | 5 | 10/4/23 | Statistical Inference: Sampling Distributions, Uncertainty,and  CIs | [{{< fa book-open-reader >}}](/schedule/05-week.qmd) | [{{< fa laptop-code >}}](/slides/06-Samp_Uncert/06-Samp_Uncert.html) |  |
 | 6 | 10/9/23 | Statistical Inference: NHST and p values | [{{< fa book-open-reader >}}](/schedule/06a-week.qmd) | [{{< fa laptop-code >}}](/slides/07-NHST-ps/07-NHST-o.html) |  |
-| 6 | 10/11/23 | GLM 1: Numerical and Categorical Explanatory Models  |[{{< fa book-open-reader >}}](/schedule/06-week.qmd)  |{{< fa laptop-code >}}  | {{< fa pen-ruler >}} |
+| 6 | 10/11/23 | GLM 1: Numerical and Categorical Explanatory Models  |[{{< fa book-open-reader >}}](/schedule/06-week.qmd)  |[{{< fa laptop-code >}}]((/slides/08-Regression_1/08-Regression.html))  | {{< fa pen-ruler >}} |
 | 7 | 10-16/10-18 | Midterm Break |  |  |  |
 | 8 | 10/23/23 | GLM 2: Categorical Explanatory Models | [{{< fa book-open-reader >}}](/schedule/08-week.qmd) | {{< fa laptop-code >}} |  |
 | 8 | 10/25/23 | Lab 5 |  |  | {{< fa pen-ruler >}} |

@@ -1,0 +1,1787 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="08-Regression_files/libs/clipboard/clipboard.min.js"></script>
+<script src="08-Regression_files/libs/quarto-html/tabby.min.js"></script>
+<script src="08-Regression_files/libs/quarto-html/popper.min.js"></script>
+<script src="08-Regression_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="08-Regression_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="08-Regression_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="08-Regression_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="08-Regression_files/libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.3.361">
+
+  <meta name="author" content="Jason Geller, PH.D.(he/him)">
+  <meta name="dcterms.date" content="2023-10-10">
+  <title>GLM I: Continuous/Numerical Predictors</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="08-Regression_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="08-Regression_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #f8f8f2;  }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #f8f8f2; } /* Normal */
+    code span.al { color: #f07178; background-color: #2a0f15; font-weight: bold; } /* Alert */
+    code span.an { color: #d4d0ab; } /* Annotation */
+    code span.at { color: #00e0e0; } /* Attribute */
+    code span.bn { color: #d4d0ab; } /* BaseN */
+    code span.bu { color: #abe338; } /* BuiltIn */
+    code span.cf { color: #ffa07a; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #abe338; } /* Char */
+    code span.cn { color: #ffd700; } /* Constant */
+    code span.co { color: #f8f8f2; font-style: italic; } /* Comment */
+    code span.cv { color: #ffd700; } /* CommentVar */
+    code span.do { color: #f8f8f2; } /* Documentation */
+    code span.dt { color: #ffa07a; } /* DataType */
+    code span.dv { color: #d4d0ab; } /* DecVal */
+    code span.er { color: #f07178; text-decoration: underline; } /* Error */
+    code span.ex { color: #00e0e0; font-weight: bold; } /* Extension */
+    code span.fl { color: #d4d0ab; } /* Float */
+    code span.fu { color: #ffa07a; } /* Function */
+    code span.im { color: #abe338; } /* Import */
+    code span.in { color: #d4d0ab; } /* Information */
+    code span.kw { color: #ffa07a; font-weight: bold; } /* Keyword */
+    code span.op { color: #ffa07a; } /* Operator */
+    code span.ot { color: #00e0e0; } /* Other */
+    code span.pp { color: #dcc6e0; } /* Preprocessor */
+    code span.re { color: #00e0e0; background-color: #f8f8f2; } /* RegionMarker */
+    code span.sc { color: #abe338; } /* SpecialChar */
+    code span.ss { color: #abe338; } /* SpecialString */
+    code span.st { color: #abe338; } /* String */
+    code span.va { color: #00e0e0; } /* Variable */
+    code span.vs { color: #abe338; } /* VerbatimString */
+    code span.wa { color: #dcc6e0; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="08-Regression_files/libs/revealjs/dist/theme/quarto.css">
+  <link rel="stylesheet" href="slide-style.css">
+  <link href="08-Regression_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="08-Regression_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="08-Regression_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="08-Regression_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="08-Regression_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="08-Regression_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+
+  .callout {
+    margin-top: 1em;
+    margin-bottom: 1em;  
+    border-radius: .25rem;
+  }
+
+  .callout.callout-style-simple { 
+    padding: 0em 0.5em;
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+    display: flex;
+  }
+
+  .callout.callout-style-default {
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+  }
+
+  .callout .callout-body-container {
+    flex-grow: 1;
+  }
+
+  .callout.callout-style-simple .callout-body {
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-style-default .callout-body {
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-titled.callout-style-simple .callout-body {
+    margin-top: 0.2em;
+  }
+
+  .callout:not(.callout-titled) .callout-body {
+      display: flex;
+  }
+
+  .callout:not(.no-icon).callout-titled.callout-style-simple .callout-content {
+    padding-left: 1.6em;
+  }
+
+  .callout.callout-titled .callout-header {
+    padding-top: 0.2em;
+    margin-bottom: -0.2em;
+  }
+
+  .callout.callout-titled .callout-title  p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+    
+  .callout.callout-titled.callout-style-simple .callout-content  p {
+    margin-top: 0;
+  }
+
+  .callout.callout-titled.callout-style-default .callout-content  p {
+    margin-top: 0.7em;
+  }
+
+  .callout.callout-style-simple div.callout-title {
+    border-bottom: none;
+    font-size: .9rem;
+    font-weight: 600;
+    opacity: 75%;
+  }
+
+  .callout.callout-style-default  div.callout-title {
+    border-bottom: none;
+    font-weight: 600;
+    opacity: 85%;
+    font-size: 0.9rem;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-default div.callout-content {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-simple .callout-icon::before {
+    height: 1rem;
+    width: 1rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 1rem 1rem;
+  }
+
+  .callout.callout-style-default .callout-icon::before {
+    height: 0.9rem;
+    width: 0.9rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 0.9rem 0.9rem;
+  }
+
+  .callout-title {
+    display: flex
+  }
+    
+  .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  .callout.no-icon::before {
+    display: none !important;
+  }
+
+  .callout.callout-titled .callout-body > .callout-content > :last-child {
+    margin-bottom: 0.5rem;
+  }
+
+  .callout.callout-titled .callout-icon::before {
+    margin-top: .5rem;
+    padding-right: .5rem;
+  }
+
+  .callout:not(.callout-titled) .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  /* Callout Types */
+
+  div.callout-note {
+    border-left-color: #4582ec !important;
+  }
+
+  div.callout-note .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEU0lEQVRYCcVXTWhcVRQ+586kSUMMxkyaElstCto2SIhitS5Ek8xUKV2poatCcVHtUlFQk8mbaaziwpWgglJwVaquitBOfhQXFlqlzSJpFSpIYyXNjBNiTCck7x2/8/LeNDOZxDuEkgOXe++553zfefee+/OYLOXFk3+1LLrRdiO81yNqZ6K9cG0P3MeFaMIQjXssE8Z1JzLO9ls20MBZX7oG8w9GxB0goaPrW5aNMp1yOZIa7Wv6o2ykpLtmAPs/vrG14Z+6d4jpbSKuhdcSyq9wGMPXjonwmESXrriLzFGOdDBLB8Y6MNYBu0dRokSygMA/mrun8MGFN3behm6VVAwg4WR3i6FvYK1T7MHo9BK7ydH+1uurECoouk5MPRyVSBrBHMYwVobG2aOXM07sWrn5qgB60rc6mcwIDJtQrnrEr44kmy+UO9r0u9O5/YbkS9juQckLed3DyW2XV/qWBBB3ptvI8EUY3I9p/67OW+g967TNr3Sotn3IuVlfMLVnsBwH4fsnebJvyGm5GeIUA3jljERmrv49SizPYuq+z7c2H/jlGC+Ghhupn/hcapqmcudB9jwJ/3jvnvu6vu5lVzF1fXyZuZZ7U8nRmVzytvT+H3kilYvH09mLWrQdwFSsFEsxFVs5fK7A0g8gMZjbif4ACpKbjv7gNGaD8bUrlk8x+KRflttr22JEMRUbTUwwDQScyzPgedQHZT0xnx7ujw2jfVfExwYHwOsDTjLdJ2ebmeQIlJ7neo41s/DrsL3kl+W2lWvAga0tR3zueGr6GL78M3ifH0rGXrBC2aAR8uYcIA5gwV8zIE8onoh8u0Fca/ciF7j1uOzEnqcIm59sEXoGc0+z6+H45V1CvAvHcD7THztu669cnp+L0okAeIc6zjbM/24LgGM1gZk7jnRu1aQWoU9sfUOuhrmtaPIO3YY1KLLWZaEO5TKUbMY5zx8W9UJ6elpLwKXbsaZ4EFl7B4bMtDv0iRipKoDQT2sNQI9b1utXFdYisi+wzZ/ri/1m7QfDgEuvgUUEIJPq3DhX/5DWNqIXDOweC2wvIR90Oq3lDpdMIgD2r0dXvGdsEW5H6x6HLRJYU7C69VefO1x8Gde1ZFSJLfWS1jbCnhtOPxmpfv2LXOA2Xk2tvnwKKPFuZ/oRmwBwqRQDcKNeVQkYcOjtWVBuM/JuYw5b6isojIkYxyYAFn5K7ZBF10fea52y8QltAg6jnMqNHFBmGkQ1j+U43HMi2xMar1Nv0zGsf1s8nUsmUtPOOrbFIR8bHFDMB5zL13Gmr/kGlCkUzedTzzmzsaJXhYawnA3UmARpiYj5ooJZiUoxFRtK3X6pgNPv+IZVPcnwbOl6f+aBaO1CNvPW9n9LmCp01nuSaTRF2YxHqZ8DYQT6WsXT+RD6eUztwYLZ8rM+rcPxamv1VQzFUkzFXvkiVrySGQgJNvXHJAxiU3/NwiC03rSf05VBaPtu/Z7/B8Yn/w7eguloAAAAAElFTkSuQmCC');
+  }
+
+  div.callout-note.callout-style-default .callout-title {
+    background-color: #dae6fb
+  }
+
+  div.callout-important {
+    border-left-color: #d9534f !important;
+  }
+
+  div.callout-important .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEKklEQVRYCcVXTWhcVRS+575MJym48A+hSRFr00ySRQhURRfd2HYjk2SSTokuBCkU2o0LoSKKraKIBTcuFCoidGFD08nkBzdREbpQ1EDNIv8qSGMFUboImMSZd4/f9zJv8ibJMC8xJQfO3HPPPef7zrvvvnvviIkpC9nsw0UttFunbUhpFzFtarSd6WJkStVMw5xyVqYTvkwfzuf/5FgtkVoB0729j1rjXwThS7Vio+Mo6DNnvLfahoZ+i/o32lULuJ3NNiz7q6+pyAUkJaFF6JwaM2lUJlV0MlnQn5aTRbEu0SEqHUa0A4AdiGuB1kFXRfVyg5d87+Dg4DL6m2TLAub60ilj7A1Ec4odSAc8X95sHh7+ZRPCFo6Fnp7HfU/fBng/hi10CjCnWnJjsxvDNxWw0NfV6Rv5GgP3I3jGWXumdTD/3cbEOP2ZbOZp69yniG3FQ9z1jD7bnBu9Fc2tKGC2q+uAJOQHBDRiZX1x36o7fWBs7J9ownbtO+n0/qWkvW7UPIfc37WgT6ZGR++EOJyeQDSb9UB+DZ1G6DdLDzyS+b/kBCYGsYgJbSQHuThGKRcw5xdeQf8YdNHsc6ePXrlSYMBuSIAFTGAtQo+VuALo4BX83N190NWZWbynBjhOHsmNfFWLeL6v+ynsA58zDvvAC8j5PkbOcXCMg2PZFk3q8MjI7WAG/Dp9AwP7jdGBOOQkAvlFUB+irtm16I1Zw9YBcpGTGXYmk3kQIC/Cds55l+iMI3jqhjAuaoe+am2Jw5GT3Nbz3CkE12NavmzN5+erJW7046n/CH1RO/RVa8lBLozXk9uqykkGAyRXLWlLv5jyp4RFsG5vGVzpDLnIjTWgnRy2Rr+tDKvRc7Y8AyZq10jj8DqXdnIRNtFZb+t/ZRtXcDiVnzpqx8mPcDWxgARUqx0W1QB9MeUZiNrV4qP+Ehc+BpNgATsTX8ozYKL2NtFYAHc84fG7ndxUPr+AR/iQSns7uSUufAymwDOb2+NjK27lEFocm/EE2WpyIy/Hi66MWuMKJn8RvxIcj87IM5Vh9663ziW36kR0HNenXuxmfaD8JC7tfKbrhFr7LiZCrMjrzTeGx+PmkosrkNzW94ObzwocJ7A1HokLolY+AvkTiD/q1H0cN48c5EL8Crkttsa/AXQVDmutfyku0E7jShx49XqV3MFK8IryDhYVbj7Sj2P2eBxwcXoe8T8idsKKPRcnZw1b+slFTubwUwhktrfnAt7J++jwQtLZcm3sr9LQrjRzz6cfMv9aLvgmnAGvpoaGLxM4mAEaLV7iAzQ3oU0IvD5x9ix3yF2RAAuYAOO2f7PEFWCXZ4C9Pb2UsgDeVnFSpbFK7/IWu7TPTvBqzbGdCHOJQSxiEjt6IyZmxQyEJHv6xyQsYk//moVFsN2zP6fRImjfq7/n/wFDguUQFNEwugAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-important.callout-style-default .callout-title {
+    background-color: #f7dddc
+  }
+
+  div.callout-warning {
+    border-left-color: #f0ad4e !important;
+  }
+
+  div.callout-warning .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAETklEQVRYCeVWW2gcVRg+58yaTUnizqbipZeX4uWhBEniBaoUX1Ioze52t7sRq6APio9V9MEaoWlVsFasRq0gltaAPuxms8lu0gcviE/FFOstVbSIxgcv6SU7EZqmdc7v9+9mJtNks51NTUH84ed889/PP+cmxP+d5FIbMJmNbpREu4WUkiTtCicKny0l1pIKmBzovF2S+hIJHX8iEu3hZJ5lNZGqyRrGSIQpq15AzF28jgpeY6yk6GVdrfFqdrD6Iw+QlB8g0YS2g7dyQmXM/IDhBhT0UCiRf59lfqmmDvzRt6kByV/m4JjtzuaujMUM2c5Z2d6JdKrRb3K2q6mA+oYVz8JnDdKPmmNthzkAk/lN63sYPgevrguc72aZX/L9C6x09GYyxBgCX4NlvyGUHOKELlm5rXeR1kchuChJt4SSwyddZRXgvwMGvYo4QSlk3/zkHD8UHxwVJA6zjZZqP8v8kK8OWLnIZtLyCAJagYC4rTGW/9Pqj92N/c+LUaAj27movwbi19tk/whRCIE7Q9vyI6yvRpftAKVTdUjOW40X3h5OXsKCdmFcx0xlLJoSuQngnrJe7Kcjm4OMq9FlC7CMmScQANuNvjfP3PjGXDBaUQmbp296S5L4DrpbrHN1T87ZVEZVCzg1FF0Ft+dKrlLukI+/c9ENo+TvlTDbYFvuKPtQ9+l052rXrgKoWkDAFnvh0wTOmYn8R5f4k/jN/fZiCM1tQx9jQQ4ANhqG4hiL0qIFTGViG9DKB7GYzgubnpofgYRwO+DFjh0Zin2m4b/97EDkXkc+f6xYAPX0KK2I/7fUQuwzuwo/L3AkcjugPNixC8cHf0FyPjWlItmLxWw4Ou9YsQCr5fijMGoD/zpdRy95HRysyXA74MWOnscpO4j2y3HAVisw85hX5+AFBRSHt4ShfLFkIMXTqyKFc46xdzQM6XbAi702a7sy04J0+feReMFKp5q9esYLCqAZYw/k14E/xcLLsFElaornTuJB0svMuJINy8xkIYuL+xPAlWRceH6+HX7THJ0djLUom46zREu7tTkxwmf/FdOZ/sh6Q8qvEAiHpm4PJ4a/doJe0gH1t+aHRgCzOvBvJedEK5OFE5jpm4AGP2a8Dxe3gGJ/pAutug9Gp6he92CsSsWBaEcxGx0FHytmIpuqGkOpldqNYQK8cSoXvd+xLxXADw0kf6UkJNFtdo5MOgaLjiQOQHcn+A6h5NuL2s0qsC2LOM75PcF3yr5STuBSAcGG+meA14K/CI21HcS4LBT6tv0QAh8Dr5l93AhZzG5ZJ4VxAqdZUEl9z7WJ4aN+svMvwHHL21UKTd1mqvChH7/Za5xzXBBKrUcB0TQ+Ulgkfbi/H/YT5EptrGzsEK7tR1B7ln9BBwckYfMiuSqklSznIuoIIOM42MQO+QnduCoFCI0bpkzjCjddHPN/F+2Yu+sd9bKNpVwHhbS3LluK/0zgfwD0xYI5dXuzlQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-warning.callout-style-default .callout-title {
+    background-color: #fcefdc
+  }
+
+  div.callout-tip {
+    border-left-color: #02b875 !important;
+  }
+
+  div.callout-tip .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAADr0lEQVRYCe1XTWgTQRj9ZjZV8a9SPIkKgj8I1bMHsUWrqYLVg4Ue6v9BwZOxSYsIerFao7UiUryIqJcqgtpimhbBXoSCVxUFe9CTiogUrUp2Pt+3aUI2u5vdNh4dmMzOzHvvezuz8xNFM0mjnbXaNu1MvFWRXkXEyE6aYOYJpdW4IXuA4r0fo8qqSMDBU0v1HJUgVieAXxzCsdE/YJTdFcVIZQNMyhruOMJKXYFoLfIfIvVIMWdsrd+Rpd86ZmyzzjJmLStqRn0v8lzkb4rVIXvnpScOJuAn2ACC65FkPzEdEy4TPWRLJ2h7z4cArXzzaOdKlbOvKKX25Wl00jSnrwVxAg3o4dRxhO13RBSdNvH0xSARv3adTXbBdTf64IWO2vH0LT+cv4GR1DJt+DUItaQogeBX/chhbTBxEiZ6gftlDNXTrvT7co4ub5A6gp9HIcHvzTa46OS5fBeP87Qm0fQkr4FsYgVQ7Qg+ZayaDg9jhg1GkWj8RG6lkeSacrrHgDaxdoBiZPg+NXV/KifMuB6//JmYH4CntVEHy/keA6x4h4CU5oFy8GzrBS18cLJMXcljAKB6INjWsRcuZBWVaS3GDrqB7rdapVIeA+isQ57Eev9eCqzqOa81CY05VLd6SamW2wA2H3SiTbnbSxmzfp7WtKZkqy4mdyAlGx7ennghYf8voqp9cLSgKdqNfa6RdRsAAkPwRuJZNbpByn+RrJi1RXTwdi8RQF6ymDwGMAtZ6TVE+4uoKh+MYkcLsT0Hk8eAienbiGdjJHZTpmNjlbFJNKDVAp2fJlYju6IreQxQ08UJDNYdoLSl6AadO+fFuCQqVMB1NJwPm69T04Wv5WhfcWyfXQB+wXRs1pt+nCknRa0LVzSA/2B+a9+zQJadb7IyyV24YAxKp2Jqs3emZTuNnKxsah+uabKbMk7CbTgJx/zIgQYErIeTKRQ9yD9wxVof5YolPHqaWo7TD6tJlh7jQnK5z2n3+fGdggIOx2kaa2YI9QWarc5Ce1ipNWMKeSG4DysFF52KBmTNMmn5HqCFkwy34rDg05gDwgH3bBi+sgFhN/e8QvRn8kbamCOhgrZ9GJhFDgfcMHzFb6BAtjKpFhzTjwv1KCVuxHvCbsSiEz4CANnj84cwHdFXAbAOJ4LTSAawGWFn5tDhLMYz6nWeU2wJfIhmIJBefcd/A5FWQWGgrWzyORZ3Q6HuV+Jf0Bj+BTX69fm1zWgK7By1YTXchFDORywnfQ7GpzOo6S+qECrsx2ifVQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-tip.callout-style-default .callout-title {
+    background-color: #ccf1e3
+  }
+
+  div.callout-caution {
+    border-left-color: #fd7e14 !important;
+  }
+
+  div.callout-caution .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAACV0lEQVRYCdVWzWoUQRCuqp2ICBLJXgITZL1EfQDBW/bkzUMUD7klD+ATSHBEfAIfQO+iXsWDxJsHL96EHAwhgzlkg8nBg25XWb0zIb0zs9muYYWkoKeru+vn664fBqElyZNuyh167NXJ8Ut8McjbmEraKHkd7uAnAFku+VWdb3reSmRV8PKSLfZ0Gjn3a6Xlcq9YGb6tADjn+lUfTXtVmaZ1KwBIvFI11rRXlWlatwIAAv2asaa9mlB9wwygiDX26qaw1yYPzFXg2N1GgG0FMF8Oj+VIx7E/03lHx8UhvYyNZLN7BwSPgekXXLribw7w5/c8EF+DBK5idvDVYtEEwMeYefjjLAdEyQ3M9nfOkgnPTEkYU+sxMq0BxNR6jExrAI31H1rzvLEfRIdgcv1XEdj6QTQAS2wtstEALLG1yEZ3QhH6oDX7ExBSFEkFINXH98NTrme5IOaaA7kIfiu2L8A3qhH9zRbukdCqdsA98TdElyeMe5BI8Rs2xHRIsoTSSVFfCFCWGPn9XHb4cdobRIWABNf0add9jakDjQJpJ1bTXOJXnnRXHRf+dNL1ZV1MBRCXhMbaHqGI1JkKIL7+i8uffuP6wVQAzO7+qVEbF6NbS0LJureYcWXUUhH66nLR5rYmva+2tjRFtojkM2aD76HEGAD3tPtKM309FJg5j/K682ywcWJ3PASCcycH/22u+Bh7Aa0ehM2Fu4z0SAE81HF9RkB21c5bEn4Dzw+/qNOyXr3DCTQDMBOdhi4nAgiFDGCinIa2owCEChUwD8qzd03PG+qdW/4fDzjUMcE1ZpIAAAAASUVORK5CYII=');
+  }
+
+  div.callout-caution.callout-style-default .callout-title {
+    background-color: #ffe5d0
+  }
+
+  </style>
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-dark">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">GLM I: Continuous/Numerical Predictors</h1>
+  <p class="subtitle">Princeton University</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Jason Geller, PH.D.(he/him) 
+</div>
+</div>
+</div>
+
+  <p class="date">2023-10-10</p>
+</section>
+<section id="packages" class="slide level2">
+<h2>Packages</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(grateful)</span>
+<span id="cb1-2"><a href="#cb1-2"></a>pkgs <span class="ot">&lt;-</span> <span class="fu">cite_packages</span>(<span class="at">output =</span> <span class="st">"table"</span>, <span class="at">out.dir =</span> <span class="st">"."</span>)</span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a>pkgs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          Package    Version                                       Citation
+1            base      4.2.2                                          @base
+2     correlation      0.8.4                                              @
+3       easystats    0.6.0.8                                     @easystats
+4             emo 0.0.0.9000                                           @emo
+5    equatiomatic      0.3.1                                  @equatiomatic
+6           flair      0.0.2                                         @flair
+7          GGally      2.1.2                                        @GGally
+8       gganimate      1.0.8                                     @gganimate
+9         ggpmisc      0.5.0                                       @ggpmisc
+10    ggstatsplot      0.9.4                                   @ggstatsplot
+11       huxtable      5.5.0                                      @huxtable
+12     kableExtra      1.3.4                                    @kableExtra
+13          knitr       1.41             @knitr2014; @knitr2015; @knitr2022
+14         pacman      0.5.1                                        @pacman
+15         papaja 0.1.1.9001                                        @papaja
+16     parameters   0.21.1.2                                    @parameters
+17      patchwork      1.1.2                                     @patchwork
+18    performance   0.10.4.1                                   @performance
+19          ppcor        1.1                                         @ppcor
+20            pwr      1.3.0                                           @pwr
+21         report    0.5.7.9                                        @report
+22      rmarkdown       2.14 @rmarkdown2018; @rmarkdown2020; @rmarkdown2022
+23            see    0.8.0.2                                           @see
+24          skimr      2.1.4                                         @skimr
+25      tidyverse      1.3.2                                     @tidyverse
+26       xaringan       0.26                                      @xaringan
+27  xaringanExtra      0.7.0                                 @xaringanExtra
+28 xaringanthemer      0.4.1                                @xaringanthemer</code></pre>
+</div>
+</div>
+</section>
+<section id="overview" class="slide level2">
+<h2>Overview</h2>
+<ul>
+<li><p>Intro to GLM/Regression analysis</p>
+<ul>
+<li><p>Why regression?</p></li>
+<li><p>How does it work?</p></li>
+<li><p>Drawing lines</p></li>
+<li><p>Error and more error</p></li>
+</ul></li>
+<li><p>Regression analysis in R</p>
+<ul>
+<li><p>Fitting and interpreting a simple model</p></li>
+<li><p>Sums of squares</p></li>
+<li><p>Model fit and <span class="math inline">\(R^2\)</span></p></li>
+<li><p>Testing assumptions</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="purposes-of-regression" class="slide level2">
+<h2>Purposes of Regression</h2>
+<div>
+<ul>
+<li class="fragment"><p><strong>Prediction</strong></p>
+<ul>
+<li class="fragment"><p>Useful if we want to forecast the future</p></li>
+<li class="fragment"><p>Focus is on predicting future values of <span class="math inline">\(Y\)</span></p>
+<ul>
+<li class="fragment"><p>Netflix trying to guess your next show</p></li>
+<li class="fragment"><p>Predicting who will enroll in SNAP</p></li>
+</ul></li>
+</ul></li>
+<li class="fragment"><p><strong>Explanation</strong></p>
+<ul>
+<li class="fragment"><p>Here we want to explain relationship of variables</p></li>
+<li class="fragment"><p>Focus is on the <strong>effect</strong> of <span class="math inline">\(X\)</span> on <span class="math inline">\(Y\)</span></p>
+<ul>
+<li class="fragment">Estimating the effect of fluency on test performance</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="how-does-regression-work" class="slide level2">
+<h2>How does regression work?</h2>
+<ul>
+<li><p>Assume <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are both theoretically continuous quantities</p>
+<ul>
+<li>Make a scatter plot of the relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span></li>
+</ul></li>
+</ul>
+<!-- -->
+<ul>
+<li><p>Draw a line to approximate the relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span></p>
+<ul>
+<li><p>And that could plausibly work for data not in the sample</p></li>
+<li><p>Find the mathy parts of the line and then interpret the math</p></li>
+</ul></li>
+</ul>
+</section>
+<section>
+<section id="lines-math-and-regression" class="title-slide slide level1 center">
+<h1>Lines, Math, and Regression</h1>
+
+</section>
+<section id="components-of-regression" class="slide level2">
+<h2>Components of Regression</h2>
+<p><span class="math display">\[
+{y_i} = \beta_0 + \beta_1{X_i} +{\varepsilon_i}
+\]</span></p>
+<p><span class="math display">\[
+{y_i} = b_0 + b_1{X_i} + e
+\]</span></p>
+<div>
+<ul>
+<li class="fragment"><p>What we’ve been referring to thus far as <span class="math inline">\({Y}\)</span></p>
+<ul>
+<li class="fragment"><p>The <strong>outcome variable</strong>, <strong>response variable</strong>, or <strong>dependent variable</strong></p></li>
+<li class="fragment"><p>The outcome is the thing we are trying to explain or predict</p></li>
+</ul></li>
+<li class="fragment"><p>What we’ve been referring to thus far as <span class="math inline">\({X}\)</span></p></li>
+<li class="fragment"><p>The <strong>explanatory variables</strong>, <strong>predictor variables</strong>, or <strong>independent variables</strong></p>
+<ul>
+<li class="fragment">Explanatory variables are things we use to explain or predict <em>variation</em> in <span class="math inline">\(Y\)</span></li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="drawing-lines-with-math" class="slide level2">
+<h2>Drawing Lines with Math</h2>
+<ul>
+<li>Remember <span class="math inline">\(y = mx + b\)</span> from high school algebra</li>
+</ul>
+<p><span class="math display">\[
+{y_i} = \beta_0 + \beta_1{X_i} +{\varepsilon_i}
+\]</span></p>
+<p><span class="math display">\[
+{y_i} = b_0 + b_1{X_i} + e
+\]</span></p>
+<ul>
+<li><p><span class="math inline">\(y_i\)</span> is the expected response for the <span class="math inline">\(i^{th}\)</span> observation</p></li>
+<li><p><span class="math inline">\(b_0\)</span> is the intercept, typically the expected value of <span class="math inline">\(y\)</span> when <span class="math inline">\(x = 0\)</span></p></li>
+<li><p><span class="math inline">\(b_1\)</span> is the slope coefficient, the average increase in <span class="math inline">\(y\)</span> for each one unit increase in <span class="math inline">\(x\)</span></p></li>
+<li><p><span class="math inline">\(e_i\)</span> is a random noise term</p></li>
+</ul>
+</section>
+<section id="slopes-and-intercepts" class="slide level2">
+<h2>Slopes and Intercepts</h2>
+<div>
+<ul>
+<li class="fragment"><p>The intercept <span class="math inline">\(b_0\)</span> captures the baseline value</p>
+<ul>
+<li class="fragment">Point at which the regression line crosses the Y-axis</li>
+</ul></li>
+<li class="fragment"><p>The slope <span class="math inline">\(b_1\)</span> captures the rate of <strong>linear change</strong> in <span class="math inline">\(y\)</span> as <span class="math inline">\(x\)</span> increases</p>
+<ul>
+<li class="fragment">Tells us how much we would expect y to change given a one-unit change in x</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="the-best-fit-line-and-least-squares" class="slide level2">
+<h2>The Best Fit Line and Least Squares</h2>
+<ul>
+<li><p>Many lines could fit the data, but which is best?</p>
+<ul>
+<li>The best fitting line is one that produces the “least squares”, or minimizes the squared difference between X and Y</li>
+</ul></li>
+<li><p>We use a method known as least squares to obtain estimates of <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span></p></li>
+</ul>
+</section>
+<section id="gauss-markov-and-linear-regression" class="slide level2">
+<h2>Gauss-Markov and Linear Regression</h2>
+<div>
+<ul>
+<li class="fragment"><p>The Gauss-Markov theorem states that if a series of assumptions hold, ordinary least squares is the the <em>best linear unbiased estimator</em> (BLUE)</p>
+<ul>
+<li class="fragment"><p>Best : smallest variance</p></li>
+<li class="fragment"><p>Linear : linear observed output variables</p></li>
+<li class="fragment"><p>Unbiased: unbiased</p></li>
+<li class="fragment"><p>Estimator</p></li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="error" class="slide level2">
+<h2>Error</h2>
+
+<img data-src="08-Regression_files/figure-revealjs/unnamed-chunk-3-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="visualize-errors-as-squares" class="slide level2">
+<h2>Visualize Errors as Squares</h2>
+
+<img data-src="08-Regression_files/figure-revealjs/unnamed-chunk-4-1.png" width="1152" class="r-stretch quarto-figure-center"></section>
+<section id="example" class="slide level2">
+<h2>Example</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="08-Regression_files/figure-revealjs/unnamed-chunk-5-1.gif"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<ul>
+<li><p>Shows two concepts:</p>
+<ol type="1">
+<li><p>Regression line is “best fit line”</p></li>
+<li><p>The “best fit line” is the one that minimizes the sum of the squared deviations between each point and the line</p></li>
+</ol></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="worse-fit-lines" class="slide level2">
+<h2>Worse Fit Lines</h2>
+
+<img data-src="08-Regression_files/figure-revealjs/unnamed-chunk-6-1.png" width="1152" class="r-stretch quarto-figure-center"></section>
+<section id="simple-regression-example" class="slide level2">
+<h2>Simple Regression Example</h2>
+<ul>
+<li>Depression scores and meaningfulness (in one’s life)</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>master <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://raw.githubusercontent.com/jgeller112/psy503-psych_stats/master/static/slides/10-linear_modeling/data/regress.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+<img data-src="08-Regression_files/figure-revealjs/unnamed-chunk-8-1.png" width="1152" class="r-stretch quarto-figure-center"></section>
+<section id="simple-regression-example-1" class="slide level2">
+<h2>Simple Regression Example</h2>
+
+<img data-src="08-Regression_files/figure-revealjs/unnamed-chunk-9-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="lm-in-r" class="slide level2">
+<h2><code>lm()</code> in R</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>model1 <span class="ot">&lt;-</span><span class="fu">lm</span>(CESD_total<span class="sc">~</span>PIL_total, <span class="at">data=</span>master)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="the-relation-between-correlation-and-regression" class="slide level2">
+<h2>The Relation Between Correlation and Regression</h2>
+<p><span class="math display">\[\hat{r} = \frac{covariance_{xy}}{s_x * s_y}\]</span></p>
+<p><span class="math display">\[\hat{\beta_x} =  \frac{\hat{r} * s_x * s_y}{s_x} = r * \frac{s_y}{s_x}\]</span></p>
+<p><span class="math display">\[\hat{\beta_0} = \bar{y} - \hat{\beta_x}\]</span></p>
+</section>
+<section id="lm-in-r-1" class="slide level2">
+<h2><code>lm()</code> in R</h2>
+<ul>
+<li><p>How would we interpret <span class="math inline">\(b_0\)</span>?</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 5
+  term        estimate std.error statistic  p.value
+  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)   56.4      3.75        15.0 2.43e-37
+2 PIL_total     -0.390    0.0336     -11.6 1.95e-25</code></pre>
+</div>
+</div></li>
+</ul>
+
+<img data-src="08-Regression_files/figure-revealjs/unnamed-chunk-12-1.png" width="1152" class="r-stretch quarto-figure-center"></section>
+<section id="lm-in-r-2" class="slide level2">
+<h2><code>lm()</code> in R</h2>
+<ul>
+<li><p>How would we interpret <span class="math inline">\(b_1\)</span>?</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 5
+  term        estimate std.error statistic  p.value
+  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)   56.4      3.75        15.0 2.43e-37
+2 PIL_total     -0.390    0.0336     -11.6 1.95e-25</code></pre>
+</div>
+</div></li>
+</ul>
+
+<img data-src="08-Regression_files/figure-revealjs/unnamed-chunk-14-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<section id="lm-in-r-3" class="slide level2">
+<h2><code>lm()</code> in R</h2>
+<p><span class="math display">\[\hat{CESD_{total}} = 56 + (-.39)*PIL_{total}\]</span></p>
+
+<img data-src="08-Regression_files/figure-revealjs/unnamed-chunk-15-1.png" width="1152" class="r-stretch quarto-figure-center"></section>
+<section id="lm-in-r-4" class="slide level2">
+<h2><code>lm()</code> in R</h2>
+<p><span class="math display">\[ \hat{CESD_{total}} = 56 + (-.39)*60\]</span></p>
+
+<img data-src="08-Regression_files/figure-revealjs/unnamed-chunk-16-1.png" width="1152" class="r-stretch quarto-figure-center"></section>
+<section id="predictions" class="slide level2">
+<h2>Predictions</h2>
+<ul>
+<li><p><code>predict</code> (object, newdata)</p>
+<ul>
+<li><p>object = model</p></li>
+<li><p>newdata = values to predict</p></li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co">#create a dataframe with value you want to predict</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a>meaning <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">PIL_total =</span> <span class="fu">c</span>(<span class="dv">60</span>, <span class="dv">80</span>, <span class="dv">90</span>, <span class="dv">100</span>))</span>
+<span id="cb7-3"><a href="#cb7-3"></a></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="fu">predict</span>(model1, meaning)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       1        2        3        4 
+32.97821 25.17243 21.26954 17.36665 </code></pre>
+</div>
+</div>
+</section>
+<section id="residuals-fitted-values-and-model-fit" class="slide level2">
+<h2>Residuals, Fitted Values, and Model Fit</h2>
+<p><br> <br> <br></p>
+<ul>
+<li>If we want to make inferences about the regression parameter estimates, then we also need an estimate of their variability</li>
+</ul>
+<!-- -->
+<ul>
+<li>We also need to know how well are data fits the linear model</li>
+</ul>
+</section>
+<section id="ss-unexplained-sums-of-squares-error" class="slide level2">
+<h2>SS Unexplained (Sums of Squares Error)</h2>
+<p><span class="math display">\[residual = y - \hat{y} = y - (x*\hat{\beta_x} + \hat{\beta_0})\]</span></p>
+<p><span class="math display">\[SS_{error} = \sum_{i=1}^n{(y_i - \hat{y_i})^2} = \sum_{i=1}^n{residuals^2}\]</span></p>
+
+<img data-src="08-Regression_files/figure-revealjs/unnamed-chunk-18-1.png" width="1152" class="r-stretch quarto-figure-center"></section>
+<section id="ss-total-sums-of-squares-total" class="slide level2">
+<h2>SS Total (Sums of Squares Total)</h2>
+<blockquote>
+<p>Squared differences between the observed dependent variable and its mean.</p>
+</blockquote>
+<p><span class="math display">\[SS_{total} = \sum{(Y_i - \bar{Y})^2}\]</span></p>
+
+<img data-src="08-Regression_files/figure-revealjs/unnamed-chunk-19-1.png" width="1152" class="r-stretch quarto-figure-center"></section>
+<section id="ss-explained-sums-of-squares-regression" class="slide level2">
+<h2>SS Explained (Sums of Squares Regression)</h2>
+<blockquote>
+<p>The sum of the differences between the predicted value and the mean of the dependent variable</p>
+</blockquote>
+<p><span class="math display">\[SS_{Explained} = \sum (\hat{Y_i} - \bar{Y})^2\]</span></p>
+
+<img data-src="08-Regression_files/figure-revealjs/unnamed-chunk-20-1.png" width="1152" class="r-stretch quarto-figure-center"></section>
+<section id="all-together" class="slide level2">
+<h2>All Together</h2>
+
+<img data-src="08-Regression_files/figure-revealjs/unnamed-chunk-21-1.png" width="1152" class="r-stretch quarto-figure-center"></section>
+<section id="broom-regression" class="slide level2">
+<h2><code>broom</code> Regression</h2>
+<ul>
+<li>tidy(): coefficient table</li>
+<li>glance(): model summary</li>
+<li>augment(): adds information about each observation</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">library</span>(broom)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="regression-nhst" class="slide level2">
+<h2>Regression: NHST</h2>
+<p><span class="math display">\[H_0\colon \ \beta_1=0\]</span> <span class="math display">\[H_1\colon \ \beta_1\ne0\]</span></p>
+<p><span class="math display">\[\begin{array}{c}
+t_{N - p} = \frac{\hat{\beta} - \beta_{expected}}{SE_{\hat{\beta}}}\\
+t_{N - p} = \frac{\hat{\beta} - 0}{SE_{\hat{\beta}}}\\
+t_{N - p} = \frac{\hat{\beta} }{SE_{\hat{\beta}}}
+\end{array}\]</span></p>
+<div class="cell">
+<div class="cell-output-display">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">56.3955372</td>
+<td style="text-align: right;">3.7525824</td>
+<td style="text-align: right;">15.02846</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PIL_total</td>
+<td style="text-align: right;">-0.3902889</td>
+<td style="text-align: right;">0.0336426</td>
+<td style="text-align: right;">-11.60104</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="calculate-standard-error" class="slide level2">
+<h2>Calculate Standard Error</h2>
+<p><span class="math display">\[MS_{error} = \frac{SS_{error}}{df} = \frac{\sum_{i=1}^n{(y_i - \hat{y_i})^2} }{N - p}\]</span></p>
+<p><span class="math display">\[
+SE_{model} = \sqrt{MS_{error}}
+\]</span></p>
+<p><span class="math display">\[SE_{\hat{\beta}_x} = \frac{SE_{model}}{\sqrt{{\sum{(x_i - \bar{x})^2}}}}\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="co">#get mse with performance</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a>mse<span class="ot">=</span><span class="fu">performance_mse</span>(model1)</span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="co">#sqrt</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a>SE<span class="ot">&lt;-</span><span class="fu">sqrt</span>(mse)</span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="co">#</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a>x_de<span class="ot">&lt;-</span> <span class="fu">sum</span>((master<span class="sc">$</span>PIL_total <span class="sc">-</span> <span class="fu">mean</span>(master<span class="sc">$</span>PIL_total))<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb10-7"><a href="#cb10-7"></a></span>
+<span id="cb10-8"><a href="#cb10-8"></a>x_sqrt <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(x_de)</span>
+<span id="cb10-9"><a href="#cb10-9"></a></span>
+<span id="cb10-10"><a href="#cb10-10"></a>SE <span class="ot">&lt;-</span> SE<span class="sc">/</span>x_sqrt</span>
+<span id="cb10-11"><a href="#cb10-11"></a></span>
+<span id="cb10-12"><a href="#cb10-12"></a>SE</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.03351633</code></pre>
+</div>
+</div>
+</section>
+<section id="cis" class="slide level2">
+<h2>95% CIs</h2>
+<p><span class="math display">\[b_1 \pm t^\ast (SE_{b_1})\]</span></p>
+<div class="cell">
+<div class="cell-output-display">
+<table style="width:100%;">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 15%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 10%">
+<col style="width: 15%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+<th style="text-align: right;">conf.low</th>
+<th style="text-align: right;">conf.high</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">56.3955372</td>
+<td style="text-align: right;">3.7525824</td>
+<td style="text-align: right;">15.02846</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">49.0068665</td>
+<td style="text-align: right;">63.7842079</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PIL_total</td>
+<td style="text-align: right;">-0.3902889</td>
+<td style="text-align: right;">0.0336426</td>
+<td style="text-align: right;">-11.60104</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">-0.4565296</td>
+<td style="text-align: right;">-0.3240481</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>result <span class="ot">&lt;-</span> <span class="fu">model_parameters</span>(model1) </span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="fu">plot</span>(result) <span class="sc">+</span> <span class="fu">theme_minimal</span>(<span class="at">base_size=</span><span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="08-Regression_files/figure-revealjs/unnamed-chunk-26-1.png" width="1152" class="r-stretch quarto-figure-center"></section>
+<section id="getting-residuals-and-predicted-values" class="slide level2">
+<h2>Getting Residuals and Predicted Values</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>assump<span class="ot">=</span><span class="fu">augment</span>(model1)<span class="co"># residuals and fitted values</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a></span>
+<span id="cb13-3"><a href="#cb13-3"></a><span class="fu">head</span>(assump) <span class="sc">%&gt;%</span></span>
+<span id="cb13-4"><a href="#cb13-4"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table>
+<colgroup>
+<col style="width: 13%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 13%">
+<col style="width: 12%">
+<col style="width: 10%">
+<col style="width: 12%">
+<col style="width: 13%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">CESD_total</th>
+<th style="text-align: right;">PIL_total</th>
+<th style="text-align: right;">.fitted</th>
+<th style="text-align: right;">.resid</th>
+<th style="text-align: right;">.hat</th>
+<th style="text-align: right;">.sigma</th>
+<th style="text-align: right;">.cooksd</th>
+<th style="text-align: right;">.std.resid</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">28</td>
+<td style="text-align: right;">121</td>
+<td style="text-align: right;">9.170584</td>
+<td style="text-align: right;">18.829416</td>
+<td style="text-align: right;">0.0057970</td>
+<td style="text-align: right;">7.602150</td>
+<td style="text-align: right;">0.0176455</td>
+<td style="text-align: right;">2.4601796</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">76</td>
+<td style="text-align: right;">26.733583</td>
+<td style="text-align: right;">10.266417</td>
+<td style="text-align: right;">0.0268288</td>
+<td style="text-align: right;">7.663762</td>
+<td style="text-align: right;">0.0253376</td>
+<td style="text-align: right;">1.3557879</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">98</td>
+<td style="text-align: right;">18.147228</td>
+<td style="text-align: right;">1.852772</td>
+<td style="text-align: right;">0.0068267</td>
+<td style="text-align: right;">7.689629</td>
+<td style="text-align: right;">0.0002016</td>
+<td style="text-align: right;">0.2422016</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">122</td>
+<td style="text-align: right;">8.780295</td>
+<td style="text-align: right;">6.219705</td>
+<td style="text-align: right;">0.0062133</td>
+<td style="text-align: right;">7.680888</td>
+<td style="text-align: right;">0.0020653</td>
+<td style="text-align: right;">0.8128131</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">99</td>
+<td style="text-align: right;">17.756939</td>
+<td style="text-align: right;">-10.756939</td>
+<td style="text-align: right;">0.0063593</td>
+<td style="text-align: right;">7.661748</td>
+<td style="text-align: right;">0.0063246</td>
+<td style="text-align: right;">-1.4058582</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">134</td>
+<td style="text-align: right;">4.096829</td>
+<td style="text-align: right;">2.903171</td>
+<td style="text-align: right;">0.0142050</td>
+<td style="text-align: right;">7.688375</td>
+<td style="text-align: right;">0.0010455</td>
+<td style="text-align: right;">0.3809315</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="model-fit" class="slide level2">
+<h2>Model Fit</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>assump1<span class="ot">=</span><span class="fu">glance</span>(model1) <span class="co">#model fit indices</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a></span>
+<span id="cb14-3"><a href="#cb14-3"></a>assump1 <span class="sc">%&gt;%</span></span>
+<span id="cb14-4"><a href="#cb14-4"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table>
+<colgroup>
+<col style="width: 9%">
+<col style="width: 12%">
+<col style="width: 8%">
+<col style="width: 9%">
+<col style="width: 7%">
+<col style="width: 2%">
+<col style="width: 9%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 11%">
+<col style="width: 4%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">r.squared</th>
+<th style="text-align: right;">adj.r.squared</th>
+<th style="text-align: right;">sigma</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+<th style="text-align: right;">df</th>
+<th style="text-align: right;">logLik</th>
+<th style="text-align: right;">AIC</th>
+<th style="text-align: right;">BIC</th>
+<th style="text-align: right;">deviance</th>
+<th style="text-align: right;">df.residual</th>
+<th style="text-align: right;">nobs</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0.3368106</td>
+<td style="text-align: right;">0.334308</td>
+<td style="text-align: right;">7.675957</td>
+<td style="text-align: right;">134.5842</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">-922.0236</td>
+<td style="text-align: right;">1850.047</td>
+<td style="text-align: right;">1860.809</td>
+<td style="text-align: right;">15613.88</td>
+<td style="text-align: right;">265</td>
+<td style="text-align: right;">267</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">summary</span>(model1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = CESD_total ~ PIL_total, data = master)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-15.782  -5.366  -1.512   3.256  29.585 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 56.39554    3.75258   15.03   &lt;2e-16 ***
+PIL_total   -0.39029    0.03364  -11.60   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 7.676 on 265 degrees of freedom
+Multiple R-squared:  0.3368,    Adjusted R-squared:  0.3343 
+F-statistic: 134.6 on 1 and 265 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</section>
+<section id="fitted-line-with-95-cis" class="slide level2">
+<h2>Fitted line with 95% CIs</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># get cis for fitted values</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a></span>
+<span id="cb17-3"><a href="#cb17-3"></a>model1 <span class="sc">%&gt;%</span></span>
+<span id="cb17-4"><a href="#cb17-4"></a>  <span class="fu">augment</span>(<span class="at">se_fit =</span> <span class="cn">TRUE</span>, <span class="at">interval =</span> <span class="st">"confidence"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 267 × 11
+   CESD_total PIL_total .fitted .lower .upper .se.fit .resid    .hat .sigma
+        &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+ 1         28       121    9.17   8.02  10.3    0.584  18.8  0.00580   7.60
+ 2         37        76   26.7   24.3   29.2    1.26   10.3  0.0268    7.66
+ 3         20        98   18.1   16.9   19.4    0.634   1.85 0.00683   7.69
+ 4         15       122    8.78   7.59   9.97   0.605   6.22 0.00621   7.68
+ 5          7        99   17.8   16.6   19.0    0.612 -10.8  0.00636   7.66
+ 6          7       134    4.10   2.30   5.90   0.915   2.90 0.0142    7.69
+ 7         27       102   16.6   15.5   17.7    0.553  10.4  0.00519   7.66
+ 8         10       124    8.00   6.72   9.28   0.650   2.00 0.00716   7.69
+ 9          9       126    7.22   5.85   8.59   0.698   1.78 0.00826   7.69
+10          8       112   12.7   11.8   13.6    0.472  -4.68 0.00378   7.69
+# ℹ 257 more rows
+# ℹ 2 more variables: .cooksd &lt;dbl&gt;, .std.resid &lt;dbl&gt;</code></pre>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="08-Regression_files/figure-revealjs/unnamed-chunk-30-1.png" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="regression-model" class="slide level2">
+<h2>Regression Model</h2>
+<ul>
+<li><p>How useful are each of the individual predictors for my model?</p>
+<ul>
+<li>Use the coefficients and t-tests of the slopes</li>
+</ul></li>
+<li><p>Is my overall model <em>(i.e., the regression equation)</em> useful at predicting the outcome variable?</p>
+<ul>
+<li>Use the model summary, F-test, and <span class="math inline">\(R^2\)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="overall-model-significance" class="slide level2">
+<h2>Overall Model Significance</h2>
+<ul>
+<li><p>Our overall model uses an <em>F</em>-test</p></li>
+<li><p>However, we can think about the hypotheses for the overall test being:</p>
+<ul>
+<li><p><span class="math inline">\(H_0\)</span>: We cannot predict the dependent variable (over and above a model with only an intercept)</p></li>
+<li><p><span class="math inline">\(H_1\)</span>: We can predict the dependent variable ( over and above a model with only an intercept)</p></li>
+</ul></li>
+<li><p>Generally, this form does not include two tailed tests because the math is squared, so it is impossible to get negative values in the statistical test</p></li>
+</ul>
+</section>
+<section id="f-distribution" class="slide level2">
+<h2>F-distribution</h2>
+
+<img data-src="images/fdis.1.png" class="r-stretch quarto-figure-center"></section>
+<section id="f-statistic-explained-over-unexplained" class="slide level2">
+<h2>F-Statistic, Explained Over Unexplained</h2>
+<ul>
+<li>F-statistics use measures of variance, which are sums of squares divided by relevant degrees of freedom</li>
+</ul>
+<p><span class="math display">\[F = \frac{SS_{Explained}/df1 (p-1)}{SS_{Unexplained}/df2(n-p)} = \frac{MS_{Explained}}{MS_{Unexplained}}\]</span></p>
+<ul>
+<li><p>If explained = unexplained, then F=1</p></li>
+<li><p>If explained &gt; then, F &gt;1</p></li>
+<li><p>If explained &lt; unexplained, F &lt; 1</p></li>
+</ul>
+</section>
+<section id="calculating-mean-squares-in-r" class="slide level2">
+<h2>Calculating Mean Squares in R</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="co">#use augment to get fitted and resid information</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a>SS_explained <span class="ot">&lt;-</span> <span class="fu">sum</span>((assump<span class="sc">$</span>.fitted <span class="sc">-</span> <span class="fu">mean</span>(assump<span class="sc">$</span>CESD_total))<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb19-3"><a href="#cb19-3"></a></span>
+<span id="cb19-4"><a href="#cb19-4"></a>SS_unexplained <span class="ot">&lt;-</span> <span class="fu">sum</span>((assump<span class="sc">$</span>CESD_total <span class="sc">-</span> assump<span class="sc">$</span>.fitted)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb19-5"><a href="#cb19-5"></a></span>
+<span id="cb19-6"><a href="#cb19-6"></a><span class="co">#TSS?</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="effect-size-r2" class="slide level2">
+<h2>Effect Size: <span class="math inline">\(R^2\)</span></h2>
+<ul>
+<li><p>Called PRE in book (not common)</p></li>
+<li><p>Coefficient of determination</p></li>
+</ul>
+<p><span class="math display">\[R^2 = 1 - \frac{SS_{\text{error}}}{SS_{\text{tot}}}\]</span> <span class="math display">\[R^2 = 1 - \frac{SS_{unexplained}}{SS_{Total}} = \frac{SS_{explained}}{SS_{Total}}\]</span></p>
+<ul>
+<li><p>Standardized effect size</p></li>
+<li><p>Amount of variance explained</p>
+<ul>
+<li><span class="math inline">\(R^2\)</span> of .4 means 40% of variance in the outcome variable (<span class="math inline">\(Y\)</span>) can be explained by the predictor (<span class="math inline">\(X\)</span>)</li>
+</ul></li>
+</ul>
+<p>Range: 0-1</p>
+</section>
+<section id="r2" class="slide level2">
+<h2><span class="math inline">\(R^2\)</span></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">glance</span>(model1) <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table>
+<colgroup>
+<col style="width: 9%">
+<col style="width: 12%">
+<col style="width: 8%">
+<col style="width: 9%">
+<col style="width: 7%">
+<col style="width: 2%">
+<col style="width: 9%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 11%">
+<col style="width: 4%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">r.squared</th>
+<th style="text-align: right;">adj.r.squared</th>
+<th style="text-align: right;">sigma</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+<th style="text-align: right;">df</th>
+<th style="text-align: right;">logLik</th>
+<th style="text-align: right;">AIC</th>
+<th style="text-align: right;">BIC</th>
+<th style="text-align: right;">deviance</th>
+<th style="text-align: right;">df.residual</th>
+<th style="text-align: right;">nobs</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0.3368106</td>
+<td style="text-align: right;">0.334308</td>
+<td style="text-align: right;">7.675957</td>
+<td style="text-align: right;">134.5842</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">-922.0236</td>
+<td style="text-align: right;">1850.047</td>
+<td style="text-align: right;">1860.809</td>
+<td style="text-align: right;">15613.88</td>
+<td style="text-align: right;">265</td>
+<td style="text-align: right;">267</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<ul>
+<li><span class="math inline">\(R^2\)</span> of .34 34% of variance in depressions scores is explained by meaning in life</li>
+</ul>
+</section>
+<section id="r2_adj" class="slide level2">
+<h2><span class="math inline">\(R^2_{adj}\)</span></h2>
+<p><span class="math display">\[R^2_{adj}\]</span></p>
+<p><span class="math display">\[R^2_{adj} = 1 - \frac{SS_{unexplained}}{SS_{Total}} = \frac{SS_{explained}(n-K)}{SS_{Total}(n-1)}\]</span> where:</p>
+<p>n = Sample size</p>
+<p>K = # of predictors</p>
+</section></section>
+<section>
+<section id="model-conditions" class="title-slide slide level1 center">
+<h1>Model conditions</h1>
+
+</section>
+<section id="assumptions" class="slide level2">
+<h2>Assumptions</h2>
+<ol type="1">
+<li><p>Linearity: There is a linear relationship between the response and predictor variable</p></li>
+<li><p>Constant Variance: The variability of the errors is equal for all values of the predictor variable</p></li>
+<li><p>Normality: The errors follow a normal distribution.</p></li>
+<li><p>Independence: The errors are independent from each other.</p></li>
+</ol>
+</section>
+<section id="assumptions-linearity" class="slide level2">
+<h2>Assumptions: Linearity</h2>
+<ul>
+<li>Can use a scatter plot between two variables but common to use residuals versus fits plot</li>
+</ul>
+
+<img data-src="08-Regression_files/figure-revealjs/unnamed-chunk-33-1.png" width="1152" class="r-stretch quarto-figure-center"></section>
+<section id="violation-nonlinear-pattern" class="slide level2">
+<h2>❌ Violation: Nonlinear pattern</h2>
+
+<img data-src="08-Regression_files/figure-revealjs/unnamed-chunk-34-1.png" width="1152" class="r-stretch quarto-figure-center"></section>
+<section id="assumptions-normality-of-errors" class="slide level2">
+<h2>Assumptions: Normality of Errors</h2>
+
+<img data-src="08-Regression_files/figure-revealjs/unnamed-chunk-35-1.png" width="1152" class="r-stretch quarto-figure-center"><p>✅:Points fall along a straight diagonal line on the normal quantile plot.</p>
+</section>
+<section id="assumptions-equal-variances" class="slide level2">
+<h2>Assumptions: Equal Variances</h2>
+<ul>
+<li>Constant error
+<ul>
+<li>No correlation between predictor and residuals</li>
+</ul></li>
+<li>What are we looking for?
+<ul>
+<li>Random variation above and below 0</li>
+<li>No patterns</li>
+<li>Width of the band of points is constant</li>
+</ul></li>
+</ul>
+</section>
+<section id="assumptions-equal-variances-1" class="slide level2">
+<h2>Assumptions: Equal Variances</h2>
+<ul>
+<li>Good</li>
+</ul>
+
+<img data-src="08-Regression_files/figure-revealjs/unnamed-chunk-36-1.png" width="1152" class="r-stretch quarto-figure-center"><p>✅ There is no distinguishable pattern or structure. The residuals are randomly scattered.</p>
+</section>
+<section id="assumptions-equal-variances-2" class="slide level2">
+<h2>Assumptions: Equal Variances</h2>
+<ul>
+<li>Bad</li>
+</ul>
+
+<img data-src="08-Regression_files/figure-revealjs/unnamed-chunk-37-1.png" width="1152" class="r-stretch quarto-figure-center"><p>✅ There is a distinguishable pattern or structure.</p>
+</section>
+<section id="assumption-independence" class="slide level2">
+<h2>Assumption: Independence</h2>
+<ul>
+<li>Let’s pretend this one is met 😀</li>
+</ul>
+<!-- -->
+<ul>
+<li>We can often check the independence assumption based on the context of the data and how the observations were collected.</li>
+</ul>
+</section>
+<section id="easystats-performance" class="slide level2">
+<h2><code>easystats</code>: Performance</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>performance<span class="sc">::</span><span class="fu">check_model</span>(model1, <span class="at">check=</span><span class="fu">c</span>(<span class="st">"normality"</span>, <span class="st">"linearity"</span>, <span class="st">"homogeneity"</span>, <span class="st">"qq"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="08-Regression_files/figure-revealjs/unnamed-chunk-38-1.png" width="1152" class="r-stretch"></section>
+<section id="assumption-violations-what-can-be-done" class="slide level2">
+<h2>Assumption violations: What can be done?</h2>
+<ul>
+<li><p>Non-linearity?</p>
+<ul>
+<li><p>Non-linear regression</p>
+<ul>
+<li>Polynomials (e.g., <span class="math inline">\(x^2\)</span>)</li>
+</ul></li>
+</ul></li>
+<li><p>Non-normality</p>
+<ul>
+<li>Transformations (e.g., log)</li>
+</ul></li>
+<li><p>Heteroskedasticity</p>
+<ul>
+<li>Use robust SEs</li>
+</ul></li>
+</ul>
+</section>
+<section id="reporting" class="slide level2">
+<h2>Reporting</h2>
+<ul>
+<li><code>report</code> function in <code>easystats</code> is greatest thing ever!</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">report</span>(model1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>We fitted a linear model (estimated using OLS) to predict CESD_total with
+PIL_total (formula: CESD_total ~ PIL_total). The model explains a statistically
+significant and substantial proportion of variance (R2 = 0.34, F(1, 265) =
+134.58, p &lt; .001, adj. R2 = 0.33). The model's intercept, corresponding to
+PIL_total = 0, is at 56.40 (95% CI [49.01, 63.78], t(265) = 15.03, p &lt; .001).
+Within this model:
+
+  - The effect of PIL total is statistically significant and negative (beta =
+-0.39, 95% CI [-0.46, -0.32], t(265) = -11.60, p &lt; .001; Std. beta = -0.58, 95%
+CI [-0.68, -0.48])
+
+Standardized parameters were obtained by fitting the model on a standardized
+version of the dataset. 95% Confidence Intervals (CIs) and p-values were
+computed using a Wald t-distribution approximation.</code></pre>
+</div>
+</div>
+</section></section>
+<section>
+<section id="your-turn" class="title-slide slide level1 center">
+<h1>Your turn!</h1>
+
+</section>
+<section id="dataset" class="slide level2">
+<h2>Dataset</h2>
+<ul>
+<li><p>Mental Health and Drug Use:</p>
+<ul>
+<li>CESD = depression measure</li>
+<li>PIL total = measure of meaning in life</li>
+<li>AUDIT total = measure of alcohol use</li>
+<li>DAST total = measure of drug usage</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>master <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://raw.githubusercontent.com/jgeller112/psy503-psych_stats/master/static/slides/10-linear_modeling/data/regress.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="footer footer-default">
+<p>PSY 503: Foundations of Statistics in Psychology</p>
+</div>
+</section></section>
+    </div>
+  </div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="08-Regression_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="08-Regression_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="08-Regression_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="08-Regression_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="08-Regression_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="08-Regression_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="08-Regression_files/libs/revealjs/plugin/multiplex/socket.io.js"></script>
+  <script src="08-Regression_files/libs/revealjs/plugin/multiplex/multiplex.js"></script>
+  <script src="08-Regression_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="08-Regression_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="08-Regression_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="08-Regression_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="08-Regression_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'smaller': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'multiplex': {"secret":"16965190875397378533","id":"401520c5d79eda61","url":"https://reveal-multiplex.glitch.me/"},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'fade',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button', {
+        text: function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+      });
+      clipboard.on('success', function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      });
+      function tippyHover(el, contentFn) {
+        const config = {
+          allowHTML: true,
+          content: contentFn,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start'
+        };
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          return note.innerHTML;
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</body></html>
