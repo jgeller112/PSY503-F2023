@@ -50,6 +50,7 @@ pkgs
 ## Github
 
 -   Find QMD here:
+    <https://github.com/jgeller112/PSY503-F2023/blob/main/slides/08-Regression_1/08-Regression.qmd>
 
 ## Overview
 
@@ -865,8 +866,9 @@ glance(model1) %>%
 
 ```
 
--   $R^2$ of .34 34% of variance in depressions scores is explained by
-    meaning in life
+-   In our example we get $R^2$ of .34
+    -   34% of variance in depressions scores is explained by meaning in
+        life
 
 ## $R^2_{adj}$
 
