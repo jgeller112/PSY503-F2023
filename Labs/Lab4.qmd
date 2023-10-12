@@ -13,5 +13,5 @@ In this assignment, you will
 -   Create and interpret visualizations using R
 -   Write-up results
 
-To access Lab 4, please go here: [Click
-here](https://classroom.github.com/a/ehHzSQt_)
+This lab will be due on October 22, 2023. To access Lab 4, please go
+here: [Click here](https://classroom.github.com/a/ehHzSQt_)
