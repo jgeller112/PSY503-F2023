@@ -1,14 +1,14 @@
 ---
 title: "Week 8"
-subtitle: "Effect Size and Power"
+subtitle: "Categorical Regression"
 date: 2023-10-23
 ---
+
 ## Before Class
 
-- [Power - Bartlett and Charles 2021](https://psy503-found-stats.netlify.app/readings_pdf/power_jamovi.pdf)
+### Textbook
 
-- [Effect Size - Ch. 6 - Improving Your Statitsical Inference](https://lakens.github.io/statistical_inferences/06-effectsize.html)
+Chapters 7 and 8 - Statistics and Data Science: A Modeling Approach
 
-## Power Simulation
 
--[Erin Buchanan](https://drive.google.com/file/d/1_Xr9AsoIyfgMivY_20QKQKlqy5xfslTw/view?usp=drive_link)
+

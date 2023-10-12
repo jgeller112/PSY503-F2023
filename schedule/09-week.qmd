@@ -1,17 +1,15 @@
 ---
 title: "Week 9"
-subtitle: "Categorical Predictors: 3 Groups"
+subtitle: "Effect Size and Power"
 date: 2023-10-30
 ---
 ## Before Class
 
-### Textbook
+- [Power - Bartlett and Charles 2021](https://psy503-found-stats.netlify.app/readings_pdf/power_jamovi.pdf)
 
-Chapter 8 - Statistics and Data Science: A Modeling Approach
+- [Effect Size - Ch. 6 - Improving Your Statitsical Inference](https://lakens.github.io/statistical_inferences/06-effectsize.html)
 
-### Book Chapter
+## Power Simulation
 
-- [Ch.6 Improving Your Statistical Inferences](https://lakens.github.io/statistical_inferences/06-effectsize.html)
-
-- [Ch.8 Improving Your Statistical Inferences](https://lakens.github.io/statistical_inferences/08-samplesizejustification.html)
+-[Erin Buchanan](https://drive.google.com/file/d/1_Xr9AsoIyfgMivY_20QKQKlqy5xfslTw/view?usp=drive_link)
 
