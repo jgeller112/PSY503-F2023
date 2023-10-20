@@ -1,0 +1,1180 @@
+---
+title: "GLM 2: Categorical Predictors"
+subtitle: "Princeton University"
+author: "Jason Geller, PH.D.(he/him)"
+date: 'Updated:`r Sys.Date()`'
+footer: "PSY 503: Foundations of Statistics in Psychology"
+format: 
+  revealjs:
+    theme: blood
+    css: slide-style.css
+    multiplex: true
+    transition: fade
+    slide-number: true
+    incremental: false 
+    chalkboard: true
+    fontsize: "28pt"
+execute:
+  freeze: auto
+  echo: true
+  message: false
+  warning: false
+  fig-align: center
+  fig-width: 12
+  fig-height: 8
+  editor_options: 
+  chunk_output_type: inline
+  code-overflow: wrap
+  html:
+    code-fold: true
+    code-tools: true
+---
+
+## Packages
+
+```{r}
+#| echo: false
+#| 
+library(pacman)
+p_load("tidyverse", "easystats", "broom", "supernova", "ungeviz", "gt", "afex", "emmeans", "knitr", "kableExtra", "faux")
+
+```
+
+```{r}
+library(grateful)
+pkgs <- cite_packages(output = "table", out.dir = ".")
+
+pkgs
+```
+
+## Today
+
+::: columns
+::: {.column width="50%"}
+-   How to interpret linear models with categorical predictors
+
+-   Explain the different ways to break down categorical predictors in
+    linear models
+
+    -   Dummy coding
+
+    -   Sum Coding
+
+    -   Deviation coding
+
+    -   DIY/custom contrasts
+:::
+
+::: {.column width="50%"}
+-   ANOVA
+
+-   Multiple comparisons
+
+-   Plotting
+:::
+:::
+
+## F-Distribution/F-test
+
+![](images/Img_3.jpeg){fig-align="center"}
+
+## F-Distribution/F-test
+
+::: columns
+::: {.column width="50%"}
+$$F = \frac{SS_{Explained}/df1 (p-1)}{SS_{Unexplained}/df2(n-p)} = \frac{MS_{Explained}}{MS_{Unexplained}}$$
+:::
+:::
+
+::: columns
+::: {.column width="50%"}
+-   `MS explained` represents the reduction in error achieved by the
+    model
+
+-   `MS unexplained` tells us how much variation is left over from the
+    complex model
+:::
+
+::: {.column width="50%"}
+![](images/fdist.png){fig-align="center" width="1018"}
+:::
+:::
+
+## Modeling Categorical Variables
+
+::: columns
+::: {.column width="50%"}
+-   Today's dataset
+
+    -   Winter(2016)
+
+        -   Are smell words (e.g., *rancid*) rated as more
+            negative/unpleasant than taste words (e.g., *sweet*)?
+
+            -   1 to 9 rating scale
+:::
+
+::: {.column width="50%"}
+```{r}
+
+senses<- read_csv(here::here("slides/09-Cat-Reg/data/winter_2016_senses_valence.csv"))
+
+senses_filt <- senses %>%
+  filter(Modality=="Taste" | Modality=="Smell")
+
+glimpse(senses_filt)
+
+```
+:::
+:::
+
+```{r}
+#| echo: false
+#| 
+
+senses_filt_mean <- senses_filt %>% 
+  group_by(Modality) %>%
+  summarise(mean_mod=mean(Val))
+
+```
+
+## Linear Model
+
+<br> <br>
+
+$${Y_i} = b_0 + b_1 {X_i} + e$$
+
+-   So far predictor variable has been continuous
+
+-   We can also use linear modeling for categorical variables!
+
+## Categorical Variables
+
+-   Terminology
+
+    -   *Factor*: a variable with a fix set of categories
+
+    -   *Levels*: The individual categories within a factor
+
+    > In our dataset, what is the factor and what are its levels?
+
+```{r}
+
+```
+
+::: callout-important
+Always make sure categorical variables are labeled as factors in your
+dataset
+:::
+
+## Linear Modeling and t-tests/ANOVAs
+
+What do we do in linear modeling?
+
+-   Fit a line (least squares method)
+
+```{r}
+#| echo: false
+#| fig-align: center
+
+some_data <- data.frame(Y= c(1,2,4,3,5,4,6,5),
+                        X= c(3,5,4,2,6,7,8,9)) %>%
+  mutate(Y_pred = predict.lm(lm(Y~X))) %>%
+  mutate(Y_error = Y - Y_pred)
+
+ggplot(some_data, aes(x=X, y=Y))+
+  geom_point()+
+  geom_smooth(method='lm', se=FALSE) + 
+  theme_minimal(base_size=20)
+```
+
+## Linear Modeling and *t*-tests/ANOVAs
+
+Within a t-test/ANOVA framework we want to know if means differ between
+groups
+
+```{r}
+#| echo: false
+#| fig-align: center
+
+senses_filt %>%
+  ggplot(aes(x=Modality, y = Val)) + 
+   geom_jitter(size = 4, alpha = 0.3,position= position_jitter(width = 0.1, height = 0.1)) + 
+   geom_hpline(stat = "summary") + 
+  geom_label(data = senses_filt_mean, aes(x = Modality, y = mean_mod, label = sprintf("Mean: %.2f", mean_mod)),
+             vjust = -0.5, hjust = 0.5, color = "black", size = 4) + # Add mean label
+  labs(y="Valence")+
+  theme_minimal(base_size=20)
+```
+
+## Fit a line
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| 
+senses_filt %>%
+  ggplot(aes(x=Modality, y = Val)) + 
+     geom_jitter(size = 4, alpha = 0.3,position= position_jitter(width = 0.1, height = 0.1))+
+   geom_hpline(stat = "summary") + 
+  geom_line(data = senses_filt_mean, aes(y = mean_mod, group = 1), color = "blue", size = 1) +
+  labs(y="Valence")+
+  theme_minimal(base_size=16)
+```
+
+## Single Line
+
+-   We have two equations
+
+    -   $y = b_0$ = intercept(mean of smell)
+
+    -   $y = b_0$ = intercept(mean of touch)
+
+-   How do we get one linear equation?
+
+# Dummy Coding/Treatment Coding
+
+## Dummy Coding/Treatment Coding
+
+-   R's default system
+
+    -   Start with $K$ levels
+
+    -   Break variable into $K$ dummy variables, which are coded as 0
+        and 1
+
+        -   Variable coded as 0 is with reference level
+
+            -   R does this automatically (0 = whatever comes first
+                alphabetically)
+
+                -   Smell = 0
+
+                -   Taste = 1
+
+## Dummy Coding/Treatment Coding
+
+$$\operatorname{Valence} = b_0 + b_{1}(X_i) + \epsilon$$
+
+-   Prediction for Smell $X_i =0$
+
+$$\hat{\operatorname{Val}} = b_0 + b_{1}(\operatorname{Modality}_{\operatorname{Taste}}0) + \epsilon$$
+$$
+\operatorname{\bar{Y}_{smell}} = b_0
+$$
+
+-   Prediction for Taste $X_i =1$
+
+$$\operatorname{Val} = b_0 + b_{1}(\operatorname{Modality}_{\operatorname{Taste}}1) + \epsilon$$
+$$\operatorname{\bar{Y}_{taste}} = b_0 + b_1(\operatorname{Modality}_{\operatorname{Taste}}1)$$
+
+## Dummy coding
+
+<br> <br> <br>
+
+```{r}
+## dummy coding
+senses_dum <- senses_filt %>%
+  mutate(mod=ifelse(Modality=="Smell", 0, 1))
+```
+
+## Dummy coded regression
+
+```{r}
+lm_treat <- lm(Val ~ mod, data=senses_dum)
+```
+
+```{r}
+#| echo: false
+lm_treat %>%
+  tidy(conf.int=TRUE) %>%
+  knitr::kable() %>%
+    kable_styling(font_size = 24) %>%
+ column_spec(2:2, color = "white",
+              background = "red")
+
+```
+
+-   $\hat{b_0}$
+
+-   $\hat{b_1}$:
+
+## Categorical contrast coding
+
+$$slope=\frac{\mu_{diff}}{run}$$
+
+![](images/twomean.JPG){fig-align="center"}
+
+## Dummy Coded Regression
+
+```{r}
+#| echo: false
+#| 
+ lm_treat %>%
+  tidy(conf.int=TRUE) %>%
+  knitr::kable() %>%
+    kable_styling(font_size = 24) %>%
+ column_spec(2:2, color = "white",
+              background = "red")
+```
+
+-   $\hat{b_1}$:
+
+## Calculate Means
+
+> Let's calculate the means for each group with this equation
+
+```{r}
+# 
+
+```
+
+## Change Reference Level
+
+```{r}
+#| code-line-numbers: "3"
+
+senses_dum <- senses_filt %>%
+  mutate(mod=factor(Modality)) %>% 
+  mutate(mod1=relevel(mod, ref="Taste"))
+#relevel the var 
+#contrasts(senses_dum$mod1)
+#contrasts(senses_dum$mod)
+```
+
+```{r}
+#| echo: false
+
+lm(Val ~ mod1, data=senses_dum) %>%
+  tidy(conf.int=TRUE) %>%
+  knitr::kable() %>% 
+kable_styling(font_size = 24) %>%
+ column_spec(2:2, color = "white",
+              background = "red")
+
+
+```
+
+# Contrast coding/Sum-to-zero
+
+## Deviation coding/sum coding
+
+-   So far the intercept at 0 has referred to a particular baseline or
+    reference level
+
+-   Sum-to-zero coding changes the intercept to correspond to mean of
+    the means (grand mean)
+
+    $$\frac{\mu_1 + \mu_2}{2}$$
+
+::: callout-note
+When are sample sizes for each group are equal the grand mean and mean
+of means will be equal
+:::
+
+## Deviation Coding (.5, -.5)
+
+::: callout-note
+Lot's of confusion over terms. I will be using Lisa Debruine's
+definitions <https://debruine.github.io/faux/articles/contrasts.html>
+:::
+
+-   $\hat{b_0}$ (intercept) is now the grand mean
+
+-   Slope is still the difference
+
+## Deviation Coding
+
+```{r}
+# how do apply deviation code
+senses_filt_dev <- senses_filt %>%
+  mutate(mod_dev=as.factor(Modality))
+  #add a new var to sum code 
+
+contrasts(senses_filt_dev$mod_dev) <- c(0.5, -0.5) # change 0 - 1 to +.5 and -.5
+
+contrasts(senses_filt_dev$mod_dev)
+
+```
+
+## Deviation Coding Results
+
+```{r}
+
+lm_dev <- lm(Val ~ mod_dev, data=senses_filt_dev)
+```
+
+lm_dev \<- lm(Val \~ mod_dev, data=senses_filt_dev)
+
+```{r}
+#| echo: false
+#| 
+# regression with dev coding (.5 - .5)
+lm(Val ~ mod_dev, data=senses_filt_dev) %>% 
+  tidy(conf.int=TRUE) %>%
+  knitr::kable() %>% 
+ kable_styling(font_size = 24) %>%
+ column_spec(2:2, color = "white",
+              background = "red")
+```
+
+-   $\hat{b_0}$:
+
+-   $\hat{b_1}$:
+
+-   $\bar{Y}_{smell}$:
+
+-   $\bar{Y}_{taste}$:
+
+## Sum Coding
+
+-   1 and -1
+
+```{r}
+#| code-line-numbers: "3"
+
+senses_filt_sum <- senses_filt_dev %>%
+  mutate(mod_sum55=ifelse(mod_dev=="Taste", .5, -.5), 
+mod_sum11 = ifelse(mod_dev=="Taste", 1, -1)) # add a new var to sum code (1, -1)
+
+```
+
+## Sum Coding (-1 + 1) Interpretation
+
+What does this do to our interpretation?
+
+-   Intercept is still centered at 0 (grand mean)
+
+-   Slope is still the same (difference between categories) but:
+
+    -   Stepping from one category to another (the run) results in
+        overall change of 2
+
+    -   Results are halved
+
+## Sum Coding (-1 + 1) Interpretation
+
+```{r}
+#| echo: false
+#| fig-align: center
+senses_filt_sum %>%
+  ggplot(aes(x=mod_sum11, y = Val)) + 
+   geom_jitter(size = 4, alpha = 0.3,position= position_jitter(width = 0.1, height = 0.1))+
+   geom_hpline(stat = "summary") + 
+  geom_vline(xintercept =0) + 
+  theme_minimal(base_size = 20)
+```
+
+## Sum Coding (+1, -1) Model Results
+
+```{r}
+lm_sum <- lm(Val ~ mod_sum11, data=senses_filt_sum)
+
+```
+
+```{r}
+#| echo: false
+#| 
+lm(Val ~ mod_sum11, data=senses_filt_sum)%>%
+  tidy(conf.int=TRUE) %>%
+  knitr::kable() %>% 
+ kable_styling(font_size = 24) %>%
+ column_spec(2:2, color = "white",
+              background = "red")
+```
+
+-   $\hat{b_0}$:
+
+-   $\hat{b_1}$:
+
+-   $\bar{Y}_{taste}$:
+
+-   $\bar{Y}_{smell}$:
+
+## Why -0.5 and +0.5?
+
+![](images/contrastcodes.bmp){fig-align="center"}
+
+## Write-up
+
+```{r}
+#| echo: false
+#| 
+lm(Val ~ mod1, data=senses_dum) %>%
+  tidy(conf.int=TRUE) %>%
+  knitr::kable() %>% 
+kable_styling(font_size = 24)
+```
+
+::: callout-tip
+We used deviation coding (0.5, -0.5) to look at the effect of taste and
+smell words on valence
+
+There was a statistically significant difference between Smell (*M*
+=5.47) and Taste Words (*M = 5.81*) in valence ratings , *b* = -.33, *t*
+=-4.33, 95% CI \[-0.49, -0.13\], *p* \<.001 . Taste words were rated as
+more pleasant than smell words.
+:::
+
+## t-test
+
+-   Same results!
+
+```{r}
+
+t.test(Val ~ Modality, data=senses_filt, var.equal=TRUE) %>% tidy() %>%
+  kable()
+
+```
+
+# Multiple Levels
+
+## Linear models with multiple levels
+
+::: columns
+::: {.column width="50%"}
+-   So far we have only been looking at two levels
+
+-   We easily can extend linear modeling approach to multiple levels
+
+-   Let's go back to our sense data
+
+    -   Before filtering it down to 2 senses it had 5 senses!
+:::
+
+::: {.column width="50%"}
+```{r}
+glimpse(senses)
+
+```
+:::
+:::
+
+## Treatment/dummy coding: multilevel factors
+
+```{r}
+lm_all <- lm(Val~Modality, data=senses)
+```
+
+```{r}
+#| echo: false
+#| 
+
+lm(Val~Modality, data=senses) %>%
+  tidy() %>%
+  kable() %>%
+  kable_styling(font_size = 24) %>%
+ column_spec(2, color = "white",
+              background = "red")
+
+```
+
+-   What is going on here? There are only 4 levels, but we actually have
+    5 levels.
+
+## Dummy Coding Extension
+
+::: columns
+::: {.column width="50%"}
+-   Create one fewer dummy codes than levels (K (number of levels)-1)
+
+-   Choose one of your levels as baseline and assign all zeros for this
+    level across each dummy code
+
+-   For first dummy code, assign 1 to first group and 0s for rest of
+    levels
+:::
+
+::: {.column width="50%"}
+-   For the second dummy code, assign 1 to second group and 0s for rest
+    of levels
+
+-   For third dummy code, assign 1 to third group and 0s for rest of
+    levels
+
+-   For fourth dummy code, assign 1 to fourth group and 0s for rest of
+    levels
+:::
+:::
+
+## Dummy Coding Extension
+
+```{r}
+#| echo: false
+#| 
+contr.treatment(5) %>%
+  kable()
+
+
+```
+
+## Dummy Coding Extension
+
+$$
+\begin{align*}
+\operatorname{Val} &= b + b_{1}(\operatorname{Modality}_{\operatorname{Smell}}) \\
+&\quad + b_{2}(\operatorname{Modality}_{\operatorname{Sound}}) \\
+&\quad + b_{3}(\operatorname{Modality}_{\operatorname{Taste}}) \\
+&\quad + b_{4}(\operatorname{Modality}_{\operatorname{Touch}}) + e
+\end{align*}
+$$
+
+![](images/morethree.JPG){fig-align="center"}
+
+## Dummy Coding Extension
+
+```{r}
+#| code-line-numbers: "2"
+senses_treatment  <- senses %>%
+  mutate(mod_treat = faux::contr_code_treatment(Modality))
+         
+senses_treatment_lm <- lm(Val~mod_treat,  data=senses_treatment)      
+
+```
+
+```{r}
+#| echo: false
+
+lm(Val~mod_treat, data=senses_treatment) %>%
+  tidy() %>%
+  kable()%>%
+  kable_styling(font_size = 24) %>%
+ column_spec(2, color = "white",
+              background = "red")
+
+```
+
+## Sum Coding
+
+Intercept = grand mean
+
+-   Assign 1 to target level, -1 to non-target level, 0 dropped
+-   Estimate represents each level vs. grand mean
+
+```{r}
+#| code-line-numbers: "2"
+senses_sum <- senses %>%
+  mutate(sum = contr_code_sum(Modality)) 
+
+lm_sum_coding <- lm(Val~sum, data=senses_sum)
+
+
+```
+
+```{r}
+#| echo: false
+#| 
+lm(Val~sum, data=senses_sum) %>%
+    tidy() %>%
+  kable()%>%
+  kable_styling(font_size = 24) %>%
+ column_spec(2, color = "white",
+              background = "red")
+
+```
+
+## Deviation coding
+
+-   Intercept = grand mean
+-   The target level gets:
+
+$$
+\frac{k-1}{k}
+$$
+
+-   Any non-target level gets:
+
+    $$
+    -\frac{1}{k}
+    $$
+
+## Deviation coding
+
+```{r}
+## deviation coding
+## baseline Sight it comes first in alphabet
+dat_dev <- senses %>%
+  mutate(SmellvSight = if_else(Modality == "Smell", 4/5, -1/5), # target A2
+         SoundvSight = if_else(Modality == "Sound", 4/5, -1/5), 
+         TastevSight = if_else(Modality=="Taste", 4/5, -1/5), 
+         TouchvSight = if_else(Modality=="Touch", 4/5, -1/5))
+         # target A3
+# fit lm with new codes
+```
+
+## Deviation coding
+
+```{r}
+
+dev_lm <- lm(Val~SmellvSight+SoundvSight+TastevSight+TouchvSight, data=dat_dev)
+
+
+```
+
+```{r}
+#| echo: false
+#| 
+lm(Val~SmellvSight+SoundvSight+TastevSight+TouchvSight, data=dat_dev) %>%
+  tidy() %>% 
+  kable()%>% 
+  kable_styling(font_size = 24) %>% column_spec(2, color = "white", background = "red")
+
+```
+
+## Deviation Coding
+
+```{r}
+#| code-line-numbers: "2"
+
+senses %>% 
+  mutate(new=contr_code_anova(Modality)) %>%
+  lm(Val~new,data=.) %>% 
+  tidy() %>% 
+  kable()%>% 
+  kable_styling(font_size = 24) %>% column_spec(2, color = "white", background = "red")
+  
+```
+
+## DIY Contrasts
+
+-   Rule 1: Groups coded with positive weights compared to groups with
+    negative wights
+
+-   Rule 2: The sum of weights you use should be zero
+
+-   Rule 3: if a group is not involved in a comparison, assign it a
+    weight of 0
+
+-   Rule 4: Initial weight assigned to groups should be equal to \#
+    groups in opposite chunk of variation
+
+-   Rule 5: To get final weights, divide initial weight by number of
+    groups with non-zero weights.
+
+## Planned Contrast Example
+
+-   Chemical vs. Non-chemical senses
+
+    | Smell and Taste | Sight, Touch, Sound | Contrast       |
+    |-----------------|---------------------|----------------|
+    | Positive        | Negative            | Sign of weight |
+    | 3               | 2                   | Magnitude      |
+    | 3,3             | 2, 2, 2             | Initial weight |
+    | 3/5 3/5         | -2/5, -2/5, -2/5    | Final weight   |
+
+## Planned Contrast Example
+
+```{r}
+
+TasteSmellVsOthers = c(-2/5, 3/5, -2/5, 3/5, -2/5)  # Comparing taste and smell to sight, touch, sound
+
+mat=cbind(TasteSmellVsOthers)
+
+#bind contrasts
+#assign contrasts to factor
+senses$Modality <- as.factor(senses$Modality)
+
+#assign contrast weights
+contrasts(senses$Modality)<-mat
+#run model
+
+```
+
+## The General Linear F-Test
+
+-   3 or more groups
+
+    -   Analysis of Variance (ANOVA)
+
+-   We can think about the hypotheses for the overall test being:
+
+$$H_0: \mu_1 = \mu_2 = \mu_3 = \mu_4 = \mu_5$$$$H_1:  b_1  \neq b_2 \neq b_3 \neq b_4 \neq b_5$$$$H_1:  \mu_1  \neq \mu_2 \neq \mu_3 \neq \mu_4 \neq \mu_5$$
+
+## Hello Again Sums of Squares
+
+![Field "Adventures in
+Statistics"](images/ss_aov.bmp){fig-align="center"}
+
+## Empty Model
+
+::: columns
+::: {.column width="50%"}
+$$Y_{ij} = \mu + \epsilon$$
+
+-   Restricted model (empty model): each score $Y_{ij}$is the result of
+    a single population mean plus random error
+
+$$SS_{error}(empty)=\sum(y_i-\bar{y})^2=SS_{total}$$
+
+-   where:
+
+$y_i$ = observed value $\bar{y}$ = mean value
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: false
+#| fig-align: center
+#| 
+
+Y <- c(4,5,2,1,3,7,4,6,3,5,6,9,8,5,7)
+myFac <- c(1,1,1,1,1,2,2,2,2,2,3,3,3,3,3)
+plot(Y, pch=myFac,main="restricted model")
+abline(h=mean(Y))
+for (i in 1:length(Y)) {
+lines(c(i,i), c(Y[i], mean(Y)), lty=2)}
+
+
+```
+:::
+:::
+
+## Full Model
+
+::: columns
+::: {.column width="50%"}
+$Y_{ij} = \mu_j + e_{ij}$
+
+-   Full model (all predictors/levels): each score $Y_{ij}$ is the
+    result of a different group mean plus random error
+
+$SS_{error}(Full)=\sum(y_{ij}-\hat{y}_{ij})^2 = \\ SS_{unexplained}$
+
+-   where:
+
+$i$ = Person $j$ = Group $y_i$ = Observed value $\hat{y}$ = Value
+estimated by regression line
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: false
+#| fig-align: center
+#| 
+
+Y <- c(4,5,2,1,3,7,4,6,3,5,6,9,8,5,7, 4, 5, 6, 7, 4, 5, 6, 7, 4, 5)
+IV0 <- c(1,1,1,1,1,2,2,2,2,2,3,3,3,3,3, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5)
+plot(Y, pch=IV0, main="full model")
+for (j in 1:5) {
+w <- which(IV0==j)
+lines(c(min(w),max(w)),c(mean(Y[w]),mean(Y[w])))
+for (i in 1:length(w)) {
+lines(c(w[i],w[i]), c(Y[w[i]], mean(Y[w])), lty=2) }}
+
+```
+:::
+:::
+
+## F-ratio
+
+-   F-ratio is measure of signal to noise
+
+$$\begin{aligned} &&df_{empty} = N - 1\\  &&df_{full} = N - p\\ &&SSE_{empty}=SS_{total}\\&&SSE_{full}=SS_{unexplained}\end{aligned}$$
+
+## F-ratio
+
+<br>
+
+<br>
+
+$$F = \frac{SS_{total}-SS_{unexplained}/{df_{empty}-df_{full}} (p-1)}{SS_{unexplained}/df_{full}(N-p)} = \frac{MS_{explained}}{MS_{unexplained}}$$
+
+## ANOVA Table
+
+```{r}
+aov1<-aov(Val~ NULL, data=senses)
+aov2 <- aov(Val~Modality, data=senses)
+#anova(aov1, aov2) compare two models 
+aov_em <- aov(Val~Modality, data=senses)
+
+parameters::model_parameters(aov_em) %>%
+  kable()
+```
+
+-   The Modality factor is significant. Now what?
+
+## Post-Hoc Comparisons
+
+-   The second best package ever created: `emmeans`
+
+-   Allows one to extract means for the model and also test comparisons
+    of interest
+
+## Pairwise tests
+
+-   Get means
+
+```{r}
+#| code-line-numbers: "3"
+# get pairwise tests between all groups
+#specs = factor
+emmeans::emmeans(aov_em, specs = "Modality")%>%
+  kable()%>%
+  kable_styling(font_size = 24) %>%
+ column_spec(2, color = "white",
+              background = "red")
+
+```
+
+## Pairwise tests
+
+-   and pairwise comparisons
+
+```{r}
+#| echo: true
+#| code-line-numbers: "4"
+# get pairwise tests between all groups
+means1 = emmeans::emmeans(aov_em, specs = "Modality")
+
+knitr::kable(pairs(means1)) %>%
+  kable_styling(font_size = 24) %>%
+ column_spec(2, color = "white",
+              background = "red")
+```
+
+## Planned Comparisons
+
+```{r}
+
+contr <- list(
+    nonchem_vs_chem = c(-1/3, 1/2, -1/3, 1/2, -1/3))
+
+emmeans::emmeans(aov_em, specs = "Modality") %>% contrast(method=contr) %>% 
+  summary(infer=TRUE) %>%
+  kable()
+
+
+```
+
+# Multiple Comparisons
+
+## Multiple Comparisons
+
+-   We want our tests to find true positives and true negatives
+
+-   Multiple comparisons
+
+    -   Family-wise error rate
+
+$$
+FWER = 1 - (1 - \alpha)^k
+$$
+
+k = number of comparisons
+
+-   $\alpha$-inflation
+
+    -   **Testing each new pairwise comparison is costly**
+
+## Bonferroni
+
+::: columns
+::: {.column width="50%"}
+$$\alpha / m$$
+
+-   Where:
+
+    -   m = number f comparisons
+
+    -   $\alpha$ = Level of significance
+
+-   Controls for false positives (Type I errors)
+
+-   Overly conservative
+
+    -   Leads to false negatives (Type II errors)
+:::
+
+::: {.column width="50%"}
+-   Report adjusted p-values
+
+    -   Multiple each by \# tests
+
+```{r}
+
+pvals = c(0.01,0.02,0.04)
+p.adjust(pvals,method ="bonferroni", n = length(pvals))
+
+```
+:::
+:::
+
+## Holm-Bonferroni
+
+::: columns
+::: {.column width="50%"}
+-   Strikes a balance between Type I and Type II errors
+
+1.  Sort p-values from smallest to largest
+
+```{r}
+pvals = c(0.01,0.02,0.04)
+```
+
+2.  Test whether *p* \< $\frac {\alpha} {m+ 1-k}$
+
+-   If so, reject and move to the next
+:::
+
+::: {.column width="50%"}
+-   Typically you report the adjusted p-value
+    -   Just multiply your p-value by the adjusted alpha's denominator
+
+```{r}
+pvals = c(0.01,0.02,0.04)
+p.adjust(pvals,method ="holm",n = length(pvals))
+
+```
+:::
+:::
+
+## Many Multiple Comparison Corrections
+
+-   Tukey
+-   Scheffe
+-   Dunnett
+-   Fisher's LSD (least significant difference)
+-   Newman-Keuls
+
+::: callout-note
+-   Find what your field does and, more importantly, justify your
+    decisions
+:::
+
+## `emmeans`
+
+-   Correct for multiple comparisons using the adjust argument
+
+```{r}
+#| code-line-numbers: "2"
+
+emmeans(aov_em, specs = "Modality") %>%
+pairs(adjust = "bonf") %>%
+    kable() %>%
+   kable_styling(font_size = 24) %>%
+ column_spec(2, color = "white",
+              background = "red")
+
+```
+
+## `emmeans`
+
+-   Adjust CIs for multiple comparisons
+
+```{r}
+#| code-line-numbers: "3"
+emmeans1 <- emmeans::emmeans(aov_em, specs = "Modality")
+emmeans1_pair <- pairs(emmeans1, adjust ="holm")
+confint(emmeans1_pair, adjust="bonf")%>%
+  kable() %>% 
+   kable_styling(font_size = 24) %>%
+ column_spec(2, color = "white",
+              background = "red")
+
+```
+
+## ANOVA Write-up
+
+-   Factor
+    -   Significance tests (F, degrees of freedom, p, effect size)
+-   Post-hoc comparisons
+    -   Difference
+
+    -   Significance tests (t, degrees of freedom, p, effect size)
+
+    -   $\alpha$-adjustment used
+
+    -   Adjusted p-value
+
+## Plotting Group Means
+
+```{r}
+#| echo: false
+#| fig-align: center
+
+
+mod=lm(Val ~ Modality, data=senses_filt)
+
+means=modelbased::estimate_means(mod)
+
+d=ggplot(senses_filt, aes(x = Modality, y = Val)) +
+  # Add base data
+  geom_violinhalf(aes(fill = Modality), color = "black") +
+  geom_jitter2(width = 0.05, alpha = 0.5) +
+
+  # Add pointrange and line from means
+  geom_line(data = means, aes(y = Mean, group = 1), size = 1) +
+  geom_pointrange(
+    data = means,
+    aes(y = Mean, ymin = CI_low, ymax = CI_high),
+    size = 1,
+    color = "red"
+  ) +
+  # Improve colors
+  scale_fill_material() +
+  theme_minimal(base_size=16)
+
+d
+
+```
+
+## Plotting Group Means
+
+```{r}
+#| echo: false
+#| fig-align: center
+
+
+mod=lm(Val ~ Modality, data=senses)
+
+means=modelbased::estimate_means(mod)
+
+d=ggplot(senses, aes(x = Modality, y = Val)) +
+  # Add base data
+  geom_violinhalf(aes(fill = Modality), color = "black") +
+  geom_jitter2(width = 0.05, alpha = 0.5) +
+
+  # Add pointrange and line from means +
+  geom_pointrange(
+    data = means,
+    aes(y = Mean, ymin = CI_low, ymax = CI_high),
+    size = 1,
+    color = "red"
+  ) +
+  # Improve colors
+  scale_fill_material() +
+  theme_minimal(base_size = 16) +
+  theme(legend.position = "none") 
+
+d
+
+
+```
+
+## Wrap-up
+
+-   Linear models can be easily extended to categorical predictors
+
+    -   Interpretation of intercept and slope are a bit different
+
+        -   Depends on coding scheme you use
+
+    -   Interpretation of test statistics and statistical significance
+        are the same
+
+        -   So are assumptions checks!
+
+## Assumption checks
+
+```{r}
+#| fig-align: center
+#| 
+mod_check <- lm(Val~Modality, data=senses)
+
+performance::check_model(mod_check, check=c("normality", "linearity", "homogeneity", "qq"))
+
+```
+
+## Next Week
+
+-   Effect size and power analysis!
