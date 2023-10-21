@@ -43,7 +43,7 @@ on Sunday (unless otherwise stated)</li>
 | 6 | 10/9/23 | Statistical Inference: NHST and p values | [{{< fa book-open-reader >}}](/schedule/06a-week.qmd) | [{{< fa laptop-code >}}](/slides/07-NHST-ps/07-NHST-o.html) |  |
 | 6 | 10/11/23 | GLM 1: Numerical and Categorical Explanatory Models  |[{{< fa book-open-reader >}}](/schedule/06-week.qmd)  |[{{< fa laptop-code >}}](/slides/08-Regression_1/08-Regression.html)  | [{{< fa pen-ruler >}}](/Labs/Lab4.qmd) |
 | 7 | 10-16/10-18 | Midterm Break |  |  |  |
-| 8 | 10/23/23 | GLM 2: Categorical Explanatory Models | [{{< fa book-open-reader >}}](/schedule/08-week.qmd) | {{< fa laptop-code >}} |  |
+| 8 | 10/23/23 | GLM 2: Categorical Explanatory Models | [{{< fa book-open-reader >}}](/schedule/08-week.qmd) | [{{< fa laptop-code >}}](/slides/09-Cat-Reg/09-Cat-Pred.html) |  |
 | 8 | 10/25/23 | Lab 5 |  |  | {{< fa pen-ruler >}} |
 | 9 | 10/30/23 | GLM 3: Categorical Explanatory Models | [{{< fa book-open-reader >}}](/schedule/09-week.qmd) | {{< fa laptop-code >}} |  |
 | 9 | 11/1/23 | Lab 6 |  |  | {{< fa pen-ruler >}} |
