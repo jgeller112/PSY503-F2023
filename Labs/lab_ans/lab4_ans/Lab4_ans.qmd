@@ -11,7 +11,7 @@ html:
     code-tools: true
 engine: knitr
 webr: 
-  packages: ["tidyverse", "easystats", "patchwork", "broom"]
+  packages: ["tidyverse", "easystats", "patchwork", "broom", "ggstatsplot"]
 filters:
   - webr
 execute:
@@ -23,7 +23,6 @@ execute:
   fig-width: 12
   fig-height: 8
 ---
-
 # Lab 4
 
 In this exercise, we will use a dataset that looks at the relationship between age and pitch perception (in Hz). You will build a linear model and answer this question: Does pitch perception change as we age?
@@ -36,6 +35,16 @@ library(patchwork)
 library(broom) # fit lm models
 library(easystats) # has performance, cor_test, and report
 ```
+
+```{webr-r}
+
+library(tidyverse) # plotting
+library(patchwork)
+library(broom) # fit lm models
+library(easystats) # has performance, cor_test, and report
+
+```
+
 
 ```{webr-r}
 
