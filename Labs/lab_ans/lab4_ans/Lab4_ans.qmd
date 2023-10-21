@@ -1,0 +1,269 @@
+---
+title: "Lab 4: Linear Modeling"
+subtitle: "Princeton University"
+author: "Jason Geller, Ph.D.(he/him)"
+date: 'Updated:`r Sys.Date()`'
+format: html
+toc: true
+toc_float: true
+html:
+    code-fold: true
+    code-tools: true
+engine: knitr
+webr: 
+  packages: ["tidyverse", "easystats", "patchwork", "broom"]
+filters:
+  - webr
+execute:
+  freeze: auto
+  echo: true
+  message: false
+  warning: false
+  fig-align: center
+  fig-width: 12
+  fig-height: 8
+---
+
+# Lab 4
+
+In this exercise, we will use a dataset that looks at the relationship between age and pitch perception (in Hz). You will build a linear model and answer this question: Does pitch perception change as we age?
+
+Load the `age_pitch.csv` data from Github. Call the tibble `age`: <https://raw.githubusercontent.com/jgeller112/psy503-psych_stats/master/static/slides/10-linear_modeling/data/age_pitch.csv>
+
+```{r}
+library(tidyverse) # plotting
+library(patchwork)
+library(broom) # fit lm models
+library(easystats) # has performance, cor_test, and report
+```
+
+```{webr-r}
+
+age <- read.csv("https://raw.githubusercontent.com/jgeller112/psy503-psych_stats/master/static/slides/10-linear_modeling/data/age_pitch.csv")
+
+head(age)
+```
+
+## Distribution of Scores
+
+-   Plot the distribution of each variable
+
+```{webr-r}
+#
+
+p1 <- age %>% 
+  ggplot(aes(x=age))+
+  geom_histogram(bins=10)+ 
+  labs(x="Age", y="Count", title="Histogram of Age")
+
+p2 <- age %>% 
+  ggplot(aes(x=pitch))+
+  geom_histogram(bins=10)+ 
+  labs(x="Pitch", y="Count", title="Histogram of Pitch")
+
+p2+p1
+
+
+```
+
+## Make a scatter plot
+
+-   Make a scatter plot of the relationship between `age` (x-axis) and `pitch` (y-axis).
+
+```{webr-r}
+#
+library(ggstatsplot)
+
+ggstatsplot::ggscatterstats(age, 
+                            x= "age", 
+                            y="pitch", 
+                          ) + 
+  theme_minimal(base_size=16)
+
+
+```
+
+## Correlation
+
+-   Calculate the correlation between pitch and age and describe the relationship
+
+    -   There is a significant negative and large correlation, *r* = -0.73, 95% CI \[-0.82, -0.59\], *t*(64) = -8.44, *p* \< .001. As age increases, pitch perception decreases.
+
+```{webr-r}
+#
+cor_test(age, x="age", y="pitch")
+```
+
+## Fit a model
+
+-   Regress `pitch` onto `age` in a linear model. Summarize the model using the `tidy()` function:
+
+```{r}
+
+age <- read.csv("https://raw.githubusercontent.com/jgeller112/psy503-psych_stats/master/static/slides/10-linear_modeling/data/age_pitch.csv")
+
+
+age_model <- lm(pitch~age, data=age)
+
+age_model %>%
+  tidy() # get tidy table 
+```
+
+```{webr-r}
+#
+age_model <- lm(pitch~age, data=age)
+
+age_model %>%
+  tidy() # get tidy table 
+```
+
+-   Now let\'s use the model coefficients to describe the relationship.
+
+    -   Interpret the slope
+
+        -   For a one-unit increase in age, there is a 0.69 decrease in pitch perception.
+
+    -   Does it make sense to interpret the intercept? If so, write the interpretation in the context of the data. Otherwise, briefly explain why not.
+
+        -  It does not make sense to interpret it because you cannot be 0 years old.
+
+```{=html}
+<!-- -->
+```
+-   Is our overall model significant? What does it mean if our F test is significant?
+
+    -   The overall model is significant, `r report::report_performance(age_model)`
+
+        -   This means that our predictor model is better than an empty model
+
+```{webr-r}
+```
+
+-   What is the $R^2$ value of our model? What does it mean? Does this model explain a lot of variance in pitch?
+
+    -   The $R^2$ is .53. This means 53% of the variance in pitch is explained by age. It is explains a substantial proportion of variance.
+
+## Regression line with 95% CIs
+
+-   Make your scatter plot again, but now include 95% CI bands around the line
+
+```{webr-r}
+
+p1 <- augment(age_model, se_fit = TRUE, interval = "confidence") %>%
+  ggplot(aes(x = age, y = pitch)) +
+  geom_point(colour = "black") +
+  geom_ribbon(aes(ymin=.lower, ymax=.upper), alpha=.5) + # This plots your custom confidence interval +
+  labs(x="Age", y="Pitch", title = "Regression Model 95% CIs")
+  
+
+p1
+
+```
+
+## Model Predictions
+
+-   Calculate pitch predictions for 20, 30, 40, 50, 60, and 70 year old people
+
+```{webr-r}
+#create a dataframe with value you want to predict
+meaning <- data.frame(age = c(20,30, 40, 50, 60, 70))
+
+predict(age_model, meaning)
+
+```
+
+## Checking model assumptions
+
+Now let\'s evaluate the model conditions. Check the **linearity**, **constant variance**, and **normality** conditions. For each condition, indicate whether it is satisfied along with a brief explanation for your conclusion.
+
+### Normality of Errors
+
+-   Create a a histogram of the residuals
+
+```{webr-r}
+
+augment(age_model) %>%
+  ggplot(aes(x=.resid)) + 
+  geom_histogram(bins=12)
+
+
+```
+
+-   How does it look?
+
+    -   It does not look too bad
+
+-   Now create a Q-Q plot
+
+```{webr-r}
+
+augment(age_model) %>% 
+  ggplot(aes(sample = .resid)) +
+  stat_qq() +
+  stat_qq_line() +
+  labs(x="Predicted", y="Residuals", title="Assumption Check: QQ Plot")
+
+
+```
+
+-   Does not look too far off from normal
+
+### Linearity
+
+-   Next, create a residual vs. fitted plot. For this, all you need to do is plot the fitted values on the x axis and the residuals on the y axis.
+
+```{webr-r}
+
+
+augment(age_model) %>%
+  ggplot(aes(x=.fitted, y=.resid)) + 
+           geom_point() + 
+  geom_hline(yintercept = 0) + 
+  labs(x="Predicted", y="Residuals", title="Assumption Check: Linearity")
+
+```
+
+-   How does it look?
+
+    -   Appears to fairly random around 0
+
+## Homoscadacity (constant error)
+
+-   Test for non-constant variance by look at the residual vs. fitted plot from above
+
+```{webr-r}
+
+augment(age_model) %>%
+  ggplot(aes(x=.fitted, y=.resid)) + 
+           geom_point() + 
+  geom_hline(yintercept = 0) + 
+  labs(x="Predicted", y="Residuals", title="Assumption Check: Error Variance")
+
+```
+
+-   How does it look?
+
+    -   There does not appear to be any patterns with the residuals
+
+## `Performance`
+
+-   Use the `performance` function to get plots for the assumptions check
+
+    ```{webr-r}
+
+    performance::check_model(age_model,check=c("normality", "linearity", "homogeneity", "qq"))
+
+    ```
+
+-   For fun, use the `check_homogeneity` and `check_normality` functions to check if your assessment was correct. There is no function to test linearity.
+
+    ```{webr-r}
+
+    performance::check_heteroscedasticity(age_model)
+    performance::check_normality(age_model)
+
+    ```
+
+## Write-up
+
+-   Write up the results from the analysis in APA style. In your write up, make sure you include a discussion of your overall model fit (F test and $R^2$) , tests for individual parameters, violations of assumptions, if any, and your overall conclusion. Please include visualizations of your data (scatter plot with regression line) and assumption checks. You can use the `report` function to help you, but please do not submit the exact output.
