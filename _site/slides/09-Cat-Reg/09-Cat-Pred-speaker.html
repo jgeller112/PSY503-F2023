@@ -11,7 +11,7 @@
   <meta name="generator" content="quarto-1.4.420">
 
   <meta name="author" content="Jason Geller, PH.D.(he/him)">
-  <meta name="dcterms.date" content="2023-10-21">
+  <meta name="dcterms.date" content="2023-10-22">
   <title>GLM 2: Categorical Predictors</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -408,7 +408,7 @@ Jason Geller, PH.D.(he/him)
 </div>
 </div>
 
-  <p class="date">2023-10-21</p>
+  <p class="date">2023-10-22</p>
 </section>
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
@@ -448,6 +448,10 @@ Jason Geller, PH.D.(he/him)
 17     ungeviz    0.1.0                                       @ungeviz</code></pre>
 </div>
 </div>
+</section>
+<section id="follow-along" class="slide level2">
+<h2>Follow Along</h2>
+<p><a href="https://github.com/jgeller112/PSY503-F2023/blob/main/slides/09-Cat-Reg/09-Cat-Pred.qmd" class="uri">https://github.com/jgeller112/PSY503-F2023/blob/main/slides/09-Cat-Reg/09-Cat-Pred.qmd</a></p>
 </section>
 <section id="today" class="slide level2">
 <h2>Today</h2>
@@ -605,7 +609,7 @@ $ Val      &lt;dbl&gt; 5.539592, 5.173947, 5.557228, 5.511795, 5.952941, 5.96500
 <li><p>R’s default system</p>
 <ul>
 <li><p>Start with <span class="math inline">\(K\)</span> levels</p></li>
-<li><p>Break variable into <span class="math inline">\(K\)</span> dummy variables, which are coded as 0 and 1</p>
+<li><p>Break variable into <span class="math inline">\(K\)</span>-1 dummy variables, which are coded as 0 and 1</p>
 <ul>
 <li><p>Variable coded as 0 is with reference level</p>
 <ul>
@@ -1344,10 +1348,12 @@ $ Val      &lt;dbl&gt; 5.398113, 5.876667, 5.233370, 5.539592, 5.173947, 5.24000
 </section>
 <section id="sum-coding-1" class="slide level2">
 <h2>Sum Coding</h2>
-<p>Intercept = grand mean</p>
 <ul>
-<li><p>Assign 1 to target level, -1 to non-target level, 0 dropped</p></li>
-<li><p>Estimate represents each level vs.&nbsp;grand mean</p></li>
+<li><p>Intercept = grand mean</p></li>
+<li><p>Estimates = level vs.&nbsp;grand mean</p>
+<ul>
+<li>Assign 1 to target level, -1 to non-target level, 0 dropped</li>
+</ul></li>
 </ul>
 </section>
 <section id="sum-coding-2" class="slide level2">
@@ -1473,18 +1479,21 @@ $ Val      &lt;dbl&gt; 5.398113, 5.876667, 5.233370, 5.539592, 5.173947, 5.24000
 <section id="deviation-coding-1" class="slide level2">
 <h2>Deviation coding</h2>
 <ul>
-<li>Intercept = grand mean</li>
+<li><p>Intercept = grand mean</p></li>
+<li><p>Estimates = deviation/difference between level and reference level</p>
+<ul>
 <li>The target level gets:</li>
+</ul></li>
 </ul>
 <p><span class="math display">\[
 \frac{k-1}{k}
 \]</span></p>
 <ul>
-<li><p>Any non-target level gets:</p>
-<p><span class="math display">\[
--\frac{1}{k}
-\]</span></p></li>
+<li>Any non-target level gets:</li>
 </ul>
+<p><span class="math display">\[
+    -\frac{1}{k}
+\]</span></p>
 </section>
 <section id="deviation-coding-2" class="slide level2">
 <h2>Deviation coding</h2>

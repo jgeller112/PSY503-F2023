@@ -55,6 +55,10 @@ pkgs <- cite_packages(output = "table", out.dir = ".")
 pkgs
 ```
 
+## Follow Along
+
+<https://github.com/jgeller112/PSY503-F2023/blob/main/slides/09-Cat-Reg/09-Cat-Pred.qmd>
+
 ## Today
 
 ::: columns
@@ -76,7 +80,6 @@ pkgs
 :::
 
 ::: {.column width="50%"}
-
 -   Multiple comparisons
 
 -   Plotting
@@ -249,7 +252,7 @@ senses_filt %>%
 
     -   Start with $K$ levels
 
-    -   Break variable into $K$ dummy variables, which are coded as 0
+    -   Break variable into $K$-1 dummy variables, which are coded as 0
         and 1
 
         -   Variable coded as 0 is with reference level
@@ -657,11 +660,11 @@ lm(Val~mod_treat, data=senses_treatment) %>%
 
 ## Sum Coding
 
-Intercept = grand mean
+-   Intercept = grand mean
 
--   Assign 1 to target level, -1 to non-target level, 0 dropped
+-   Estimates = level vs. grand mean
 
--   Estimate represents each level vs. grand mean
+    -   Assign 1 to target level, -1 to non-target level, 0 dropped
 
 ## Sum Coding
 
@@ -704,7 +707,10 @@ lm(Val~sum, data=senses_sum) %>%
 ## Deviation coding
 
 -   Intercept = grand mean
--   The target level gets:
+
+-   Estimates = deviation/difference between level and reference level
+
+    -   The target level gets:
 
 $$
 \frac{k-1}{k}
@@ -712,9 +718,9 @@ $$
 
 -   Any non-target level gets:
 
-    $$
+$$
     -\frac{1}{k}
-    $$
+$$
 
 ## Deviation coding
 
