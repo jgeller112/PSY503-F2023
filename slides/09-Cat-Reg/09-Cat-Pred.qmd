@@ -172,6 +172,12 @@ $${Y_i} = b_0 + b_1 {X_i} + e$$
 
 ```{r}
 
+is.factor(senses_filt$Modality)
+
+senses_filt %>% 
+  mutate(Modality=factor(Modality), 
+         Modality=as.factor(Modality))
+
 ```
 
 ::: callout-important
@@ -288,6 +294,9 @@ $$\operatorname{\bar{Y}_{taste}} = b_0 + b_1(\operatorname{Modality}_{\operatorn
 ## dummy coding
 senses_dum <- senses_filt %>%
   mutate(mod=ifelse(Modality=="Smell", 0, 1))
+
+
+senses_dum
 ```
 
 ## Dummy coded regression
@@ -307,7 +316,7 @@ lm_treat %>%
 
 ```
 
--   $\hat{b_0}$
+-   $\hat{b_0}$: The mean of smell (5.47). When X = 0 (Smell), y = 5.47
 
 -   $\hat{b_1}$:
 
@@ -330,14 +339,20 @@ $$slope=\frac{\mu_{diff}}{run}$$
               background = "red")
 ```
 
--   $\hat{b_1}$:
+-   $\hat{b_1}$: The mean difference between the two groups. If you go from one category to another, there is a .337 difference between the two groups
 
 ## Calculate Means
 
 > Let's calculate the means for each group with this equation
 
 ```{r}
-# 
+# mean of smell
+
+#b_0 + b_1(0)
+5.47 + (.337)*(0) 
+#b_0 + b_1(1)
+# mean of taste
+5.47 + (.337)*1
 
 ```
 
@@ -400,12 +415,12 @@ definitions <https://debruine.github.io/faux/articles/contrasts.html>
 ```{r}
 # how do apply deviation code
 senses_filt_dev <- senses_filt %>%
-  mutate(mod_dev=as.factor(Modality))
-  #add a new var to sum code 
+  mutate(mod_dev=as.factor(Modality)) %>%
+  #man code it
+  mutate(modo_dev=ifelse(Modality=="Smell", .5, -.5))
+  #add a new var to dev code 
 
 contrasts(senses_filt_dev$mod_dev) <- c(0.5, -0.5) # change 0 - 1 to +.5 and -.5
-
-contrasts(senses_filt_dev$mod_dev)
 
 ```
 
@@ -415,8 +430,6 @@ contrasts(senses_filt_dev$mod_dev)
 
 lm_dev <- lm(Val ~ mod_dev, data=senses_filt_dev)
 ```
-
-lm_dev \<- lm(Val \~ mod_dev, data=senses_filt_dev)
 
 ```{r}
 #| echo: false
@@ -430,13 +443,14 @@ lm(Val ~ mod_dev, data=senses_filt_dev) %>%
               background = "red")
 ```
 
--   $\hat{b_0}$:
+-   $\hat{b_0}$: The value of the intercept is the mean of the means
+    (5.64)
 
--   $\hat{b_1}$:
+-   $\hat{b_1}$: The difference between Smell and taste
 
--   $\bar{Y}_{smell}$:
+-   $\bar{Y}_{smell} = b_0 + b_1(.5)$
 
--   $\bar{Y}_{taste}$:
+-   $\bar{Y}_{taste}: b_0 + b_1(-.5)$
 
 ## Sum Coding
 
@@ -447,7 +461,10 @@ lm(Val ~ mod_dev, data=senses_filt_dev) %>%
 
 senses_filt_sum <- senses_filt_dev %>%
   mutate(mod_sum55=ifelse(mod_dev=="Taste", .5, -.5), 
-mod_sum11 = ifelse(mod_dev=="Taste", 1, -1)) # add a new var to sum code (1, -1)
+mod_sum11 = ifelse(mod_dev=="Smell", 1, -1)) # add a new var to sum code (1, -1)
+
+
+contrasts(senses_filt_sum$mod_dev) <- c(1, -1)
 
 ```
 
@@ -495,13 +512,14 @@ lm(Val ~ mod_sum11, data=senses_filt_sum)%>%
               background = "red")
 ```
 
--   $\hat{b_0}$:
+-   $\hat{b_0}$: The grand mean of Smell and taste
 
--   $\hat{b_1}$:
+-   $\hat{b_1}$: the difference between what we coded as 1 and the grand
+    mean, which is half the difference between the two conditions.
 
--   $\bar{Y}_{taste}$:
+-   $\bar{Y}_{smell} = b_0 + b_1(1)$
 
--   $\bar{Y}_{smell}$:
+-   $\bar{Y}_{taste}: b_0 + b_1(-1)$
 
 ## Why -0.5 and +0.5?
 

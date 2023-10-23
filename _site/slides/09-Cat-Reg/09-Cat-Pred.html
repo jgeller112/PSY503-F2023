@@ -11,7 +11,7 @@
   <meta name="generator" content="quarto-1.4.420">
 
   <meta name="author" content="Jason Geller, PH.D.(he/him)">
-  <meta name="dcterms.date" content="2023-10-22">
+  <meta name="dcterms.date" content="2023-10-23">
   <title>GLM 2: Categorical Predictors</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -408,7 +408,7 @@ Jason Geller, PH.D.(he/him)
 </div>
 </div>
 
-  <p class="date">2023-10-22</p>
+  <p class="date">2023-10-23</p>
 </section>
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
@@ -556,6 +556,31 @@ $ Val      &lt;dbl&gt; 5.539592, 5.173947, 5.557228, 5.511795, 5.952941, 5.96500
 <p>In our dataset, what is the factor and what are its levels?</p>
 </blockquote></li>
 </ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">is.factor</span>(senses_filt<span class="sc">$</span>Modality)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>senses_filt <span class="sc">%&gt;%</span> </span>
+<span id="cb7-2"><a href="#cb7-2"></a>  <span class="fu">mutate</span>(<span class="at">Modality=</span><span class="fu">factor</span>(Modality), </span>
+<span id="cb7-3"><a href="#cb7-3"></a>         <span class="at">Modality=</span><span class="fu">as.factor</span>(Modality))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 72 × 3
+   Word       Modality   Val
+   &lt;chr&gt;      &lt;fct&gt;    &lt;dbl&gt;
+ 1 acidic     Taste     5.54
+ 2 acrid      Smell     5.17
+ 3 alcoholic  Taste     5.56
+ 4 antiseptic Smell     5.51
+ 5 aromatic   Smell     5.95
+ 6 astringent Taste     5.96
+ 7 barbecued  Taste     6.05
+ 8 beery      Taste     6.07
+ 9 bitter     Taste     5.12
+10 bland      Taste     5.75
+# ℹ 62 more rows</code></pre>
+</div>
+</div>
 <div class="callout callout-important callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -641,15 +666,34 @@ $ Val      &lt;dbl&gt; 5.539592, 5.173947, 5.557228, 5.511795, 5.952941, 5.96500
 <h2>Dummy coding</h2>
 <p><br> <br> <br></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="do">## dummy coding</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a>senses_dum <span class="ot">&lt;-</span> senses_filt <span class="sc">%&gt;%</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a>  <span class="fu">mutate</span>(<span class="at">mod=</span><span class="fu">ifelse</span>(Modality<span class="sc">==</span><span class="st">"Smell"</span>, <span class="dv">0</span>, <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="do">## dummy coding</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a>senses_dum <span class="ot">&lt;-</span> senses_filt <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a>  <span class="fu">mutate</span>(<span class="at">mod=</span><span class="fu">ifelse</span>(Modality<span class="sc">==</span><span class="st">"Smell"</span>, <span class="dv">0</span>, <span class="dv">1</span>))</span>
+<span id="cb9-4"><a href="#cb9-4"></a></span>
+<span id="cb9-5"><a href="#cb9-5"></a></span>
+<span id="cb9-6"><a href="#cb9-6"></a>senses_dum</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 72 × 4
+   Word       Modality   Val   mod
+   &lt;chr&gt;      &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt;
+ 1 acidic     Taste     5.54     1
+ 2 acrid      Smell     5.17     0
+ 3 alcoholic  Taste     5.56     1
+ 4 antiseptic Smell     5.51     0
+ 5 aromatic   Smell     5.95     0
+ 6 astringent Taste     5.96     1
+ 7 barbecued  Taste     6.05     1
+ 8 beery      Taste     6.07     1
+ 9 bitter     Taste     5.12     1
+10 bland      Taste     5.75     1
+# ℹ 62 more rows</code></pre>
+</div>
 </div>
 </section>
 <section id="dummy-coded-regression" class="slide level2">
 <h2>Dummy coded regression</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>lm_treat <span class="ot">&lt;-</span> <span class="fu">lm</span>(Val <span class="sc">~</span> mod, <span class="at">data=</span>senses_dum)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>lm_treat <span class="ot">&lt;-</span> <span class="fu">lm</span>(Val <span class="sc">~</span> mod, <span class="at">data=</span>senses_dum)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
@@ -691,7 +735,7 @@ $ Val      &lt;dbl&gt; 5.539592, 5.173947, 5.557228, 5.511795, 5.952941, 5.96500
 </div>
 </div>
 <ul>
-<li><p><span class="math inline">\(\hat{b_0}\)</span></p></li>
+<li><p><span class="math inline">\(\hat{b_0}\)</span>: The mean of smell (5.47). When X = 0 (Smell), y = 5.47</p></li>
 <li><p><span class="math inline">\(\hat{b_1}\)</span>:</p></li>
 </ul>
 </section>
@@ -742,7 +786,7 @@ $ Val      &lt;dbl&gt; 5.539592, 5.173947, 5.557228, 5.511795, 5.952941, 5.96500
 </div>
 </div>
 <ul>
-<li><span class="math inline">\(\hat{b_1}\)</span>:</li>
+<li><span class="math inline">\(\hat{b_1}\)</span>: The mean difference between the two groups. If you go from one category to another, there is a .337 difference between the two groups</li>
 </ul>
 </section>
 <section id="calculate-means" class="slide level2">
@@ -751,18 +795,30 @@ $ Val      &lt;dbl&gt; 5.539592, 5.173947, 5.557228, 5.511795, 5.952941, 5.96500
 <p>Let’s calculate the means for each group with this equation</p>
 </blockquote>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="co"># mean of smell</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a></span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="co">#b_0 + b_1(0)</span></span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="fl">5.47</span> <span class="sc">+</span> (.<span class="dv">337</span>)<span class="sc">*</span>(<span class="dv">0</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5.47</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="co">#b_0 + b_1(1)</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="co"># mean of taste</span></span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="fl">5.47</span> <span class="sc">+</span> (.<span class="dv">337</span>)<span class="sc">*</span><span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5.807</code></pre>
+</div>
 </div>
 </section>
 <section id="change-reference-level" class="slide level2">
 <h2>Change Reference Level</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>senses_dum <span class="ot">&lt;-</span> senses_filt <span class="sc">%&gt;%</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a>  <span class="fu">mutate</span>(<span class="at">mod=</span><span class="fu">factor</span>(Modality)) <span class="sc">%&gt;%</span> </span>
-<span id="cb8-3"><a href="#cb8-3"></a>  <span class="fu">mutate</span>(<span class="at">mod1=</span><span class="fu">relevel</span>(mod, <span class="at">ref=</span><span class="st">"Taste"</span>))</span>
-<span id="cb8-4"><a href="#cb8-4"></a><span class="co">#relevel the var </span></span>
-<span id="cb8-5"><a href="#cb8-5"></a><span class="co">#contrasts(senses_dum$mod1)</span></span>
-<span id="cb8-6"><a href="#cb8-6"></a><span class="co">#contrasts(senses_dum$mod)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>senses_dum <span class="ot">&lt;-</span> senses_filt <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a>  <span class="fu">mutate</span>(<span class="at">mod=</span><span class="fu">factor</span>(Modality)) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-3"><a href="#cb16-3"></a>  <span class="fu">mutate</span>(<span class="at">mod1=</span><span class="fu">relevel</span>(mod, <span class="at">ref=</span><span class="st">"Taste"</span>))</span>
+<span id="cb16-4"><a href="#cb16-4"></a><span class="co">#relevel the var </span></span>
+<span id="cb16-5"><a href="#cb16-5"></a><span class="co">#contrasts(senses_dum$mod1)</span></span>
+<span id="cb16-6"><a href="#cb16-6"></a><span class="co">#contrasts(senses_dum$mod)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
@@ -853,27 +909,21 @@ $ Val      &lt;dbl&gt; 5.539592, 5.173947, 5.557228, 5.511795, 5.952941, 5.96500
 <section id="deviation-coding" class="slide level2">
 <h2>Deviation coding</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># how do apply deviation code</span></span>
-<span id="cb9-2"><a href="#cb9-2"></a>senses_filt_dev <span class="ot">&lt;-</span> senses_filt <span class="sc">%&gt;%</span></span>
-<span id="cb9-3"><a href="#cb9-3"></a>  <span class="fu">mutate</span>(<span class="at">mod_dev=</span><span class="fu">as.factor</span>(Modality))</span>
-<span id="cb9-4"><a href="#cb9-4"></a>  <span class="co">#add a new var to sum code </span></span>
-<span id="cb9-5"><a href="#cb9-5"></a></span>
-<span id="cb9-6"><a href="#cb9-6"></a><span class="fu">contrasts</span>(senses_filt_dev<span class="sc">$</span>mod_dev) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="sc">-</span><span class="fl">0.5</span>) <span class="co"># change 0 - 1 to +.5 and -.5</span></span>
-<span id="cb9-7"><a href="#cb9-7"></a></span>
-<span id="cb9-8"><a href="#cb9-8"></a><span class="fu">contrasts</span>(senses_filt_dev<span class="sc">$</span>mod_dev)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>      [,1]
-Smell  0.5
-Taste -0.5</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># how do apply deviation code</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a>senses_filt_dev <span class="ot">&lt;-</span> senses_filt <span class="sc">%&gt;%</span></span>
+<span id="cb17-3"><a href="#cb17-3"></a>  <span class="fu">mutate</span>(<span class="at">mod_dev=</span><span class="fu">as.factor</span>(Modality)) <span class="sc">%&gt;%</span></span>
+<span id="cb17-4"><a href="#cb17-4"></a>  <span class="co">#man code it</span></span>
+<span id="cb17-5"><a href="#cb17-5"></a>  <span class="fu">mutate</span>(<span class="at">modo_dev=</span><span class="fu">ifelse</span>(Modality<span class="sc">==</span><span class="st">"Smell"</span>, .<span class="dv">5</span>, <span class="sc">-</span>.<span class="dv">5</span>))</span>
+<span id="cb17-6"><a href="#cb17-6"></a>  <span class="co">#add a new var to dev code </span></span>
+<span id="cb17-7"><a href="#cb17-7"></a></span>
+<span id="cb17-8"><a href="#cb17-8"></a><span class="fu">contrasts</span>(senses_filt_dev<span class="sc">$</span>mod_dev) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="sc">-</span><span class="fl">0.5</span>) <span class="co"># change 0 - 1 to +.5 and -.5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="deviation-coding-results" class="slide level2">
 <h2>Deviation Coding Results</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>lm_dev <span class="ot">&lt;-</span> <span class="fu">lm</span>(Val <span class="sc">~</span> mod_dev, <span class="at">data=</span>senses_filt_dev)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>lm_dev <span class="ot">&lt;-</span> <span class="fu">lm</span>(Val <span class="sc">~</span> mod_dev, <span class="at">data=</span>senses_filt_dev)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>lm_dev &lt;- lm(Val ~ mod_dev, data=senses_filt_dev)</p>
 <div class="cell">
 <div class="cell-output-display">
 <table class="table" data-quarto-postprocess="true" style="font-size: 24px; margin-left: auto; margin-right: auto;">
@@ -914,10 +964,10 @@ Taste -0.5</code></pre>
 </div>
 </div>
 <ul>
-<li><p><span class="math inline">\(\hat{b_0}\)</span>:</p></li>
-<li><p><span class="math inline">\(\hat{b_1}\)</span>:</p></li>
-<li><p><span class="math inline">\(\bar{Y}_{smell}\)</span>:</p></li>
-<li><p><span class="math inline">\(\bar{Y}_{taste}\)</span>:</p></li>
+<li><p><span class="math inline">\(\hat{b_0}\)</span>: The value of the intercept is the mean of the means (5.64)</p></li>
+<li><p><span class="math inline">\(\hat{b_1}\)</span>: The difference between Smell and taste</p></li>
+<li><p><span class="math inline">\(\bar{Y}_{smell} = b_0 + b_1(.5)\)</span></p></li>
+<li><p><span class="math inline">\(\bar{Y}_{taste}: b_0 + b_1(-.5)\)</span></p></li>
 </ul>
 </section>
 <section id="sum-coding" class="slide level2">
@@ -926,9 +976,12 @@ Taste -0.5</code></pre>
 <li>1 and -1</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>senses_filt_sum <span class="ot">&lt;-</span> senses_filt_dev <span class="sc">%&gt;%</span></span>
-<span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">mutate</span>(<span class="at">mod_sum55=</span><span class="fu">ifelse</span>(mod_dev<span class="sc">==</span><span class="st">"Taste"</span>, .<span class="dv">5</span>, <span class="sc">-</span>.<span class="dv">5</span>), </span>
-<span id="cb12-3"><a href="#cb12-3"></a><span class="at">mod_sum11 =</span> <span class="fu">ifelse</span>(mod_dev<span class="sc">==</span><span class="st">"Taste"</span>, <span class="dv">1</span>, <span class="sc">-</span><span class="dv">1</span>)) <span class="co"># add a new var to sum code (1, -1)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>senses_filt_sum <span class="ot">&lt;-</span> senses_filt_dev <span class="sc">%&gt;%</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a>  <span class="fu">mutate</span>(<span class="at">mod_sum55=</span><span class="fu">ifelse</span>(mod_dev<span class="sc">==</span><span class="st">"Taste"</span>, .<span class="dv">5</span>, <span class="sc">-</span>.<span class="dv">5</span>), </span>
+<span id="cb19-3"><a href="#cb19-3"></a><span class="at">mod_sum11 =</span> <span class="fu">ifelse</span>(mod_dev<span class="sc">==</span><span class="st">"Smell"</span>, <span class="dv">1</span>, <span class="sc">-</span><span class="dv">1</span>)) <span class="co"># add a new var to sum code (1, -1)</span></span>
+<span id="cb19-4"><a href="#cb19-4"></a></span>
+<span id="cb19-5"><a href="#cb19-5"></a></span>
+<span id="cb19-6"><a href="#cb19-6"></a><span class="fu">contrasts</span>(senses_filt_sum<span class="sc">$</span>mod_dev) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="sc">-</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="sum-coding--1-1-interpretation" class="slide level2">
@@ -950,7 +1003,7 @@ Taste -0.5</code></pre>
 <section id="sum-coding-1--1-model-results" class="slide level2">
 <h2>Sum Coding (+1, -1) Model Results</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>lm_sum <span class="ot">&lt;-</span> <span class="fu">lm</span>(Val <span class="sc">~</span> mod_sum11, <span class="at">data=</span>senses_filt_sum)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>lm_sum <span class="ot">&lt;-</span> <span class="fu">lm</span>(Val <span class="sc">~</span> mod_sum11, <span class="at">data=</span>senses_filt_sum)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
@@ -978,12 +1031,12 @@ Taste -0.5</code></pre>
 </tr>
 <tr class="even">
 <td style="text-align: left;">mod_sum11</td>
-<td style="text-align: right; color: white !important; background-color: red !important;">0.1685562</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">-0.1685562</td>
 <td style="text-align: right;">0.0389664</td>
-<td style="text-align: right;">4.325684</td>
+<td style="text-align: right;">-4.325684</td>
 <td style="text-align: right;">4.95e-05</td>
-<td style="text-align: right;">0.0908402</td>
-<td style="text-align: right;">0.2462721</td>
+<td style="text-align: right;">-0.2462721</td>
+<td style="text-align: right;">-0.0908402</td>
 </tr>
 </tbody>
 </table>
@@ -992,10 +1045,10 @@ Taste -0.5</code></pre>
 </div>
 </div>
 <ul>
-<li><p><span class="math inline">\(\hat{b_0}\)</span>:</p></li>
-<li><p><span class="math inline">\(\hat{b_1}\)</span>:</p></li>
-<li><p><span class="math inline">\(\bar{Y}_{taste}\)</span>:</p></li>
-<li><p><span class="math inline">\(\bar{Y}_{smell}\)</span>:</p></li>
+<li><p><span class="math inline">\(\hat{b_0}\)</span>: The grand mean of Smell and taste</p></li>
+<li><p><span class="math inline">\(\hat{b_1}\)</span>: the difference between what we coded as 1 and the grand mean, which is half the difference between the two conditions.</p></li>
+<li><p><span class="math inline">\(\bar{Y}_{smell} = b_0 + b_1(1)\)</span></p></li>
+<li><p><span class="math inline">\(\bar{Y}_{taste}: b_0 + b_1(-1)\)</span></p></li>
 </ul>
 </section>
 <section id="why--0.5-and-0.5" class="slide level2">
@@ -1064,8 +1117,8 @@ Taste -0.5</code></pre>
 <li>Same results!</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">t.test</span>(Val <span class="sc">~</span> Modality, <span class="at">data=</span>senses_filt, <span class="at">var.equal=</span><span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="fu">tidy</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb14-2"><a href="#cb14-2"></a>  <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">t.test</span>(Val <span class="sc">~</span> Modality, <span class="at">data=</span>senses_filt, <span class="at">var.equal=</span><span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="fu">tidy</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb21-2"><a href="#cb21-2"></a>  <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table data-quarto-postprocess="true">
 <thead>
@@ -1121,7 +1174,7 @@ Taste -0.5</code></pre>
 </ul>
 </div><div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">glimpse</span>(senses)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">glimpse</span>(senses)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 405
 Columns: 3
@@ -1136,7 +1189,7 @@ $ Val      &lt;dbl&gt; 5.398113, 5.876667, 5.233370, 5.539592, 5.173947, 5.24000
 <section id="treatmentdummy-coding-multilevel-factors" class="slide level2">
 <h2>Treatment/dummy coding: multilevel factors</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>lm_all <span class="ot">&lt;-</span> <span class="fu">lm</span>(Val<span class="sc">~</span>Modality, <span class="at">data=</span>senses)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>lm_all <span class="ot">&lt;-</span> <span class="fu">lm</span>(Val<span class="sc">~</span>Modality, <span class="at">data=</span>senses)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
@@ -1286,10 +1339,10 @@ $ Val      &lt;dbl&gt; 5.398113, 5.876667, 5.233370, 5.539592, 5.173947, 5.24000
 <section id="dummy-coding-extension-3" class="slide level2">
 <h2>Dummy Coding Extension</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>senses_treatment  <span class="ot">&lt;-</span> senses <span class="sc">%&gt;%</span></span>
-<span id="cb18-2"><a href="#cb18-2"></a>  <span class="fu">mutate</span>(<span class="at">mod_treat =</span> faux<span class="sc">::</span><span class="fu">contr_code_treatment</span>(Modality))</span>
-<span id="cb18-3"><a href="#cb18-3"></a>         </span>
-<span id="cb18-4"><a href="#cb18-4"></a>senses_treatment_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(Val<span class="sc">~</span>mod_treat,  <span class="at">data=</span>senses_treatment)      </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>senses_treatment  <span class="ot">&lt;-</span> senses <span class="sc">%&gt;%</span></span>
+<span id="cb25-2"><a href="#cb25-2"></a>  <span class="fu">mutate</span>(<span class="at">mod_treat =</span> faux<span class="sc">::</span><span class="fu">contr_code_treatment</span>(Modality))</span>
+<span id="cb25-3"><a href="#cb25-3"></a>         </span>
+<span id="cb25-4"><a href="#cb25-4"></a>senses_treatment_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(Val<span class="sc">~</span>mod_treat,  <span class="at">data=</span>senses_treatment)      </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
@@ -1416,10 +1469,10 @@ $ Val      &lt;dbl&gt; 5.398113, 5.876667, 5.233370, 5.539592, 5.173947, 5.24000
 <section id="sum-coding-3" class="slide level2">
 <h2>Sum Coding</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>senses_sum <span class="ot">&lt;-</span> senses <span class="sc">%&gt;%</span></span>
-<span id="cb19-2"><a href="#cb19-2"></a>  <span class="fu">mutate</span>(<span class="at">sum =</span> <span class="fu">contr_code_sum</span>(Modality)) </span>
-<span id="cb19-3"><a href="#cb19-3"></a></span>
-<span id="cb19-4"><a href="#cb19-4"></a>lm_sum_coding <span class="ot">&lt;-</span> <span class="fu">lm</span>(Val<span class="sc">~</span>sum, <span class="at">data=</span>senses_sum)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>senses_sum <span class="ot">&lt;-</span> senses <span class="sc">%&gt;%</span></span>
+<span id="cb26-2"><a href="#cb26-2"></a>  <span class="fu">mutate</span>(<span class="at">sum =</span> <span class="fu">contr_code_sum</span>(Modality)) </span>
+<span id="cb26-3"><a href="#cb26-3"></a></span>
+<span id="cb26-4"><a href="#cb26-4"></a>lm_sum_coding <span class="ot">&lt;-</span> <span class="fu">lm</span>(Val<span class="sc">~</span>sum, <span class="at">data=</span>senses_sum)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
@@ -1498,15 +1551,15 @@ $ Val      &lt;dbl&gt; 5.398113, 5.876667, 5.233370, 5.539592, 5.173947, 5.24000
 <section id="deviation-coding-2" class="slide level2">
 <h2>Deviation coding</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="do">## deviation coding</span></span>
-<span id="cb20-2"><a href="#cb20-2"></a><span class="do">## baseline Sight it comes first in alphabet</span></span>
-<span id="cb20-3"><a href="#cb20-3"></a>dat_dev <span class="ot">&lt;-</span> senses <span class="sc">%&gt;%</span></span>
-<span id="cb20-4"><a href="#cb20-4"></a>  <span class="fu">mutate</span>(<span class="at">SmellvSight =</span> <span class="fu">if_else</span>(Modality <span class="sc">==</span> <span class="st">"Smell"</span>, <span class="dv">4</span><span class="sc">/</span><span class="dv">5</span>, <span class="sc">-</span><span class="dv">1</span><span class="sc">/</span><span class="dv">5</span>), <span class="co"># target A2</span></span>
-<span id="cb20-5"><a href="#cb20-5"></a>         <span class="at">SoundvSight =</span> <span class="fu">if_else</span>(Modality <span class="sc">==</span> <span class="st">"Sound"</span>, <span class="dv">4</span><span class="sc">/</span><span class="dv">5</span>, <span class="sc">-</span><span class="dv">1</span><span class="sc">/</span><span class="dv">5</span>), </span>
-<span id="cb20-6"><a href="#cb20-6"></a>         <span class="at">TastevSight =</span> <span class="fu">if_else</span>(Modality<span class="sc">==</span><span class="st">"Taste"</span>, <span class="dv">4</span><span class="sc">/</span><span class="dv">5</span>, <span class="sc">-</span><span class="dv">1</span><span class="sc">/</span><span class="dv">5</span>), </span>
-<span id="cb20-7"><a href="#cb20-7"></a>         <span class="at">TouchvSight =</span> <span class="fu">if_else</span>(Modality<span class="sc">==</span><span class="st">"Touch"</span>, <span class="dv">4</span><span class="sc">/</span><span class="dv">5</span>, <span class="sc">-</span><span class="dv">1</span><span class="sc">/</span><span class="dv">5</span>))</span>
-<span id="cb20-8"><a href="#cb20-8"></a>         <span class="co"># target A3</span></span>
-<span id="cb20-9"><a href="#cb20-9"></a><span class="co"># fit lm with new codes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="do">## deviation coding</span></span>
+<span id="cb27-2"><a href="#cb27-2"></a><span class="do">## baseline Sight it comes first in alphabet</span></span>
+<span id="cb27-3"><a href="#cb27-3"></a>dat_dev <span class="ot">&lt;-</span> senses <span class="sc">%&gt;%</span></span>
+<span id="cb27-4"><a href="#cb27-4"></a>  <span class="fu">mutate</span>(<span class="at">SmellvSight =</span> <span class="fu">if_else</span>(Modality <span class="sc">==</span> <span class="st">"Smell"</span>, <span class="dv">4</span><span class="sc">/</span><span class="dv">5</span>, <span class="sc">-</span><span class="dv">1</span><span class="sc">/</span><span class="dv">5</span>), <span class="co"># target A2</span></span>
+<span id="cb27-5"><a href="#cb27-5"></a>         <span class="at">SoundvSight =</span> <span class="fu">if_else</span>(Modality <span class="sc">==</span> <span class="st">"Sound"</span>, <span class="dv">4</span><span class="sc">/</span><span class="dv">5</span>, <span class="sc">-</span><span class="dv">1</span><span class="sc">/</span><span class="dv">5</span>), </span>
+<span id="cb27-6"><a href="#cb27-6"></a>         <span class="at">TastevSight =</span> <span class="fu">if_else</span>(Modality<span class="sc">==</span><span class="st">"Taste"</span>, <span class="dv">4</span><span class="sc">/</span><span class="dv">5</span>, <span class="sc">-</span><span class="dv">1</span><span class="sc">/</span><span class="dv">5</span>), </span>
+<span id="cb27-7"><a href="#cb27-7"></a>         <span class="at">TouchvSight =</span> <span class="fu">if_else</span>(Modality<span class="sc">==</span><span class="st">"Touch"</span>, <span class="dv">4</span><span class="sc">/</span><span class="dv">5</span>, <span class="sc">-</span><span class="dv">1</span><span class="sc">/</span><span class="dv">5</span>))</span>
+<span id="cb27-8"><a href="#cb27-8"></a>         <span class="co"># target A3</span></span>
+<span id="cb27-9"><a href="#cb27-9"></a><span class="co"># fit lm with new codes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="deviation-coding-3" class="slide level2">
@@ -1569,10 +1622,10 @@ $ Val      &lt;dbl&gt; 5.398113, 5.876667, 5.233370, 5.539592, 5.173947, 5.24000
 <section id="deviation-coding-4" class="slide level2">
 <h2>Deviation coding</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>senses_dev <span class="ot">&lt;-</span> senses  <span class="sc">%&gt;%</span> </span>
-<span id="cb21-2"><a href="#cb21-2"></a>  <span class="fu">mutate</span>(<span class="at">new=</span><span class="fu">contr_code_anova</span>(Modality))</span>
-<span id="cb21-3"><a href="#cb21-3"></a></span>
-<span id="cb21-4"><a href="#cb21-4"></a>dev_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(Val<span class="sc">~</span>new, <span class="at">data=</span>senses_dev)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>senses_dev <span class="ot">&lt;-</span> senses  <span class="sc">%&gt;%</span> </span>
+<span id="cb28-2"><a href="#cb28-2"></a>  <span class="fu">mutate</span>(<span class="at">new=</span><span class="fu">contr_code_anova</span>(Modality))</span>
+<span id="cb28-3"><a href="#cb28-3"></a></span>
+<span id="cb28-4"><a href="#cb28-4"></a>dev_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(Val<span class="sc">~</span>new, <span class="at">data=</span>senses_dev)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
@@ -1679,17 +1732,17 @@ $ Val      &lt;dbl&gt; 5.398113, 5.876667, 5.233370, 5.539592, 5.173947, 5.24000
 <section id="planned-contrast-example-1" class="slide level2">
 <h2>Planned Contrast Example</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>TasteSmellVsOthers <span class="ot">=</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">2</span><span class="sc">/</span><span class="dv">5</span>, <span class="dv">3</span><span class="sc">/</span><span class="dv">5</span>, <span class="sc">-</span><span class="dv">2</span><span class="sc">/</span><span class="dv">5</span>, <span class="dv">3</span><span class="sc">/</span><span class="dv">5</span>, <span class="sc">-</span><span class="dv">2</span><span class="sc">/</span><span class="dv">5</span>)  <span class="co"># Comparing taste and smell to sight, touch, sound</span></span>
-<span id="cb22-2"><a href="#cb22-2"></a></span>
-<span id="cb22-3"><a href="#cb22-3"></a>mat<span class="ot">=</span><span class="fu">cbind</span>(TasteSmellVsOthers)</span>
-<span id="cb22-4"><a href="#cb22-4"></a></span>
-<span id="cb22-5"><a href="#cb22-5"></a><span class="co">#bind contrasts</span></span>
-<span id="cb22-6"><a href="#cb22-6"></a><span class="co">#assign contrasts to factor</span></span>
-<span id="cb22-7"><a href="#cb22-7"></a>senses<span class="sc">$</span>Modality <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(senses<span class="sc">$</span>Modality)</span>
-<span id="cb22-8"><a href="#cb22-8"></a></span>
-<span id="cb22-9"><a href="#cb22-9"></a><span class="co">#assign contrast weights</span></span>
-<span id="cb22-10"><a href="#cb22-10"></a><span class="fu">contrasts</span>(senses<span class="sc">$</span>Modality)<span class="ot">&lt;-</span>mat</span>
-<span id="cb22-11"><a href="#cb22-11"></a><span class="co">#run model</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>TasteSmellVsOthers <span class="ot">=</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">2</span><span class="sc">/</span><span class="dv">5</span>, <span class="dv">3</span><span class="sc">/</span><span class="dv">5</span>, <span class="sc">-</span><span class="dv">2</span><span class="sc">/</span><span class="dv">5</span>, <span class="dv">3</span><span class="sc">/</span><span class="dv">5</span>, <span class="sc">-</span><span class="dv">2</span><span class="sc">/</span><span class="dv">5</span>)  <span class="co"># Comparing taste and smell to sight, touch, sound</span></span>
+<span id="cb29-2"><a href="#cb29-2"></a></span>
+<span id="cb29-3"><a href="#cb29-3"></a>mat<span class="ot">=</span><span class="fu">cbind</span>(TasteSmellVsOthers)</span>
+<span id="cb29-4"><a href="#cb29-4"></a></span>
+<span id="cb29-5"><a href="#cb29-5"></a><span class="co">#bind contrasts</span></span>
+<span id="cb29-6"><a href="#cb29-6"></a><span class="co">#assign contrasts to factor</span></span>
+<span id="cb29-7"><a href="#cb29-7"></a>senses<span class="sc">$</span>Modality <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(senses<span class="sc">$</span>Modality)</span>
+<span id="cb29-8"><a href="#cb29-8"></a></span>
+<span id="cb29-9"><a href="#cb29-9"></a><span class="co">#assign contrast weights</span></span>
+<span id="cb29-10"><a href="#cb29-10"></a><span class="fu">contrasts</span>(senses<span class="sc">$</span>Modality)<span class="ot">&lt;-</span>mat</span>
+<span id="cb29-11"><a href="#cb29-11"></a><span class="co">#run model</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="the-general-linear-f-test" class="slide level2">
@@ -1767,13 +1820,13 @@ $ Val      &lt;dbl&gt; 5.398113, 5.876667, 5.233370, 5.539592, 5.173947, 5.24000
 <section id="anova-table" class="slide level2">
 <h2>ANOVA Table</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>aov1<span class="ot">&lt;-</span><span class="fu">aov</span>(Val<span class="sc">~</span> <span class="cn">NULL</span>, <span class="at">data=</span>senses)</span>
-<span id="cb23-2"><a href="#cb23-2"></a>aov2 <span class="ot">&lt;-</span> <span class="fu">aov</span>(Val<span class="sc">~</span>Modality, <span class="at">data=</span>senses)</span>
-<span id="cb23-3"><a href="#cb23-3"></a><span class="co">#anova(aov1, aov2) compare two models </span></span>
-<span id="cb23-4"><a href="#cb23-4"></a>aov_em <span class="ot">&lt;-</span> <span class="fu">aov</span>(Val<span class="sc">~</span>Modality, <span class="at">data=</span>senses)</span>
-<span id="cb23-5"><a href="#cb23-5"></a></span>
-<span id="cb23-6"><a href="#cb23-6"></a>parameters<span class="sc">::</span><span class="fu">model_parameters</span>(aov_em) <span class="sc">%&gt;%</span></span>
-<span id="cb23-7"><a href="#cb23-7"></a>  <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>aov1<span class="ot">&lt;-</span><span class="fu">aov</span>(Val<span class="sc">~</span> <span class="cn">NULL</span>, <span class="at">data=</span>senses)</span>
+<span id="cb30-2"><a href="#cb30-2"></a>aov2 <span class="ot">&lt;-</span> <span class="fu">aov</span>(Val<span class="sc">~</span>Modality, <span class="at">data=</span>senses)</span>
+<span id="cb30-3"><a href="#cb30-3"></a><span class="co">#anova(aov1, aov2) compare two models </span></span>
+<span id="cb30-4"><a href="#cb30-4"></a>aov_em <span class="ot">&lt;-</span> <span class="fu">aov</span>(Val<span class="sc">~</span>Modality, <span class="at">data=</span>senses)</span>
+<span id="cb30-5"><a href="#cb30-5"></a></span>
+<span id="cb30-6"><a href="#cb30-6"></a>parameters<span class="sc">::</span><span class="fu">model_parameters</span>(aov_em) <span class="sc">%&gt;%</span></span>
+<span id="cb30-7"><a href="#cb30-7"></a>  <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table data-quarto-postprocess="true">
 <thead>
@@ -1826,13 +1879,13 @@ $ Val      &lt;dbl&gt; 5.398113, 5.876667, 5.233370, 5.539592, 5.173947, 5.24000
 <li>Get means</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="co"># get pairwise tests between all groups</span></span>
-<span id="cb24-2"><a href="#cb24-2"></a><span class="co">#specs = factor</span></span>
-<span id="cb24-3"><a href="#cb24-3"></a>emmeans<span class="sc">::</span><span class="fu">emmeans</span>(aov_em, <span class="at">specs =</span> <span class="st">"Modality"</span>)<span class="sc">%&gt;%</span></span>
-<span id="cb24-4"><a href="#cb24-4"></a>  <span class="fu">kable</span>()<span class="sc">%&gt;%</span></span>
-<span id="cb24-5"><a href="#cb24-5"></a>  <span class="fu">kable_styling</span>(<span class="at">font_size =</span> <span class="dv">24</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb24-6"><a href="#cb24-6"></a> <span class="fu">column_spec</span>(<span class="dv">2</span>, <span class="at">color =</span> <span class="st">"white"</span>,</span>
-<span id="cb24-7"><a href="#cb24-7"></a>              <span class="at">background =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="co"># get pairwise tests between all groups</span></span>
+<span id="cb31-2"><a href="#cb31-2"></a><span class="co">#specs = factor</span></span>
+<span id="cb31-3"><a href="#cb31-3"></a>emmeans<span class="sc">::</span><span class="fu">emmeans</span>(aov_em, <span class="at">specs =</span> <span class="st">"Modality"</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb31-4"><a href="#cb31-4"></a>  <span class="fu">kable</span>()<span class="sc">%&gt;%</span></span>
+<span id="cb31-5"><a href="#cb31-5"></a>  <span class="fu">kable_styling</span>(<span class="at">font_size =</span> <span class="dv">24</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb31-6"><a href="#cb31-6"></a> <span class="fu">column_spec</span>(<span class="dv">2</span>, <span class="at">color =</span> <span class="st">"white"</span>,</span>
+<span id="cb31-7"><a href="#cb31-7"></a>              <span class="at">background =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table" data-quarto-postprocess="true" style="font-size: 24px; margin-left: auto; margin-right: auto;">
 <thead>
@@ -1899,13 +1952,13 @@ $ Val      &lt;dbl&gt; 5.398113, 5.876667, 5.233370, 5.539592, 5.173947, 5.24000
 <li>and pairwise comparisons</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25" data-code-line-numbers="4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="co"># get pairwise tests between all groups</span></span>
-<span id="cb25-2"><a href="#cb25-2"></a>means1 <span class="ot">=</span> emmeans<span class="sc">::</span><span class="fu">emmeans</span>(aov_em, <span class="at">specs =</span> <span class="st">"Modality"</span>)</span>
-<span id="cb25-3"><a href="#cb25-3"></a></span>
-<span id="cb25-4"><a href="#cb25-4"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">pairs</span>(means1)) <span class="sc">%&gt;%</span></span>
-<span id="cb25-5"><a href="#cb25-5"></a>  <span class="fu">kable_styling</span>(<span class="at">font_size =</span> <span class="dv">24</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb25-6"><a href="#cb25-6"></a> <span class="fu">column_spec</span>(<span class="dv">2</span>, <span class="at">color =</span> <span class="st">"white"</span>,</span>
-<span id="cb25-7"><a href="#cb25-7"></a>              <span class="at">background =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32" data-code-line-numbers="4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="co"># get pairwise tests between all groups</span></span>
+<span id="cb32-2"><a href="#cb32-2"></a>means1 <span class="ot">=</span> emmeans<span class="sc">::</span><span class="fu">emmeans</span>(aov_em, <span class="at">specs =</span> <span class="st">"Modality"</span>)</span>
+<span id="cb32-3"><a href="#cb32-3"></a></span>
+<span id="cb32-4"><a href="#cb32-4"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">pairs</span>(means1)) <span class="sc">%&gt;%</span></span>
+<span id="cb32-5"><a href="#cb32-5"></a>  <span class="fu">kable_styling</span>(<span class="at">font_size =</span> <span class="dv">24</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb32-6"><a href="#cb32-6"></a> <span class="fu">column_spec</span>(<span class="dv">2</span>, <span class="at">color =</span> <span class="st">"white"</span>,</span>
+<span id="cb32-7"><a href="#cb32-7"></a>              <span class="at">background =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table" data-quarto-postprocess="true" style="font-size: 24px; margin-left: auto; margin-right: auto;">
 <thead>
@@ -2009,12 +2062,12 @@ $ Val      &lt;dbl&gt; 5.398113, 5.876667, 5.233370, 5.539592, 5.173947, 5.24000
 <section id="planned-comparisons" class="slide level2">
 <h2>Planned Comparisons</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>contr <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb26-2"><a href="#cb26-2"></a>    <span class="at">nonchem_vs_chem =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, <span class="sc">-</span><span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, <span class="sc">-</span><span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>))</span>
-<span id="cb26-3"><a href="#cb26-3"></a></span>
-<span id="cb26-4"><a href="#cb26-4"></a>emmeans<span class="sc">::</span><span class="fu">emmeans</span>(aov_em, <span class="at">specs =</span> <span class="st">"Modality"</span>) <span class="sc">%&gt;%</span> <span class="fu">contrast</span>(<span class="at">method=</span>contr) <span class="sc">%&gt;%</span> </span>
-<span id="cb26-5"><a href="#cb26-5"></a>  <span class="fu">summary</span>(<span class="at">infer=</span><span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb26-6"><a href="#cb26-6"></a>  <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>contr <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb33-2"><a href="#cb33-2"></a>    <span class="at">nonchem_vs_chem =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, <span class="sc">-</span><span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, <span class="sc">-</span><span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>))</span>
+<span id="cb33-3"><a href="#cb33-3"></a></span>
+<span id="cb33-4"><a href="#cb33-4"></a>emmeans<span class="sc">::</span><span class="fu">emmeans</span>(aov_em, <span class="at">specs =</span> <span class="st">"Modality"</span>) <span class="sc">%&gt;%</span> <span class="fu">contrast</span>(<span class="at">method=</span>contr) <span class="sc">%&gt;%</span> </span>
+<span id="cb33-5"><a href="#cb33-5"></a>  <span class="fu">summary</span>(<span class="at">infer=</span><span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb33-6"><a href="#cb33-6"></a>  <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table data-quarto-postprocess="true">
 <thead>
@@ -2097,8 +2150,8 @@ FWER = 1 - (1 - \alpha)^k
 </ul></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>pvals <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">0.01</span>,<span class="fl">0.02</span>,<span class="fl">0.04</span>)</span>
-<span id="cb27-2"><a href="#cb27-2"></a><span class="fu">p.adjust</span>(pvals,<span class="at">method =</span><span class="st">"bonferroni"</span>, <span class="at">n =</span> <span class="fu">length</span>(pvals))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>pvals <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">0.01</span>,<span class="fl">0.02</span>,<span class="fl">0.04</span>)</span>
+<span id="cb34-2"><a href="#cb34-2"></a><span class="fu">p.adjust</span>(pvals,<span class="at">method =</span><span class="st">"bonferroni"</span>, <span class="at">n =</span> <span class="fu">length</span>(pvals))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.03 0.06 0.12</code></pre>
 </div>
@@ -2117,7 +2170,7 @@ FWER = 1 - (1 - \alpha)^k
 <li>Sort p-values from smallest to largest</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>pvals <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">0.01</span>,<span class="fl">0.02</span>,<span class="fl">0.04</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>pvals <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">0.01</span>,<span class="fl">0.02</span>,<span class="fl">0.04</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol start="2" type="1">
 <li>Test whether <em>p</em> &lt; <span class="math inline">\(\frac {\alpha} {m+ 1-k}\)</span></li>
@@ -2133,8 +2186,8 @@ FWER = 1 - (1 - \alpha)^k
 </ul></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>pvals <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">0.01</span>,<span class="fl">0.02</span>,<span class="fl">0.04</span>)</span>
-<span id="cb30-2"><a href="#cb30-2"></a><span class="fu">p.adjust</span>(pvals,<span class="at">method =</span><span class="st">"holm"</span>,<span class="at">n =</span> <span class="fu">length</span>(pvals))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a>pvals <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">0.01</span>,<span class="fl">0.02</span>,<span class="fl">0.04</span>)</span>
+<span id="cb37-2"><a href="#cb37-2"></a><span class="fu">p.adjust</span>(pvals,<span class="at">method =</span><span class="st">"holm"</span>,<span class="at">n =</span> <span class="fu">length</span>(pvals))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.03 0.04 0.04</code></pre>
 </div>
@@ -2173,10 +2226,10 @@ FWER = 1 - (1 - \alpha)^k
 <li>Correct p-values for multiple comparisons using the adjust argument</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32" data-code-line-numbers="4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="co"># get means</span></span>
-<span id="cb32-2"><a href="#cb32-2"></a>em_aov <span class="ot">&lt;-</span> <span class="fu">emmeans</span>(aov_em, <span class="at">specs =</span> <span class="st">"Modality"</span>)</span>
-<span id="cb32-3"><a href="#cb32-3"></a><span class="co"># get pairwise comparisons</span></span>
-<span id="cb32-4"><a href="#cb32-4"></a>em_aov_pairs <span class="ot">&lt;-</span> <span class="fu">pairs</span>(em_aov, <span class="at">adjust =</span> <span class="st">"bonf"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39" data-code-line-numbers="4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a><span class="co"># get means</span></span>
+<span id="cb39-2"><a href="#cb39-2"></a>em_aov <span class="ot">&lt;-</span> <span class="fu">emmeans</span>(aov_em, <span class="at">specs =</span> <span class="st">"Modality"</span>)</span>
+<span id="cb39-3"><a href="#cb39-3"></a><span class="co"># get pairwise comparisons</span></span>
+<span id="cb39-4"><a href="#cb39-4"></a>em_aov_pairs <span class="ot">&lt;-</span> <span class="fu">pairs</span>(em_aov, <span class="at">adjust =</span> <span class="st">"bonf"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
@@ -2285,11 +2338,11 @@ FWER = 1 - (1 - \alpha)^k
 <li>Adjust CIs for multiple comparisons</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33" data-code-line-numbers="4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>emmeans1 <span class="ot">&lt;-</span> emmeans<span class="sc">::</span><span class="fu">emmeans</span>(aov_em, <span class="at">specs =</span> <span class="st">"Modality"</span>)</span>
-<span id="cb33-2"><a href="#cb33-2"></a></span>
-<span id="cb33-3"><a href="#cb33-3"></a>emmeans1_pair <span class="ot">&lt;-</span> <span class="fu">pairs</span>(emmeans1, <span class="at">adjust =</span><span class="st">"holm"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb33-4"><a href="#cb33-4"></a><span class="co">#get confidence intervals</span></span>
-<span id="cb33-5"><a href="#cb33-5"></a><span class="fu">confint</span>(emmeans1_pair, <span class="at">adjust=</span><span class="st">"bonf"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40" data-code-line-numbers="4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a>emmeans1 <span class="ot">&lt;-</span> emmeans<span class="sc">::</span><span class="fu">emmeans</span>(aov_em, <span class="at">specs =</span> <span class="st">"Modality"</span>)</span>
+<span id="cb40-2"><a href="#cb40-2"></a></span>
+<span id="cb40-3"><a href="#cb40-3"></a>emmeans1_pair <span class="ot">&lt;-</span> <span class="fu">pairs</span>(emmeans1, <span class="at">adjust =</span><span class="st">"holm"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb40-4"><a href="#cb40-4"></a><span class="co">#get confidence intervals</span></span>
+<span id="cb40-5"><a href="#cb40-5"></a><span class="fu">confint</span>(emmeans1_pair, <span class="at">adjust=</span><span class="st">"bonf"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
@@ -2435,9 +2488,9 @@ FWER = 1 - (1 - \alpha)^k
 <section id="assumption-checks" class="slide level2">
 <h2>Assumption checks</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>mod_check <span class="ot">&lt;-</span> <span class="fu">lm</span>(Val<span class="sc">~</span>Modality, <span class="at">data=</span>senses)</span>
-<span id="cb34-2"><a href="#cb34-2"></a></span>
-<span id="cb34-3"><a href="#cb34-3"></a>performance<span class="sc">::</span><span class="fu">check_model</span>(mod_check, <span class="at">check=</span><span class="fu">c</span>(<span class="st">"normality"</span>, <span class="st">"linearity"</span>, <span class="st">"homogeneity"</span>, <span class="st">"qq"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>mod_check <span class="ot">&lt;-</span> <span class="fu">lm</span>(Val<span class="sc">~</span>Modality, <span class="at">data=</span>senses)</span>
+<span id="cb41-2"><a href="#cb41-2"></a></span>
+<span id="cb41-3"><a href="#cb41-3"></a>performance<span class="sc">::</span><span class="fu">check_model</span>(mod_check, <span class="at">check=</span><span class="fu">c</span>(<span class="st">"normality"</span>, <span class="st">"linearity"</span>, <span class="st">"homogeneity"</span>, <span class="st">"qq"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="09-Cat-Pred_files/figure-revealjs/unnamed-chunk-54-1.png" class="quarto-figure-center r-stretch" width="1152"></section>
