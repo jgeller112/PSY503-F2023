@@ -20,3 +20,7 @@ multiple comparisons.
 
 To access Lab 5, please [Click
 here](https://classroom.github.com/a/FHe2aFzU)
+
+## Lab Answers
+
+-   [Lab 5 Answers](/Labs/lab_ans/lab5_ans/lab5_ans.qmd)

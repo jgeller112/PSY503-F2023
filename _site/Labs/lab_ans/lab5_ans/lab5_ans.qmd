@@ -1,0 +1,423 @@
+---
+title: "Lab 5: Categorical Regression"
+subtitle: "Princeton University"
+author: "Jason Geller, Ph.D.(he/him)"
+date: 'Updated:`r Sys.Date()`'
+format: html
+toc: true
+toc_float: true
+html:
+    code-fold: true
+    code-tools: true
+execute: 
+  warning: false
+  message: false
+engine: knitr
+webr: 
+  packages: ["tidyverse", "ggrain", "broom", "emmeans", "faux", "knitr"]
+filters:
+  - webr
+---
+
+## Data
+
+We'll be looking at a dataset comparing different kinds of treatment for depression. In this study, depressed patients (n = 5 per group) were randomly assigned to one of three groups:
+
+1.	CBT group 
+2.	Psychotherapy group 
+3.	Control group (received no therapy) 
+
+- After 10 weeks, participants' depression scores were measured. Our dataset will have just 2 variables: `group` (CBT, Psychotherapy or Control) and `depress` (depression scores). 
+
+* **NOTE:** In this example, lower scores = more depressed. (This is a little counter-intuitive.)
+
+* **NOTE:**
+`1` = CBT; 
+`2` = Psychotherapy;
+`3` = Control
+
+- Load libraries
+
+```{webr-r}
+# you will need to add more :)
+library(tidyverse)
+library(gt)
+library(emmeans)
+library(faux)
+library(knitr)
+library(broom)
+```
+
+- Import the data
+
+```{webr-r}
+
+depression <- read.csv("data/depression.csv")
+
+```
+
+### Structure of the data
+
+> Is the `group` column a factor? Show me how we can test this. 
+
+```{webr-r}
+
+is.factor(depression$group)
+
+```
+
+> Create a new  `group` column to correspond with labels above and make sure it is a factor
+
+```{webr-r}
+
+# Create a new 'group_fct' column with proper labels and make it a factor
+depression <- depression %>%
+  mutate(group_fct = factor(group,
+                            labels = c("CBT", "Psychotherapy", "Control"))) # order matters here!
+
+```
+
+> Check that the new variable you created is now a factor
+
+```{webr-r}
+
+is.factor(depression$group_fct)
+
+```
+
+## Descriptives
+
+> Summarize the dataset for each group. Use `kable` or `gt`  to create a nice table that lists group names, mean, SD, and N. Use ?? or Google the packages. 
+
+```{webr-r}
+
+library(gt)
+depression %>%
+  group_by(group) %>%
+  summarise(
+    Mean = mean(depress),
+    SD = sd(depress),
+    N = n()
+  ) %>%
+  gt()
+
+
+```
+
+## Dummy coding
+
+- Categorical predictors with more than two levels are broken up into several smaller variables. In doing so, we take variables that don't have any inherent numerical value to them, e.g. `group` , which takes the values `1`/`CBT`, `2`/`Psychotherapy` or `3`/`Control`, and ascribe meaningful numbers that allow for us to calculate meaningful statistics.
+
+>  Run a linear model with the group factor you created
+
+```{webr-r}
+
+model_dummies <- lm(depress ~ group_fct, data = depression)
+
+model_dummies %>%
+  tidy() %>%
+  kable()
+
+```
+
+> In the above model output, what does each coef mean?
+
+- $b_0$: The mean of the CBT Group
+
+- $b_1$: The mean difference between the CBT group and Psychotherapy
+
+- $b_2$: The mean difference between CBT and control group
+
+> Are there any significant differences? Please write-up each difference making the appropiate inferences 
+
+> What does the F value mean? What is the $R^2$?  
+
+- Let's imagine that we have the following (more intuitive) research questions:
+
+1. Is CBT effective (relative to no therapy)? 
+2. Is psychotherapy effective (relative to no therapy)? 
+
+>  What do we want as our reference group to answer these research questions?
+
+- We need to change our reference level to the control group
+
+- Now let's make the appropriate dummy codes. Recall that we need *k*-1 dummy codes (where *k* is the number of groups). We have 3 groups, so we need 2 dummy codes. 
+ 
+> Create two dummy codes to answer the two questions above. Use `case_when` or `if_else` to create two new columns in the dataset. 
+
+```{webr-r}
+
+depression <- depression %>%
+  mutate(CBT_dummy = if_else(group_fct == "CBT", 1, 0),
+         Psychotherapy_dummy = if_else(group_fct == "Psychotherapy", 1, 0))
+
+
+depression %>%
+  head() %>%
+  kable()
+
+
+```
+
+> Run the linear model using these new dummy variables as the IV's
+
+```{webr-r}
+
+model_dummies <- lm(depress ~ CBT_dummy + Psychotherapy_dummy, data = depression)
+
+model_dummies %>%
+   tidy() %>%
+  kable()
+
+```
+
+> In the above model output, what does each coefficient mean?
+
+- $b_0$: The mean of the control group
+
+- $b_1$: The mean difference between the CBT group and control group
+
+- $b_2$: The mean difference between Psychotherapy  and control group
+
+> Are there any significant differences? Please write-up each difference making the appropiate inferences 
+
+> How does the F value and $R^2$ we got from this model compare to our last model with different (underlying) dummy codes? 
+
+## Sum coding
+
+- Let's imagine our research questions are as follows:
+
+1. Is CBT effective compared to the overall sample?
+2. Is Psychotherapy effective compared to the overall sample?
+
+> Create a sum coded variable by hand
+
+```{webr-r}
+#code 
+depression %>%
+  mutate(sum_code1=ifelse(group_fct=="CBT", 1,ifelse(group_fct==                                                 "Psychotherapy", -1, 0)), sum_code2=ifelse(group_fct=="Psychotherapy", 1,ifelse(group_fct== "CBT", -1, 0)))
+
+```
+
+> Create a sum coded variable using `contr_code_sum`
+
+```{webr-r}
+library(faux)
+#code 
+depression_sum <- depression %>%
+  mutate(sum_code_faux=contr_code_sum(group_fct, omit="Control"))
+
+```
+
+> Run a linear regression with sum coded variable
+
+```{webr-r}
+#
+model_sum <- lm(depress ~ sum_code_faux,data = depression_sum)
+
+model_sum %>%
+  tidy() %>%
+  kable()
+
+```
+
+> In the above model output, what does each coefficient mean?
+
+- $b_0$: Grand mean 
+
+- $b_1$: The mean difference between the CBT group and grand mean
+
+- $b_2$: The mean difference between Psychotherapy  and grand mean
+
+> Are there any significant differences?  Please write-up each difference making the appropiate inferences
+
+
+## Deviation coding
+
+- Let's imagine our research question is a bit different: 
+
+1. Is CBT effective compared to the Psychotherapy? 
+2. Is CBT effective compared to control? 
+
+> Code this by hand
+
+```{webr-r}
+
+#code 
+depression_dev <- depression  %>%
+  mutate(dev_code1=ifelse(group_fct=="Psychotherapy", 2/3, -1/3), dev_code2=ifelse(group_fct=="Control", 2/3, -1/3))
+
+depression_dev %>%
+  select(dev_code1, dev_code2)%>%
+  head() %>%
+  kable()
+
+```
+
+> Now use `contr_code_anova`
+
+```{webr-r}
+#
+#code 
+depression_dev <- depression  %>%
+  mutate(dev_code_faux=contr_code_anova(group_fct))
+
+```
+
+
+> Run a linear regression with the deviation coded variable
+
+```{webr-r}
+#
+model_dev <- lm(depress ~ dev_code_faux,data = depression_dev)
+
+model_dev %>% 
+  tidy() %>%
+  kable()
+```
+
+> In the above model output, what does each coefficient mean?
+
+- $b_0$: Grand mean 
+
+- $b_1$: The mean difference between the CBT group and Psychotherapy group
+
+- $b_2$: The mean difference between CBT  and control group
+
+> Are there any significant differences?  Please write-up each difference making the appropiate inferences
+
+## DIY contrasts
+
+- Let's imagine our research questions are a bit different again:  What if you wanted to know: 
+
+1. Are Psychotherapy and CBT together better than control?
+
+2. Is Psychotherapy better than CBT?
+
+> Run a linear model testing these specific hypotheses
+
+```{webr-r}
+#
+PTCB <- c(1/3, 1/3, -2/3)
+
+PTCBT <- c(1/2, -1/2,0)
+
+mat <- cbind(PTCB, PTCBT)
+
+contrasts(depression$group_fct) <- mat
+
+lm(depress ~ group_fct, data = depression) %>%
+  tidy() %>%
+  kable()
+```
+
+> In the above model output, what does each coefficient mean?
+
+- $b_0$: Grand mean 
+
+- $b_1$: The mean difference between the Psychotherapy and CBT vs. control
+
+- $b_2$: The mean difference between CBT  and Psychotherapy group
+
+> Are there any significant differences?  Please write-up each difference making the appropiate inferences
+
+# Traditional ANOVA 
+
+- Run an ANOVA to determine whether there is a relationship between `Group` and `depression`.
+
+```{webr-r}
+#
+
+aov_em <- aov(depress ~ group_fct, data = depression)
+
+aov_em %>%
+  tidy() %>%
+  kable()
+```
+
+> What does the F-test tell us? How does this F test compare with the F test from the linear models you ran above?
+
+> Use the `emmeans` package to calculate the means for each group
+
+```{webr-r}
+#
+
+library(emmeans)
+means <- emmeans(aov_em, specs = ~group_fct)
+
+
+kable(means)
+
+
+```
+
+> Calculate post-hoc comparisons
+
+```{webr-r}
+#
+pairwise <- pairs(means, adjust = "bonferroni")
+
+
+kable(pairwise)
+
+```
+
+> What is the value of the Bonferroni corrected *p*-value for these comparisons?
+
+- `r .05/3`
+
+```{webr-r}
+#
+adjust_alpha <- .05/3
+```
+
+> Adjust your p-values using Bonferroni adjustment in `emmeans`
+
+```{webr-r}
+
+pairwise <- pairs(means, adjust = "bonferroni")
+
+kable(pairwise)
+```
+
+> Adjust your p-values using Holm adjustment in `emmeans`
+
+```{webr-r}
+#
+pairwise_holm <- pairs(means, adjust = "holm")
+
+kable(pairwise_holm)
+```
+
+
+> What difference do you notice about the Bonferroni vs. Holm correction? 
+
+- Bonf is more conservative
+
+## Plot
+
+>  Visualize the data.
+
+- Make sure it is publication ready! 
+
+```{webr-r}
+
+library(ggrain)
+
+ggplot(depression_dev, aes(x = group_fct, y = depress, fill = group_fct)) +
+	geom_rain(rain.side="l") + 
+  labs(x="Group", y="Depression Scores", title="Group Depression Scores") + 
+  theme_minimal(base_size=12) +
+  theme(legend.position = "none")
+
+
+
+```
+## Write up
+
+- Write up the ANOVA results. Report on pairwise comparisons. 
+
+
+
+
+
