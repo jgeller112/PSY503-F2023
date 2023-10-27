@@ -14,7 +14,7 @@ execute:
   message: false
 engine: knitr
 webr: 
-  packages: ["tidyverse", "ggrain", "broom", "emmeans", "faux", "knitr"]
+  packages: ["tidyverse", "ggrain", "broom", "emmeans", "faux", "knitr", "gt"]
 filters:
   - webr
 ---
@@ -52,7 +52,7 @@ library(broom)
 
 ```{webr-r}
 
-depression <- read.csv("data/depression.csv")
+depression <- read.csv("https://raw.githubusercontent.com/jgeller112/Lab5-Categorical_Regression/main/data/depression.csv")
 
 ```
 
@@ -416,8 +416,4 @@ ggplot(depression_dev, aes(x = group_fct, y = depress, fill = group_fct)) +
 ## Write up
 
 - Write up the ANOVA results. Report on pairwise comparisons. 
-
-
-
-
 
