@@ -33,7 +33,7 @@ bibliography: references.bib
 
 ## Announcements
 
-![](images/Oct. 31 Seminar in Advanced Research Methods Flyer-1.png){fig-align="center"}
+![](images/Oct.%2031%20Seminar%20in%20Advanced%20Research%20Methods%20Flyer-1.png){fig-align="center"}
 
 ## Announcements
 
@@ -195,6 +195,22 @@ countdown(minutes = 2, seconds = 00)
 ## Cohen's $d$
 
 ```{r}
+
+# calculate d by hand
+
+senses_filt %>%
+  group_by(Modality) %>%
+  summarise(mean=mean(Val), sd=sd(Val), n=n())
+
+
+cohen_d_class <- function(m1, m2, sd1, sd2){
+  
+  d <- (m1-m2)/sqrt((sd1^2+sd2^2)/2)
+  return(d)
+}
+
+cohen_d_class(5.47, 5.808, .336, .303)
+
 ```
 
 ## `easystats`
@@ -232,7 +248,7 @@ $$
 ```{r}
 #| eval: false
 #| 
-effectsize::t_to_d()
+effectsize::t_to_d(4.32, 72)
 
 ```
 
@@ -267,11 +283,13 @@ effectsize::hedges_g(Val~Modality, data = senses_filt) %>%
 ## `MOTE`
 
 ```{r}
-#| eval: false
+#| eval: True 
 library(MOTE)
 #classic d
-d.ind.t(m1, m2, sd1, sd2, n1, n2, a = 0.05)
+d=d.ind.t(5.47, 5.81, .34, .30, 25, 47, a = 0.05)
 ```
+
+`r d$estimate`
 
 -   Shiny: <https://doomlab.shinyapps.io/mote/>
 
@@ -372,7 +390,8 @@ $\eta^2$ and $\eta^2_p$ will be the same with one variable
 aov_em <- aov(Val~Modality, data=senses)
 eta_squared(aov_em, partial=FALSE) #eta-sqaured
 eta_squared(aov_em, partial=TRUE) # partial eta-sqaured
-
+omega_squared(aov_em, partial=FALSE) # omega squa
+omega_squared(aov_em, partial=TRUE) # omega squa
 
 ```
 
@@ -625,7 +644,7 @@ $$
 #| eval: false
 f2=.26
 
-WebPower::wp.regression(n=NULL, p1=1, p2=0, f2=.26, alpha=.05, power=.8)
+WebPower::wp.regression(n=34, p1=1, p2=0, f2=seq(.1, .3, .05), alpha=.05, power=NULL)
 ```
 
 ## Power Curves
@@ -710,10 +729,10 @@ library(Superpower)
 ```{r}
 
 design <- "5b" # 5 levels of var
-n <- 12
-mu <- c(5, 3, 6, 9, 4)
-sd <- c(1.65, 1.91, 1.65, 1.91, 1.54)
-label_list = list("condition" = c("Smell", "Taste", "Sight", "Touch", "Sound")) #
+n <- 12 # unequal ns dont work yet for this
+mu <- c(5, 3, 6, 9, 4)# each group mean
+sd <- c(1.65, 1.91, 1.65, 1.91, 1.54) # each group sd
+label_list = list("condition" = c("Smell", "Taste", "Sight", "Touch", "Sound")) # labels for each group
 
 
 ```
@@ -722,7 +741,10 @@ label_list = list("condition" = c("Smell", "Taste", "Sight", "Touch", "Sound")) 
 ::: {.column width="50%"}
 ```{r}
 #| fig-align: center
-#| 
+
+
+# create a random dataaset based on params
+
 design_result <- ANOVA_design(design = design,
                               n = n,
                               mu = mu, 
@@ -744,7 +766,7 @@ design_result <- ANOVA_design(design = design,
 
 ```{r}
 
-nsims=100 # number of times we do this
+nsims=100 # number of times we do this should be larger than this!
 
 power_result_vig_2 <- ANOVA_power(design_result, 
                                   nsims = nsims, 
@@ -754,7 +776,10 @@ power_result_vig_2 <- ANOVA_power(design_result,
 ## Power Curve
 
 ```{r}
-plot_power(design_result, min_n = 10, max_n = 250, emm=TRUE)
+d=plot_power(design_result, min_n = 10, max_n = 250, emm=TRUE)
+# emmeans power curves=
+d$plot_emm # can use to look at pairwise power
+
 ```
 
 ## Posthoc Power
@@ -790,7 +815,7 @@ plot_power(design_result, min_n = 10, max_n = 250, emm=TRUE)
 
 ```{r}
 # leave out effect size and it will tell us min effect size we can detect
-
+WebPower::wp.regression(n=34, p1=1, p2=0, f2=NULL, alpha=.05, power=.9)
 ```
 
 ## Ways to increase power
@@ -815,7 +840,7 @@ table {
 </style>
 ```
 |                            |                                                                                                                                                             |
-|:----------------|:------------------------------------------------------|
+|:------------------|:----------------------------------------------------|
 | Type of justification      | When is this justification applicable?                                                                                                                      |
 | Measure entire population  | A researcher can specify the entire population, it is finite, and it is possible to measure (almost) every entity in the population.                        |
 | Resource constraints       | Limited resources are the primary reason for the choice of the sample size a researcher can collect.                                                        |
