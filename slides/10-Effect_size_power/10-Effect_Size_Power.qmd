@@ -1,0 +1,838 @@
+---
+title: "Effect Size and Power"
+subtitle: "Princeton University"
+author: "Jason Geller, PH.D.(he/him)"
+date: 'Updated:`r Sys.Date()`'
+footer: "PSY 503: Foundations of Statistics in Psychology"
+format: 
+  revealjs:
+    theme: blood
+    css: slide-style.css
+    multiplex: true
+    transition: fade
+    slide-number: true
+    incremental: false 
+    chalkboard: true
+    fontsize: "25pt"
+execute:
+  freeze: auto
+  echo: true
+  message: false
+  warning: false
+  fig-align: center
+  fig-width: 12
+  fig-height: 8
+  editor_options: 
+  chunk_output_type: inline
+  code-overflow: wrap
+  html:
+    code-fold: true
+    code-tools: true
+bibliography: references.bib
+---
+
+## Announcements
+
+![](images/Oct. 31 Seminar in Advanced Research Methods Flyer-1.png){fig-align="center"}
+
+## Announcements
+
+-   Labs
+    -   Respond to feedback and resubmit!
+
+## Packages
+
+```{r}
+#| echo: false
+#| 
+library(pacman)
+p_load("tidyverse", "easystats", "broom", "supernova", "ungeviz", "gt", "afex", "emmeans", "knitr", "kableExtra", "Superpower", "WebPower")
+
+```
+
+```{r}
+library(grateful)
+pkgs <- cite_packages(output = "table", out.dir = ".")
+
+pkgs
+```
+
+## Today
+
+-   Effect size
+
+-   Statistical Power
+
+    -   What is power?
+
+    -   Why do we care about power?
+
+    -   How do we determine power
+
+## Effect size
+
+<br>
+
+<br>
+
+> "The amount of anything that's of research interest" (Cumming &
+> Calin-Jageman, 2017, p.111)
+
+-   Effect size refers to the strength of a relationship
+
+    -   Emphasizes the size of the relationship or difference
+    -   Practical significance
+
+## Effect size
+
+-   $R^2$
+
+    -   How much variability does a predictor explain in the outcome?
+
+$$
+R^2 = 1 - \frac{SS_{unexplained}}{SS_{Total}} = \frac{SS_{explained}}{SS_{Total}}
+$$
+
+-   Cohen (1988):
+
+    -   $R^2$ **\< 0.02** - Very weak
+
+    -   **0.02 \<=** $R^2$ **\< 0.13** - Weak
+
+    -   **0.13 \<=** $R^2$ **\< 0.26** - Moderate
+
+    -   $R^2$ **\>= 0.26** - Substantial
+
+## Effect size
+
+```{r}
+#| fig-align: center
+#| 
+senses<-read.csv("https://raw.githubusercontent.com/jgeller112/PSY503-F2023/main/slides/09-Cat-Reg/data/winter_2016_senses_valence.csv")
+
+senses_filt <- senses %>%
+  filter(Modality=="Taste" | Modality=="Smell")
+
+# Create the plot
+ggplot(senses_filt, aes(x = Val, fill = Modality)) + 
+  geom_density(alpha = 0.5) +
+  labs(x = "Value", y = "Density") +
+  theme_minimal(base_size=16)
+
+```
+
+## Effect Size
+
+-   Is there a significance difference between the groups?
+
+```{r}
+
+lm(Val~Modality, data=senses_filt) %>%
+  tidy()%>%
+ knitr::kable() %>% 
+ kable_styling(font_size = 24) %>%
+ column_spec(5, color = "white",
+              background = "red")
+```
+
+. . .
+
+-   How big is the difference between means/groups?
+
+## Effect Size
+
+-   Categorical variables
+
+    -   Comparing two levels
+
+        -   Cohen's *d*
+        -   Hedges' *g* (*N* \< 20)
+
+    -   Three or more (ANOVA-designs)
+
+        -   $\eta^2$
+
+        -   $\eta^2_p$
+
+## Cohen's $d$ : 2 Sample
+
+-   *Standardized mean difference*
+
+$$
+d = \frac{{\mu_1 - \mu_2}}{{\sigma}_p}
+$$
+
+Where:
+
+$$
+\begin{align*}
+\mu_1 & = \text{Mean of group 1} \\
+\mu_2 & = \text{Mean of group 2} \\
+\sigma_p & = \text{Pooled standard deviation}
+\end{align*}
+$$
+
+$$s_{p} = \sqrt{\frac{(S_1^2 + S_2^2)}
+          {2}}$$
+
+## Modality data
+
+-   Calculate Cohen's $d$?
+
+```{r}
+
+library(countdown)
+countdown(minutes = 2, seconds = 00)
+
+```
+
+## Cohen's $d$
+
+```{r}
+```
+
+## `easystats`
+
+```{r}
+
+effectsize::cohens_d(Val~Modality, data = senses_filt) %>% 
+  print_html()
+
+```
+
+## Cohen's $d$
+
+-   Unequal sample sizes
+
+$$
+s_p = \sqrt{\frac{(n_1-1)s_1^2 + (n_2-1)s_2^2}{n_1-n_2-2}}
+$$
+
+```{r}
+#use if variances are not equal
+effectsize::cohens_d(Val~Modality, data = senses_filt, pooled_sd = FALSE) %>%
+print_html()
+
+```
+
+## Cohen's $d$
+
+-   Can use the *t* value provided in output!
+
+$$
+d = 2 \times \frac{t}{\sqrt{N_1 + N_2 - 2}}
+$$
+
+```{r}
+#| eval: false
+#| 
+effectsize::t_to_d()
+
+```
+
+## Hedges' $g$
+
+-   Use if sample size is small ( \< 20)
+
+$$
+g = \frac{{\bar{X}_1 - \bar{X}_2}}{{S_p}} \times \left(1 - \frac{3}{{4(N-1)}}\right)
+$$
+
+Where:
+
+$$
+\begin{align*}
+\bar{X}_1 & = \text{Mean of group 1} \\
+\bar{X}_2 & = \text{Mean of group 2} \\
+S_p & = \text{Pooled standard deviation} \\
+N & = \text{Total number of observations}
+\end{align*}
+$$
+
+## Hedges' $g$: `Easystats`
+
+```{r}
+
+effectsize::hedges_g(Val~Modality, data = senses_filt) %>% 
+  print_html()
+
+```
+
+## `MOTE`
+
+```{r}
+#| eval: false
+library(MOTE)
+#classic d
+d.ind.t(m1, m2, sd1, sd2, n1, n2, a = 0.05)
+```
+
+-   Shiny: <https://doomlab.shinyapps.io/mote/>
+
+## Effect size interpretation
+
+-   Cohen [@cohen2013]
+
+    -   Small
+
+        -   d = .2
+
+    -   Medium
+
+        -   d= .5
+
+    -   Large
+
+        -   d = .8
+
+## Effect size interpretation
+
+![](images/medium.png){fig-align="center" width="626"}
+
+-   57.9% of the treatment group will be higher than the control group
+    ($U_3$)
+
+<!-- -->
+
+-   92.0% overlap
+
+-   55.6% of the time a person chosen randomly from treatment group at
+    random will have higher mean (probability of superiority)
+
+## Effect size interpretation
+
+![](images/small.png){fig-align="center" width="705"}
+
+-   69.1% of the treatment group will be higher than the control group
+    (\$U_3\$)
+
+-   80.3% overlap
+
+-   63.8% of the time a person chosen randomly from the treatment group
+    will have higher mean (probability of superiority)
+
+## Effect size interpretation
+
+![](images/large.png){fig-align="center" width="776"}
+
+-   84.1% of the treatment group will be higher than the control group
+    (\$U_3\$)
+
+-   61.7% overlap
+
+-   76.0% of the time a person chosen randomly from treatment group will
+    have higher mean (probability of superiority)
+
+## ANOVA: effect sizes
+
+-   eta-squared
+
+$$\eta^{2} = \frac{\text{SS}_{\text{explained}}}{\text{SS}_{\text{total}}}$$
+
+> \% of variance explained
+
+-   Cannot be easily compared between studies, because the total
+    variability in a study $SS_{total}$ depends on the design of a
+    study, and increases when additional variables are manipulated
+
+## ANOVA: Effect sizes
+
+-   $\eta_p^2$
+
+$$\eta_p^2 = \frac{SS_{explained}}{SS_{explained} + SS_{unexplained}}$$
+
+> \% of variance explained for one effect (partailing out others)
+>
+> Used with more than one factor!
+
+## ANOVA: Effect sizes
+
+-   Less biased
+
+$$\omega^2 = \frac{SS_{model} - df_{model}\cdot MS_{error}}{SS_{total} + MS_{error}}$$
+
+$$\omega_{p}^{2} = \frac{F - 1}{F + \ \frac{\text{df}_{\text{error}} + 1}{\text{df}_{\text{effect}}}}$$
+
+## Calculate ANOVA Effect Size in R
+
+::: callout-note
+$\eta^2$ and $\eta^2_p$ will be the same with one variable
+:::
+
+-   $\eta_2$
+-   $\eta^2_p$
+
+```{r}
+aov_em <- aov(Val~Modality, data=senses)
+eta_squared(aov_em, partial=FALSE) #eta-sqaured
+eta_squared(aov_em, partial=TRUE) # partial eta-sqaured
+
+
+```
+
+```{r}
+#| eval: false
+eta_squared(aov_em, partial=TRUE)
+```
+
+## Reporting
+
+::: callout-note
+Always report effect size and CIs
+:::
+
+`r report(aov_em, partial=TRUE)`
+
+# Power
+
+## Recap of NHST
+
+-   Are taste words rated as more unpleasant than smell words?
+
+    -   $H_0$:There is no effect of Modality on ratings
+    -   $H_1$: There is an effect of Modality on ratings
+
+## Recap of NHST
+
+-   A world in which $H_1$ exists
+
+    -   Two types of errors:
+
+![](images/power.png){fig-align="center" width="646"}
+
+## Power
+
+-   $1-\beta$ : Probability rejecting null when it is false
+
+> The probability of observing a statistical significant effect, given a
+> sample size, alpha level and a effect size of interest
+
+-   **Detecting the effect when it really exists**
+
+## What is common?
+
+In psychology:
+
+-   β = .20
+
+-   This means we are willing to make a Type II error 20% of the time
+
+-   α =.05
+
+    -   This means we are willing to make a Type I error only 5% of the
+        time (i.e., significance \< .05).
+
+-   Power = 1−β = .80
+
+::: callout-note
+We should really be using power of .9
+:::
+
+## What is common?
+
+What does it mean if we say: "we compare retrieval practice to
+re-reading with power = .75"
+
+. . .
+
+-   **If retrieval practice is actually beneficial, there is a 75%
+    chance we'll get a significant result when we do this study MANY
+    MANY TIMES**
+
+. . .
+
+-   We compare bilinguals to monolinguals on a test of non-verbal
+    cognition with power = .35
+
+. . .
+
+-   **If there is a difference between monolinguals & bilinguals, there
+    is a 35% chance we'll get p \< .05 IF WE DO THIS MANY MANY TIMES**
+
+## Why should we care about power?
+
+-   Efficient use of resources
+
+    -   Power analyses tell us if our planned sample size (n) is:
+
+        -   Large enough to be able to find what we're looking for
+
+        -   Not too large that we're collecting more data than necessary
+
+-   This is about good use of our resources!
+
+    -   Societal resources: money, participant hours
+
+    -   Your resources: Time!!
+
+## Why should we care about power?
+
+-   Avoid p-hacking [@simmons2011]
+
+    -   Rate of false positive results increases if we keep collecting
+        data whenever our effect is non-significant
+
+-   Power analysis decides sample in advance
+
+## Why should we care about power?
+
+-   Understand non-replication [@estimati2015]
+
+    -   Even if an effect exists in the population, we'd expect some
+        non-significant results
+
+        -   Power is almost never 100%
+
+        -   In fact, many common designs in psychology have low power
+            (Etz & Vandekerckhove, 2016; Maxwell et al., 2015)
+
+## Why should we care about power?
+
+-   Better understand null results
+
+    -   Non-significant result, by itself, doesn't prove an effect
+        doesn't exist
+
+        -   Absence of evidence $\neq$ evidence for absence
+
+    -   With high power, null result is more informative
+
+        -   E.g., null effect of Modality on ratings with 20% power
+
+            -   Maybe differences & we just couldn't detect the effect?
+
+            -   But: null effect of Modality on ratings with power of
+                90%
+
+                -   Makes me more sure
+
+## Why should we care about power?
+
+-   Granting agencies want them now
+
+    -   Don't want to fund a study with low probability of showing
+        anything
+
+        -   e.g., Our theory predicts greater activity in Broca's area
+            in condition A than condition B. But our experiment has only
+            a 16% probability of detecting the difference
+            -   Not good!
+
+## Why should we care about power?
+
+-   Scientific accuracy!
+
+    -   If there is an effect, we want to know about it!
+
+## Power analysis
+
+-   Power analysis: Do we have the power to detect the effect we're
+    interested in? If not, what is it going to take?
+
+-   Depends on:
+
+    1.  Sample size
+    2.  Effect size (e.g., d)
+    3.  Statistical significance criteria (α)
+
+## Power Analysis
+
+-   Depends on:
+
+    1.  Sample size - Can control this
+    2.  Effect size (e.g., d) - Can't control this
+    3.  Statistical significance criteria (α) - usually fixed
+
+-   So:
+
+    -   Determine desired power
+
+    -   Estimate effect size(s)
+
+    -   Calculate the necessary sample size
+
+## Power to estimate sample size
+
+-   Calculate required sample size given a) effect size (e.g., d) b)
+    significance level (α), c) desired power.
+
+    -   How do we determine our effect size?
+
+        -   Smallest effect size of interest (SESOI) (e.g., d = 0.5)
+            (Lakens)
+
+        -   A priori
+
+            -   Use literature to estimate effect size
+
+            -   Meta-analyses
+
+            -   Rules of thumb
+
+## Determining Power
+
+-   R
+    -   `pwr`
+    -   `WebPower`
+    -   `Superpower` (simulation)
+-   Non-R
+    -   G\*Power
+
+## `WebPower`
+
+-   For GLM:
+
+```{r}
+#| eval: false
+#| 
+WebPower::wp.regression(n=NULL, p1=NULL, p2=0, f2=NULL, alpha=.05, power=NULL)
+
+```
+
+-   n: sample size
+
+-   p1: \# of predictors
+
+-   p2: \# of predictors in reduced model
+
+-   f2: effect size measure
+
+-   Alpha: significance level
+
+-   Power
+
+## A priori power
+
+-   Modality data
+
+    -   We want to conduct a similar experiment and estimate how many
+        people we should collect to achieve a desired power of 80%
+
+-   We need to convert the $R^2$ value to $f^2$ (alternative effect size
+    used in multiple regression/general linear models power analyses)
+
+$$
+f^2 = R^{2}/(1 - R^{2})
+$$
+
+```{r}
+#| eval: false
+f2=.26
+
+WebPower::wp.regression(n=NULL, p1=1, p2=0, f2=.26, alpha=.05, power=.8)
+```
+
+## Power Curves
+
+-   Visualization showing power as a function sample size
+
+```{r}
+#| fig-align: center
+#| 
+#add seq
+res <- WebPower::wp.regression(n = seq(10,300,50), p1 = 1, f2 = 0.2, 
+                                 alpha = 0.05, power = NULL)
+
+res_df = data.frame(n=res$n, power=res$power)
+
+# visualize the result
+ggplot(res_df, aes(n, power)) + 
+  geom_line() + 
+  geom_hline(yintercept=.8, color="blue") + 
+  labs(x="Sample Size", y="Power")+
+  theme_minimal(base_size = 16)
+```
+
+## Power Questions
+
+-   How many people do we need for 90% power?
+
+```{r}
+countdown(minutes = 1, seconds = 00)
+```
+
+## Power Questions
+
+-   What would be our power be if I could only collect 5 participants?
+
+```{r}
+countdown(minutes = 1, seconds = 00)
+```
+
+## Power Questions
+
+-   What is the effect on power with varying effect sizes?
+    -   Sensitivity analysis
+
+```{r}
+countdown(minutes = 1, seconds = 00)
+
+```
+
+# Simulation
+
+-   Remember the definition of power?
+
+    -   The probability of observing a significant effect in our sample
+        if the effect truly exists in the population
+
+    -   What if we knew for a fact that the effect existed in a
+        particular population?
+
+        -   Then, a measure of power is how often we get a significant
+            result in a sample (of our intended n)
+
+    -   Solution: We create ("simulate") the data.
+
+## Monte Carlo Simulations
+
+1.  Set population parameters
+
+**from already conducted studies or pilot data**
+
+## Modality power analysis
+
+-   `Superpower`
+
+```{r}
+library(Superpower)
+
+```
+
+::: columns
+::: {.column width="50%"}
+```{r}
+
+design <- "5b" # 5 levels of var
+n <- 12
+mu <- c(5, 3, 6, 9, 4)
+sd <- c(1.65, 1.91, 1.65, 1.91, 1.54)
+label_list = list("condition" = c("Smell", "Taste", "Sight", "Touch", "Sound")) #
+
+
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+#| fig-align: center
+#| 
+design_result <- ANOVA_design(design = design,
+                              n = n,
+                              mu = mu, 
+                              sd = sd, 
+                              label_list = label_list)
+```
+:::
+:::
+
+## Monte Carlo Simulations
+
+1.  Set population parameters
+2.  Create a random sample from these data
+3.  Do this multiple times
+4.  Calculate how many times you get a significant result
+    -   E.g., 5 out 10 times (50% power)
+
+## Monte Carlo simulations
+
+```{r}
+
+nsims=100 # number of times we do this
+
+power_result_vig_2 <- ANOVA_power(design_result, 
+                                  nsims = nsims, 
+                                  seed = 1234)
+```
+
+## Power Curve
+
+```{r}
+plot_power(design_result, min_n = 10, max_n = 250, emm=TRUE)
+```
+
+## Posthoc Power
+
+::: columns
+::: {.column width="50%"}
+-   Sometimes reviewers will ask you to conduct a post-experiment power
+    calculation in order to interpret non-significant findings
+
+    -   Do not do this!
+
+1.  Sample effect size not rep of population size
+
+2.  Adds nothing over a *p*-value
+
+-   *p* \> .05 = low power (Duh!)
+:::
+
+::: {.column width="50%"}
+![](images/posthoc.png){fig-align="center"}
+:::
+:::
+
+## The Minimal Detectable Effect Size
+
+-   We do not live in a perfect world
+
+    -   Sometimes we cannot collect all the data we need
+    -   Sometimes we forget to do a power analysis
+
+-   Report the smallest effect size that could be detected in your study
+    for this particular sample size
+
+```{r}
+# leave out effect size and it will tell us min effect size we can detect
+
+```
+
+## Ways to increase power
+
+-   Study large effects :)
+
+-   Increase sample size
+
+-   Increase the significance level of $\alpha$
+
+    -   One-sided hypotheses
+
+-   Better measures
+
+## Sample size justification
+
+```{=html}
+<style scoped>
+table {
+  font-size: 20px;
+}
+</style>
+```
+|                            |                                                                                                                                                             |
+|:----------------|:------------------------------------------------------|
+| Type of justification      | When is this justification applicable?                                                                                                                      |
+| Measure entire population  | A researcher can specify the entire population, it is finite, and it is possible to measure (almost) every entity in the population.                        |
+| Resource constraints       | Limited resources are the primary reason for the choice of the sample size a researcher can collect.                                                        |
+| Accuracy                   | The research question focusses on the size of a parameter, and a researcher collects sufficient data to have an estimate with a desired level of accuracy.  |
+| A-priori power analysis    | The research question has the aim to test whether certain effect sizes can be statistically rejected with a desired statistical power.                      |
+| Heuristics                 | A researcher decides upon the sample size based on a heuristic, general rule or norm that is described in the literature, or communicated orally.           |
+| No justification           | A researcher has no reason to choose a specific sample size, or does not have a clearly specified inferential goal and wants to communicate this honestly.  |
+
+## More resources
+
+-   Check out power simulation video from last year when Erin was here
+    -   <https://drive.google.com/file/d/1_Xr9AsoIyfgMivY_20QKQKlqy5xfslTw/view>
+
+## More complex analyses
+
+-   Linear and generalized linear mixed effects models
+    -   @kumle2021
+
+```{r}
+#| eval: false
+#| 
+#  devtools::install_github("DejanDraschkow/mixedpower") 
+library(mixedpower)
+```
+
+## References
