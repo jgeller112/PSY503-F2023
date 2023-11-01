@@ -1,15 +1,19 @@
 ---
-title: "Lab 6"
+title: "Lab 6: Power and Effect Size"
 format: html
 editor: visual
 author: "Jason Geller, Ph.D."
-date: 2023 03 22
+date: 2023 11 01
 toc: true
 toc_float: true
+bibliography: references.bib
 ---
 
-## Lab 5: Bayesian Data Analysis
+## Lab 6: Power and Effect Size
 
-In Lab 6, we will analyze data from Carney, Cuddy, and Yap's (2010) study on the effect of power posing on testosterone levels. To conduct the analysis, we will be using the brms package to fit a Bayesian regression model. The focus of this lab is to teach you how to fit and report Bayesian regression models, including discussion of the posterior distribution, working with priors, and model selection.
+In this lab, you will use a published dataset from @tekin2021 to
+calculate effect sizes using `MOTE` and conduct power analyses using
+`WebPower` and `Superpower`.
 
-To access Lab 6, please [Click here](https://classroom.github.com/a/Z7n5wtRw)
+This lab will be due on November 05, 2023. To access Lab 6, please go
+here: [Click here](https://classroom.github.com/a/qxP4LfB1)
