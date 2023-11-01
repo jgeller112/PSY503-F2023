@@ -626,12 +626,11 @@ WebPower::wp.regression(n=NULL, p1=NULL, p2=0, f2=NULL, alpha=.05, power=NULL)
 
 -   Power
 
+::: callout-note
+Whatever you want estimated leave blank
+:::
+
 ## A priori power
-
--   Modality data
-
-    -   We want to conduct a similar experiment and estimate how many
-        people we should collect to achieve a desired power of 80%
 
 -   We need to convert the $R^2$ value to $f^2$ (alternative effect size
     used in multiple regression/general linear models power analyses)
@@ -640,11 +639,15 @@ $$
 f^2 = R^{2}/(1 - R^{2})
 $$
 
+-   Modality data
+
+    -   We want to conduct a similar experiment and estimate how many
+        people we should collect to achieve a desired power of 80%
+
 ```{r}
-#| eval: false
 f2=.26
 
-WebPower::wp.regression(n=34, p1=1, p2=0, f2=seq(.1, .3, .05), alpha=.05, power=NULL)
+WebPower::wp.regression(n=NULL, p1=1, p2=0, f2=f2, alpha=.05, power=.8)
 ```
 
 ## Power Curves
@@ -673,7 +676,9 @@ ggplot(res_df, aes(n, power)) +
 -   How many people do we need for 90% power?
 
 ```{r}
-countdown(minutes = 1, seconds = 00)
+
+WebPower::wp.regression(n=NULL, p1=1, p2=0, f2=f2, alpha=.05, power=.9)
+
 ```
 
 ## Power Questions
@@ -681,7 +686,7 @@ countdown(minutes = 1, seconds = 00)
 -   What would be our power be if I could only collect 5 participants?
 
 ```{r}
-countdown(minutes = 1, seconds = 00)
+WebPower::wp.regression(n=5, p1=1, p2=0, f2=f2, alpha=.05, power=NULL)
 ```
 
 ## Power Questions
@@ -690,9 +695,12 @@ countdown(minutes = 1, seconds = 00)
     -   Sensitivity analysis
 
 ```{r}
-countdown(minutes = 1, seconds = 00)
+
+WebPower::wp.regression(n=74, p1=1, p2=0, f2=seq(.1, .3, .05), alpha=.05, power=NULL)
 
 ```
+
+-   As effect size increases, so does power!
 
 # Simulation
 
@@ -776,7 +784,16 @@ power_result_vig_2 <- ANOVA_power(design_result,
 ## Power Curve
 
 ```{r}
+
 d=plot_power(design_result, min_n = 10, max_n = 250, emm=TRUE)
+
+```
+
+## Power Curve
+
+-   Pairwise comparisons
+
+```{r}
 # emmeans power curves=
 d$plot_emm # can use to look at pairwise power
 
@@ -840,7 +857,7 @@ table {
 </style>
 ```
 |                            |                                                                                                                                                             |
-|:------------------|:----------------------------------------------------|
+|:-------------------|:---------------------------------------------------|
 | Type of justification      | When is this justification applicable?                                                                                                                      |
 | Measure entire population  | A researcher can specify the entire population, it is finite, and it is possible to measure (almost) every entity in the population.                        |
 | Resource constraints       | Limited resources are the primary reason for the choice of the sample size a researcher can collect.                                                        |
