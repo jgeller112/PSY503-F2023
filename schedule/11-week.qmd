@@ -1,10 +1,11 @@
 ---
 title: "Week 11"
-subtitle: "MR: Interactions"
-date: 2023-11-27
+subtitle: "MR: Centering/Standardization/Transformations"
+date: 2023-11-13
 ---
 ## Before Class
 
 ### Textbook
 
-- Chapter 16 - Statistics and Data Science: A Modeling Approach
+- [Chapter 12](https://psy503-found-stats.netlify.app/readings_pdf/Regression%20and%20Other%20Stories%20by%20Andrew%20Gelman,%20Jennifer%20Hill,%20Aki%20Vehtari.pdf)
+
