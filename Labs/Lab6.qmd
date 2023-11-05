@@ -17,3 +17,7 @@ calculate effect sizes using `MOTE` and conduct power analyses using
 
 This lab will be due on November 05, 2023. To access Lab 6, please go
 here: [Click here](https://classroom.github.com/a/qxP4LfB1)
+
+## Lab Answers
+
+-   [Lab 6 answers](/Labs/lab_ans/lab6_ans/Lab6-EffPower_ans.qmd])

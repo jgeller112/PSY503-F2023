@@ -1,0 +1,297 @@
+---
+title: "Lab6: Effect Size and Power"
+subtitle: "Princeton University"
+author: "Jason Geller, Ph.D.(he/him)"
+date: 'Updated:`r Sys.Date()`'
+format: html
+toc: true
+toc_float: true
+html:
+    code-fold: true
+    code-tools: true
+execute: 
+  warning: false
+  message: false
+engine: knitr
+webr: 
+  packages: ["tidyverse", "ggrain", "easystats", "broom", "emmeans", "knitr", "Superpower", "papaja", "httr"]
+filters:
+  - webr
+---
+
+In today's lab, we will be using data from [@tekin2021; Experiment 1].
+In their study, participants viewed cue-target pairs (e.g., DOOR -
+HOUSE) during a study phase. After, groups either provided delayed JOLs
+(e.g., given a cue word, how likely is it on a scale of 0-100 you will
+recall the target on a later test), attempted to retrieve the target
+word (DOOR-?), or restudied the same cue-target pairs (DOOR-HOUSE). Each
+group then took a final test over the pairs. The aim of their study was
+to determine whether engaging in retrieval practice and providng delayed
+JOLs had similar effects on memory.
+
+To access the data for Experiment 1, please visit their OSF page--the
+link is in the paper.
+
+# Effect size
+
+> As a first step, you will need to read in the data from OSF. A link
+> can be found in their paper.
+
+```{webr-r}
+
+
+data <- read.csv("https://raw.githubusercontent.com/jgeller112/Lab6-Effsize_Power/main/data/JOL_Exp1_wide.csv")
+
+```
+
+> We are interested in the scores on the final test (`Total Final)` as a
+> function of Condition (`Condition`). We will only be looking at three
+> conditions: `Restudy`, `Overt retrieval` (retrieval practice), and
+> `Cue-Only JOL`. Please select and filter the appropriate columns from
+> the dataset.
+
+```{webr-r}
+library(tidyverse)
+
+data <- data %>%
+  select(Participant, Total_Final, Condition) %>%
+  filter(Condition!="Cue-target J")
+
+
+```
+
+> Visualize the differences between the three groups
+
+```{webr-r}
+
+library(ggrain)
+
+ggplot(data, aes(x = Condition, y = Total_Final, fill = Condition)) +
+    geom_rain(rain.side="l") + 
+  labs(x="Group", y="Final Test Score", title="Perforamnce by Group") + 
+  theme_minimal(base_size=12) +
+  theme(legend.position = "none")
+
+
+```
+
+> Next I want you to run a lm model. Use dummy coding and fit two models
+> to get the pairwise comparisons between all the three conditions (you
+> will need to use the relevel function and re-run the lm model to get
+> the third comparison).
+
+```{webr-r}
+library(broom)
+lm1 <- lm(Total_Final~Condition, data=data) 
+
+
+```
+
+> Take one of your models from above and use `emmeans` and `pairs`
+> function to get the pairwise comparisons. This a much easier approach
+> and one that I much prefer you use in your work.
+
+```{webr-r}
+library(emmeans)
+emmeans(lm1, specs="Condition") %>%
+  pairs()
+
+```
+
+> Calculate Cohen's d by hand for each of the pairwise comparisons
+
+```{webr-r}
+
+data %>%
+  group_by(Condition)%>%
+  summarise(mean=mean(Total_Final), sd=sd(Total_Final), n=n())
+
+cuov <- (.500-.5245)/ sqrt( ((43 - 1) * 0.168 ^ 2 + (40 - 1) * .135 ^ 2) / (43 + 40 - 2))
+
+cuere <- (.500-.437)/ sqrt( ((43 - 1) * 0.168 ^ 2 + (40 - 1) * .169 ^ 2) / (43 + 40 - 2))
+
+ovre <- (.525-.437)/ sqrt( ((40 - 1) * 0.135 ^ 2 + (40 - 1) * .169 ^ 2) / (40 + 40 - 2))
+
+cuov 
+
+cuere
+
+ovre
+
+
+```
+
+> Use the `MOTE` package to get 95% CIs around each d value
+
+```{webr-r}
+
+library(MOTE)
+
+d1 <- MOTE::d.ind.t(.500, .5245, .168, .135, 43, 40)
+
+d2 <- MOTE::d.ind.t(.500, .437, .168, .169, 43, 40)
+                    
+d3 <- MOTE::d.ind.t(.5245, .437, .135, .169, 40, 40)
+
+d1
+
+d2
+
+d3
+
+```
+
+> Write-up the results from the pairwise comparisons in APA style. The
+> differences between each of the pairwise comparisons between each
+> group and all relevant information (*t*, *p*, 95% CIs, size) . Make
+> sure you correct for pairwise comparisons and state which correction
+> you use
+
+# Power
+
+### `WebPower`
+
+-   Using the WebPower package calculate the the number of participants
+    per group we need to have 90% power in our model to detect a
+    difference.
+
+```{webr-r}
+library(WebPower)
+
+WebPower::wp.regression(n=NULL, p1=2, f2=0.1, alpha=0.05, power=.9)
+
+```
+
+### `Superpower`
+
+-   Book going over `Superpower`
+    <https://aaroncaldwell.us/SuperpowerBook/>
+
+-   Reviewer 2 asked you to calculate the power of @tekin2021 Experiment
+    1 after you ran it. Set up a study design using the `ANOVA_design`
+    function from `Superpower`. Use the same means, SD, and n (use 40
+    per group as `SuperPower`cannot do unequal sample sizes for one-way
+    designs) from their Experiment 1 study (excluding the one
+    condition). Run a power analysis on this data.
+
+```{webr-r}
+library(Superpower)
+
+design <- "3b" # 5 levels of var
+n <- 40 # unequal ns dont work yet for this
+mu <- c(.50,.52, .43)# each group mean
+sd <- c(0.17, .14, 0.17) # each group sd
+label_list = list("condition" = c("Cue-JOL", "OR","RS")) # labels for each group
+
+
+design_result <- ANOVA_design(design = design,
+                              n = n,
+                              mu = mu, 
+                              sd = sd, 
+                              label_list = label_list)
+```
+
+> What is our power to detect the overall effect of `Condition`? What
+> about the pairwise comparisons between the groups?
+
+-   To detect the effect of Condition we have only 64.22% power (Yikes).
+    To detect the cue-JOL vs. overt difference we have 9.36% power. To
+    detect the Cue-JOL vs. Restudy difference we have 43.98% power.
+    Finally, to detect the overt and restudy difference we have power of
+    73%.
+
+```{webr-r}
+
+nsims=5000# number of times we do this should be larger than this!
+
+power_result_vig_2 <- ANOVA_power(design_result, 
+                                  nsims = nsims, 
+                                  seed = 1234)
+
+```
+
+> What kind of power analysis would this be?
+
+-   Post-hoc
+
+> What do you think of this study design
+
+-   Not very well powered study.
+
+```{=html}
+<!-- -->
+```
+-   We now want to run a replication study. Let's plan a study a study
+    where we want to collect 100 Ps per group.
+
+    > Change `ANOVA_design` to reflect *just this difference*. Set N =
+    > 100.
+
+```{webr-r}
+
+library(Superpower)
+
+design <- "3b" # 5 levels of var
+n <- 100 # unequal ns dont work yet for this
+mu <- c(.50,.52, .43)# each group mean
+sd <- c(0.17, .14, 0.17) # each group sd
+label_list = list("condition" = c("Cue-JOL", "OR","RS")) # labels for each group
+
+
+design_result <- ANOVA_design(design = design,
+                              n = n,
+                              mu = mu, 
+                              sd = sd, 
+                              label_list = label_list)
+
+```
+
+> What would are power be using the current study parameters to detect
+> overall effect? How about each pairwise comparison?
+
+```{webr-r}
+
+nsims=5000# number of times we do this should be larger than this!
+
+power_result_vig_2 <- ANOVA_power(design_result, 
+                                  nsims = nsims, 
+                                  seed = 1234)
+
+```
+
+-   Let's say I want to power the study to be able to detect a .05 point
+    difference on the final test between the Cue-Only JOLs and Overt
+    Retrieval groups.
+
+> Change `ANOVA_design` to reflect *just this difference*. Set N = 40.
+> What is our power to detect a .05 point difference with 40 per group?
+
+```{webr-r}
+
+design <- "2b" # 2 levels of var
+n <- 40 # unequal ns dont work yet for this
+mu <- c(.50,.55)# each group mean
+sd <- c(0.17, .14) # each group sd
+label_list = list("condition" = c("Cue-JOL", "OR")) # labels for each group
+
+
+design_result <- ANOVA_design(design = design,
+                              n = n,
+                              mu = mu, 
+                              sd = sd, 
+                              label_list = label_list)
+
+
+```
+
+> Plot the power curve just for this difference. What sample size is
+> needed to achieve 90% power?
+
+```{webr-r}
+
+plot_power(design_result, min_n = 10, max_n = 400)
+
+```
+
+-   You need 205 participants to have 90% power to detect a .05
+    difference between the two conditions.
