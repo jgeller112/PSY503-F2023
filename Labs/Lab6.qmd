@@ -20,4 +20,4 @@ here: [Click here](https://classroom.github.com/a/qxP4LfB1)
 
 ## Lab Answers
 
--   [Lab 6 answers](/Labs/lab_ans/lab6_ans/Lab6-EffPower_ans.qmd])
+-   [Lab 6 answers](/Labs/lab_ans/lab6_ans/Lab6-EffPower_ans.qmd)
