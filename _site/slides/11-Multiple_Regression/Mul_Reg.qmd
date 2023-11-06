@@ -1,0 +1,919 @@
+---
+title: "Multiple Regression"
+subtitle: "Princeton University"
+author: "Jason Geller, PH.D.(he/him)"
+date: 'Updated:`r Sys.Date()`'
+footer: "PSY 503: Foundations of Statistics in Psychology"
+format: 
+  revealjs:
+    theme: blood
+    css: slide-style.css
+    multiplex: true
+    transition: fade
+    slide-number: true
+    incremental: false 
+    chalkboard: true
+    fontsize: "25pt"
+execute:
+  freeze: auto
+  echo: true
+  message: false
+  warning: false
+  fig-align: center
+  fig-width: 12
+  fig-height: 8
+  editor_options: 
+  chunk_output_type: inline
+  code-overflow: wrap
+  html:
+    code-fold: true
+    code-tools: true
+---
+
+## Packages
+
+```{r}
+#| echo: false
+#| 
+library(pacman)
+p_load("tidyverse", "easystats", "broom", "supernova", "ungeviz", "gt", "afex", "emmeans", "knitr", "kableExtra", "papaja")
+```
+
+```{r}
+library(grateful)
+pkgs <- cite_packages(output = "table", out.dir = ".")
+
+pkgs
+```
+
+## Today
+
+-   Introduction to multiple regression
+
+    -   Interpretation of coefs
+
+-   Assumptions of multiple regression
+
+-   Effect size and power
+
+-   Plotting
+
+-   Write-up
+
+## Simple Linear Model
+
+![](images/Pxy.png){fig-align="center"}
+
+## Multiple predictors in linear regression
+
+![](images/xymult.png){fig-align="center"}
+
+## Multiple regression
+
+$$\begin{align}
+\hat{Y} &= b_0 + \beta_1 X
+\end{align}$$
+
+$$\large \hat{Y} = b_0 + b_1X_1 + b_2X_2 + \dots+b_kX_k$$
+
+-   Simple as adding predictors to our linear equation
+
+## Multiple regression equation
+
+$$\large \hat{Y} = b_0 + b_1X_1 + b_2X_2 + \dots+b_kX_k$$
+
+-   $\hat{Y}$ = predicted value on the outcome variable Y
+-   $b_0$ = predicted value on Y when all Xs = 0
+-   $X_k$ = predictor variables
+-   $b_k$ = unstandardized regression coefficients
+-   $k$ = the number of predictor variables
+
+## Straight Line to Hyperplane
+
+::: columns
+::: {.column width="50%"}
+-   More than two predictors (plane)
+
+    -   Multi-dimensional space
+
+-   Regression coefficients are "partial" regression coefficients
+
+    -   Slope for variable X1 ($b_1$) predicts the change in Y per unit
+        X1 holding X2 constant
+
+    -   Slope for variable X2 ($b_2$) predicts the change in Y per unit
+        X2 holding X1 constant
+:::
+
+::: {.column width="50%"}
+<br>
+
+<br>
+
+![](images/multip.png){fig-align="center" width="722"}
+:::
+:::
+
+## Multiple Regression: Example
+
+$$
+\begin{align*}
+\operatorname{CESD\_total} &= b_o + b_{1}(\operatorname{PIL\_total}) \\
+&+ b_{2}(\operatorname{AUDIT\_TOTAL\_NEW}) \\
+&+ b_{3}(\operatorname{DAST\_TOTAL\_NEW}) \\
+&+ e
+\end{align*}
+$$
+
+```{r}
+master <- read.csv("https://raw.githubusercontent.com/jgeller112/psy503-psych_stats/master/static/slides/10-linear_modeling/data/regress.csv")
+
+```
+
+-   Mental Health and Drug Use:
+
+    -   CESD = depression measure
+    -   PIL total = measure of meaning in life
+    -   AUDIT total = measure of alcohol use
+    -   DAST total = measure of drug usage
+
+## Scatterplot
+
+```{r}
+#| fig-align: center
+# Change the point sizes manually
+
+anim.1<- ggplot(master, aes(x=PIL_total, y=CESD_total))+
+   geom_point() + 
+  theme_minimal(base_size=16)
+
+anim.1
+
+```
+
+## Scatterplot
+
+```{r}
+#| fig-align: center
+# Change the point sizes manually
+
+anim.1<- ggplot(master, aes(x=AUDIT_TOTAL_NEW, y=CESD_total))+
+   geom_point() + 
+  theme_minimal(base_size=16)
+
+anim.1
+```
+
+## Scatterplot
+
+```{r}
+#| fig-align: center
+# Change the point sizes manually
+anim.1<- ggplot(master, aes(x=DAST_TOTAL_NEW, y=CESD_total))+
+   geom_point() + 
+  theme_minimal(base_size=16)
+
+anim.1
+```
+
+## Individual Predictors
+
+-   We test the individual predictors with a t-test:
+
+    -   $t = \frac{b}{SE}$
+
+    -   Therefore, the model for each individual predictor is our
+        coefficient b
+
+    -   Single sample t-test to determine if the b value is different
+        from zero
+
+## Fitting the model
+
+```{r}
+model_fit <- lm(CESD_total ~ PIL_total + AUDIT_TOTAL_NEW + DAST_TOTAL_NEW,
+             data = master) 
+
+```
+
+```{r}
+#| echo: false
+#| 
+model_fit %>%
+  tidy(conf.int=TRUE) %>%
+  knitr::kable() %>%
+    kable_styling(font_size = 24) %>%
+ row_spec(1, color = "white",
+              background = "red")
+
+```
+
+-   $b_0$:
+
+## Fitting the model
+
+```{r}
+#| echo: false
+#| 
+model_fit %>%
+  tidy(conf.int=TRUE) %>%
+  knitr::kable() %>%
+    kable_styling(font_size = 24) %>%
+ row_spec(2, color = "white",
+              background = "red")
+
+
+
+```
+
+-   $b_1$:
+
+## Fitting the model
+
+```{r}
+#| echo: false
+#| 
+model_fit %>%
+  tidy(conf.int=TRUE) %>%
+  knitr::kable() %>%
+    kable_styling(font_size = 24) %>%
+ row_spec(3, color = "white",
+              background = "red")
+
+
+
+```
+
+-   $b_2$:
+
+## Fitting the model
+
+```{r}
+#| echo: false
+
+
+model_fit %>%
+  tidy(conf.int=TRUE) %>%
+  knitr::kable() %>%
+    kable_styling(font_size = 24) %>%
+ row_spec(4, color = "white",
+              background = "red")
+
+
+```
+
+-   $b_3$:
+
+## Mo predictors mo problems
+
+-   Assumptions
+
+    -   Linearity
+
+    -   Independence
+
+    -   Normality of residuals
+
+    -   Equal error ("homoskedasticity")
+
+-   Issues:
+
+    -   Missingness
+
+    -   Factors are correlated with one another (multicollinearity)
+
+    -   Unusual values/outliers
+
+## Problems
+
+-   Missingness
+    -   list-wise deletion (removes entire row where missingness occurs)
+
+```{r}
+nomiss <- master %>%
+  drop_na() # drop missing data
+
+nrow(master)
+nrow(nomiss)
+
+```
+
+## Problems
+
+-   Multicolinearity
+
+    -   You want X and Y to be correlated
+
+    -   You do not want the Xs to be highly correlated
+
+![](images/mult-prob.PNG){fig-align="center"}
+
+## Multicolinearity
+
+-   Problems
+
+    -   Extreme cases (complete collinearity) = Nonidentifiable model
+
+    -   "Unstable" regression coefficients ("bouncing betas")
+
+        -   Imprecise estimation
+
+    -   Large standard errors
+
+        -   Increased Type II errors
+            -   Not detecting a difference when there is one
+
+## Multicolinearity
+
+-   Tolerance
+
+    -   Measures influence of one predictor on another
+    -   If predictors are highly correlated, tolerance gets smaller
+
+$$Tolerance=1- R^2_j$$
+
+> where $R^2_j$ is the proportion of variation in X that is explained by
+> the linear combination of the other predictors in the model
+
+## Multicolinearity
+
+-   VIF (variance inflation factor)
+
+    -   How much does our estimates (SEs) change due to the correlation
+
+$$VIF=\frac{1}{1- R^2_j}$$
+
+-   Rule of thumb:
+
+    -   VIF \> 10 indicates issues
+
+## Multicolinearity
+
+-   Check multicolinearity in your data
+
+```{r}
+#| fig-align: center
+#| 
+#easystats performance package
+plot(check_collinearity(model_fit))
+```
+
+## Multicolinearity
+
+-   Strategies
+
+    -   Anticipate collinearity issues at the design stage
+
+    -   Depends: Drop variable if there's no theoretical pay-off anyway
+
+    -   Depends: Fit separate models and compare fit
+
+    -   Depends: Increase sample size
+
+    -   Depends: Orthogonalize predictors experimentally
+
+    -   Depends: Use alternative approaches, such as ridge regression or
+        LASSO
+
+    -   Do not do anything about it (if prediction is your goal)
+
+## Identifying unusual cases
+
+![](images/out.png){fig-align="center"}
+
+## Influential points
+
+-   An observation or case is influential if removing it substantially
+    changes the coefficients of the regression model
+
+> Influence = Leverage x Distance (outliers)
+
+![](images/influ1.png){fig-align="center"}
+
+## Influential points
+
+-   Influential points have a large impact on the coefficients and
+    standard errors used for inference
+
+    -   Can be on x or y variables
+
+-   These points can sometimes be identified in a scatterplot if there
+    is only one predictor variable
+
+    -   This is often not the case when there are multiple predictors
+
+-   We will use measures to quantify an individual observation's
+    influence on the regression model
+
+    -   **Leverage**, **Standardized residuals** , and **Cook's
+        distance**
+
+## Leverage
+
+-   Deals with Xs
+
+> Measure of geometric distance of the observation's predictor point
+> ($X_{i1}$, $X_{i2}$) from center point of the predictor space
+
+$$
+h_i = \dfrac{1}{n} + \dfrac{\left(x_i -\overline{x}\right)^2}{\sum_{j=1}^{n}{\left(x_j -\overline{x}\right)^2}} \qquad \text{and}\qquad \overline{h} = \dfrac{k}{n}  \qquad \text{and}\qquad \dfrac{1}{n} \leq h_i \leq 1.0
+$$
+
+::: callout-note
+In multiple regression $h_i$ measures distance from the centroid (point
+of means) of Xs
+:::
+
+## Leverage
+
+![](images/lev.png){fig-align="center"}
+
+## Leverage
+
+-   We say a point is high leverage if:
+
+$$
+h_i > \frac{2K+2}{N}
+$$
+
+-   K is the number of predictors
+
+-   N is the sample size
+
+```{r}
+#| code-line-numbers: "5"
+#| 
+k <- 3 ##number of IVs/predictors
+# label 1 if out 0 if not
+model_out<- model_fit  %>%
+  augment() %>%
+  mutate(lev_out = ifelse(.hat>(2*+2)/nrow(.),1, 0))
+
+```
+
+## Standardized Residuals
+
+-   Distance
+    -   how far away y point is from line
+
+$$
+std.res_i = \frac{y_i - \hat{y}_i}{\hat{\sigma}_\epsilon\sqrt{1-h_i}}
+$$
+
+> Where $\hat{\sigma}_\epsilon$ is regression standard error
+
+-   Use cut-off \> 3
+
+## Standardized Residuals
+
+```{r}
+#| code-line-numbers: "5"
+# label 1 if out 0 if not
+model_out<- model_fit  %>%
+  augment() %>%
+  mutate(lev_out = ifelse(.hat>(2*k+2)/nrow(.),1, 0), 
+         std_out=ifelse(abs(.std.resid) > 3, 1, 0))
+
+```
+
+```{r}
+#| fig-align: center
+#| 
+library(olsrr)
+
+ols_plot_resid_stand(model_fit)
+
+```
+
+## Leverage and Distance
+
+![Montoya](images/lev1.png){fig-align="center"}
+
+## Leverage and distance
+
+![Montoya](images/lev2.png){fig-align="center"}
+
+## Leverage and distance
+
+![Montoya](images/lev3.png){fig-align="center"}
+
+## Cook's distance
+
+-   Influence **(Cook's Distance)**
+
+    -   A measure of how much of an effect that single case has on the
+        whole model
+
+        -   How close it lies to general line (residuals)
+
+        -   It's leverage $$
+            D_i = \frac{(std.res_i)^2}{k + 1}\bigg(\frac{h_i}{1-h_i}\bigg)
+            $$
+
+        -   Threshold:
+
+$$
+\frac{4}{N-K-1}
+$$
+
+## Cook's distance
+
+```{r}
+#| code-line-numbers: "8"
+# label 1 if out 0 if not
+model_out<- model_fit  %>%
+  augment() %>%
+  mutate(lev_out = ifelse(.hat>(2*k+2)/nrow(.),1, 0),
+         std_out=ifelse(abs(.std.resid) > 3, 1, 0), 
+         cook_out = ifelse(.cooksd > (4 / (nrow(.) - 3 - 1)), 1, 0))
+
+```
+
+```{r}
+#| fig-align: center
+#| 
+library(olsrr)
+ols_plot_cooksd_bar(model_fit)
+
+```
+
+## Combine Metrics
+
+-   What do I do with all these numbers?
+
+    -   Create a total score for the number of indicators a data point
+        has
+
+    -   You can decide what rule to use, but a suggestion is 2 or more
+        indicators is an outliers
+
+```{r}
+#| code-line-numbers: "9"
+
+
+# label 1 if out 0 if not
+model_out<- model_fit  %>%
+  augment() %>%
+  mutate(lev_out = ifelse(.hat>(2*k+2)/nrow(.),1, 0), cook_out = ifelse(.cooksd > (4 / (nrow(.) - 3 - 1)), 1, 0), std_out=ifelse(.std.resid >= 3, 1, 0)) %>%
+  rowwise() %>%
+  mutate(sum_out=lev_out+cook_out+std_out) %>%
+  filter(sum_out < 2)
+
+
+
+```
+
+## `Easystats: Check_outliers`
+
+-   Use consensus method
+
+    -   If half of methods say point is outlier, get rid of it
+
+```{r}
+
+# will estimate all outliers methods
+outliers_list <- check_outliers(model_fit, method = "all")
+
+# provides a col called outliers with prob of outliers by method (50% more than half said ob was outlier)
+
+out_data <-insight::get_data(model_fit)[outliers_list, ] # Show outliers data
+
+# get rid of values in outliers list in the main dataset 
+clean_data <- anti_join(nomiss,out_data, by=c("CESD_total", "PIL_total", "AUDIT_TOTAL_NEW", "DAST_TOTAL_NEW"))
+
+```
+
+## Refit model
+
+```{r}
+
+model_fit <- lm(CESD_total ~ PIL_total + AUDIT_TOTAL_NEW + DAST_TOTAL_NEW,
+             data = clean_data) 
+
+
+```
+
+## Assumptions
+
+-   Linearity
+
+-   Independence
+
+-   Normality of residuals
+
+-   Equal error ("homoskedasticity")
+
+. . .
+
+-   **Additivity (more than one variable)**
+
+## Assumptions
+
+-   Additivity
+
+    -   Implies that for an existing model, the effect of a predictor on
+        a response variable (whether it be linear or non-linear) is not
+        affected by changes in other existing predictors
+
+        -   Add interaction if not the case
+
+## Assumptions
+
+```{r}
+performance::check_model(model_fit, check=c("normality", "linearity", "homogeneity", "qq", "vif"))
+
+```
+
+## Violation Assumptions
+
+-   Normality (more on this next week)
+
+-   Homoskedasticity
+
+## Heteroskedasticity
+
+```{r}
+
+check_heteroscedasticity(model_fit)
+
+```
+
+-   We can use robust SEs
+
+-   They work by changing the covariance matrix (the diagonal is the
+    variance)
+
+    $$
+    \text{Var}(\epsilon) = \sigma^2 I_n = \sigma^2
+    \begin{bmatrix}
+    1 & 0 & \cdots & 0 \\
+    0 & 1 & \cdots & 0 \\
+    \vdots & \vdots & \ddots & \vdots \\
+    0 & 0 & \cdots & 1
+    \end{bmatrix}
+    $$
+
+## Heteroskedasticity
+
+$$
+D_{\text{HC3}} =
+\begin{bmatrix}
+\frac{\epsilon_1^2}{(1-h_{11})^2} & 0 & \cdots & 0 \\
+0 & \frac{\epsilon_2^2}{(1-h_{22})^2} & \cdots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \cdots & \frac{\epsilon_n^2}{(1-h_{nn})^2}
+\end{bmatrix}
+$$
+
+```{r}
+
+library(easystats) # model_paramters function
+#fit model first then read into function
+mp <- model_parameters(model_fit, vcov = "HC3")
+
+```
+
+## Refit Model
+
+-   Fit model on clean dataset with outliers removed
+
+```{r}
+#| echo: false
+
+mp  %>%
+  knitr::kable() %>%
+    kable_styling(font_size = 24) %>%
+ row_spec(2, color = "white",
+              background = "red")
+
+```
+
+$b_1$:
+
+## Interpretation
+
+```{r}
+#| echo: false
+
+
+mp  %>%
+  knitr::kable() %>%
+    kable_styling(font_size = 24) %>%
+ row_spec(3, color = "white",
+              background = "red")
+
+
+
+
+```
+
+$b_2$:
+
+## Interpretation
+
+```{r}
+#| echo: false
+#| 
+
+mp  %>%
+    knitr::kable() %>%
+    kable_styling(font_size = 24) %>%
+ row_spec(4, color = "white",
+              background = "red")
+
+
+```
+
+-   $b_3$:
+
+## Predictors
+
+```{r}
+library(papaja)
+apa_style <- apa_print(model_fit)
+```
+
+-   Meaning: `r apa_style$full_result$PIL_total`
+-   Alcohol: `r apa_style$full_result$AUDIT_TOTAL_NEW`
+-   Drugs: `r apa_style$full_result$DAST_TOTAL_NEW`
+
+## Overall Model Fit
+
+-   Is the overall model significant?
+
+```{r}
+apa_style <- apa_print(model_fit)
+
+```
+
+-   `r apa_style$full_result$modelfit`
+
+## Adjusted $R^2$
+
+$$
+\large R_{A}^2 = 1 - (1 -R^2)\frac{n-1}{n-p-1}
+$$
+
+```{r}
+
+glance(model_fit) %>%
+    knitr::kable() %>%
+    kable_styling(font_size = 24) %>%
+ column_spec(2, color = "white",
+              background = "red")
+
+```
+
+## Effect size
+
+::: columns
+::: {.column width="50%"}
+-   R is the multiple correlation
+-   $R^2$ is the multiple correlation squared
+    -   All overlap in Y used for overall model
+    -   $A+B+C/(A+B+C+D)$
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: false
+#| fig-align: center
+#| 
+
+knitr::include_graphics("https://brendanhcullen.github.io/psy612/lectures/images/venn/Slide3.jpeg")
+
+```
+:::
+:::
+
+## Effect Size
+
+::: columns
+::: {.column width="50%"}
+-   sr is the semipartial correlation
+    -   It represents (when squared) the proportion of (unique) variance
+        accounted for by the predictor, relative to the total variance
+        of Y
+        -   Increase in proportion of explained Y variance when X is
+            added
+            -   How much does X add over and beyond other variables
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: false
+#| fig-align: center
+
+knitr::include_graphics("https://brendanhcullen.github.io/psy612/lectures/images/venn/Slide4.jpeg")
+
+```
+:::
+:::
+
+------------------------------------------------------------------------
+
+## Effect Size
+
+::: columns
+::: {.column width="50%"}
+-   $pr$ is the partial correlation
+    -   When squared, proportion of variance not explained by other
+        predictors but just X
+        -   Removes influence of other variables
+-   Pr \> sr
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-height: 2
+#| fig-width: 4
+#| 
+
+knitr::include_graphics("https://brendanhcullen.github.io/psy612/lectures/images/venn/Slide5.jpeg")
+
+knitr::include_graphics("https://brendanhcullen.github.io/psy612/lectures/images/venn/Slide6.jpeg")
+```
+:::
+:::
+
+## When to use?
+
+-   $sr^2$
+
+    -   Most often used when we want to show that some variable adds
+        incremental variance in Y above and beyond another X variable
+
+-   $pr^2$
+
+    -   Remove influence of another variable
+
+## Partial correlations
+
+```{r}
+cor <- cor(clean_data[2:5])
+
+#partial corr from easystats
+correlation::cor_to_pcor(cor)^2
+
+#semipartial you need the covariance 
+#cor_to_spcor(cor, cov = sapply(nomiss, sd))
+
+```
+
+## Partial correlations
+
+-   We would add these to our other reports:
+
+    -   Meaning: `r apa_style$full_result$PIL_total`, $pr^2 = .33$\`
+    -   Alcohol: `r apa_style$full_result$AUDIT_TOTAL_NEW`,
+        $pr^2 = .02$\`
+    -   Drugs: `r apa_style$full_result$DAST_TOTAL_NEW`, $pr^2 = .03$\`
+
+## Multiple Regression: Power
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+R2 <- model_fit$r.squared
+f2 <- R2 / (1-R2)
+
+WebPower::wp.regression(n=72, p1=3, p2=0, f2=f2, alpha=.05, power=NULL)
+```
+
+# Plotting
+
+## Partial regression plots
+
+-   Must partial out other factors by setting them to some value
+    (usually mean)
+
+```{r}
+#| fig-align: center
+#| 
+library(ggeffects)
+#will hold all other vars at mean level 
+dat <-ggpredict(model_fit, terms=c("PIL_total")) 
+#add raw data points to plot
+plot(dat, add.data=TRUE) + theme_minimal(base_size=16)
+
+```
+
+## Write-up
+
+We fitted a linear model(estimated using OLS) to predictCESD_total with
+PIL_total,AUDIT_TOTAL_NEW andDAST_TOTAL_NEW (formula:CESD_total \~
+PIL_total +AUDIT_TOTAL_NEW +DAST_TOTAL_NEW). The modelexplains a
+statisticallysignificant and substantialproportion of variance (R2
+=0.36, F(3, 262) = 48.84, p \<.001, adj. R2 = 0.35).
+
+-   Meaning: `r apa_style$full_result$PIL_total`, $pr^2 = .33$\`
+-   Alcohol: `r apa_style$full_result$AUDIT_TOTAL_NEW`, $pr^2 = .02$\`
+-   Drugs: `r apa_style$full_result$DAST_TOTAL_NEW`, $pr^2 = .03$\`
+
+## Next Week
+
+-   Centering
+
+-   Standardizing
+
+-   Transformations
