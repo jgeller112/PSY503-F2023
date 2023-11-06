@@ -533,7 +533,18 @@ Jason Geller, PH.D.(he/him)
 \end{align*}
 \]</span></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>master <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://raw.githubusercontent.com/jgeller112/psy503-psych_stats/master/static/slides/10-linear_modeling/data/regress.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>master <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://raw.githubusercontent.com/jgeller112/psy503-psych_stats/master/static/slides/10-linear_modeling/data/regress.csv"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="fu">head</span>(master)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  X PIL_total CESD_total AUDIT_TOTAL_NEW DAST_TOTAL_NEW
+1 1       121         28               1              0
+2 2        76         37               5              0
+3 3        98         20               3              0
+4 4       122         15               3              1
+5 5        99          7               2              0
+6 6       134          7               3              0</code></pre>
+</div>
 </div>
 <ul>
 <li><p>Mental Health and Drug Use:</p>
@@ -548,38 +559,38 @@ Jason Geller, PH.D.(he/him)
 <section id="scatterplot" class="slide level2">
 <h2>Scatterplot</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Change the point sizes manually</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a></span>
-<span id="cb4-3"><a href="#cb4-3"></a>anim<span class="fl">.1</span><span class="ot">&lt;-</span> <span class="fu">ggplot</span>(master, <span class="fu">aes</span>(<span class="at">x=</span>PIL_total, <span class="at">y=</span>CESD_total))<span class="sc">+</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a>   <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb4-5"><a href="#cb4-5"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size=</span><span class="dv">16</span>)</span>
-<span id="cb4-6"><a href="#cb4-6"></a></span>
-<span id="cb4-7"><a href="#cb4-7"></a>anim<span class="fl">.1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-<img data-src="Mul_Reg_files/figure-revealjs/unnamed-chunk-4-1.png" class="quarto-figure-center r-stretch" width="1152"></section>
-<section id="scatterplot-1" class="slide level2">
-<h2>Scatterplot</h2>
-<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Change the point sizes manually</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a></span>
-<span id="cb5-3"><a href="#cb5-3"></a>anim<span class="fl">.1</span><span class="ot">&lt;-</span> <span class="fu">ggplot</span>(master, <span class="fu">aes</span>(<span class="at">x=</span>AUDIT_TOTAL_NEW, <span class="at">y=</span>CESD_total))<span class="sc">+</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a>anim<span class="fl">.1</span><span class="ot">&lt;-</span> <span class="fu">ggplot</span>(master, <span class="fu">aes</span>(<span class="at">x=</span>PIL_total, <span class="at">y=</span>CESD_total))<span class="sc">+</span></span>
 <span id="cb5-4"><a href="#cb5-4"></a>   <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
 <span id="cb5-5"><a href="#cb5-5"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size=</span><span class="dv">16</span>)</span>
 <span id="cb5-6"><a href="#cb5-6"></a></span>
 <span id="cb5-7"><a href="#cb5-7"></a>anim<span class="fl">.1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
+<img data-src="Mul_Reg_files/figure-revealjs/unnamed-chunk-4-1.png" class="quarto-figure-center r-stretch" width="1152"></section>
+<section id="scatterplot-1" class="slide level2">
+<h2>Scatterplot</h2>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Change the point sizes manually</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a></span>
+<span id="cb6-3"><a href="#cb6-3"></a>anim<span class="fl">.1</span><span class="ot">&lt;-</span> <span class="fu">ggplot</span>(master, <span class="fu">aes</span>(<span class="at">x=</span>AUDIT_TOTAL_NEW, <span class="at">y=</span>CESD_total))<span class="sc">+</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a>   <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb6-5"><a href="#cb6-5"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size=</span><span class="dv">16</span>)</span>
+<span id="cb6-6"><a href="#cb6-6"></a></span>
+<span id="cb6-7"><a href="#cb6-7"></a>anim<span class="fl">.1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
 <img data-src="Mul_Reg_files/figure-revealjs/unnamed-chunk-5-1.png" class="quarto-figure-center r-stretch" width="1152"></section>
 <section id="scatterplot-2" class="slide level2">
 <h2>Scatterplot</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Change the point sizes manually</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a>anim<span class="fl">.1</span><span class="ot">&lt;-</span> <span class="fu">ggplot</span>(master, <span class="fu">aes</span>(<span class="at">x=</span>DAST_TOTAL_NEW, <span class="at">y=</span>CESD_total))<span class="sc">+</span></span>
-<span id="cb6-3"><a href="#cb6-3"></a>   <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb6-4"><a href="#cb6-4"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size=</span><span class="dv">16</span>)</span>
-<span id="cb6-5"><a href="#cb6-5"></a></span>
-<span id="cb6-6"><a href="#cb6-6"></a>anim<span class="fl">.1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># Change the point sizes manually</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a>anim<span class="fl">.1</span><span class="ot">&lt;-</span> <span class="fu">ggplot</span>(master, <span class="fu">aes</span>(<span class="at">x=</span>DAST_TOTAL_NEW, <span class="at">y=</span>CESD_total))<span class="sc">+</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a>   <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb7-4"><a href="#cb7-4"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size=</span><span class="dv">16</span>)</span>
+<span id="cb7-5"><a href="#cb7-5"></a></span>
+<span id="cb7-6"><a href="#cb7-6"></a>anim<span class="fl">.1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="Mul_Reg_files/figure-revealjs/unnamed-chunk-6-1.png" class="quarto-figure-center r-stretch" width="1152"></section>
@@ -597,8 +608,34 @@ Jason Geller, PH.D.(he/him)
 <section id="fitting-the-model" class="slide level2">
 <h2>Fitting the model</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>model_fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(CESD_total <span class="sc">~</span> PIL_total <span class="sc">+</span> AUDIT_TOTAL_NEW <span class="sc">+</span> DAST_TOTAL_NEW,</span>
-<span id="cb7-2"><a href="#cb7-2"></a>             <span class="at">data =</span> master) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>model_fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(CESD_total <span class="sc">~</span> PIL_total <span class="sc">+</span> AUDIT_TOTAL_NEW <span class="sc">+</span> DAST_TOTAL_NEW,</span>
+<span id="cb8-2"><a href="#cb8-2"></a>             <span class="at">data =</span> master) </span>
+<span id="cb8-3"><a href="#cb8-3"></a></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="fu">summary</span>(model_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = CESD_total ~ PIL_total + AUDIT_TOTAL_NEW + DAST_TOTAL_NEW, 
+    data = master)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-19.619  -5.172  -1.256   3.420  28.847 
+
+Coefficients:
+                Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)     55.16374    3.88905  14.184   &lt;2e-16 ***
+PIL_total       -0.38158    0.03384 -11.276   &lt;2e-16 ***
+AUDIT_TOTAL_NEW -0.09211    0.09391  -0.981    0.328    
+DAST_TOTAL_NEW   1.03415    0.39871   2.594    0.010 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 7.585 on 262 degrees of freedom
+  (1 observation deleted due to missingness)
+Multiple R-squared:  0.3587,    Adjusted R-squared:  0.3513 
+F-statistic: 48.84 on 3 and 262 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
@@ -657,9 +694,9 @@ Jason Geller, PH.D.(he/him)
 
 </div>
 </div>
-<ul>
-<li><span class="math inline">\(b_0\)</span>:</li>
-</ul>
+<blockquote>
+<p><span class="math inline">\(b_0\)</span>: The value of Y when all the Xs=0</p>
+</blockquote>
 </section>
 <section id="fitting-the-model-1" class="slide level2">
 <h2>Fitting the model</h2>
@@ -720,9 +757,9 @@ Jason Geller, PH.D.(he/him)
 
 </div>
 </div>
-<ul>
-<li><span class="math inline">\(b_1\)</span>:</li>
-</ul>
+<blockquote>
+<p><span class="math inline">\(b_1\)</span>: If Alch and drug use are held constant, for every 1 unit increase in X (meaning) leads to a -0.38 decrease in depression scores.</p>
+</blockquote>
 </section>
 <section id="fitting-the-model-2" class="slide level2">
 <h2>Fitting the model</h2>
@@ -783,9 +820,9 @@ Jason Geller, PH.D.(he/him)
 
 </div>
 </div>
-<ul>
-<li><span class="math inline">\(b_2\)</span>:</li>
-</ul>
+<blockquote>
+<p><span class="math inline">\(b_2\)</span>: Holding meaning and drug use constant, for every unit increase in alch use there is a -0.09 decrease in depression scores.</p>
+</blockquote>
 </section>
 <section id="fitting-the-model-3" class="slide level2">
 <h2>Fitting the model</h2>
@@ -846,9 +883,9 @@ Jason Geller, PH.D.(he/him)
 
 </div>
 </div>
-<ul>
-<li><span class="math inline">\(b_3\)</span>:</li>
-</ul>
+<blockquote>
+<p><span class="math inline">\(b_3\)</span>: Holding meaning and alch usage constant, for every unit increase in drug usage there is a 1.03 increase in depression.</p>
+</blockquote>
 </section>
 <section id="mo-predictors-mo-problems" class="slide level2">
 <h2>Mo predictors mo problems</h2>
@@ -877,14 +914,18 @@ Jason Geller, PH.D.(he/him)
 </ul></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>nomiss <span class="ot">&lt;-</span> master <span class="sc">%&gt;%</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a>  <span class="fu">drop_na</span>() <span class="co"># drop missing data</span></span>
-<span id="cb8-3"><a href="#cb8-3"></a></span>
-<span id="cb8-4"><a href="#cb8-4"></a><span class="fu">nrow</span>(master)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>nomiss <span class="ot">&lt;-</span> master <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a>  <span class="fu">drop_na</span>() <span class="co"># drop missing data</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co">#base r</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a>nomiss <span class="ot">&lt;-</span> master <span class="sc">%&gt;%</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a>  <span class="fu">na.omit</span>() </span>
+<span id="cb10-7"><a href="#cb10-7"></a></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="fu">nrow</span>(master)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 267</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">nrow</span>(nomiss)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">nrow</span>(nomiss)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 266</code></pre>
 </div>
@@ -957,8 +998,8 @@ Jason Geller, PH.D.(he/him)
 <li>Check multicolinearity in your data</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="co">#easystats performance package</span></span>
-<span id="cb12-2"><a href="#cb12-2"></a><span class="fu">plot</span>(<span class="fu">check_collinearity</span>(model_fit))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="co">#easystats performance package</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="fu">plot</span>(<span class="fu">check_collinearity</span>(model_fit))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="Mul_Reg_files/figure-revealjs/unnamed-chunk-13-1.png" class="quarto-figure-center r-stretch" width="1152"></section>
@@ -1050,11 +1091,31 @@ h_i &gt; \frac{2K+2}{N}
 <li><p>N is the sample size</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13" data-code-line-numbers="5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>k <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="do">##number of IVs/predictors</span></span>
-<span id="cb13-2"><a href="#cb13-2"></a><span class="co"># label 1 if out 0 if not</span></span>
-<span id="cb13-3"><a href="#cb13-3"></a>model_out<span class="ot">&lt;-</span> model_fit  <span class="sc">%&gt;%</span></span>
-<span id="cb13-4"><a href="#cb13-4"></a>  <span class="fu">augment</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb13-5"><a href="#cb13-5"></a>  <span class="fu">mutate</span>(<span class="at">lev_out =</span> <span class="fu">ifelse</span>(.hat<span class="sc">&gt;</span>(<span class="dv">2</span><span class="sc">*+</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">nrow</span>(.),<span class="dv">1</span>, <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15" data-code-line-numbers="5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>k <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="do">##number of IVs/predictors</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a><span class="co"># label 1 if out 0 if not</span></span>
+<span id="cb15-3"><a href="#cb15-3"></a>model_out<span class="ot">&lt;-</span> model_fit  <span class="sc">%&gt;%</span></span>
+<span id="cb15-4"><a href="#cb15-4"></a>  <span class="fu">augment</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb15-5"><a href="#cb15-5"></a>  <span class="fu">mutate</span>(<span class="at">lev_out =</span> <span class="fu">ifelse</span>(.hat<span class="sc">&gt;</span>(<span class="dv">2</span><span class="sc">*+</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">nrow</span>(.),<span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb15-6"><a href="#cb15-6"></a></span>
+<span id="cb15-7"><a href="#cb15-7"></a>model_out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 266 × 12
+   .rownames CESD_total PIL_total AUDIT_TOTAL_NEW DAST_TOTAL_NEW .fitted .resid
+   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;           &lt;dbl&gt;          &lt;int&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+ 1 1                 28       121               1              0    8.90  19.1 
+ 2 2                 37        76               5              0   25.7   11.3 
+ 3 3                 20        98               3              0   17.5    2.51
+ 4 4                 15       122               3              1    9.37   5.63
+ 5 5                  7        99               2              0   17.2  -10.2 
+ 6 6                  7       134               3              0    3.76   3.24
+ 7 7                 27       102               2              1   17.1    9.91
+ 8 8                 10       124               1              0    7.76   2.24
+ 9 9                  9       126               1              0    6.99   2.01
+10 10                 8       112               7              1   12.8   -4.82
+# ℹ 256 more rows
+# ℹ 5 more variables: .hat &lt;dbl&gt;, .sigma &lt;dbl&gt;, .cooksd &lt;dbl&gt;,
+#   .std.resid &lt;dbl&gt;, lev_out &lt;dbl&gt;</code></pre>
+</div>
 </div>
 </section>
 <section id="standardized-residuals" class="slide level2">
@@ -1078,16 +1139,16 @@ std.res_i = \frac{y_i - \hat{y}_i}{\hat{\sigma}_\epsilon\sqrt{1-h_i}}
 <section id="standardized-residuals-1" class="slide level2">
 <h2>Standardized Residuals</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14" data-code-line-numbers="5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="co"># label 1 if out 0 if not</span></span>
-<span id="cb14-2"><a href="#cb14-2"></a>model_out<span class="ot">&lt;-</span> model_fit  <span class="sc">%&gt;%</span></span>
-<span id="cb14-3"><a href="#cb14-3"></a>  <span class="fu">augment</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb14-4"><a href="#cb14-4"></a>  <span class="fu">mutate</span>(<span class="at">lev_out =</span> <span class="fu">ifelse</span>(.hat<span class="sc">&gt;</span>(<span class="dv">2</span><span class="sc">*</span>k<span class="sc">+</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">nrow</span>(.),<span class="dv">1</span>, <span class="dv">0</span>), </span>
-<span id="cb14-5"><a href="#cb14-5"></a>         <span class="at">std_out=</span><span class="fu">ifelse</span>(<span class="fu">abs</span>(.std.resid) <span class="sc">&gt;</span> <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17" data-code-line-numbers="5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># label 1 if out 0 if not</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a>model_out<span class="ot">&lt;-</span> model_fit  <span class="sc">%&gt;%</span></span>
+<span id="cb17-3"><a href="#cb17-3"></a>  <span class="fu">augment</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb17-4"><a href="#cb17-4"></a>  <span class="fu">mutate</span>(<span class="at">lev_out =</span> <span class="fu">ifelse</span>(.hat<span class="sc">&gt;</span>(<span class="dv">2</span><span class="sc">*</span>k<span class="sc">+</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">nrow</span>(.),<span class="dv">1</span>, <span class="dv">0</span>), </span>
+<span id="cb17-5"><a href="#cb17-5"></a>         <span class="at">std_out=</span><span class="fu">ifelse</span>(<span class="fu">abs</span>(.std.resid) <span class="sc">&gt;</span> <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">library</span>(olsrr)</span>
-<span id="cb15-2"><a href="#cb15-2"></a></span>
-<span id="cb15-3"><a href="#cb15-3"></a><span class="fu">ols_plot_resid_stand</span>(model_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="fu">library</span>(olsrr)</span>
+<span id="cb18-2"><a href="#cb18-2"></a></span>
+<span id="cb18-3"><a href="#cb18-3"></a><span class="fu">ols_plot_resid_stand</span>(model_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="Mul_Reg_files/figure-revealjs/unnamed-chunk-16-1.png" class="quarto-figure-center r-stretch" width="1152"></section>
@@ -1125,16 +1186,16 @@ D_i = \frac{(std.res_i)^2}{k + 1}\bigg(\frac{h_i}{1-h_i}\bigg)
 <section id="cooks-distance-1" class="slide level2">
 <h2>Cook’s distance</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16" data-code-line-numbers="8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="co"># label 1 if out 0 if not</span></span>
-<span id="cb16-2"><a href="#cb16-2"></a>model_out<span class="ot">&lt;-</span> model_fit  <span class="sc">%&gt;%</span></span>
-<span id="cb16-3"><a href="#cb16-3"></a>  <span class="fu">augment</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb16-4"><a href="#cb16-4"></a>  <span class="fu">mutate</span>(<span class="at">lev_out =</span> <span class="fu">ifelse</span>(.hat<span class="sc">&gt;</span>(<span class="dv">2</span><span class="sc">*</span>k<span class="sc">+</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">nrow</span>(.),<span class="dv">1</span>, <span class="dv">0</span>),</span>
-<span id="cb16-5"><a href="#cb16-5"></a>         <span class="at">std_out=</span><span class="fu">ifelse</span>(<span class="fu">abs</span>(.std.resid) <span class="sc">&gt;</span> <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">0</span>), </span>
-<span id="cb16-6"><a href="#cb16-6"></a>         <span class="at">cook_out =</span> <span class="fu">ifelse</span>(.cooksd <span class="sc">&gt;</span> (<span class="dv">4</span> <span class="sc">/</span> (<span class="fu">nrow</span>(.) <span class="sc">-</span> <span class="dv">3</span> <span class="sc">-</span> <span class="dv">1</span>)), <span class="dv">1</span>, <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19" data-code-line-numbers="8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="co"># label 1 if out 0 if not</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a>model_out<span class="ot">&lt;-</span> model_fit  <span class="sc">%&gt;%</span></span>
+<span id="cb19-3"><a href="#cb19-3"></a>  <span class="fu">augment</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb19-4"><a href="#cb19-4"></a>  <span class="fu">mutate</span>(<span class="at">lev_out =</span> <span class="fu">ifelse</span>(.hat<span class="sc">&gt;</span>(<span class="dv">2</span><span class="sc">*</span>k<span class="sc">+</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">nrow</span>(.),<span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb19-5"><a href="#cb19-5"></a>         <span class="at">std_out=</span><span class="fu">ifelse</span>(<span class="fu">abs</span>(.std.resid) <span class="sc">&gt;</span> <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">0</span>), </span>
+<span id="cb19-6"><a href="#cb19-6"></a>         <span class="at">cook_out =</span> <span class="fu">ifelse</span>(.cooksd <span class="sc">&gt;</span> (<span class="dv">4</span> <span class="sc">/</span> (<span class="fu">nrow</span>(.) <span class="sc">-</span> <span class="dv">3</span> <span class="sc">-</span> <span class="dv">1</span>)), <span class="dv">1</span>, <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">library</span>(olsrr)</span>
-<span id="cb17-2"><a href="#cb17-2"></a><span class="fu">ols_plot_cooksd_bar</span>(model_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">library</span>(olsrr)</span>
+<span id="cb20-2"><a href="#cb20-2"></a><span class="fu">ols_plot_cooksd_bar</span>(model_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="Mul_Reg_files/figure-revealjs/unnamed-chunk-18-1.png" class="quarto-figure-center r-stretch" width="1152"></section>
@@ -1148,13 +1209,23 @@ D_i = \frac{(std.res_i)^2}{k + 1}\bigg(\frac{h_i}{1-h_i}\bigg)
 </ul></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18" data-code-line-numbers="9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="co"># label 1 if out 0 if not</span></span>
-<span id="cb18-2"><a href="#cb18-2"></a>model_out<span class="ot">&lt;-</span> model_fit  <span class="sc">%&gt;%</span></span>
-<span id="cb18-3"><a href="#cb18-3"></a>  <span class="fu">augment</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb18-4"><a href="#cb18-4"></a>  <span class="fu">mutate</span>(<span class="at">lev_out =</span> <span class="fu">ifelse</span>(.hat<span class="sc">&gt;</span>(<span class="dv">2</span><span class="sc">*</span>k<span class="sc">+</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">nrow</span>(.),<span class="dv">1</span>, <span class="dv">0</span>), <span class="at">cook_out =</span> <span class="fu">ifelse</span>(.cooksd <span class="sc">&gt;</span> (<span class="dv">4</span> <span class="sc">/</span> (<span class="fu">nrow</span>(.) <span class="sc">-</span> <span class="dv">3</span> <span class="sc">-</span> <span class="dv">1</span>)), <span class="dv">1</span>, <span class="dv">0</span>), <span class="at">std_out=</span><span class="fu">ifelse</span>(.std.resid <span class="sc">&gt;=</span> <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">0</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb18-5"><a href="#cb18-5"></a>  <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb18-6"><a href="#cb18-6"></a>  <span class="fu">mutate</span>(<span class="at">sum_out=</span>lev_out<span class="sc">+</span>cook_out<span class="sc">+</span>std_out) <span class="sc">%&gt;%</span></span>
-<span id="cb18-7"><a href="#cb18-7"></a>  <span class="fu">filter</span>(sum_out <span class="sc">&lt;</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21" data-code-line-numbers="9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="co"># label 1 if out 0 if not</span></span>
+<span id="cb21-2"><a href="#cb21-2"></a>model_out<span class="ot">&lt;-</span> model_fit  <span class="sc">%&gt;%</span></span>
+<span id="cb21-3"><a href="#cb21-3"></a>  <span class="fu">augment</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb21-4"><a href="#cb21-4"></a>  <span class="fu">mutate</span>(<span class="at">lev_out =</span> <span class="fu">ifelse</span>(.hat<span class="sc">&gt;</span>(<span class="dv">2</span><span class="sc">*</span>k<span class="sc">+</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">nrow</span>(.),<span class="dv">1</span>, <span class="dv">0</span>), <span class="at">cook_out =</span> <span class="fu">ifelse</span>(.cooksd <span class="sc">&gt;</span> (<span class="dv">4</span> <span class="sc">/</span> (<span class="fu">nrow</span>(.) <span class="sc">-</span> <span class="dv">3</span> <span class="sc">-</span> <span class="dv">1</span>)), <span class="dv">1</span>, <span class="dv">0</span>), <span class="at">std_out=</span><span class="fu">ifelse</span>(.std.resid <span class="sc">&gt;=</span> <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">0</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb21-5"><a href="#cb21-5"></a>  <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb21-6"><a href="#cb21-6"></a>  <span class="fu">mutate</span>(<span class="at">sum_out=</span>lev_out<span class="sc">+</span>cook_out<span class="sc">+</span>std_out) <span class="sc">%&gt;%</span></span>
+<span id="cb21-7"><a href="#cb21-7"></a>  <span class="fu">filter</span>(sum_out <span class="sc">&lt;</span> <span class="dv">2</span>)</span>
+<span id="cb21-8"><a href="#cb21-8"></a></span>
+<span id="cb21-9"><a href="#cb21-9"></a></span>
+<span id="cb21-10"><a href="#cb21-10"></a><span class="fu">nrow</span>(nomiss)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 266</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23" data-code-line-numbers="9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">nrow</span>(model_out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 255</code></pre>
+</div>
 </div>
 </section>
 <section id="easystats-check_outliers" class="slide level2">
@@ -1166,22 +1237,108 @@ D_i = \frac{(std.res_i)^2}{k + 1}\bigg(\frac{h_i}{1-h_i}\bigg)
 </ul></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="co"># will estimate all outliers methods</span></span>
-<span id="cb19-2"><a href="#cb19-2"></a>outliers_list <span class="ot">&lt;-</span> <span class="fu">check_outliers</span>(model_fit, <span class="at">method =</span> <span class="st">"all"</span>)</span>
-<span id="cb19-3"><a href="#cb19-3"></a></span>
-<span id="cb19-4"><a href="#cb19-4"></a><span class="co"># provides a col called outliers with prob of outliers by method (50% more than half said ob was outlier)</span></span>
-<span id="cb19-5"><a href="#cb19-5"></a></span>
-<span id="cb19-6"><a href="#cb19-6"></a>out_data <span class="ot">&lt;-</span>insight<span class="sc">::</span><span class="fu">get_data</span>(model_fit)[outliers_list, ] <span class="co"># Show outliers data</span></span>
-<span id="cb19-7"><a href="#cb19-7"></a></span>
-<span id="cb19-8"><a href="#cb19-8"></a><span class="co"># get rid of values in outliers list in the main dataset </span></span>
-<span id="cb19-9"><a href="#cb19-9"></a>clean_data <span class="ot">&lt;-</span> <span class="fu">anti_join</span>(nomiss,out_data, <span class="at">by=</span><span class="fu">c</span>(<span class="st">"CESD_total"</span>, <span class="st">"PIL_total"</span>, <span class="st">"AUDIT_TOTAL_NEW"</span>, <span class="st">"DAST_TOTAL_NEW"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="co"># will estimate all outliers methods</span></span>
+<span id="cb25-2"><a href="#cb25-2"></a>outliers_list <span class="ot">&lt;-</span> <span class="fu">check_outliers</span>(model_fit, <span class="at">method =</span> <span class="st">"all"</span>)</span>
+<span id="cb25-3"><a href="#cb25-3"></a></span>
+<span id="cb25-4"><a href="#cb25-4"></a>outliers_list</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>6 outliers detected: cases 34, 46, 78, 89, 201, 244.
+- Based on the following methods and thresholds: zscore_robust (3.291),
+  iqr (2), ci (1), cook (0.841), mahalanobis (20), mahalanobis_robust
+  (20), mcd (20), ics (0.001), optics (8), lof (0.001).
+- For variable: (Whole model).
+
+Note: Outliers were classified as such by at least half of the selected methods. 
+
+-----------------------------------------------------------------------------
+ 
+The following observations were considered outliers for two or more
+  variables by at least one of the selected methods:
+
+   Row n_Zscore_robust n_IQR n_ci  n_Mahalanobis n_Mahalanobis_robust
+1   65               3     2    0              0       (Multivariate)
+2  244               3     3    2 (Multivariate)       (Multivariate)
+3   39               2     0    0              0                    0
+4   49               2     1    0              0       (Multivariate)
+5   68               2     2    0              0       (Multivariate)
+6   70               2     2    0              0       (Multivariate)
+7  195               2     1    1              0       (Multivariate)
+8  197               2     1    0              0       (Multivariate)
+9    2               1     1    0              0       (Multivariate)
+10  23               1     1    0              0       (Multivariate)
+11  34               1     1    0 (Multivariate)       (Multivariate)
+12  36               1     1    0              0       (Multivariate)
+13  38               1     1    0              0       (Multivariate)
+14  46               1     1    0 (Multivariate)       (Multivariate)
+15  50               1     1    0              0       (Multivariate)
+16  63               1     1    0              0       (Multivariate)
+17  66               1     1    0              0       (Multivariate)
+18  72               1     0    0              0       (Multivariate)
+19  78               1     1    1              0       (Multivariate)
+20  84               1     0    0              0       (Multivariate)
+21  89               1     1    0 (Multivariate)       (Multivariate)
+22  99               1     0    0              0                    0
+23 100               1     1    0              0       (Multivariate)
+24 164               1     1    0              0       (Multivariate)
+25 171               1     0    0              0                    0
+26 199               1     0    0              0       (Multivariate)
+27 200               1     0    0              0       (Multivariate)
+28 201               1     1    0 (Multivariate)       (Multivariate)
+29 208               1     1    0              0       (Multivariate)
+30 219               1     1    0              0       (Multivariate)
+31 231               1     1    0              0       (Multivariate)
+32 245               1     1    0              0       (Multivariate)
+33 167               0     0    0              0       (Multivariate)
+34 122               0     0    0              0                    0
+            n_MCD          n_ICS       n_OPTICS          n_LOF
+1  (Multivariate)              0              0              0
+2  (Multivariate) (Multivariate) (Multivariate) (Multivariate)
+3               0              0              0 (Multivariate)
+4  (Multivariate)              0              0              0
+5  (Multivariate)              0              0              0
+6               0              0              0              0
+7  (Multivariate)              0              0              0
+8  (Multivariate) (Multivariate)              0              0
+9               0              0              0              0
+10 (Multivariate)              0              0              0
+11 (Multivariate)              0              0 (Multivariate)
+12 (Multivariate)              0              0              0
+13              0              0              0              0
+14 (Multivariate) (Multivariate)              0              0
+15 (Multivariate)              0              0              0
+16 (Multivariate)              0              0              0
+17              0              0              0 (Multivariate)
+18              0              0              0              0
+19 (Multivariate)              0              0 (Multivariate)
+20              0              0              0              0
+21 (Multivariate) (Multivariate)              0 (Multivariate)
+22              0              0              0 (Multivariate)
+23 (Multivariate)              0              0              0
+24 (Multivariate)              0              0              0
+25              0              0              0 (Multivariate)
+26 (Multivariate)              0              0              0
+27              0              0              0              0
+28 (Multivariate) (Multivariate)              0              0
+29              0              0              0              0
+30 (Multivariate)              0              0              0
+31 (Multivariate)              0              0              0
+32 (Multivariate)              0              0              0
+33 (Multivariate)              0              0              0
+34              0              0              0 (Multivariate)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="co"># provides a col called outliers with prob of outliers by method (50% more than half said ob was outlier)</span></span>
+<span id="cb27-2"><a href="#cb27-2"></a></span>
+<span id="cb27-3"><a href="#cb27-3"></a>out_data <span class="ot">&lt;-</span>insight<span class="sc">::</span><span class="fu">get_data</span>(model_fit)[outliers_list, ] <span class="co"># Show outliers data</span></span>
+<span id="cb27-4"><a href="#cb27-4"></a></span>
+<span id="cb27-5"><a href="#cb27-5"></a><span class="co"># get rid of values in outliers list in the main dataset </span></span>
+<span id="cb27-6"><a href="#cb27-6"></a>clean_data <span class="ot">&lt;-</span> <span class="fu">anti_join</span>(nomiss,out_data, <span class="at">by=</span><span class="fu">c</span>(<span class="st">"CESD_total"</span>, <span class="st">"PIL_total"</span>, <span class="st">"AUDIT_TOTAL_NEW"</span>, <span class="st">"DAST_TOTAL_NEW"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="refit-model" class="slide level2">
 <h2>Refit model</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>model_fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(CESD_total <span class="sc">~</span> PIL_total <span class="sc">+</span> AUDIT_TOTAL_NEW <span class="sc">+</span> DAST_TOTAL_NEW,</span>
-<span id="cb20-2"><a href="#cb20-2"></a>             <span class="at">data =</span> clean_data) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>model_fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(CESD_total <span class="sc">~</span> PIL_total <span class="sc">+</span> AUDIT_TOTAL_NEW <span class="sc">+</span> DAST_TOTAL_NEW,</span>
+<span id="cb28-2"><a href="#cb28-2"></a>             <span class="at">data =</span> clean_data) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="assumptions" class="slide level2">
@@ -1213,7 +1370,7 @@ D_i = \frac{(std.res_i)^2}{k + 1}\bigg(\frac{h_i}{1-h_i}\bigg)
 <section id="assumptions-2" class="slide level2">
 <h2>Assumptions</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>performance<span class="sc">::</span><span class="fu">check_model</span>(model_fit, <span class="at">check=</span><span class="fu">c</span>(<span class="st">"normality"</span>, <span class="st">"linearity"</span>, <span class="st">"homogeneity"</span>, <span class="st">"qq"</span>, <span class="st">"vif"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>performance<span class="sc">::</span><span class="fu">check_model</span>(model_fit, <span class="at">check=</span><span class="fu">c</span>(<span class="st">"normality"</span>, <span class="st">"linearity"</span>, <span class="st">"homogeneity"</span>, <span class="st">"qq"</span>, <span class="st">"vif"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="Mul_Reg_files/figure-revealjs/unnamed-chunk-22-1.png" width="1152" class="r-stretch"></section>
@@ -1227,7 +1384,7 @@ D_i = \frac{(std.res_i)^2}{k + 1}\bigg(\frac{h_i}{1-h_i}\bigg)
 <section id="heteroskedasticity" class="slide level2">
 <h2>Heteroskedasticity</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">check_heteroscedasticity</span>(model_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="fu">check_heteroscedasticity</span>(model_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Warning: Heteroscedasticity (non-constant error variance) detected (p = 0.001).</code></pre>
 </div>
@@ -1258,9 +1415,19 @@ D_{\text{HC3}} =
 \end{bmatrix}
 \]</span></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="fu">library</span>(easystats) <span class="co"># model_paramters function</span></span>
-<span id="cb24-2"><a href="#cb24-2"></a><span class="co">#fit model first then read into function</span></span>
-<span id="cb24-3"><a href="#cb24-3"></a>mp <span class="ot">&lt;-</span> <span class="fu">model_parameters</span>(model_fit, <span class="at">vcov =</span> <span class="st">"HC3"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="fu">library</span>(easystats) <span class="co"># model_paramters function</span></span>
+<span id="cb32-2"><a href="#cb32-2"></a><span class="co">#fit model first then read into function</span></span>
+<span id="cb32-3"><a href="#cb32-3"></a>mp <span class="ot">&lt;-</span> <span class="fu">model_parameters</span>(model_fit, <span class="at">vcov =</span> <span class="st">"HC3"</span>)</span>
+<span id="cb32-4"><a href="#cb32-4"></a></span>
+<span id="cb32-5"><a href="#cb32-5"></a>mp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Parameter       | Coefficient |   SE |         95% CI | t(256) |      p
+-----------------------------------------------------------------------
+(Intercept)     |       57.65 | 4.16 | [49.45, 65.84] |  13.85 | &lt; .001
+PIL total       |       -0.40 | 0.04 | [-0.47, -0.33] | -11.32 | &lt; .001
+AUDIT TOTAL NEW |       -0.10 | 0.09 | [-0.28,  0.07] |  -1.18 | 0.240 
+DAST TOTAL NEW  |        0.89 | 0.48 | [-0.06,  1.84] |   1.85 | 0.066 </code></pre>
+</div>
 </div>
 </section>
 <section id="refit-model-1" class="slide level2">
@@ -1484,8 +1651,95 @@ D_{\text{HC3}} =
 <section id="predictors" class="slide level2">
 <h2>Predictors</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="fu">library</span>(papaja)</span>
-<span id="cb25-2"><a href="#cb25-2"></a>apa_style <span class="ot">&lt;-</span> <span class="fu">apa_print</span>(model_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a><span class="fu">library</span>(papaja)</span>
+<span id="cb34-2"><a href="#cb34-2"></a>apa_style <span class="ot">&lt;-</span> <span class="fu">apa_print</span>(model_fit)</span>
+<span id="cb34-3"><a href="#cb34-3"></a></span>
+<span id="cb34-4"><a href="#cb34-4"></a>apa_style</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$estimate
+$estimate$Intercept
+[1] "$b = 57.65$, 95\\% CI $[49.82, 65.47]$"
+
+$estimate$PIL_total
+[1] "$b = -0.40$, 95\\% CI $[-0.47, -0.33]$"
+
+$estimate$AUDIT_TOTAL_NEW
+[1] "$b = -0.10$, 95\\% CI $[-0.29, 0.09]$"
+
+$estimate$DAST_TOTAL_NEW
+[1] "$b = 0.89$, 95\\% CI $[-0.10, 1.88]$"
+
+$estimate$modelfit
+$estimate$modelfit$r2
+[1] "$R^2 = .37$, 90\\% CI $[0.28, 0.44]$"
+
+$estimate$modelfit$r2_adj
+[1] "$R^2_{adj} = .36$"
+
+$estimate$modelfit$aic
+[1] "$\\mathrm{AIC} = 1,787.29$"
+
+$estimate$modelfit$bic
+[1] "$\\mathrm{BIC} = 1,805.10$"
+
+
+
+$statistic
+$statistic$Intercept
+[1] "$t(256) = 14.50$, $p &lt; .001$"
+
+$statistic$PIL_total
+[1] "$t(256) = -11.63$, $p &lt; .001$"
+
+$statistic$AUDIT_TOTAL_NEW
+[1] "$t(256) = -1.08$, $p = .283$"
+
+$statistic$DAST_TOTAL_NEW
+[1] "$t(256) = 1.77$, $p = .077$"
+
+$statistic$modelfit
+$statistic$modelfit$r2
+[1] "$F(3, 256) = 49.58$, $p &lt; .001$"
+
+
+
+$full_result
+$full_result$Intercept
+[1] "$b = 57.65$, 95\\% CI $[49.82, 65.47]$, $t(256) = 14.50$, $p &lt; .001$"
+
+$full_result$PIL_total
+[1] "$b = -0.40$, 95\\% CI $[-0.47, -0.33]$, $t(256) = -11.63$, $p &lt; .001$"
+
+$full_result$AUDIT_TOTAL_NEW
+[1] "$b = -0.10$, 95\\% CI $[-0.29, 0.09]$, $t(256) = -1.08$, $p = .283$"
+
+$full_result$DAST_TOTAL_NEW
+[1] "$b = 0.89$, 95\\% CI $[-0.10, 1.88]$, $t(256) = 1.77$, $p = .077$"
+
+$full_result$modelfit
+$full_result$modelfit$r2
+[1] "$R^2 = .37$, 90\\% CI $[0.28, 0.44]$, $F(3, 256) = 49.58$, $p &lt; .001$"
+
+
+
+$table
+A data.frame with 6 labelled columns:
+
+             term estimate       conf.int statistic  df p.value
+1       Intercept    57.65 [49.82, 65.47]     14.50 256  &lt; .001
+2       PIL total    -0.40 [-0.47, -0.33]    -11.63 256  &lt; .001
+3 AUDIT TOTAL NEW    -0.10  [-0.29, 0.09]     -1.08 256    .283
+4  DAST TOTAL NEW     0.89  [-0.10, 1.88]      1.77 256    .077
+
+term     : Predictor 
+estimate : $b$ 
+conf.int : 95\\% CI 
+statistic: $t$ 
+df       : $\\mathit{df}$ 
+p.value  : $p$ 
+attr(,"class")
+[1] "apa_results" "list"       </code></pre>
+</div>
 </div>
 <ul>
 <li>Meaning: <span class="math inline">\(b = -0.40\)</span>, 95% CI <span class="math inline">\([-0.47, -0.33]\)</span>, <span class="math inline">\(t(256) = -11.63\)</span>, <span class="math inline">\(p &lt; .001\)</span></li>
@@ -1499,7 +1753,7 @@ D_{\text{HC3}} =
 <li>Is the overall model significant?</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>apa_style <span class="ot">&lt;-</span> <span class="fu">apa_print</span>(model_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>apa_style <span class="ot">&lt;-</span> <span class="fu">apa_print</span>(model_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li><span class="math inline">\(R^2 = .37\)</span>, 90% CI <span class="math inline">\([0.28, 0.44]\)</span>, <span class="math inline">\(F(3, 256) = 49.58\)</span>, <span class="math inline">\(p &lt; .001\)</span></li>
@@ -1511,11 +1765,11 @@ D_{\text{HC3}} =
 \large R_{A}^2 = 1 - (1 -R^2)\frac{n-1}{n-p-1}
 \]</span></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="fu">glance</span>(model_fit) <span class="sc">%&gt;%</span></span>
-<span id="cb27-2"><a href="#cb27-2"></a>    knitr<span class="sc">::</span><span class="fu">kable</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb27-3"><a href="#cb27-3"></a>    <span class="fu">kable_styling</span>(<span class="at">font_size =</span> <span class="dv">24</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb27-4"><a href="#cb27-4"></a> <span class="fu">column_spec</span>(<span class="dv">2</span>, <span class="at">color =</span> <span class="st">"white"</span>,</span>
-<span id="cb27-5"><a href="#cb27-5"></a>              <span class="at">background =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a><span class="fu">glance</span>(model_fit) <span class="sc">%&gt;%</span></span>
+<span id="cb37-2"><a href="#cb37-2"></a>    knitr<span class="sc">::</span><span class="fu">kable</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb37-3"><a href="#cb37-3"></a>    <span class="fu">kable_styling</span>(<span class="at">font_size =</span> <span class="dv">24</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb37-4"><a href="#cb37-4"></a> <span class="fu">column_spec</span>(<span class="dv">2</span>, <span class="at">color =</span> <span class="st">"white"</span>,</span>
+<span id="cb37-5"><a href="#cb37-5"></a>              <span class="at">background =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table" data-quarto-postprocess="true" style="font-size: 24px; margin-left: auto; margin-right: auto;">
 <thead>
@@ -1644,10 +1898,10 @@ D_{\text{HC3}} =
 <section id="partial-correlations" class="slide level2">
 <h2>Partial correlations</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>cor <span class="ot">&lt;-</span> <span class="fu">cor</span>(clean_data[<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>])</span>
-<span id="cb28-2"><a href="#cb28-2"></a></span>
-<span id="cb28-3"><a href="#cb28-3"></a><span class="co">#partial corr from easystats</span></span>
-<span id="cb28-4"><a href="#cb28-4"></a>correlation<span class="sc">::</span><span class="fu">cor_to_pcor</span>(cor)<span class="sc">^</span><span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a>cor <span class="ot">&lt;-</span> <span class="fu">cor</span>(clean_data[<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>])</span>
+<span id="cb38-2"><a href="#cb38-2"></a></span>
+<span id="cb38-3"><a href="#cb38-3"></a><span class="co">#partial corr from easystats</span></span>
+<span id="cb38-4"><a href="#cb38-4"></a>correlation<span class="sc">::</span><span class="fu">cor_to_pcor</span>(cor)<span class="sc">^</span><span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                  PIL_total  CESD_total AUDIT_TOTAL_NEW DAST_TOTAL_NEW
 PIL_total       1.000000000 0.345595004     0.003207045    0.002944418
@@ -1655,11 +1909,30 @@ CESD_total      0.345595004 1.000000000     0.004507692    0.012149492
 AUDIT_TOTAL_NEW 0.003207045 0.004507692     1.000000000    0.233954231
 DAST_TOTAL_NEW  0.002944418 0.012149492     0.233954231    1.000000000</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="co">#semipartial you need the covariance </span></span>
-<span id="cb30-2"><a href="#cb30-2"></a><span class="co">#cor_to_spcor(cor, cov = sapply(nomiss, sd))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a><span class="co">#semipartial you need the covariance </span></span>
+<span id="cb40-2"><a href="#cb40-2"></a><span class="co">#cor_to_spcor(cor, cov = sapply(clean_data[2:5], sd))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="partial-correlations-1" class="slide level2">
+<h2>Partial correlations</h2>
+<ul>
+<li>Can use your model to get <span class="math inline">\(sr^2\)</span></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a><span class="co">#input model to semi-partial</span></span>
+<span id="cb41-2"><a href="#cb41-2"></a><span class="fu">r2_semipartial</span>(model_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Term            |      sr2 |       95% CI
+-----------------------------------------
+PIL_total       |     0.33 | [0.26, 1.00]
+AUDIT_TOTAL_NEW | 2.86e-03 | [0.00, 1.00]
+DAST_TOTAL_NEW  | 7.78e-03 | [0.00, 1.00]
+
+- One-sided CIs: upper bound fixed at [1.00].</code></pre>
+</div>
+</div>
+</section>
+<section id="partial-correlations-2" class="slide level2">
 <h2>Partial correlations</h2>
 <ul>
 <li><p>We would add these to our other reports:</p>
@@ -1669,15 +1942,29 @@ DAST_TOTAL_NEW  0.002944418 0.012149492     0.233954231    1.000000000</code></p
 <li>Drugs: <span class="math inline">\(b = 0.89\)</span>, 95% CI <span class="math inline">\([-0.10, 1.88]\)</span>, <span class="math inline">\(t(256) = 1.77\)</span>, <span class="math inline">\(p = .077\)</span>, <span class="math inline">\(pr^2 = .03\)</span>`</li>
 </ul></li>
 </ul>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p><span class="math inline">\(pr^2\)</span>: 33% of variance in Depression is explained by meaning that is not explained by the other variables</p>
+<p><span class="math inline">\(sr^2\)</span>: 3% of variance in depression can be uniquely explained by meaning above and beyond the other vars.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="multiple-regression-power" class="slide level2">
 <h2>Multiple Regression: Power</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>R2<span class="ot">&lt;-</span><span class="fu">glance</span>(model_fit)</span>
-<span id="cb31-2"><a href="#cb31-2"></a>R2 <span class="ot">&lt;-</span> R2<span class="sc">$</span>adj.r.squared</span>
-<span id="cb31-3"><a href="#cb31-3"></a>f2 <span class="ot">&lt;-</span> R2 <span class="sc">/</span> (<span class="dv">1</span><span class="sc">-</span>R2)</span>
-<span id="cb31-4"><a href="#cb31-4"></a></span>
-<span id="cb31-5"><a href="#cb31-5"></a>WebPower<span class="sc">::</span><span class="fu">wp.regression</span>(<span class="at">n=</span><span class="dv">72</span>, <span class="at">p1=</span><span class="dv">3</span>, <span class="at">p2=</span><span class="dv">0</span>, <span class="at">f2=</span>f2, <span class="at">alpha=</span>.<span class="dv">05</span>, <span class="at">power=</span><span class="cn">NULL</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a>R2<span class="ot">&lt;-</span><span class="fu">glance</span>(model_fit)</span>
+<span id="cb43-2"><a href="#cb43-2"></a>R2 <span class="ot">&lt;-</span> R2<span class="sc">$</span>adj.r.squared</span>
+<span id="cb43-3"><a href="#cb43-3"></a>f2 <span class="ot">&lt;-</span> R2 <span class="sc">/</span> (<span class="dv">1</span><span class="sc">-</span>R2)</span>
+<span id="cb43-4"><a href="#cb43-4"></a></span>
+<span id="cb43-5"><a href="#cb43-5"></a>WebPower<span class="sc">::</span><span class="fu">wp.regression</span>(<span class="at">n=</span><span class="dv">72</span>, <span class="at">p1=</span><span class="dv">3</span>, <span class="at">p2=</span><span class="dv">0</span>, <span class="at">f2=</span>f2, <span class="at">alpha=</span>.<span class="dv">05</span>, <span class="at">power=</span><span class="cn">NULL</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Power for multiple regression
 
@@ -1699,14 +1986,14 @@ URL: http://psychstat.org/regression</code></pre>
 <li>Must partial out other factors by setting them to some value (usually mean)</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="fu">library</span>(ggeffects)</span>
-<span id="cb33-2"><a href="#cb33-2"></a><span class="co">#will hold all other vars at mean level </span></span>
-<span id="cb33-3"><a href="#cb33-3"></a>dat <span class="ot">&lt;-</span><span class="fu">ggpredict</span>(model_fit, <span class="at">terms=</span><span class="fu">c</span>(<span class="st">"PIL_total"</span>)) </span>
-<span id="cb33-4"><a href="#cb33-4"></a><span class="co">#add raw data points to plot</span></span>
-<span id="cb33-5"><a href="#cb33-5"></a><span class="fu">plot</span>(dat, <span class="at">add.data=</span><span class="cn">TRUE</span>) <span class="sc">+</span> <span class="fu">theme_minimal</span>(<span class="at">base_size=</span><span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a><span class="fu">library</span>(ggeffects)</span>
+<span id="cb45-2"><a href="#cb45-2"></a><span class="co">#will hold all other vars at mean level </span></span>
+<span id="cb45-3"><a href="#cb45-3"></a>dat <span class="ot">&lt;-</span><span class="fu">ggpredict</span>(model_fit, <span class="at">terms=</span><span class="fu">c</span>(<span class="st">"PIL_total"</span>)) </span>
+<span id="cb45-4"><a href="#cb45-4"></a><span class="co">#add raw data points to plot</span></span>
+<span id="cb45-5"><a href="#cb45-5"></a><span class="fu">plot</span>(dat, <span class="at">add.data=</span><span class="cn">TRUE</span>) <span class="sc">+</span> <span class="fu">theme_minimal</span>(<span class="at">base_size=</span><span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="Mul_Reg_files/figure-revealjs/unnamed-chunk-36-1.png" class="quarto-figure-center r-stretch" width="1152"></section>
+<img data-src="Mul_Reg_files/figure-revealjs/unnamed-chunk-37-1.png" class="quarto-figure-center r-stretch" width="1152"></section>
 <section id="write-up" class="slide level2">
 <h2>Write-up</h2>
 <p>We fitted a linear model(estimated using OLS) to predictCESD_total with PIL_total,AUDIT_TOTAL_NEW andDAST_TOTAL_NEW (formula:CESD_total ~ PIL_total +AUDIT_TOTAL_NEW +DAST_TOTAL_NEW). The model explains a statistically significant and substantial proportion of variance (R2 =0.36, F(3, 262) = 48.84, p &lt;.001, adj. R2 = 0.35).</p>
