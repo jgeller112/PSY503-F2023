@@ -47,7 +47,7 @@ on Sunday (unless otherwise stated)</li>
 | 8 | 10/25/23 | Lab 5 |  |  | [{{< fa pen-ruler >}}](/Labs/Lab5.qmd) |
 | 9 | 10/30/23 | GLM 3: Categorical Explanatory Models | [{{< fa book-open-reader >}}](/schedule/09-week.qmd) | [{{< fa laptop-code >}}](/slides/10-Effect_size_power/10-Effect_Size_Power.html) |  |
 | 9 | 11/1/23 | Lab 6 |  |  | [{{< fa pen-ruler >}}](/Labs/Lab6.qmd) |
-| 10 | 11/6/23 | GLM 4: Multiple Regression (MR) | [{{< fa book-open-reader >}}](/schedule/10-week.qmd) | {{< fa laptop-code >}} |  |
+| 10 | 11/6/23 | GLM 4: Multiple Regression (MR) | [{{< fa book-open-reader >}}](/schedule/10-week.qmd) | [{{< fa laptop-code >}}](/slides/11-Multiple_Regression/Mul_Reg.html) |  |
 | 10 | 11/8/23 | Lab 7 |  |  | {{< fa pen-ruler >}} |
 | 11 | 11/13/23 | GLM 5: Centering, Standardization, and Transformations | [{{< fa book-open-reader >}}](/schedule/11-week.qmd) | {{< fa laptop-code >}} |  |
 | 11 | 11/15/23 | Lab 8 |  |  | {{< fa pen-ruler >}} |

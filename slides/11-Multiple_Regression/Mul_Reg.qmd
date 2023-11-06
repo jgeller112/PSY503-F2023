@@ -590,7 +590,6 @@ clean_data <- anti_join(nomiss,out_data, by=c("CESD_total", "PIL_total", "AUDIT_
 model_fit <- lm(CESD_total ~ PIL_total + AUDIT_TOTAL_NEW + DAST_TOTAL_NEW,
              data = clean_data) 
 
-
 ```
 
 ## Assumptions
