@@ -11,7 +11,7 @@
   <meta name="generator" content="quarto-1.4.420">
 
   <meta name="author" content="Jason Geller, PH.D.(he/him)">
-  <meta name="dcterms.date" content="2023-11-05">
+  <meta name="dcterms.date" content="2023-11-06">
   <title>Multiple Regression</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -408,7 +408,7 @@ Jason Geller, PH.D.(he/him)
 </div>
 </div>
 
-  <p class="date">2023-11-05</p>
+  <p class="date">2023-11-06</p>
 </section>
 <section id="packages" class="slide level2">
 <h2>Packages</h2>
@@ -1673,15 +1673,16 @@ DAST_TOTAL_NEW  0.002944418 0.012149492     0.233954231    1.000000000</code></p
 <section id="multiple-regression-power" class="slide level2">
 <h2>Multiple Regression: Power</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>R2 <span class="ot">&lt;-</span> model_fit<span class="sc">$</span>r.squared</span>
-<span id="cb31-2"><a href="#cb31-2"></a>f2 <span class="ot">&lt;-</span> R2 <span class="sc">/</span> (<span class="dv">1</span><span class="sc">-</span>R2)</span>
-<span id="cb31-3"><a href="#cb31-3"></a></span>
-<span id="cb31-4"><a href="#cb31-4"></a>WebPower<span class="sc">::</span><span class="fu">wp.regression</span>(<span class="at">n=</span><span class="dv">72</span>, <span class="at">p1=</span><span class="dv">3</span>, <span class="at">p2=</span><span class="dv">0</span>, <span class="at">f2=</span>f2, <span class="at">alpha=</span>.<span class="dv">05</span>, <span class="at">power=</span><span class="cn">NULL</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>R2<span class="ot">&lt;-</span><span class="fu">glance</span>(model_fit)</span>
+<span id="cb31-2"><a href="#cb31-2"></a>R2 <span class="ot">&lt;-</span> R2<span class="sc">$</span>adj.r.squared</span>
+<span id="cb31-3"><a href="#cb31-3"></a>f2 <span class="ot">&lt;-</span> R2 <span class="sc">/</span> (<span class="dv">1</span><span class="sc">-</span>R2)</span>
+<span id="cb31-4"><a href="#cb31-4"></a></span>
+<span id="cb31-5"><a href="#cb31-5"></a>WebPower<span class="sc">::</span><span class="fu">wp.regression</span>(<span class="at">n=</span><span class="dv">72</span>, <span class="at">p1=</span><span class="dv">3</span>, <span class="at">p2=</span><span class="dv">0</span>, <span class="at">f2=</span>f2, <span class="at">alpha=</span>.<span class="dv">05</span>, <span class="at">power=</span><span class="cn">NULL</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Power for multiple regression
 
-     n p1 p2 alpha
-    72  3  0  0.05
+     n p1 p2        f2 alpha     power
+    72  3  0 0.5627578  0.05 0.9998543
 
 URL: http://psychstat.org/regression</code></pre>
 </div>
@@ -1708,9 +1709,9 @@ URL: http://psychstat.org/regression</code></pre>
 <img data-src="Mul_Reg_files/figure-revealjs/unnamed-chunk-36-1.png" class="quarto-figure-center r-stretch" width="1152"></section>
 <section id="write-up" class="slide level2">
 <h2>Write-up</h2>
-<p>We fitted a linear model(estimated using OLS) to predictCESD_total with PIL_total,AUDIT_TOTAL_NEW andDAST_TOTAL_NEW (formula:CESD_total ~ PIL_total +AUDIT_TOTAL_NEW +DAST_TOTAL_NEW). The modelexplains a statisticallysignificant and substantialproportion of variance (R2 =0.36, F(3, 262) = 48.84, p &lt;.001, adj. R2 = 0.35).</p>
+<p>We fitted a linear model(estimated using OLS) to predictCESD_total with PIL_total,AUDIT_TOTAL_NEW andDAST_TOTAL_NEW (formula:CESD_total ~ PIL_total +AUDIT_TOTAL_NEW +DAST_TOTAL_NEW). The model explains a statistically significant and substantial proportion of variance (R2 =0.36, F(3, 262) = 48.84, p &lt;.001, adj. R2 = 0.35).</p>
 <ul>
-<li>Meaning: <span class="math inline">\(b = -0.40\)</span>, 95% CI <span class="math inline">\([-0.47, -0.33]\)</span>, <span class="math inline">\(t(256) = -11.63\)</span>, <span class="math inline">\(p &lt; .001\)</span>, <span class="math inline">\(pr^2 = .33\)</span>`</li>
+<li>Meaning: <span class="math inline">\(b = -0.40\)</span>, 95% CI <span class="math inline">\([-0.47, -0.33]\)</span>, <span class="math inline">\(t(256) = -11.63\)</span>, <span class="math inline">\(p &lt; .001\)</span>, <span class="math inline">\(pr^2 = .35\)</span>`</li>
 <li>Alcohol: <span class="math inline">\(b = -0.10\)</span>, 95% CI <span class="math inline">\([-0.29, 0.09]\)</span>, <span class="math inline">\(t(256) = -1.08\)</span>, <span class="math inline">\(p = .283\)</span>, <span class="math inline">\(pr^2 = .02\)</span>`</li>
 <li>Drugs: <span class="math inline">\(b = 0.89\)</span>, 95% CI <span class="math inline">\([-0.10, 1.88]\)</span>, <span class="math inline">\(t(256) = 1.77\)</span>, <span class="math inline">\(p = .077\)</span>, <span class="math inline">\(pr^2 = .03\)</span>`</li>
 </ul>

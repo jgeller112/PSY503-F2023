@@ -590,7 +590,6 @@ clean_data <- anti_join(nomiss,out_data, by=c("CESD_total", "PIL_total", "AUDIT_
 model_fit <- lm(CESD_total ~ PIL_total + AUDIT_TOTAL_NEW + DAST_TOTAL_NEW,
              data = clean_data) 
 
-
 ```
 
 ## Assumptions
@@ -874,7 +873,8 @@ correlation::cor_to_pcor(cor)^2
 ## Multiple Regression: Power
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-R2 <- model_fit$r.squared
+R2<-glance(model_fit)
+R2 <- R2$adj.r.squared
 f2 <- R2 / (1-R2)
 
 WebPower::wp.regression(n=72, p1=3, p2=0, f2=f2, alpha=.05, power=NULL)
@@ -902,11 +902,11 @@ plot(dat, add.data=TRUE) + theme_minimal(base_size=16)
 
 We fitted a linear model(estimated using OLS) to predictCESD_total with
 PIL_total,AUDIT_TOTAL_NEW andDAST_TOTAL_NEW (formula:CESD_total \~
-PIL_total +AUDIT_TOTAL_NEW +DAST_TOTAL_NEW). The modelexplains a
-statisticallysignificant and substantialproportion of variance (R2
+PIL_total +AUDIT_TOTAL_NEW +DAST_TOTAL_NEW). The model explains a
+statistically significant and substantial proportion of variance (R2
 =0.36, F(3, 262) = 48.84, p \<.001, adj. R2 = 0.35).
 
--   Meaning: `r apa_style$full_result$PIL_total`, $pr^2 = .33$\`
+-   Meaning: `r apa_style$full_result$PIL_total`, $pr^2 = .35$\`
 -   Alcohol: `r apa_style$full_result$AUDIT_TOTAL_NEW`, $pr^2 = .02$\`
 -   Drugs: `r apa_style$full_result$DAST_TOTAL_NEW`, $pr^2 = .03$\`
 

@@ -30,7 +30,9 @@ execute:
     code-tools: true
 ---
 
+
 ## Packages
+
 
 ```{r}
 #| echo: false
@@ -45,6 +47,7 @@ pkgs <- cite_packages(output = "table", out.dir = ".")
 
 pkgs
 ```
+
 
 ## Today
 
@@ -125,10 +128,12 @@ $$
 \end{align*}
 $$
 
+
 ```{r}
 master <- read.csv("https://raw.githubusercontent.com/jgeller112/psy503-psych_stats/master/static/slides/10-linear_modeling/data/regress.csv")
 
 ```
+
 
 -   Mental Health and Drug Use:
 
@@ -138,6 +143,7 @@ master <- read.csv("https://raw.githubusercontent.com/jgeller112/psy503-psych_st
     -   DAST total = measure of drug usage
 
 ## Scatterplot
+
 
 ```{r}
 #| fig-align: center
@@ -151,7 +157,9 @@ anim.1
 
 ```
 
+
 ## Scatterplot
+
 
 ```{r}
 #| fig-align: center
@@ -164,7 +172,9 @@ anim.1<- ggplot(master, aes(x=AUDIT_TOTAL_NEW, y=CESD_total))+
 anim.1
 ```
 
+
 ## Scatterplot
+
 
 ```{r}
 #| fig-align: center
@@ -175,6 +185,7 @@ anim.1<- ggplot(master, aes(x=DAST_TOTAL_NEW, y=CESD_total))+
 
 anim.1
 ```
+
 
 ## Individual Predictors
 
@@ -189,6 +200,7 @@ anim.1
         from zero
 
 ## Fitting the model
+
 
 ```{r}
 model_fit <- lm(CESD_total ~ PIL_total + AUDIT_TOTAL_NEW + DAST_TOTAL_NEW,
@@ -208,9 +220,11 @@ model_fit %>%
 
 ```
 
+
 -   $b_0$:
 
 ## Fitting the model
+
 
 ```{r}
 #| echo: false
@@ -226,9 +240,11 @@ model_fit %>%
 
 ```
 
+
 -   $b_1$:
 
 ## Fitting the model
+
 
 ```{r}
 #| echo: false
@@ -244,9 +260,11 @@ model_fit %>%
 
 ```
 
+
 -   $b_2$:
 
 ## Fitting the model
+
 
 ```{r}
 #| echo: false
@@ -261,6 +279,7 @@ model_fit %>%
 
 
 ```
+
 
 -   $b_3$:
 
@@ -289,6 +308,7 @@ model_fit %>%
 -   Missingness
     -   list-wise deletion (removes entire row where missingness occurs)
 
+
 ```{r}
 nomiss <- master %>%
   drop_na() # drop missing data
@@ -297,6 +317,7 @@ nrow(master)
 nrow(nomiss)
 
 ```
+
 
 ## Problems
 
@@ -351,12 +372,14 @@ $$VIF=\frac{1}{1- R^2_j}$$
 
 -   Check multicolinearity in your data
 
+
 ```{r}
 #| fig-align: center
 #| 
 #easystats performance package
 plot(check_collinearity(model_fit))
 ```
+
 
 ## Multicolinearity
 
@@ -440,6 +463,7 @@ $$
 
 -   N is the sample size
 
+
 ```{r}
 #| code-line-numbers: "5"
 #| 
@@ -450,6 +474,7 @@ model_out<- model_fit  %>%
   mutate(lev_out = ifelse(.hat>(2*+2)/nrow(.),1, 0))
 
 ```
+
 
 ## Standardized Residuals
 
@@ -465,6 +490,7 @@ $$
 -   Use cut-off \> 3
 
 ## Standardized Residuals
+
 
 ```{r}
 #| code-line-numbers: "5"
@@ -484,6 +510,7 @@ library(olsrr)
 ols_plot_resid_stand(model_fit)
 
 ```
+
 
 ## Leverage and Distance
 
@@ -518,6 +545,7 @@ $$
 
 ## Cook's distance
 
+
 ```{r}
 #| code-line-numbers: "8"
 # label 1 if out 0 if not
@@ -537,6 +565,7 @@ ols_plot_cooksd_bar(model_fit)
 
 ```
 
+
 ## Combine Metrics
 
 -   What do I do with all these numbers?
@@ -546,6 +575,7 @@ ols_plot_cooksd_bar(model_fit)
 
     -   You can decide what rule to use, but a suggestion is 2 or more
         indicators is an outliers
+
 
 ```{r}
 #| code-line-numbers: "9"
@@ -563,11 +593,13 @@ model_out<- model_fit  %>%
 
 ```
 
+
 ## `Easystats: Check_outliers`
 
 -   Use consensus method
 
     -   If half of methods say point is outlier, get rid of it
+
 
 ```{r}
 
@@ -583,7 +615,9 @@ clean_data <- anti_join(nomiss,out_data, by=c("CESD_total", "PIL_total", "AUDIT_
 
 ```
 
+
 ## Refit model
+
 
 ```{r}
 
@@ -591,6 +625,7 @@ model_fit <- lm(CESD_total ~ PIL_total + AUDIT_TOTAL_NEW + DAST_TOTAL_NEW,
              data = clean_data) 
 
 ```
+
 
 ## Assumptions
 
@@ -618,10 +653,12 @@ model_fit <- lm(CESD_total ~ PIL_total + AUDIT_TOTAL_NEW + DAST_TOTAL_NEW,
 
 ## Assumptions
 
+
 ```{r}
 performance::check_model(model_fit, check=c("normality", "linearity", "homogeneity", "qq", "vif"))
 
 ```
+
 
 ## Violation Assumptions
 
@@ -631,11 +668,13 @@ performance::check_model(model_fit, check=c("normality", "linearity", "homogenei
 
 ## Heteroskedasticity
 
+
 ```{r}
 
 check_heteroscedasticity(model_fit)
 
 ```
+
 
 -   We can use robust SEs
 
@@ -664,6 +703,7 @@ D_{\text{HC3}} =
 \end{bmatrix}
 $$
 
+
 ```{r}
 
 library(easystats) # model_paramters function
@@ -672,9 +712,11 @@ mp <- model_parameters(model_fit, vcov = "HC3")
 
 ```
 
+
 ## Refit Model
 
 -   Fit model on clean dataset with outliers removed
+
 
 ```{r}
 #| echo: false
@@ -687,9 +729,11 @@ mp  %>%
 
 ```
 
+
 $b_1$:
 
 ## Interpretation
+
 
 ```{r}
 #| echo: false
@@ -706,9 +750,11 @@ mp  %>%
 
 ```
 
+
 $b_2$:
 
 ## Interpretation
+
 
 ```{r}
 #| echo: false
@@ -723,14 +769,17 @@ mp  %>%
 
 ```
 
+
 -   $b_3$:
 
 ## Predictors
+
 
 ```{r}
 library(papaja)
 apa_style <- apa_print(model_fit)
 ```
+
 
 -   Meaning: `r apa_style$full_result$PIL_total`
 -   Alcohol: `r apa_style$full_result$AUDIT_TOTAL_NEW`
@@ -740,10 +789,12 @@ apa_style <- apa_print(model_fit)
 
 -   Is the overall model significant?
 
+
 ```{r}
 apa_style <- apa_print(model_fit)
 
 ```
+
 
 -   `r apa_style$full_result$modelfit`
 
@@ -752,6 +803,7 @@ apa_style <- apa_print(model_fit)
 $$
 \large R_{A}^2 = 1 - (1 -R^2)\frac{n-1}{n-p-1}
 $$
+
 
 ```{r}
 
@@ -762,6 +814,7 @@ glance(model_fit) %>%
               background = "red")
 
 ```
+
 
 ## Effect size
 
@@ -774,6 +827,7 @@ glance(model_fit) %>%
 :::
 
 ::: {.column width="50%"}
+
 ```{r}
 #| echo: false
 #| fig-align: center
@@ -782,6 +836,7 @@ glance(model_fit) %>%
 knitr::include_graphics("https://brendanhcullen.github.io/psy612/lectures/images/venn/Slide3.jpeg")
 
 ```
+
 :::
 :::
 
@@ -799,6 +854,7 @@ knitr::include_graphics("https://brendanhcullen.github.io/psy612/lectures/images
 :::
 
 ::: {.column width="50%"}
+
 ```{r}
 #| echo: false
 #| fig-align: center
@@ -806,6 +862,7 @@ knitr::include_graphics("https://brendanhcullen.github.io/psy612/lectures/images
 knitr::include_graphics("https://brendanhcullen.github.io/psy612/lectures/images/venn/Slide4.jpeg")
 
 ```
+
 :::
 :::
 
@@ -823,6 +880,7 @@ knitr::include_graphics("https://brendanhcullen.github.io/psy612/lectures/images
 :::
 
 ::: {.column width="50%"}
+
 ```{r}
 #| echo: false
 #| fig-align: center
@@ -834,6 +892,7 @@ knitr::include_graphics("https://brendanhcullen.github.io/psy612/lectures/images
 
 knitr::include_graphics("https://brendanhcullen.github.io/psy612/lectures/images/venn/Slide6.jpeg")
 ```
+
 :::
 :::
 
@@ -850,6 +909,7 @@ knitr::include_graphics("https://brendanhcullen.github.io/psy612/lectures/images
 
 ## Partial correlations
 
+
 ```{r}
 cor <- cor(clean_data[2:5])
 
@@ -860,6 +920,7 @@ correlation::cor_to_pcor(cor)^2
 #cor_to_spcor(cor, cov = sapply(nomiss, sd))
 
 ```
+
 
 ## Partial correlations
 
@@ -872,6 +933,7 @@ correlation::cor_to_pcor(cor)^2
 
 ## Multiple Regression: Power
 
+
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 R2<-glance(model_fit)
 R2 <- R2$adj.r.squared
@@ -880,12 +942,14 @@ f2 <- R2 / (1-R2)
 WebPower::wp.regression(n=72, p1=3, p2=0, f2=f2, alpha=.05, power=NULL)
 ```
 
+
 # Plotting
 
 ## Partial regression plots
 
 -   Must partial out other factors by setting them to some value
     (usually mean)
+
 
 ```{r}
 #| fig-align: center
@@ -897,6 +961,7 @@ dat <-ggpredict(model_fit, terms=c("PIL_total"))
 plot(dat, add.data=TRUE) + theme_minimal(base_size=16)
 
 ```
+
 
 ## Write-up
 
@@ -917,3 +982,4 @@ statistically significant and substantial proportion of variance (R2
 -   Standardizing
 
 -   Transformations
+
