@@ -1,19 +1,24 @@
 ---
-title: "Lab 7"
+title: "Lab 7 - Multiple Regression"
 format: html
 editor: visual
 author: "Jason Geller, Ph.D."
-date: 2023 03 22
+date: 2023 11 08
 toc: true
 toc_float: true
 ---
 
-## Lab 7: Mediation
+## Lab 7: Multiple Regression
 
-You will be reproducing the results presented in the following research paper:
+The goal of this lab is not only to perform a multiple regression
+analysis but also to understand and interpret the results in the context
+of a research question.
 
-Cho, C., Yoo, H. J., Min, J., Nashiro, K., Thayer, J. F., Lehrer, P. M., & Mather, M. (2023). Changes in Medial Prefrontal Cortex Mediate Effects of Heart Rate Variability Biofeedback on Positive Emotional Memory Biases. Applied Psychophysiology and Biofeedback. [**https://doi.org/10.1007/s10484-023-09579-1**](https://doi.org/10.1007/s10484-023-09579-1)
+In this lab you will gain experience:
 
-During this lab, you will gain experience performing mediation in R and assessing open science practices by attempting to replicate the findings of a recent paper.
+-   Fitting a multiple regression model
+-   Interpreting the results of your multiple regression analysis
+-   Testing assumptions of multiple regression
+-   Reporting a multiple regression analysis
 
-To access Lab 7, please [click here](https://classroom.github.com/a/YpnFBFwZ).
+To access the lab: [click here](https://classroom.github.com/a/A1sR4WdE)

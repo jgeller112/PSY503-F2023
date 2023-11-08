@@ -48,11 +48,11 @@ on Sunday (unless otherwise stated)</li>
 | 9 | 10/30/23 | GLM 3: Categorical Explanatory Models | [{{< fa book-open-reader >}}](/schedule/09-week.qmd) | [{{< fa laptop-code >}}](/slides/10-Effect_size_power/10-Effect_Size_Power.html) |  |
 | 9 | 11/1/23 | Lab 6 |  |  | [{{< fa pen-ruler >}}](/Labs/Lab6.qmd) |
 | 10 | 11/6/23 | GLM 4: Multiple Regression (MR) | [{{< fa book-open-reader >}}](/schedule/10-week.qmd) | [{{< fa laptop-code >}}](/slides/11-Multiple_Regression/Mul_Reg.html) |  |
-| 10 | 11/8/23 | Lab 7 |  |  | {{< fa pen-ruler >}} |
+| 10 | 11/8/23 | Lab 7 |  |  | [{{< fa pen-ruler >}}](/Labs/Lab7.qmd) |
 | 11 | 11/13/23 | GLM 5: Centering, Standardization, and Transformations | [{{< fa book-open-reader >}}](/schedule/11-week.qmd) | {{< fa laptop-code >}} |  |
 | 11 | 11/15/23 | Lab 8 |  |  | {{< fa pen-ruler >}} |
 | 12 | 11/20/23 - 11/23/23 | Thanksgiving - No Class |  |  |  |
-| 13 | 11/27/23 | GLM 5: Interactions | [{{< fa book-open-reader >}}](/schedule/13-week.qmd) | {{< fa laptop-code >}} |  |
+| 13 | 11/27/23 | GLM 6: Interactions | [{{< fa book-open-reader >}}](/schedule/13-week.qmd) | {{< fa laptop-code >}} |  |
 | 13 | 11/29/23 | Lab 9 |  |  | {{< fa pen-ruler >}} |
 | 14 | 12/4/23 | GLM 6: Interactions | [{{< fa book-open-reader >}}](/schedule/14-week.qmd) | {{< fa laptop-code >}} |  |
 | 14 | 12/6/23 | Lab 10 |  |  | {{< fa pen-ruler >}} |
