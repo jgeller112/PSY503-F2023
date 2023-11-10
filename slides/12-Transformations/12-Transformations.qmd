@@ -1,0 +1,890 @@
+---
+title: "Transformations"
+subtitle: "Princeton University"
+author: "Jason Geller, PH.D.(he/him)"
+date: 'Updated:`r Sys.Date()`'
+footer: "PSY 503: Foundations of Statistics in Psychology"
+format: 
+  revealjs:
+    theme: blood
+    css: slide-style.css
+    multiplex: true
+    transition: fade
+    slide-number: true
+    incremental: false 
+    chalkboard: true
+    fontsize: "25pt"
+execute:
+  freeze: auto
+  echo: true
+  message: false
+  warning: false
+  fig-align: center
+  fig-width: 12
+  fig-height: 8
+  editor_options: 
+  chunk_output_type: inline
+  code-overflow: wrap
+  html:
+    code-fold: true
+    code-tools: true
+---
+
+## Packages
+
+```{r}
+#| echo: false
+#| 
+library(pacman)
+p_load("tidyverse", "easystats", "broom", "kableExtra")
+```
+
+```{r}
+library(grateful)
+pkgs <- cite_packages(output = "table", out.dir = ".")
+
+pkgs
+```
+
+## Today
+
+-   Transformations
+
+    -   Linear Transformations
+
+        -   Centering
+        -   Standardization
+
+    -   Nonlinear Transformations
+
+        -   Logarithms
+
+-   Polynomial (non-linear) regression
+
+## Transformations
+
+-   When should we transform our data?
+
+. . .
+
+-   To make our data more *interpretable*
+
+. . .
+
+-   When our data is *non-linear*
+
+. . .
+
+-   When our data is *skewed (non-normal)*
+
+## Linear Transformations
+
+-   Linear transformations
+
+    -   Adding, subtracting, dividing by, or multiplying a variable with
+        a constant
+
+    -   Does not change the relationships in a genuine way ("same
+        model")
+
+## Linear Transformations
+
+-   Linear transformations
+
+    -   Adding, subtracting, dividing by, or multiplying a variable with
+        a constant
+
+    -   Does not change the relationships in a genuine way ("same
+        model")
+
+        -   Common: centering and standardizing
+
+## Linear Transformations - Data
+
+-   Pitch and Age
+
+```{r}
+data = read_csv("https://raw.githubusercontent.com/jgeller112/psy503-psych_stats/master/static/slides/10-linear_modeling/data/age_pitch.csv")
+```
+
+## Linear Transformations
+
+```{r, fig.align='center', out.width="100%", echo=FALSE}
+#manually
+anim.1<- ggplot(data, aes(age,pitch))+
+   geom_point(size=5)+
+  geom_smooth(method=lm, se=FALSE, fullrange=TRUE, size=3)+
+  theme_minimal(base_size=16)
+
+anim.1
+
+```
+
+## Linear Transformations
+
+What is $b_0$ again?
+
+```{r, fig.align='center', echo=FALSE, out.width="100%"}
+#Animation
+# Change the point sizes manually
+anim.1<- ggplot(data, aes(age,pitch))+
+  geom_point(size=5)+
+  geom_smooth(method=lm, se=FALSE, fullrange=TRUE, size=5)+
+  theme_minimal(base_size=16) +
+  geom_vline(xintercept=0, linetype="dotted") + 
+  geom_point(x=0, y=216, colour="red", size=10, shape=22, fill="red") + 
+  expand_limits(x = 0)
+anim.1
+```
+
+## Centering
+
+-   Sometimes our data is *nonsensical*
+
+    -   Intercept when Age = 0
+
+```{=html}
+<!-- -->
+```
+-   Centering changes the model so that 0 is mean/average of X
+
+```{r, fig.align='center', echo=FALSE, out.width="100%"}
+#Animation# Change the point sizes manually #center
+data$age_c <- data$age-mean(data$age)
+
+anim.1<- ggplot(data, aes(age_c,pitch))+
+  geom_point(size=5)+
+  geom_smooth(method=lm, se=FALSE, fullrange=TRUE, size=5)+
+  theme_bw(base_size=20) +
+  geom_vline(xintercept=0, linetype="dotted") + 
+  geom_point(x=0, y=175, colour="red", size=10, shape=22, fill="red")+ 
+  expand_limits(x = 0)
+
+anim.1
+```
+
+## Centering - How?
+
+```{r}
+
+# man way
+data %>%
+  mutate(age_c=age-mean(age))
+
+# data wizard from easystats
+data %>%
+  mutate(age_c=age-mean(age), 
+         age_c_dw=datawizard::center(age))
+
+data
+
+  
+
+```
+
+## Centering - How?
+
+```{r}
+df <- mutate(data,
+             age_c = age - mean(age, na.rm = TRUE)) # center
+```
+
+```{r}
+library(datawizard) # package to center and standardize
+
+df_wiz <- df %>% 
+  mutate(age_c = datawizard::center(age))
+
+head(df_wiz) %>%
+  kable()
+```
+
+## Centering around other values
+
+-   We could also make 0 correspond to some other sensible/useful value
+
+    -   Smallest logically possible value?
+
+## Centering
+
+```{r}
+
+lm(pitch~age_c, data=df) %>% 
+  tidy(conf.int=TRUE) %>%
+  knitr::kable() %>%
+    kable_styling(font_size = 24) %>%
+ row_spec(1:2, color = "white",
+              background = "red")
+```
+
+## Centering
+
+-   Good if zero is *not meaningful*
+
+    -   If 0 is meaningful, do not need to center data
+
+-   Centering can also help with multicollinearity issues!
+
+# When in doubt, center!
+
+## Standardization
+
+-   b = unstandardized regression coefficient
+
+    -   For every one unit increase in X, there will be b unit increase
+        in Y
+
+-   $\beta$ = Standardized regression coefficient
+
+    -   X in standard deviation units
+    -   For every one SD increase in X, there will be b change in Y
+
+## Standardize Predictors
+
+-   Sometimes we want to put our variables on the same metric
+
+    -   Standardizing the coefs can allow for comparison within models
+
+        -   Get's rid of the units of X
+        -   Sometimes used a measure of importance
+
+-   Dividing centered mean by \$\\sigma\$
+
+    -   z scoring!
+
+```{r, fig.align='center', echo=FALSE, out.width="100%"}
+#Animation
+# Change the point sizes manually
+df_stand <- df %>% 
+  mutate(
+          # stand
+             age_z_dw = datawizard::standardize(age))
+
+anim.1<- ggplot(df_stand, aes(age_z_dw,pitch))+
+  geom_point(size=5)+
+  geom_smooth(method=lm, se=FALSE, fullrange=TRUE, size=5)+
+  theme_minimal(base_size=16) +
+  geom_vline(xintercept=0, linetype="dotted") + 
+  geom_point(x=0, y=175, colour="red", size=10, shape=22, fill="red") + 
+  expand_limits(x = 0)
+  
+
+anim.1
+```
+
+## Standardizing - How?
+
+```{r}
+
+```
+
+## Standardizing - How?
+
+```{r}
+df_stand <- df %>%
+  mutate(age_z = age_c / sd(age, na.rm = TRUE))# standardize z score
+```
+
+```{r}
+df_wiz <- mutate(df_stand,
+             age_z_es = datawizard::standardize(age))
+```
+
+```{r}
+#| echo: false
+#| 
+head(df_wiz) %>%
+  kable()
+```
+
+## Standardized model
+
+```{r}
+
+lm(pitch~age_z, data=df_stand)%>% 
+  tidy(conf.int=TRUE) %>%
+  knitr::kable() %>%
+    kable_styling(font_size = 24) %>%
+ row_spec(1:2, color = "white",
+              background = "red")
+
+
+```
+
+::: callout-important
+$\beta_0$:
+
+$\beta_1$:
+:::
+
+## Output
+
+::: panel-tabset
+## Standard
+
+```{r}
+lm(pitch~age, data=df_stand) %>%
+   tidy(conf.int=TRUE) %>%
+  knitr::kable() %>%
+    kable_styling(font_size = 24) %>%
+ row_spec(1:2, color = "white",
+              background = "red")
+
+```
+
+## Center
+
+```{r}
+
+lm(pitch~age_c, data=df_stand) %>% 
+  tidy(conf.int=TRUE) %>%
+  knitr::kable() %>%
+    kable_styling(font_size = 24) %>%
+ row_spec(1:2, color = "white",
+              background = "red")
+
+```
+
+## Standardization
+
+```{r}
+
+lm(pitch~age_z, data=df_stand) %>% 
+  tidy(conf.int=TRUE) %>%
+  knitr::kable() %>%
+    kable_styling(font_size = 24) %>%
+ row_spec(1:2, color = "white",
+              background = "red")
+
+```
+:::
+
+. . .
+
+-   Changes interpretation of coefficients
+
+    -   Centering (intercept)
+
+    -   Standardization (X)
+
+-   Does not change statistical inference or model
+
+# Nonlinear Transformations
+
+## Transformations
+
+-   Nonlinear transformations
+
+    -   Transformation that affects different data points differently
+
+    -   Changes the relationships ("different model")
+
+        -   Common: Logarthims
+
+    -   Makes models more in line with assumptions
+
+## Logarithmic transformations
+
+```{r, echo=FALSE, fig.align='center', out.width="90%"}
+
+knitr::include_graphics("images/log.bmp")
+
+```
+
+## Logarithmic transformations
+
+::: callout-note
+-   R uses natural log base = 2.7182
+:::
+
+```{r, echo=FALSE, fig.align='center', out.width="90%"}
+
+knitr::include_graphics("images/base.PNG")
+
+```
+
+## Logarithmic transformations
+
+-   Exponentiation
+
+    -   Takes small numbers and grows them
+
+$$10^1 = 10$$ $$10^2 = 100$$ $$10^3 = 1000$$ $$10^4 = 10000$$
+$$10^5 = 100000$$
+
+-   `exp` function in R
+
+## Log Transformations
+
+-   Logarithmic
+
+    -   Describe changes in terms of multiplication
+
+        -   How many times must one "base" number be multiplied by
+            itself to get some other particular number?
+
+        -   Takes large numbers and shrinks them
+
+$$2.30 = log(10)$$ $$4.61 = log(100)$$ $$6.91 = log(1000)$$
+$$11.51 = log(10000)$$
+
+-   `log` function in R
+
+## Log transformations
+
+-   Tracks the order of magnitude
+
+-   Large numbers shrink more than smaller numbers
+
+    -   Compression effect (larger values are closer to the other)
+
+```{r}
+# time in ms
+RTs <- c(600, 650, 700, 1000, 4000)
+
+logRTs <- log(RTs) # base = 2.718282
+
+logRTs # log rts 
+
+exp(logRTs) # get ms numbers back 
+```
+
+## Logarithmic transformations
+
+::: columns
+::: {.column width="50%"}
+```{r}
+#| echo: false
+#| fig-align: center
+#| 
+ELP <- read_csv("https://raw.githubusercontent.com/jgeller112/psy503-psych_stats/master/static/slides/12-Transformations_Centering/data/ELP_frequency.csv")
+
+
+ELP <- mutate(ELP,
+              Log10Freq = log10(Freq),
+              LogRT = log(RT))
+
+
+ELP %>% ggplot(aes(x = Freq, y = RT, label = Word)) +
+  geom_text() +
+  geom_smooth(method = 'lm') +
+  ggtitle('RT ~ raw frequency') +
+  theme_minimal(base_size = 16) 
+
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: false
+#| fig-align: center
+#| 
+
+ELP %>% ggplot(aes(x = log(Freq), y = LogRT, label = Word)) +
+  geom_text() +
+  geom_smooth(method = 'lm') +
+  ggtitle('Log RT ~ log frequency') +
+  theme_minimal(base_size=16)
+```
+:::
+:::
+
+## Outcome $Y$ Transformations
+
+-   Makes $Y$ more linear
+
+-   Makes $Y$ normal
+
+Can help with heteroskedasticity
+
+## Outcome $Y$ Transformations
+
+-   Logarithmic
+
+-   Square root $\sqrt(y)$
+
+-   Inverse transformations (1/y)
+
+> Most transformations make interpretation difficult. log(Y) is the most
+> straightforward to interpret
+
+## Y Transformations: Age 
+
+-   A high respiratory rate can potentially indicate a respiratory
+    infection in children. In order to determine what indicates a
+    "high"rate, we first want to understand the relationship between a
+    child's age and their respiratory rate
+
+    -   The data contain the respiratory rate for 618 children ages 15
+        days to 3 years
+
+        -   `Age`
+        -   `Rate`
+
+```{r}
+library(Sleuth3)
+data(ex0824)
+
+```
+
+## Rate vs. Age
+
+```{r}
+#| fig-align: center
+#| echo: false
+
+anim.1<- ggplot(ex0824, aes(x=Age, y=Rate))+
+   geom_point() + 
+  theme_minimal(base_size=16)
+
+anim.1
+
+```
+
+## Log transformation on Y
+
+-   If we apply a log transformation to the response variable, we want
+    to estimate the parameters for the model
+
+$$
+\widehat{\log(Y)} = b_0 + b_1 X
+$$
+
+-   We want to interpret the model in terms of y not log(Y) so we write
+    all interpretations in terms of
+
+$$
+y = \exp\{b_0 + b_1 X\} = \exp\{b_0\}\exp\{b_1X\}
+$$
+
+## Log Y Interpretation
+
+-   Dependent/response variable
+
+    -   Exponentiate the coefficient, subtract one from this number, and
+        multiply by 100 to get percentage
+
+    -   For every one-unit difference in predictor, our dependent
+        variable increases/decreases by about %
+
+        -   If exp() \> 1, % increase
+
+        -   if exp() \< 1, % decrease
+
+## Model
+
+```{r}
+#| eval: false
+lm(Rate~Age, data=ex0824) %>%
+  tidy(conf.int = TRUE, exponentiate = FALSE) # note this 
+```
+
+::: panel-tabset
+## Heteroscedasticity
+
+```{r}
+#| echo: false
+#| fig-height: 4
+lm(Rate~Age, data=ex0824) %>% check_heteroscedasticity()%>%
+  plot()
+
+```
+
+## Normality
+
+```{r}
+#| echo: false
+#| fig-height: 4
+
+lm(Rate~Age, data=ex0824) %>% check_normality() %>% 
+  plot()
+
+```
+:::
+
+## Model
+
+```{r}
+# need to exponentiate the estimate! set to true
+lm(log(Rate)~Age, data=ex0824) %>%
+  tidy(conf.int = TRUE, exponentiate = FALSE) %>% kable() %>% 
+  knitr::kable() %>%
+    kable_styling(font_size = 24) %>%
+ row_spec(1:2, color = "white",
+              background = "red")
+
+lm(log(Rate)~Age, data=ex0824) %>%
+  tidy(conf.int = TRUE, exponentiate = TRUE) %>%  knitr::kable() %>%
+    kable_styling(font_size = 24) %>%
+ row_spec(1:2, color = "white",
+              background = "red")
+
+```
+
+::: callout-important
+-   $b_0$: The mean respiratory rate for a new born child is expected to
+    be 46.759 (exp{3.845}) breaths per minute.
+
+-   $b_1$: For increase in age, the mean respiratory rate for a new born
+    child is expected to decrease by 2% (if exp \< 1 decrease, if exp \>
+    1 increase)
+:::
+
+## Model better?
+
+::: panel-tabset
+## Heteroscedasticity
+
+```{r}
+#| fig-align: center
+#| fig-height: 4
+
+lm(log(Rate)~Age, data=ex0824) %>%
+  check_heteroscedasticity() %>%
+  plot()
+
+```
+
+## Normality
+
+```{r}
+#| fig-align: center
+#| fig-height: 4
+
+lm(log(Rate)~Age, data=ex0824) %>%
+  check_normality() %>%
+  plot()
+
+```
+:::
+
+## **Log Transformation on X**
+
+![](https://sta210-sp21.netlify.app/slides/13-transformations_files/figure-html/unnamed-chunk-23-1.png){fig-align="center"}
+
+-   Try a transformation on X if the scatterplot shows some curvature
+    but the variance is constant for all values of X
+
+    -   Makes $X$ more linear
+    -   Makes $X$ more normal
+    -   Does not fix heteroscedasticity
+
+## **Log Interpretation on X**
+
+$$
+\hat{Y} = b_0 + b_1 \log(X)
+$$
+
+-   For log transformed predictors
+
+    -   Divide the coefficient by 100
+
+        -   1% increase in the independent variable increases (or
+            decreases) the dependent variable by (coefficient/100) units
+
+    -   For x percent increase, take log(1.x) and multiple the coef
+
+        -   For 20% increase in X multiple the coef by log(1.20)
+
+::: callout-note
+Recall that multiplying a number by 1.22 is the same as increasing the
+number by 22%.
+:::
+
+## X transformation model
+
+```{r}
+
+lm(Rate~log(Age), data=ex0824) %>%
+  tidy(conf.int = TRUE) %>%
+   knitr::kable() %>%
+    kable_styling(font_size = 24) %>%
+ row_spec(1:2, color = "white",
+              background = "red")
+
+
+```
+
+$b_0$: The expected (mean) respiratory rate for children who are 1 month
+old (log(1) = 0) is 50.135 breaths per minute.
+
+$b_1$: If a child's age doubles, we expect their respiratory rate to
+decrease by 4.146 (-5.982\*log(2)) breaths per minute.
+
+## Other $X$ Transformations
+
+-   Square root $\sqrt(y)$
+
+-   Inverse transformations (1/y)
+
+    -   Makes interpretation hard!
+
+## X and Y Log transformation interpretation
+
+-   When dependent/response variable and independent/predictor
+    variable(s) are log-transformed
+
+    -   Interpret the coefficient as the percent increase in the
+        dependent variable for every 1% increase in the independent
+        variable
+
+        -   Example: the coefficient is 0.198. For every 1% increase in
+            the independent variable, our dependent variable increases
+            by about 0.20%. For x percent increase, calculate 1.x to the
+            power of the coefficient, subtract 1, and multiply by 100
+
+        -   Example: For every 20% increase in the independent variable,
+            our dependent variable increases by about (1.20 0.198 -- 1)
+            \* 100 = 3.7 percent
+
+## When Should You Log Transform?
+
+-   Ideally: When it's theoretically motivated
+
+    -   Common in linguistics and psychology:
+
+        -   Word frequency
+        -   Response times
+        -   Perceptual magnitudes
+
+-   After you look at the relationship to DV
+
+-   You have no 0s or negative values
+
+## Polynomial Models
+
+-   A nonlinear regression method that models the relationship between X
+    and Y using polynomials
+
+-   Polynomial is mathematical expression of operators and non-negative
+    powers
+
+```{r, echo=FALSE,fig.align='center', out.width="100%"}
+
+knitr::include_graphics("images/orthogonal-curves-1.png")
+
+```
+
+## Memory example
+
+-   Memory and Time
+
+-   13 subjects were asked to memorize a list of disconnected items
+
+-   The subjects were then asked to recall the items at various times up
+    to a week later
+
+```{r}
+
+mem_df <- tibble::tribble(
+   ~time, ~prop,
+      1L,  0.84,
+      5L,  0.71,
+     15L,  0.61,
+     30L,  0.56,
+     60L,  0.54,
+    120L,  0.47,
+    240L,  0.45,
+    480L,  0.38,
+    720L,  0.36,
+   1440L,  0.26,
+   2880L,   0.2,
+   5760L,  0.16,
+  10080L,  0.08
+  )
+```
+
+## Memory example
+
+```{r}
+#| fig-align: center
+#| 
+
+anim.1<- ggplot(mem_df, aes(time,prop))+
+   geom_point(size=5)+
+  theme_minimal(base_size=16)
+
+anim.1
+
+```
+
+## Polynomial regression
+
+$$\begin{equation}
+Y_i = b_0 + b_1 x_i + b_2 x_i^2 + e_i.
+\end{equation}$$
+
+```{r}
+
+log_df_quad <- mem_df%>%
+  mutate(time2=time^-2) # add in quadratic term to dataset
+
+```
+
+## Polynomial regression
+
+```{r}
+  
+quad_lm <-lm(prop ~ time + time2,  data=log_df_quad)
+
+ quad_lm %>% 
+  tidy(conf.int = TRUE) %>%
+  kable()
+
+```
+
+## Model fit quadratic
+
+```{r}
+#| fig-align: center
+#| 
+
+anim.1<- ggplot(mem_df, aes(time,prop))+
+   geom_point(size=5)+
+  geom_smooth(method = "lm", formula = y ~ x + I(x^2), se = FALSE)+
+  theme_minimal(base_size=16)
+
+anim.1
+```
+
+## Testing Polynomial Models
+
+-   Analyze all the terms in model
+
+-   Model comparisons
+
+    -   Testing some of the $X$ terms, starting with the lowest order
+        term and including the next higher-order terms from there
+
+        -   Include all lower terms of that variable
+
+## Model fit comparison
+
+```{r}
+# forward
+
+# linear model
+lm_lin <- lm(prop ~ time,  data=mem_df)
+
+# linear + quad model 
+lm_quad <- lm(prop ~ time + time2,  data=log_df_quad)
+
+# model comparisons
+anova(lm_lin, lm_quad) %>%
+  kable()
+```
+
+-   If *F* is significant, less pasimonious model (more DFs) is
+    preferred
+
+-   If *F* is non-significant, more parsimonious model preferred
+
+## Next time
+
+-   Interactions
+
+    -   Continuous by categorical
+
+    -   Continuous by continuous
+
+    -   Categorical x categorical
