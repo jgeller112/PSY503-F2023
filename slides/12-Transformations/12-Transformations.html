@@ -451,12 +451,12 @@ Jason Geller, PH.D.(he/him)
 <ul>
 <li><p>Transformations</p>
 <ul>
-<li><p>Linear Transformations</p>
+<li><p>Linear transformations</p>
 <ul>
 <li>Centering</li>
 <li>Standardization</li>
 </ul></li>
-<li><p>Nonlinear Transformations</p>
+<li><p>Nonlinear transformations</p>
 <ul>
 <li>Logarithms</li>
 </ul></li>
@@ -695,12 +695,12 @@ Jason Geller, PH.D.(he/him)
 <ul>
 <li><p>b = unstandardized regression coefficient</p>
 <ul>
-<li>For every one unit increase in X, there will be b unit increase in Y</li>
+<li>For every one unit increase in <span class="math inline">\(X\)</span>, there will be b unit increase in <span class="math inline">\(Y\)</span></li>
 </ul></li>
 <li><p><span class="math inline">\(\beta\)</span> = Standardized regression coefficient</p>
 <ul>
-<li>X in standard deviation units</li>
-<li>For every one SD increase in X, there will be b change in Y</li>
+<li><span class="math inline">\(X\)</span> in standard deviation units</li>
+<li>For every one SD increase in <span class="math inline">\(X\)</span>, there will be b change in <span class="math inline">\(Y\)</span></li>
 </ul></li>
 </ul>
 </section>
@@ -1052,6 +1052,12 @@ Jason Geller, PH.D.(he/him)
 <img data-src="images/log.bmp" class="quarto-figure-center r-stretch" style="width:90.0%"></section>
 <section id="logarithmic-transformations-1" class="slide level2">
 <h2>Logarithmic transformations</h2>
+<ul>
+<li><p>Describe changes in terms of multiplication</p>
+<ul>
+<li>How many times must one “base” number be multiplied by itself to get some other particular number?</li>
+</ul></li>
+</ul>
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -1087,11 +1093,7 @@ Jason Geller, PH.D.(he/him)
 <ul>
 <li><p>Logarithmic</p>
 <ul>
-<li><p>Describe changes in terms of multiplication</p>
-<ul>
-<li><p>How many times must one “base” number be multiplied by itself to get some other particular number?</p></li>
-<li><p>Takes large numbers and shrinks them</p></li>
-</ul></li>
+<li>Takes large numbers and shrinks them</li>
 </ul></li>
 </ul>
 <p><span class="math display">\[2.30 = log(10)\]</span> <span class="math display">\[4.61 = log(100)\]</span> <span class="math display">\[6.91 = log(1000)\]</span> <span class="math display">\[11.51 = log(10000)\]</span></p>
@@ -1525,14 +1527,17 @@ y = \exp\{b_0 + b_1 X\} = \exp\{b_0\}\exp\{b_1X\}
 <ul>
 <li><p>Interpret the coefficient as the percent increase in the dependent variable for every 1% increase in the independent variable</p>
 <ul>
-<li><p>Example: the coefficient is 0.198. For every 1% increase in the independent variable, our dependent variable increases by about 0.20%. For x percent increase, calculate 1.x to the power of the coefficient, subtract 1, and multiply by 100</p></li>
-<li><p>Example: For every 20% increase in the independent variable, our dependent variable increases by about (1.20^0.198 – 1) * 100 = 3.7 percent</p></li>
+<li><p>Example: the coefficient is 0.198. For every 1% increase in the independent variable, our dependent variable increases by about 20%.</p></li>
+<li><p>For x percent increase, calculate 1.x to the power of the coefficient, subtract 1, and multiply by 100</p>
+<ul>
+<li>Example: For every 20% increase in the independent variable, our dependent variable increases by about (1.20^0.198 – 1) * 100 = 3.7%</li>
+</ul></li>
 </ul></li>
 </ul></li>
 </ul>
 </section>
 <section id="when-should-you-log-transform" class="slide level2">
-<h2>When Should You Log Transform?</h2>
+<h2>When should you log transform?</h2>
 <ul>
 <li><p>Ideally: When it’s theoretically motivated</p>
 <ul>
@@ -1548,7 +1553,7 @@ y = \exp\{b_0 + b_1 X\} = \exp\{b_0\}\exp\{b_1X\}
 </ul>
 </section>
 <section id="polynomial-models" class="slide level2">
-<h2>Polynomial Models</h2>
+<h2>Polynomial models</h2>
 <ul>
 <li><p>A nonlinear regression method that models the relationship between X and Y using polynomials</p></li>
 <li><p>Polynomial is mathematical expression of operators and non-negative powers</p></li>
@@ -1828,53 +1833,33 @@ Y_i = b_0 + b_1 x_i + b_2 x_i^2 + e_i.
 </div>
 </div>
 </section>
-<section id="model-fit-quadratic" class="slide level2">
-<h2>Model fit quadratic</h2>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>anim<span class="fl">.1</span><span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data, <span class="fu">aes</span>(hours,happiness))<span class="sc">+</span></span>
-<span id="cb29-2"><a href="#cb29-2"></a>   <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">5</span>)<span class="sc">+</span></span>
-<span id="cb29-3"><a href="#cb29-3"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">formula =</span> y <span class="sc">~</span> x <span class="sc">+</span> <span class="fu">I</span>(x<span class="sc">^</span><span class="dv">2</span>), <span class="at">se =</span> <span class="cn">FALSE</span>)<span class="sc">+</span></span>
-<span id="cb29-4"><a href="#cb29-4"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size=</span><span class="dv">16</span>)</span>
-<span id="cb29-5"><a href="#cb29-5"></a></span>
-<span id="cb29-6"><a href="#cb29-6"></a>anim<span class="fl">.1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-<img data-src="12-Transformations_files/figure-revealjs/unnamed-chunk-43-1.png" class="quarto-figure-center r-stretch" width="1152"></section>
 <section id="multicollinearity" class="slide level2">
 <h2>Multicollinearity</h2>
 <ul>
-<li>Time and time^2 are highly correlated</li>
+<li>Time and <span class="math inline">\(time^2\)</span> are highly correlated</li>
 </ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="fu">check_collinearity</span>(quad_lm_sq)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># Check for Multicollinearity
-
-High Correlation
-
-  Term   VIF     VIF 95% CI Increased SE Tolerance Tolerance 95% CI
- hours 23.78 [12.49, 46.15]         4.88      0.04     [0.02, 0.08]
- time2 23.78 [12.49, 46.15]         4.88      0.04     [0.02, 0.08]</code></pre>
-</div>
-</div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode numberSource {check_collinearity(quad_lm_sq)} number-lines code-with-copy"><code class="sourceCode"></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="fragment">
 <ul>
 <li><p>What can be done?</p>
 <ul>
 <li>Centering!</li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="multicollinearity-1" class="slide level2">
 <h2>Multicollinearity</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="co">#center var and then square </span></span>
-<span id="cb32-2"><a href="#cb32-2"></a></span>
-<span id="cb32-3"><a href="#cb32-3"></a>x<span class="ot">=</span>log_df_quad <span class="sc">%&gt;%</span></span>
-<span id="cb32-4"><a href="#cb32-4"></a>  <span class="fu">mutate</span>(<span class="at">hours_c=</span><span class="fu">center</span>(hours), <span class="at">time_sq=</span>hours_c<span class="sc">^</span><span class="dv">2</span>, <span class="at">time_sq_c=</span><span class="fu">center</span>(time_sq))</span>
-<span id="cb32-5"><a href="#cb32-5"></a></span>
-<span id="cb32-6"><a href="#cb32-6"></a>quad_lm_sq <span class="ot">&lt;-</span><span class="fu">lm</span>(happiness <span class="sc">~</span> hours_c <span class="sc">+</span> time_sq_c,  <span class="at">data=</span>x)</span>
-<span id="cb32-7"><a href="#cb32-7"></a></span>
-<span id="cb32-8"><a href="#cb32-8"></a><span class="fu">check_collinearity</span>(quad_lm_sq)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="co">#center var and then square </span></span>
+<span id="cb30-2"><a href="#cb30-2"></a>x<span class="ot">=</span>log_df_quad <span class="sc">%&gt;%</span></span>
+<span id="cb30-3"><a href="#cb30-3"></a>  <span class="fu">mutate</span>(<span class="at">hours_c=</span><span class="fu">center</span>(hours), <span class="at">time_sq=</span>hours_c<span class="sc">^</span><span class="dv">2</span>, <span class="at">time_sq_c=</span><span class="fu">center</span>(time_sq))</span>
+<span id="cb30-4"><a href="#cb30-4"></a></span>
+<span id="cb30-5"><a href="#cb30-5"></a><span class="co">#refit model</span></span>
+<span id="cb30-6"><a href="#cb30-6"></a>quad_lm_sq <span class="ot">&lt;-</span><span class="fu">lm</span>(happiness <span class="sc">~</span> hours_c <span class="sc">+</span> time_sq_c,  <span class="at">data=</span>x)</span>
+<span id="cb30-7"><a href="#cb30-7"></a></span>
+<span id="cb30-8"><a href="#cb30-8"></a><span class="co">#check col</span></span>
+<span id="cb30-9"><a href="#cb30-9"></a><span class="fu">check_collinearity</span>(quad_lm_sq)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># Check for Multicollinearity
 
@@ -1886,6 +1871,18 @@ Low Correlation
 </div>
 </div>
 </section>
+<section id="model-fit-quadratic" class="slide level2">
+<h2>Model fit quadratic</h2>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>anim<span class="fl">.1</span><span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data, <span class="fu">aes</span>(hours,happiness))<span class="sc">+</span></span>
+<span id="cb32-2"><a href="#cb32-2"></a>   <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">5</span>)<span class="sc">+</span></span>
+<span id="cb32-3"><a href="#cb32-3"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">formula =</span> y <span class="sc">~</span> x <span class="sc">+</span> <span class="fu">I</span>(x<span class="sc">^</span><span class="dv">2</span>), <span class="at">se =</span> <span class="cn">FALSE</span>)<span class="sc">+</span></span>
+<span id="cb32-4"><a href="#cb32-4"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size=</span><span class="dv">16</span>)</span>
+<span id="cb32-5"><a href="#cb32-5"></a></span>
+<span id="cb32-6"><a href="#cb32-6"></a>anim<span class="fl">.1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="12-Transformations_files/figure-revealjs/unnamed-chunk-45-1.png" class="quarto-figure-center r-stretch" width="1152"></section>
 <section id="testing-polynomial-models" class="slide level2">
 <h2>Testing polynomial models</h2>
 <ul>
@@ -1902,17 +1899,17 @@ Low Correlation
 <section id="model-fit-comparison" class="slide level2">
 <h2>Model fit comparison</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a><span class="co"># forward</span></span>
-<span id="cb34-2"><a href="#cb34-2"></a></span>
-<span id="cb34-3"><a href="#cb34-3"></a><span class="co"># linear model</span></span>
-<span id="cb34-4"><a href="#cb34-4"></a>lm_lin <span class="ot">&lt;-</span> <span class="fu">lm</span>(happiness <span class="sc">~</span> hours,  <span class="at">data=</span>data)</span>
-<span id="cb34-5"><a href="#cb34-5"></a></span>
-<span id="cb34-6"><a href="#cb34-6"></a><span class="co"># linear + quad model </span></span>
-<span id="cb34-7"><a href="#cb34-7"></a>lm_quad <span class="ot">&lt;-</span> <span class="fu">lm</span>(happiness <span class="sc">~</span> hours <span class="sc">+</span> time2,  <span class="at">data=</span>log_df_quad)</span>
-<span id="cb34-8"><a href="#cb34-8"></a></span>
-<span id="cb34-9"><a href="#cb34-9"></a><span class="co"># model comparisons</span></span>
-<span id="cb34-10"><a href="#cb34-10"></a><span class="fu">anova</span>(lm_lin, lm_quad) <span class="sc">%&gt;%</span></span>
-<span id="cb34-11"><a href="#cb34-11"></a>  <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="co"># forward</span></span>
+<span id="cb33-2"><a href="#cb33-2"></a></span>
+<span id="cb33-3"><a href="#cb33-3"></a><span class="co"># linear model</span></span>
+<span id="cb33-4"><a href="#cb33-4"></a>lm_lin <span class="ot">&lt;-</span> <span class="fu">lm</span>(happiness <span class="sc">~</span> hours,  <span class="at">data=</span>data)</span>
+<span id="cb33-5"><a href="#cb33-5"></a></span>
+<span id="cb33-6"><a href="#cb33-6"></a><span class="co"># linear + quad model </span></span>
+<span id="cb33-7"><a href="#cb33-7"></a>lm_quad <span class="ot">&lt;-</span> <span class="fu">lm</span>(happiness <span class="sc">~</span> hours <span class="sc">+</span> time2,  <span class="at">data=</span>log_df_quad)</span>
+<span id="cb33-8"><a href="#cb33-8"></a></span>
+<span id="cb33-9"><a href="#cb33-9"></a><span class="co"># model comparisons</span></span>
+<span id="cb33-10"><a href="#cb33-10"></a><span class="fu">anova</span>(lm_lin, lm_quad) <span class="sc">%&gt;%</span></span>
+<span id="cb33-11"><a href="#cb33-11"></a>  <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table data-quarto-postprocess="true">
 <thead>

@@ -50,12 +50,12 @@ pkgs
 
 -   Transformations
 
-    -   Linear Transformations
+    -   Linear transformations
 
         -   Centering
         -   Standardization
 
-    -   Nonlinear Transformations
+    -   Nonlinear transformations
 
         -   Logarithms
 
@@ -223,13 +223,13 @@ $b_1$:
 
 -   b = unstandardized regression coefficient
 
-    -   For every one unit increase in X, there will be b unit increase
-        in Y
+    -   For every one unit increase in $X$, there will be b unit
+        increase in $Y$
 
 -   $\beta$ = Standardized regression coefficient
 
-    -   X in standard deviation units
-    -   For every one SD increase in X, there will be b change in Y
+    -   $X$ in standard deviation units
+    -   For every one SD increase in $X$, there will be b change in $Y$
 
 ## Standardize Predictors
 
@@ -393,6 +393,11 @@ knitr::include_graphics("images/log.bmp")
 
 ## Logarithmic transformations
 
+-   Describe changes in terms of multiplication
+
+    -   How many times must one "base" number be multiplied by itself to
+        get some other particular number?
+
 ::: callout-note
 -   R uses natural log base = 2.7182
 :::
@@ -417,12 +422,7 @@ $$10^1 = 10$$ $$10^2 = 100$$ $$10^3 = 1000$$ $$10^4 = 10000$$
 
 -   Logarithmic
 
-    -   Describe changes in terms of multiplication
-
-        -   How many times must one "base" number be multiplied by
-            itself to get some other particular number?
-
-        -   Takes large numbers and shrinks them
+    -   Takes large numbers and shrinks them
 
 $$2.30 = log(10)$$ $$4.61 = log(100)$$ $$6.91 = log(1000)$$
 $$11.51 = log(10000)$$
@@ -742,14 +742,16 @@ decrease by 4.146 (-5.982\*log(2)) breaths per minute.
 
         -   Example: the coefficient is 0.198. For every 1% increase in
             the independent variable, our dependent variable increases
-            by about 0.20%. For x percent increase, calculate 1.x to the
-            power of the coefficient, subtract 1, and multiply by 100
+            by about 20%.
 
-        -   Example: For every 20% increase in the independent variable,
-            our dependent variable increases by about (1.20\^0.198 -- 1)
-            \* 100 = 3.7 percent
+        -   For x percent increase, calculate 1.x to the power of the
+            coefficient, subtract 1, and multiply by 100
 
-## When Should You Log Transform?
+            -   Example: For every 20% increase in the independent
+                variable, our dependent variable increases by about
+                (1.20\^0.198 -- 1) \* 100 = 3.7%
+
+## When should you log transform?
 
 -   Ideally: When it's theoretically motivated
 
@@ -763,7 +765,7 @@ decrease by 4.146 (-5.982\*log(2)) breaths per minute.
 
 -   You have no 0s or negative values
 
-## Polynomial Models
+## Polynomial models
 
 -   A nonlinear regression method that models the relationship between X
     and Y using polynomials
@@ -861,27 +863,14 @@ quad_lm_sq <-lm(happiness ~ hours  + time2,  data=log_df_quad)
 
 ```
 
-## Model fit quadratic
-
-```{r}
-#| fig-align: center
-#| 
-
-anim.1<- ggplot(data, aes(hours,happiness))+
-   geom_point(size=5)+
-  geom_smooth(method = "lm", formula = y ~ x + I(x^2), se = FALSE)+
-  theme_minimal(base_size=16)
-
-anim.1
-```
-
 ## Multicollinearity
 
--   Time and time\^2 are highly correlated
+-   Time and $time^2$ are highly correlated
 
-```{r}
-check_collinearity(quad_lm_sq)
+```{check_collinearity(quad_lm_sq)}
 ```
+
+. . .
 
 -   What can be done?
 
@@ -890,16 +879,38 @@ check_collinearity(quad_lm_sq)
 ## Multicollinearity
 
 ```{r}
-
 #center var and then square 
-
 x=log_df_quad %>%
   mutate(hours_c=center(hours), time_sq=hours_c^2, time_sq_c=center(time_sq))
 
+#refit model
 quad_lm_sq <-lm(happiness ~ hours_c + time_sq_c,  data=x)
 
+#check col
 check_collinearity(quad_lm_sq)
 
+```
+
+```{r}
+#| echo: false
+
+quad_lm_sq <-lm(happiness ~ hours_c + time_sq_c,  data=x) %>%
+  tidy(conf.int = TRUE) %>%
+  kable()
+
+```
+
+## Model fit quadratic
+
+```{r}
+#| fig-align: center
+#| 
+anim.1<- ggplot(data, aes(hours,happiness))+
+   geom_point(size=5)+
+  geom_smooth(method = "lm", formula = y ~ x + I(x^2), se = FALSE)+
+  theme_minimal(base_size=16)
+
+anim.1
 ```
 
 ## Testing polynomial models
