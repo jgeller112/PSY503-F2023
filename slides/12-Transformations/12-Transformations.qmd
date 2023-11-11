@@ -143,10 +143,9 @@ anim.1
 
     -   Intercept when Age = 0
 
-```{=html}
 <!-- -->
-```
--   Centering changes the model so that 0 is mean/average of X
+
+-   Mean centering changes the model so that 0 is mean/average of X
 
 ```{r, fig.align='center', echo=FALSE, out.width="100%"}
 #Animation# Change the point sizes manually #center
@@ -166,19 +165,6 @@ anim.1
 ## Centering - How?
 
 ```{r}
-
-# man way
-data %>%
-  mutate(age_c=age-mean(age))
-
-# data wizard from easystats
-data %>%
-  mutate(age_c=age-mean(age), 
-         age_c_dw=datawizard::center(age))
-
-data
-
-  
 
 ```
 
@@ -217,6 +203,12 @@ lm(pitch~age_c, data=df) %>%
               background = "red")
 ```
 
+::: callout-important
+$b_0$:
+
+$b_1$:
+:::
+
 ## Centering
 
 -   Good if zero is *not meaningful*
@@ -241,6 +233,8 @@ lm(pitch~age_c, data=df) %>%
 
 ## Standardize Predictors
 
+::: columns
+::: {.column width="50%"}
 -   Sometimes we want to put our variables on the same metric
 
     -   Standardizing the coefs can allow for comparison within models
@@ -248,13 +242,17 @@ lm(pitch~age_c, data=df) %>%
         -   Get's rid of the units of X
         -   Sometimes used a measure of importance
 
--   Dividing centered mean by \$\\sigma\$
+-   Dividing centered mean by $\sigma$
 
     -   z scoring!
+:::
 
-```{r, fig.align='center', echo=FALSE, out.width="100%"}
-#Animation
-# Change the point sizes manually
+::: {.column width="50%"}
+```{r}
+#| echo: false
+#| fig-align: center
+#
+
 df_stand <- df %>% 
   mutate(
           # stand
@@ -271,6 +269,8 @@ anim.1<- ggplot(df_stand, aes(age_z_dw,pitch))+
 
 anim.1
 ```
+:::
+:::
 
 ## Standardizing - How?
 
@@ -410,7 +410,6 @@ knitr::include_graphics("images/base.PNG")
     -   Takes small numbers and grows them
 
 $$10^1 = 10$$ $$10^2 = 100$$ $$10^3 = 1000$$ $$10^4 = 10000$$
-$$10^5 = 100000$$
 
 -   `exp` function in R
 
@@ -495,7 +494,7 @@ ELP %>% ggplot(aes(x = log(Freq), y = LogRT, label = Word)) +
 
 -   Makes $Y$ normal
 
-Can help with heteroskedasticity
+-   Can help with heteroskedasticity
 
 ## Outcome $Y$ Transformations
 
@@ -508,7 +507,7 @@ Can help with heteroskedasticity
 > Most transformations make interpretation difficult. log(Y) is the most
 > straightforward to interpret
 
-## Y Transformations: Age 
+## Y Transformations: Age
 
 -   A high respiratory rate can potentially indicate a respiratory
     infection in children. In order to determine what indicates a
@@ -571,7 +570,7 @@ $$
 
         -   if exp() \< 1, % decrease
 
-## Model
+## Y Model
 
 ```{r}
 #| eval: false
@@ -602,12 +601,12 @@ lm(Rate~Age, data=ex0824) %>% check_normality() %>%
 ```
 :::
 
-## Model
+## Log Y Model
 
 ```{r}
 # need to exponentiate the estimate! set to true
 lm(log(Rate)~Age, data=ex0824) %>%
-  tidy(conf.int = TRUE, exponentiate = FALSE) %>% kable() %>% 
+  tidy(conf.int = TRUE, exponentiate = FALSE) %>%
   knitr::kable() %>%
     kable_styling(font_size = 24) %>%
  row_spec(1:2, color = "white",
@@ -621,13 +620,26 @@ lm(log(Rate)~Age, data=ex0824) %>%
 
 ```
 
+## Log Y Model: Interpretation
+
+```{r}
+#| echo: false
+#| 
+
+lm(log(Rate)~Age, data=ex0824) %>%
+  tidy(conf.int = TRUE, exponentiate = TRUE) %>%  knitr::kable() %>%
+    kable_styling(font_size = 24) %>%
+ row_spec(1:2, color = "white",
+              background = "red")
+
+```
+
 ::: callout-important
 -   $b_0$: The mean respiratory rate for a new born child is expected to
     be 46.759 (exp{3.845}) breaths per minute.
 
--   $b_1$: For increase in age, the mean respiratory rate for a new born
-    child is expected to decrease by 2% (if exp \< 1 decrease, if exp \>
-    1 increase)
+-   $b_1$: For increase in age, the respiratory rate is expected to
+    decrease by 2%
 :::
 
 ## Model better?
@@ -734,7 +746,7 @@ decrease by 4.146 (-5.982\*log(2)) breaths per minute.
             power of the coefficient, subtract 1, and multiply by 100
 
         -   Example: For every 20% increase in the independent variable,
-            our dependent variable increases by about (1.20 0.198 -- 1)
+            our dependent variable increases by about (1.20\^0.198 -- 1)
             \* 100 = 3.7 percent
 
 ## When Should You Log Transform?
@@ -765,42 +777,26 @@ knitr::include_graphics("images/orthogonal-curves-1.png")
 
 ```
 
-## Memory example
+## Example
 
--   Memory and Time
-
--   13 subjects were asked to memorize a list of disconnected items
-
--   The subjects were then asked to recall the items at various times up
-    to a week later
+-   Happiness and Hours worked
 
 ```{r}
 
-mem_df <- tibble::tribble(
-   ~time, ~prop,
-      1L,  0.84,
-      5L,  0.71,
-     15L,  0.61,
-     30L,  0.56,
-     60L,  0.54,
-    120L,  0.47,
-    240L,  0.45,
-    480L,  0.38,
-    720L,  0.36,
-   1440L,  0.26,
-   2880L,   0.2,
-   5760L,  0.16,
-  10080L,  0.08
-  )
+data <- data.frame(hours=c(6, 9, 12, 14, 30, 35, 40, 47, 51, 55, 60),
+                   happiness=c(14, 28, 50, 70, 89, 94, 90, 75, 59, 44, 27))
+
+data %>%
+  kable()
 ```
 
-## Memory example
+## Example
 
 ```{r}
 #| fig-align: center
 #| 
 
-anim.1<- ggplot(mem_df, aes(time,prop))+
+anim.1<- ggplot(data, aes(hours,happiness))+
    geom_point(size=5)+
   theme_minimal(base_size=16)
 
@@ -816,20 +812,52 @@ Y_i = b_0 + b_1 x_i + b_2 x_i^2 + e_i.
 
 ```{r}
 
-log_df_quad <- mem_df%>%
-  mutate(time2=time^-2) # add in quadratic term to dataset
+log_df_quad <- data %>%
+  mutate(time2=hours^2) # add in quadratic term to dataset
 
 ```
 
 ## Polynomial regression
 
+-   Linear term
+
 ```{r}
   
-quad_lm <-lm(prop ~ time + time2,  data=log_df_quad)
+quad_lm <-lm(happiness ~ hours,  data=log_df_quad)
+
+```
+
+```{r}
+#| echo: false
 
  quad_lm %>% 
   tidy(conf.int = TRUE) %>%
   kable()
+ 
+ quad_lm %>%
+   glance() %>%
+   kable()
+```
+
+## Polynomial regression
+
+-   Quadratic
+
+```{r}
+quad_lm_sq <-lm(happiness ~ hours  + time2,  data=log_df_quad)
+
+```
+
+```{r}
+#| echo: false
+
+ quad_lm_sq %>% 
+  tidy(conf.int = TRUE) %>%
+  kable()
+ 
+ quad_lm_sq %>%
+   glance() %>%
+   kable()
 
 ```
 
@@ -839,7 +867,7 @@ quad_lm <-lm(prop ~ time + time2,  data=log_df_quad)
 #| fig-align: center
 #| 
 
-anim.1<- ggplot(mem_df, aes(time,prop))+
+anim.1<- ggplot(data, aes(hours,happiness))+
    geom_point(size=5)+
   geom_smooth(method = "lm", formula = y ~ x + I(x^2), se = FALSE)+
   theme_minimal(base_size=16)
@@ -847,7 +875,34 @@ anim.1<- ggplot(mem_df, aes(time,prop))+
 anim.1
 ```
 
-## Testing Polynomial Models
+## Multicollinearity
+
+-   Time and time\^2 are highly correlated
+
+```{r}
+check_collinearity(quad_lm_sq)
+```
+
+-   What can be done?
+
+    -   Centering!
+
+## Multicollinearity
+
+```{r}
+
+#center var and then square 
+
+x=log_df_quad %>%
+  mutate(hours_c=center(hours), time_sq=hours_c^2, time_sq_c=center(time_sq))
+
+quad_lm_sq <-lm(happiness ~ hours_c + time_sq_c,  data=x)
+
+check_collinearity(quad_lm_sq)
+
+```
+
+## Testing polynomial models
 
 -   Analyze all the terms in model
 
@@ -864,27 +919,29 @@ anim.1
 # forward
 
 # linear model
-lm_lin <- lm(prop ~ time,  data=mem_df)
+lm_lin <- lm(happiness ~ hours,  data=data)
 
 # linear + quad model 
-lm_quad <- lm(prop ~ time + time2,  data=log_df_quad)
+lm_quad <- lm(happiness ~ hours + time2,  data=log_df_quad)
 
 # model comparisons
 anova(lm_lin, lm_quad) %>%
   kable()
 ```
 
--   If *F* is significant, less pasimonious model (more DFs) is
+-   If *F* is significant, less parsimonious model (more DFs) is
     preferred
 
 -   If *F* is non-significant, more parsimonious model preferred
 
 ## Next time
 
--   Interactions
+-   After break
 
-    -   Continuous by categorical
+    -   Interactions
 
-    -   Continuous by continuous
+        -   Continuous x categorical
 
-    -   Categorical x categorical
+        -   Continuous x continuous
+
+        -   Categorical x categorical

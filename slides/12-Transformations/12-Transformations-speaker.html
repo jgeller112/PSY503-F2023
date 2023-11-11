@@ -11,8 +11,8 @@
   <meta name="generator" content="quarto-1.4.420">
 
   <meta name="author" content="Jason Geller, PH.D.(he/him)">
-  <meta name="dcterms.date" content="2023-11-10">
-  <title>LM: Transformations</title>
+  <meta name="dcterms.date" content="2023-11-11">
+  <title>Transformations</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -397,7 +397,7 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">LM: Transformations</h1>
+  <h1 class="title">Transformations</h1>
   <p class="subtitle">Princeton University</p>
 
 <div class="quarto-title-authors">
@@ -408,7 +408,7 @@ Jason Geller, PH.D.(he/him)
 </div>
 </div>
 
-  <p class="date">2023-11-10</p>
+  <p class="date">2023-11-11</p>
 </section>
 <section id="packages" class="slide level2">
 <h2>Packages</h2>
@@ -528,89 +528,35 @@ Jason Geller, PH.D.(he/him)
 <img data-src="12-Transformations_files/figure-revealjs/unnamed-chunk-5-1.png" class="quarto-figure-center r-stretch" style="width:100.0%"></section>
 <section id="centering" class="slide level2">
 <h2>Centering</h2>
-<blockquote>
-<p>Sometimes our data is <em>nonsensical</em> (e.g., Intercept when Age = 0)</p>
-</blockquote>
 <ul>
-<li>Centering changes the model so that 0 is mean/average of X</li>
+<li><p>Sometimes our data is <em>nonsensical</em></p>
+<ul>
+<li>Intercept when Age = 0</li>
+</ul></li>
+</ul>
+<!-- -->
+<ul>
+<li>Mean centering changes the model so that 0 is mean/average of X</li>
 </ul>
 
 <img data-src="12-Transformations_files/figure-revealjs/unnamed-chunk-6-1.png" class="quarto-figure-center r-stretch" style="width:100.0%"></section>
 <section id="centering---how" class="slide level2">
 <h2>Centering - How?</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># man way</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a>data <span class="sc">%&gt;%</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a>  <span class="fu">mutate</span>(<span class="at">age_c=</span>age<span class="sc">-</span><span class="fu">mean</span>(age))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 66 × 3
-     age pitch  age_c
-   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
- 1  66.4  166.   7.66
- 2  64.4  170.   5.60
- 3  61.9  172.   3.14
- 4  54.6  171.  -4.17
- 5  69.4  156.  10.7 
- 6  62.0  169.   3.23
- 7  67.5  175.   8.77
- 8  43.8  182. -15.0 
- 9  69.7  168.  11.0 
-10  68.2  156.   9.49
-# ℹ 56 more rows</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># data wizard from easystats</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a>data <span class="sc">%&gt;%</span></span>
-<span id="cb6-3"><a href="#cb6-3"></a>  <span class="fu">mutate</span>(<span class="at">age_c=</span>age<span class="sc">-</span><span class="fu">mean</span>(age), </span>
-<span id="cb6-4"><a href="#cb6-4"></a>         <span class="at">age_c_dw=</span>datawizard<span class="sc">::</span><span class="fu">center</span>(age))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 66 × 4
-     age pitch  age_c age_c_dw  
-   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dw_trnsf&gt;
- 1  66.4  166.   7.66   7.664545
- 2  64.4  170.   5.60   5.604545
- 3  61.9  172.   3.14   3.144545
- 4  54.6  171.  -4.17  -4.165455
- 5  69.4  156.  10.7   10.664545
- 6  62.0  169.   3.23   3.234545
- 7  67.5  175.   8.77   8.774545
- 8  43.8  182. -15.0  -14.985455
- 9  69.7  168.  11.0   10.964545
-10  68.2  156.   9.49   9.494545
-# ℹ 56 more rows</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 66 × 3
-     age pitch  age_c
-   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
- 1  66.4  166.   7.66
- 2  64.4  170.   5.60
- 3  61.9  172.   3.14
- 4  54.6  171.  -4.17
- 5  69.4  156.  10.7 
- 6  62.0  169.   3.23
- 7  67.5  175.   8.77
- 8  43.8  182. -15.0 
- 9  69.7  168.  11.0 
-10  68.2  156.   9.49
-# ℹ 56 more rows</code></pre>
-</div>
-</div>
 </section>
 <section id="centering---how-1" class="slide level2">
 <h2>Centering - How?</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>df <span class="ot">&lt;-</span> <span class="fu">mutate</span>(data,</span>
-<span id="cb10-2"><a href="#cb10-2"></a>             <span class="at">age_c =</span> age <span class="sc">-</span> <span class="fu">mean</span>(age, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="co"># center</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>df <span class="ot">&lt;-</span> <span class="fu">mutate</span>(data,</span>
+<span id="cb4-2"><a href="#cb4-2"></a>             <span class="at">age_c =</span> age <span class="sc">-</span> <span class="fu">mean</span>(age, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="co"># center</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">library</span>(datawizard) <span class="co"># package to center and standardize</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a></span>
-<span id="cb11-3"><a href="#cb11-3"></a>df_wiz <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> </span>
-<span id="cb11-4"><a href="#cb11-4"></a>  <span class="fu">mutate</span>(<span class="at">age_c =</span> datawizard<span class="sc">::</span><span class="fu">center</span>(age))</span>
-<span id="cb11-5"><a href="#cb11-5"></a></span>
-<span id="cb11-6"><a href="#cb11-6"></a><span class="fu">head</span>(df_wiz) <span class="sc">%&gt;%</span></span>
-<span id="cb11-7"><a href="#cb11-7"></a>  <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">library</span>(datawizard) <span class="co"># package to center and standardize</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a></span>
+<span id="cb5-3"><a href="#cb5-3"></a>df_wiz <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> </span>
+<span id="cb5-4"><a href="#cb5-4"></a>  <span class="fu">mutate</span>(<span class="at">age_c =</span> datawizard<span class="sc">::</span><span class="fu">center</span>(age))</span>
+<span id="cb5-5"><a href="#cb5-5"></a></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="fu">head</span>(df_wiz) <span class="sc">%&gt;%</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a>  <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table data-quarto-postprocess="true">
 <thead>
@@ -670,12 +616,12 @@ Jason Geller, PH.D.(he/him)
 <section id="centering-1" class="slide level2">
 <h2>Centering</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">lm</span>(pitch<span class="sc">~</span>age_c, <span class="at">data=</span>df) <span class="sc">%&gt;%</span> </span>
-<span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">tidy</span>(<span class="at">conf.int=</span><span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb12-3"><a href="#cb12-3"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb12-4"><a href="#cb12-4"></a>    <span class="fu">kable_styling</span>(<span class="at">font_size =</span> <span class="dv">24</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb12-5"><a href="#cb12-5"></a> <span class="fu">row_spec</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">color =</span> <span class="st">"white"</span>,</span>
-<span id="cb12-6"><a href="#cb12-6"></a>              <span class="at">background =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">lm</span>(pitch<span class="sc">~</span>age_c, <span class="at">data=</span>df) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-2"><a href="#cb6-2"></a>  <span class="fu">tidy</span>(<span class="at">conf.int=</span><span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a>    <span class="fu">kable_styling</span>(<span class="at">font_size =</span> <span class="dv">24</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a> <span class="fu">row_spec</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">color =</span> <span class="st">"white"</span>,</span>
+<span id="cb6-6"><a href="#cb6-6"></a>              <span class="at">background =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table" data-quarto-postprocess="true" style="font-size: 24px; margin-left: auto; margin-right: auto;">
 <thead>
@@ -714,8 +660,20 @@ Jason Geller, PH.D.(he/him)
 
 </div>
 </div>
-<p>b0: the value of y when x at mean</p>
-<p>b_1: A 1 unit increase in age leads to a -.69 decrease in pitch perception .</p>
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Important</strong></p>
+</div>
+<div class="callout-content">
+<p><span class="math inline">\(b_0\)</span>:</p>
+<p><span class="math inline">\(b_1\)</span>:</p>
+</div>
+</div>
+</div>
 </section>
 <section id="centering-2" class="slide level2">
 <h2>Centering</h2>
@@ -739,64 +697,52 @@ Jason Geller, PH.D.(he/him)
 <ul>
 <li>For every one unit increase in X, there will be b unit increase in Y</li>
 </ul></li>
-<li><p><span class="math inline">\(\beta\)</span> = standardized regression coefficient</p>
+<li><p><span class="math inline">\(\beta\)</span> = Standardized regression coefficient</p>
 <ul>
 <li>X in standard deviation units</li>
-<li>For every one SD increase in X, there will be change in Y</li>
+<li>For every one SD increase in X, there will be b change in Y</li>
 </ul></li>
 </ul>
 </section>
 <section id="standardize-predictors" class="slide level2">
 <h2>Standardize Predictors</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
 <ul>
 <li><p>Sometimes we want to put our variables on the same metric</p>
 <ul>
-<li><p>Standarding the coefs can allow for comparison within models</p>
+<li><p>Standardizing the coefs can allow for comparison within models</p>
 <ul>
 <li>Get’s rid of the units of X</li>
+<li>Sometimes used a measure of importance</li>
 </ul></li>
 </ul></li>
-<li><p>Dividing centered mean by $\sigma$</p>
+<li><p>Dividing centered mean by <span class="math inline">\(\sigma\)</span></p>
 <ul>
 <li>z scoring!</li>
 </ul></li>
 </ul>
-
-<img data-src="12-Transformations_files/figure-revealjs/unnamed-chunk-11-1.png" class="quarto-figure-center r-stretch" style="width:100.0%"></section>
+</div><div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<p><img data-src="12-Transformations_files/figure-revealjs/unnamed-chunk-11-1.png" class="quarto-figure-center" width="1152"></p>
+</div>
+</div>
+</div>
+</div>
+</section>
 <section id="standardizing---how" class="slide level2">
 <h2>Standardizing - How?</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>data <span class="sc">%&gt;%</span></span>
-<span id="cb13-2"><a href="#cb13-2"></a>  <span class="fu">mutate</span>(<span class="at">age_z=</span>(age<span class="sc">-</span><span class="fu">mean</span>(age))<span class="sc">/</span><span class="fu">sd</span>(age), </span>
-<span id="cb13-3"><a href="#cb13-3"></a>         <span class="at">age_z_dw=</span>datawizard<span class="sc">::</span><span class="fu">standardize</span>(age), </span>
-<span id="cb13-4"><a href="#cb13-4"></a>         <span class="at">age_z_base=</span><span class="fu">scale</span>(age))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 66 × 6
-     age pitch  age_c  age_z age_z_dw   age_z_base[,1]
-   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dw_trnsf&gt;          &lt;dbl&gt;
- 1  66.4  166.   7.66  0.578  0.5783796          0.578
- 2  64.4  170.   5.60  0.423  0.4229285          0.423
- 3  61.9  172.   3.14  0.237  0.2372927          0.237
- 4  54.6  171.  -4.17 -0.314 -0.3143323         -0.314
- 5  69.4  156.  10.7   0.805  0.8047647          0.805
- 6  62.0  169.   3.23  0.244  0.2440843          0.244
- 7  67.5  175.   8.77  0.662  0.6621421          0.662
- 8  43.8  182. -15.0  -1.13  -1.1308278         -1.13 
- 9  69.7  168.  11.0   0.827  0.8274032          0.827
-10  68.2  156.   9.49  0.716  0.7164745          0.716
-# ℹ 56 more rows</code></pre>
-</div>
-</div>
 </section>
 <section id="standardizing---how-1" class="slide level2">
 <h2>Standardizing - How?</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>df_stand <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
-<span id="cb15-2"><a href="#cb15-2"></a>  <span class="fu">mutate</span>(<span class="at">age_z =</span> age_c <span class="sc">/</span> <span class="fu">sd</span>(age, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))<span class="co"># standardize z score</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>df_stand <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a>  <span class="fu">mutate</span>(<span class="at">age_z =</span> age_c <span class="sc">/</span> <span class="fu">sd</span>(age, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))<span class="co"># standardize z score</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>df_wiz <span class="ot">&lt;-</span> <span class="fu">mutate</span>(df_stand,</span>
-<span id="cb16-2"><a href="#cb16-2"></a>             <span class="at">age_z_es =</span> datawizard<span class="sc">::</span><span class="fu">standardize</span>(age))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>df_wiz <span class="ot">&lt;-</span> <span class="fu">mutate</span>(df_stand,</span>
+<span id="cb8-2"><a href="#cb8-2"></a>             <span class="at">age_z_es =</span> datawizard<span class="sc">::</span><span class="fu">standardize</span>(age))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
@@ -863,12 +809,12 @@ Jason Geller, PH.D.(he/him)
 <section id="standardized-model" class="slide level2">
 <h2>Standardized model</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">lm</span>(pitch<span class="sc">~</span>age_z, <span class="at">data=</span>df_stand)<span class="sc">%&gt;%</span> </span>
-<span id="cb17-2"><a href="#cb17-2"></a>  <span class="fu">tidy</span>(<span class="at">conf.int=</span><span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb17-3"><a href="#cb17-3"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb17-4"><a href="#cb17-4"></a>    <span class="fu">kable_styling</span>(<span class="at">font_size =</span> <span class="dv">24</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb17-5"><a href="#cb17-5"></a> <span class="fu">row_spec</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">color =</span> <span class="st">"white"</span>,</span>
-<span id="cb17-6"><a href="#cb17-6"></a>              <span class="at">background =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">lm</span>(pitch<span class="sc">~</span>age_z, <span class="at">data=</span>df_stand)<span class="sc">%&gt;%</span> </span>
+<span id="cb9-2"><a href="#cb9-2"></a>  <span class="fu">tidy</span>(<span class="at">conf.int=</span><span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a>    <span class="fu">kable_styling</span>(<span class="at">font_size =</span> <span class="dv">24</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a> <span class="fu">row_spec</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">color =</span> <span class="st">"white"</span>,</span>
+<span id="cb9-6"><a href="#cb9-6"></a>              <span class="at">background =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table" data-quarto-postprocess="true" style="font-size: 24px; margin-left: auto; margin-right: auto;">
 <thead>
@@ -916,8 +862,8 @@ Jason Geller, PH.D.(he/him)
 <p><strong>Important</strong></p>
 </div>
 <div class="callout-content">
-<p><span class="math inline">\(\beta_0\)</span>: The value of Y when X is at it’s mean</p>
-<p><span class="math inline">\(\beta_1\)</span>: 1 SD change in X leads to a 9.19 decease in y</p>
+<p><span class="math inline">\(\beta_0\)</span>:</p>
+<p><span class="math inline">\(\beta_1\)</span>:</p>
 </div>
 </div>
 </div>
@@ -929,12 +875,12 @@ Jason Geller, PH.D.(he/him)
 <div class="tab-content">
 <div id="tabset-1-1">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="fu">lm</span>(pitch<span class="sc">~</span>age, <span class="at">data=</span>df_stand) <span class="sc">%&gt;%</span></span>
-<span id="cb18-2"><a href="#cb18-2"></a>   <span class="fu">tidy</span>(<span class="at">conf.int=</span><span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb18-3"><a href="#cb18-3"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb18-4"><a href="#cb18-4"></a>    <span class="fu">kable_styling</span>(<span class="at">font_size =</span> <span class="dv">24</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb18-5"><a href="#cb18-5"></a> <span class="fu">row_spec</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">color =</span> <span class="st">"white"</span>,</span>
-<span id="cb18-6"><a href="#cb18-6"></a>              <span class="at">background =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">lm</span>(pitch<span class="sc">~</span>age, <span class="at">data=</span>df_stand) <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a>   <span class="fu">tidy</span>(<span class="at">conf.int=</span><span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a>    <span class="fu">kable_styling</span>(<span class="at">font_size =</span> <span class="dv">24</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a> <span class="fu">row_spec</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">color =</span> <span class="st">"white"</span>,</span>
+<span id="cb10-6"><a href="#cb10-6"></a>              <span class="at">background =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table" data-quarto-postprocess="true" style="font-size: 24px; margin-left: auto; margin-right: auto;">
 <thead>
@@ -976,12 +922,12 @@ Jason Geller, PH.D.(he/him)
 </div>
 <div id="tabset-1-2">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">lm</span>(pitch<span class="sc">~</span>age_c, <span class="at">data=</span>df_stand) <span class="sc">%&gt;%</span> </span>
-<span id="cb19-2"><a href="#cb19-2"></a>  <span class="fu">tidy</span>(<span class="at">conf.int=</span><span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb19-3"><a href="#cb19-3"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb19-4"><a href="#cb19-4"></a>    <span class="fu">kable_styling</span>(<span class="at">font_size =</span> <span class="dv">24</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb19-5"><a href="#cb19-5"></a> <span class="fu">row_spec</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">color =</span> <span class="st">"white"</span>,</span>
-<span id="cb19-6"><a href="#cb19-6"></a>              <span class="at">background =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">lm</span>(pitch<span class="sc">~</span>age_c, <span class="at">data=</span>df_stand) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-2"><a href="#cb11-2"></a>  <span class="fu">tidy</span>(<span class="at">conf.int=</span><span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb11-4"><a href="#cb11-4"></a>    <span class="fu">kable_styling</span>(<span class="at">font_size =</span> <span class="dv">24</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a> <span class="fu">row_spec</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">color =</span> <span class="st">"white"</span>,</span>
+<span id="cb11-6"><a href="#cb11-6"></a>              <span class="at">background =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table" data-quarto-postprocess="true" style="font-size: 24px; margin-left: auto; margin-right: auto;">
 <thead>
@@ -1023,12 +969,12 @@ Jason Geller, PH.D.(he/him)
 </div>
 <div id="tabset-1-3">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">lm</span>(pitch<span class="sc">~</span>age_z, <span class="at">data=</span>df_stand) <span class="sc">%&gt;%</span> </span>
-<span id="cb20-2"><a href="#cb20-2"></a>  <span class="fu">tidy</span>(<span class="at">conf.int=</span><span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb20-3"><a href="#cb20-3"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb20-4"><a href="#cb20-4"></a>    <span class="fu">kable_styling</span>(<span class="at">font_size =</span> <span class="dv">24</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb20-5"><a href="#cb20-5"></a> <span class="fu">row_spec</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">color =</span> <span class="st">"white"</span>,</span>
-<span id="cb20-6"><a href="#cb20-6"></a>              <span class="at">background =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">lm</span>(pitch<span class="sc">~</span>age_z, <span class="at">data=</span>df_stand) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">tidy</span>(<span class="at">conf.int=</span><span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb12-4"><a href="#cb12-4"></a>    <span class="fu">kable_styling</span>(<span class="at">font_size =</span> <span class="dv">24</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a> <span class="fu">row_spec</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">color =</span> <span class="st">"white"</span>,</span>
+<span id="cb12-6"><a href="#cb12-6"></a>              <span class="at">background =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table" data-quarto-postprocess="true" style="font-size: 24px; margin-left: auto; margin-right: auto;">
 <thead>
@@ -1077,7 +1023,7 @@ Jason Geller, PH.D.(he/him)
 <li><p>Centering (intercept)</p></li>
 <li><p>Standardization (X)</p></li>
 </ul></li>
-<li><p>Does not change statistical inference</p></li>
+<li><p>Does not change statistical inference or model</p></li>
 </ul>
 </div>
 </section></section>
@@ -1123,15 +1069,18 @@ Jason Geller, PH.D.(he/him)
 </div>
 
 <img data-src="images/base.PNG" class="quarto-figure-center r-stretch" style="width:90.0%"></section>
-<section id="logathimthic-transformations" class="slide level2">
-<h2>Logathimthic transformations</h2>
+<section id="logarithmic-transformations-2" class="slide level2">
+<h2>Logarithmic transformations</h2>
 <ul>
 <li><p>Exponentiation</p>
 <ul>
 <li>Takes small numbers and grows them</li>
 </ul></li>
 </ul>
-<p><span class="math display">\[10^1 = 10\]</span> <span class="math display">\[10^2 = 100\]</span> <span class="math display">\[10^3 = 1000\]</span> <span class="math display">\[10^4 = 10000\]</span> <span class="math display">\[10^5 = 100000\]</span></p>
+<p><span class="math display">\[10^1 = 10\]</span> <span class="math display">\[10^2 = 100\]</span> <span class="math display">\[10^3 = 1000\]</span> <span class="math display">\[10^4 = 10000\]</span></p>
+<ul>
+<li><code>exp</code> function in R</li>
+</ul>
 </section>
 <section id="log-transformations" class="slide level2">
 <h2>Log Transformations</h2>
@@ -1146,6 +1095,9 @@ Jason Geller, PH.D.(he/him)
 </ul></li>
 </ul>
 <p><span class="math display">\[2.30 = log(10)\]</span> <span class="math display">\[4.61 = log(100)\]</span> <span class="math display">\[6.91 = log(1000)\]</span> <span class="math display">\[11.51 = log(10000)\]</span></p>
+<ul>
+<li><code>log</code> function in R</li>
+</ul>
 </section>
 <section id="log-transformations-1" class="slide level2">
 <h2>Log transformations</h2>
@@ -1157,22 +1109,22 @@ Jason Geller, PH.D.(he/him)
 </ul></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="co"># time in ms</span></span>
-<span id="cb21-2"><a href="#cb21-2"></a>RTs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">600</span>, <span class="dv">650</span>, <span class="dv">700</span>, <span class="dv">1000</span>, <span class="dv">4000</span>)</span>
-<span id="cb21-3"><a href="#cb21-3"></a></span>
-<span id="cb21-4"><a href="#cb21-4"></a>logRTs <span class="ot">&lt;-</span> <span class="fu">log</span>(RTs) <span class="co"># base = 2.718282</span></span>
-<span id="cb21-5"><a href="#cb21-5"></a></span>
-<span id="cb21-6"><a href="#cb21-6"></a>logRTs <span class="co"># log rts </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="co"># time in ms</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a>RTs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">600</span>, <span class="dv">650</span>, <span class="dv">700</span>, <span class="dv">1000</span>, <span class="dv">4000</span>)</span>
+<span id="cb13-3"><a href="#cb13-3"></a></span>
+<span id="cb13-4"><a href="#cb13-4"></a>logRTs <span class="ot">&lt;-</span> <span class="fu">log</span>(RTs) <span class="co"># base = 2.718282</span></span>
+<span id="cb13-5"><a href="#cb13-5"></a></span>
+<span id="cb13-6"><a href="#cb13-6"></a>logRTs <span class="co"># log rts </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 6.396930 6.476972 6.551080 6.907755 8.294050</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">exp</span>(logRTs) <span class="co"># get ms numbers back </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">exp</span>(logRTs) <span class="co"># get ms numbers back </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1]  600  650  700 1000 4000</code></pre>
 </div>
 </div>
 </section>
-<section id="logarithmic-transformations-2" class="slide level2">
+<section id="logarithmic-transformations-3" class="slide level2">
 <h2>Logarithmic transformations</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
@@ -1195,7 +1147,7 @@ Jason Geller, PH.D.(he/him)
 <ul>
 <li><p>Makes <span class="math inline">\(Y\)</span> more linear</p></li>
 <li><p>Makes <span class="math inline">\(Y\)</span> normal</p></li>
-<li><p>Can help with Heteroscadacity</p></li>
+<li><p>Can help with heteroskedasticity</p></li>
 </ul>
 </section>
 <section id="outcome-y-transformations-1" class="slide level2">
@@ -1209,8 +1161,8 @@ Jason Geller, PH.D.(he/him)
 <p>Most transformations make interpretation difficult. log(Y) is the most straightforward to interpret</p>
 </blockquote>
 </section>
-<section id="y-transformations-data" class="slide level2">
-<h2>Y Transformations: Data</h2>
+<section id="y-transformations-age" class="slide level2">
+<h2>Y Transformations: Age</h2>
 <ul>
 <li><p>A high respiratory rate can potentially indicate a respiratory infection in children. In order to determine what indicates a “high”rate, we first want to understand the relationship between a child’s age and their respiratory rate</p>
 <ul>
@@ -1222,8 +1174,8 @@ Jason Geller, PH.D.(he/him)
 </ul></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="fu">library</span>(Sleuth3)</span>
-<span id="cb25-2"><a href="#cb25-2"></a><span class="fu">data</span>(ex0824)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">library</span>(Sleuth3)</span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="fu">data</span>(ex0824)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="rate-vs.-age" class="slide level2">
@@ -1233,7 +1185,7 @@ Jason Geller, PH.D.(he/him)
 <section id="log-transformation-on-y" class="slide level2">
 <h2>Log transformation on Y</h2>
 <ul>
-<li>If we apply a log transformation to the response variable, we want to estimate the parameters for the model...</li>
+<li>If we apply a log transformation to the response variable, we want to estimate the parameters for the model</li>
 </ul>
 <p><span class="math display">\[
 \widehat{\log(Y)} = b_0 + b_1 X
@@ -1251,18 +1203,22 @@ y = \exp\{b_0 + b_1 X\} = \exp\{b_0\}\exp\{b_1X\}
 <li><p>Dependent/response variable</p>
 <ul>
 <li><p>Exponentiate the coefficient, subtract one from this number, and multiply by 100 to get percentage</p></li>
-<li><p>For every one-unit increase in predictor, our dependent variable increases by about %</p></li>
+<li><p>For every one-unit difference in predictor, our dependent variable increases/decreases by about %</p>
+<ul>
+<li><p>If exp() &gt; 1, % increase</p></li>
+<li><p>if exp() &lt; 1, % decrease</p></li>
+</ul></li>
 </ul></li>
 </ul>
 </section>
-<section id="model" class="slide level2">
-<h2>Model</h2>
+<section id="y-model" class="slide level2">
+<h2>Y Model</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="fu">lm</span>(Rate<span class="sc">~</span>Age, <span class="at">data=</span>ex0824) <span class="sc">%&gt;%</span></span>
-<span id="cb26-2"><a href="#cb26-2"></a>  <span class="fu">tidy</span>(<span class="at">conf.int =</span> <span class="cn">TRUE</span>, <span class="at">exponentiate =</span> <span class="cn">FALSE</span>) <span class="co"># note this </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="fu">lm</span>(Rate<span class="sc">~</span>Age, <span class="at">data=</span>ex0824) <span class="sc">%&gt;%</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a>  <span class="fu">tidy</span>(<span class="at">conf.int =</span> <span class="cn">TRUE</span>, <span class="at">exponentiate =</span> <span class="cn">FALSE</span>) <span class="co"># note this </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="panel-tabset">
-<ul id="tabset-2" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-2-1">Heterpscedasticity</a></li><li><a href="#tabset-2-2">Normality</a></li></ul>
+<ul id="tabset-2" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-2-1">Heteroscedasticity</a></li><li><a href="#tabset-2-2">Normality</a></li></ul>
 <div class="tab-content">
 <div id="tabset-2-1">
 <div class="cell">
@@ -1281,14 +1237,18 @@ y = \exp\{b_0 + b_1 X\} = \exp\{b_0\}\exp\{b_1X\}
 </div>
 </div>
 </section>
-<section id="model-1" class="slide level2">
-<h2>Model</h2>
+<section id="log-y-model" class="slide level2">
+<h2>Log Y Model</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="co"># need to exponentiate the estimate! set to true</span></span>
-<span id="cb27-2"><a href="#cb27-2"></a><span class="fu">lm</span>(<span class="fu">log</span>(Rate)<span class="sc">~</span>Age, <span class="at">data=</span>ex0824) <span class="sc">%&gt;%</span></span>
-<span id="cb27-3"><a href="#cb27-3"></a>  <span class="fu">tidy</span>(<span class="at">conf.int =</span> <span class="cn">TRUE</span>, <span class="at">exponentiate =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="co"># need to exponentiate the estimate! set to true</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="fu">lm</span>(<span class="fu">log</span>(Rate)<span class="sc">~</span>Age, <span class="at">data=</span>ex0824) <span class="sc">%&gt;%</span></span>
+<span id="cb19-3"><a href="#cb19-3"></a>  <span class="fu">tidy</span>(<span class="at">conf.int =</span> <span class="cn">TRUE</span>, <span class="at">exponentiate =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb19-4"><a href="#cb19-4"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb19-5"><a href="#cb19-5"></a>    <span class="fu">kable_styling</span>(<span class="at">font_size =</span> <span class="dv">24</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb19-6"><a href="#cb19-6"></a> <span class="fu">row_spec</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">color =</span> <span class="st">"white"</span>,</span>
+<span id="cb19-7"><a href="#cb19-7"></a>              <span class="at">background =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<table data-quarto-postprocess="true">
+<table class="table" data-quarto-postprocess="true" style="font-size: 24px; margin-left: auto; margin-right: auto;">
 <thead>
 <tr class="header">
 <th style="text-align: left;" data-quarto-table-cell-role="th">term</th>
@@ -1302,22 +1262,106 @@ y = \exp\{b_0 + b_1 X\} = \exp\{b_0\}\exp\{b_1X\}
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">(Intercept)</td>
-<td style="text-align: right;">46.7642275</td>
-<td style="text-align: right;">0.0126277</td>
-<td style="text-align: right;">304.49984</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">45.6188072</td>
-<td style="text-align: right;">47.9384076</td>
+<td style="text-align: left; color: white !important; background-color: red !important;">(Intercept)</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">3.845118</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">0.0126277</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">304.49984</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">0</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">3.8203201</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">3.8699170</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Age</td>
-<td style="text-align: right;">0.9811706</td>
-<td style="text-align: right;">0.0007357</td>
-<td style="text-align: right;">-25.83888</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0.9797541</td>
-<td style="text-align: right;">0.9825891</td>
+<td style="text-align: left; color: white !important; background-color: red !important;">Age</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">-0.019009</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">0.0007357</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">-25.83888</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">0</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">-0.0204537</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">-0.0175642</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">lm</span>(<span class="fu">log</span>(Rate)<span class="sc">~</span>Age, <span class="at">data=</span>ex0824) <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a>  <span class="fu">tidy</span>(<span class="at">conf.int =</span> <span class="cn">TRUE</span>, <span class="at">exponentiate =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span>  knitr<span class="sc">::</span><span class="fu">kable</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb20-3"><a href="#cb20-3"></a>    <span class="fu">kable_styling</span>(<span class="at">font_size =</span> <span class="dv">24</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb20-4"><a href="#cb20-4"></a> <span class="fu">row_spec</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">color =</span> <span class="st">"white"</span>,</span>
+<span id="cb20-5"><a href="#cb20-5"></a>              <span class="at">background =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table" data-quarto-postprocess="true" style="font-size: 24px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">term</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">estimate</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">std.error</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">statistic</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">p.value</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">conf.low</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">conf.high</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left; color: white !important; background-color: red !important;">(Intercept)</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">46.7642275</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">0.0126277</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">304.49984</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">0</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">45.6188072</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">47.9384076</td>
+</tr>
+<tr class="even">
+<td style="text-align: left; color: white !important; background-color: red !important;">Age</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">0.9811706</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">0.0007357</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">-25.83888</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">0</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">0.9797541</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">0.9825891</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+</section>
+<section id="log-y-model-interpretation" class="slide level2">
+<h2>Log Y Model: Interpretation</h2>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table" data-quarto-postprocess="true" style="font-size: 24px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">term</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">estimate</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">std.error</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">statistic</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">p.value</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">conf.low</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">conf.high</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left; color: white !important; background-color: red !important;">(Intercept)</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">46.7642275</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">0.0126277</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">304.49984</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">0</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">45.6188072</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">47.9384076</td>
+</tr>
+<tr class="even">
+<td style="text-align: left; color: white !important; background-color: red !important;">Age</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">0.9811706</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">0.0007357</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">-25.83888</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">0</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">0.9797541</td>
+<td style="text-align: right; color: white !important; background-color: red !important;">0.9825891</td>
 </tr>
 </tbody>
 </table>
@@ -1336,7 +1380,7 @@ y = \exp\{b_0 + b_1 X\} = \exp\{b_0\}\exp\{b_1X\}
 <div class="callout-content">
 <ul>
 <li><p><span class="math inline">\(b_0\)</span>: The mean respiratory rate for a new born child is expected to be 46.759 (exp{3.845}) breaths per minute.</p></li>
-<li><p><span class="math inline">\(b_0\)</span>: The mean respiratory rate for a new born child is expected to be 46.759 (exp{3.845}) breaths per minute.</p></li>
+<li><p><span class="math inline">\(b_1\)</span>: For increase in age, the respiratory rate is expected to decrease by 2%</p></li>
 </ul>
 </div>
 </div>
@@ -1349,21 +1393,21 @@ y = \exp\{b_0 + b_1 X\} = \exp\{b_0\}\exp\{b_1X\}
 <div class="tab-content">
 <div id="tabset-3-1">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="fu">lm</span>(<span class="fu">log</span>(Rate)<span class="sc">~</span>Age, <span class="at">data=</span>ex0824) <span class="sc">%&gt;%</span></span>
-<span id="cb28-2"><a href="#cb28-2"></a>  <span class="fu">check_heteroscedasticity</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb28-3"><a href="#cb28-3"></a>  <span class="fu">plot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">lm</span>(<span class="fu">log</span>(Rate)<span class="sc">~</span>Age, <span class="at">data=</span>ex0824) <span class="sc">%&gt;%</span></span>
+<span id="cb21-2"><a href="#cb21-2"></a>  <span class="fu">check_heteroscedasticity</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb21-3"><a href="#cb21-3"></a>  <span class="fu">plot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img data-src="12-Transformations_files/figure-revealjs/unnamed-chunk-31-1.png" class="quarto-figure-center" width="1152"></p>
+<p><img data-src="12-Transformations_files/figure-revealjs/unnamed-chunk-32-1.png" class="quarto-figure-center" width="1152"></p>
 </div>
 </div>
 </div>
 <div id="tabset-3-2">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="fu">lm</span>(<span class="fu">log</span>(Rate)<span class="sc">~</span>Age, <span class="at">data=</span>ex0824) <span class="sc">%&gt;%</span></span>
-<span id="cb29-2"><a href="#cb29-2"></a>  <span class="fu">check_normality</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb29-3"><a href="#cb29-3"></a>  <span class="fu">plot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">lm</span>(<span class="fu">log</span>(Rate)<span class="sc">~</span>Age, <span class="at">data=</span>ex0824) <span class="sc">%&gt;%</span></span>
+<span id="cb22-2"><a href="#cb22-2"></a>  <span class="fu">check_normality</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb22-3"><a href="#cb22-3"></a>  <span class="fu">plot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img data-src="12-Transformations_files/figure-revealjs/unnamed-chunk-32-1.png" class="quarto-figure-center" width="1152"></p>
+<p><img data-src="12-Transformations_files/figure-revealjs/unnamed-chunk-33-1.png" class="quarto-figure-center" width="1152"></p>
 </div>
 </div>
 </div>
@@ -1374,12 +1418,11 @@ y = \exp\{b_0 + b_1 X\} = \exp\{b_0\}\exp\{b_1X\}
 <h2><strong>Log Transformation on X</strong></h2>
 
 <img data-src="https://sta210-sp21.netlify.app/slides/13-transformations_files/figure-html/unnamed-chunk-23-1.png" class="quarto-figure-center r-stretch"><ul>
-<li>Try a transformation on X if the scatterplot shows some curvature but the variance is constant for all values of X</li>
+<li><p>Try a transformation on X if the scatterplot shows some curvature but the variance is constant for all values of X</p>
+<ul>
 <li>Makes <span class="math inline">\(X\)</span> more linear</li>
 <li>Makes <span class="math inline">\(X\)</span> more normal</li>
-<li>Does not fix heteroscedasticity
-<ul>
-<li>Lets plot our memory data</li>
+<li>Does not fix heteroscedasticity</li>
 </ul></li>
 </ul>
 </section>
@@ -1418,12 +1461,12 @@ y = \exp\{b_0 + b_1 X\} = \exp\{b_0\}\exp\{b_1X\}
 <section id="x-transformation-model" class="slide level2">
 <h2>X transformation model</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="fu">lm</span>(Rate<span class="sc">~</span><span class="fu">log</span>(Age), <span class="at">data=</span>ex0824) <span class="sc">%&gt;%</span></span>
-<span id="cb30-2"><a href="#cb30-2"></a>  <span class="fu">tidy</span>(<span class="at">conf.int =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb30-3"><a href="#cb30-3"></a>   knitr<span class="sc">::</span><span class="fu">kable</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb30-4"><a href="#cb30-4"></a>    <span class="fu">kable_styling</span>(<span class="at">font_size =</span> <span class="dv">24</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb30-5"><a href="#cb30-5"></a> <span class="fu">row_spec</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">color =</span> <span class="st">"white"</span>,</span>
-<span id="cb30-6"><a href="#cb30-6"></a>              <span class="at">background =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">lm</span>(Rate<span class="sc">~</span><span class="fu">log</span>(Age), <span class="at">data=</span>ex0824) <span class="sc">%&gt;%</span></span>
+<span id="cb23-2"><a href="#cb23-2"></a>  <span class="fu">tidy</span>(<span class="at">conf.int =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb23-3"><a href="#cb23-3"></a>   knitr<span class="sc">::</span><span class="fu">kable</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb23-4"><a href="#cb23-4"></a>    <span class="fu">kable_styling</span>(<span class="at">font_size =</span> <span class="dv">24</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb23-5"><a href="#cb23-5"></a> <span class="fu">row_spec</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">color =</span> <span class="st">"white"</span>,</span>
+<span id="cb23-6"><a href="#cb23-6"></a>              <span class="at">background =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table" data-quarto-postprocess="true" style="font-size: 24px; margin-left: auto; margin-right: auto;">
 <thead>
@@ -1483,7 +1526,7 @@ y = \exp\{b_0 + b_1 X\} = \exp\{b_0\}\exp\{b_1X\}
 <li><p>Interpret the coefficient as the percent increase in the dependent variable for every 1% increase in the independent variable</p>
 <ul>
 <li><p>Example: the coefficient is 0.198. For every 1% increase in the independent variable, our dependent variable increases by about 0.20%. For x percent increase, calculate 1.x to the power of the coefficient, subtract 1, and multiply by 100</p></li>
-<li><p>Example: For every 20% increase in the independent variable, our dependent variable increases by about (1.20 0.198 – 1) * 100 = 3.7 percent</p></li>
+<li><p>Example: For every 20% increase in the independent variable, our dependent variable increases by about (1.20^0.198 – 1) * 100 = 3.7 percent</p></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -1512,61 +1555,107 @@ y = \exp\{b_0 + b_1 X\} = \exp\{b_0\}\exp\{b_1X\}
 </ul>
 
 <img data-src="images/orthogonal-curves-1.png" class="quarto-figure-center r-stretch" style="width:100.0%"></section>
-<section id="memory-example" class="slide level2">
-<h2>Memory example</h2>
+<section id="example" class="slide level2">
+<h2>Example</h2>
 <ul>
-<li><p>Memory and Time</p></li>
-<li><p>13 subjects were asked to memorize a list of disconnected items</p></li>
-<li><p>The subjects were then asked to recall the items at various times up to a week later</p></li>
+<li>Happiness and Hours worked</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>mem_df <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
-<span id="cb31-2"><a href="#cb31-2"></a>   <span class="sc">~</span>time, <span class="sc">~</span>prop,</span>
-<span id="cb31-3"><a href="#cb31-3"></a>      <span class="dv">1</span>L,  <span class="fl">0.84</span>,</span>
-<span id="cb31-4"><a href="#cb31-4"></a>      <span class="dv">5</span>L,  <span class="fl">0.71</span>,</span>
-<span id="cb31-5"><a href="#cb31-5"></a>     <span class="dv">15</span>L,  <span class="fl">0.61</span>,</span>
-<span id="cb31-6"><a href="#cb31-6"></a>     <span class="dv">30</span>L,  <span class="fl">0.56</span>,</span>
-<span id="cb31-7"><a href="#cb31-7"></a>     <span class="dv">60</span>L,  <span class="fl">0.54</span>,</span>
-<span id="cb31-8"><a href="#cb31-8"></a>    <span class="dv">120</span>L,  <span class="fl">0.47</span>,</span>
-<span id="cb31-9"><a href="#cb31-9"></a>    <span class="dv">240</span>L,  <span class="fl">0.45</span>,</span>
-<span id="cb31-10"><a href="#cb31-10"></a>    <span class="dv">480</span>L,  <span class="fl">0.38</span>,</span>
-<span id="cb31-11"><a href="#cb31-11"></a>    <span class="dv">720</span>L,  <span class="fl">0.36</span>,</span>
-<span id="cb31-12"><a href="#cb31-12"></a>   <span class="dv">1440</span>L,  <span class="fl">0.26</span>,</span>
-<span id="cb31-13"><a href="#cb31-13"></a>   <span class="dv">2880</span>L,   <span class="fl">0.2</span>,</span>
-<span id="cb31-14"><a href="#cb31-14"></a>   <span class="dv">5760</span>L,  <span class="fl">0.16</span>,</span>
-<span id="cb31-15"><a href="#cb31-15"></a>  <span class="dv">10080</span>L,  <span class="fl">0.08</span></span>
-<span id="cb31-16"><a href="#cb31-16"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="memory-example-1" class="slide level2">
-<h2>Memory example</h2>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>anim<span class="fl">.1</span><span class="ot">&lt;-</span> <span class="fu">ggplot</span>(mem_df, <span class="fu">aes</span>(time,prop))<span class="sc">+</span></span>
-<span id="cb32-2"><a href="#cb32-2"></a>   <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">5</span>)<span class="sc">+</span></span>
-<span id="cb32-3"><a href="#cb32-3"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size=</span><span class="dv">16</span>)</span>
-<span id="cb32-4"><a href="#cb32-4"></a></span>
-<span id="cb32-5"><a href="#cb32-5"></a>anim<span class="fl">.1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">hours=</span><span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">9</span>, <span class="dv">12</span>, <span class="dv">14</span>, <span class="dv">30</span>, <span class="dv">35</span>, <span class="dv">40</span>, <span class="dv">47</span>, <span class="dv">51</span>, <span class="dv">55</span>, <span class="dv">60</span>),</span>
+<span id="cb24-2"><a href="#cb24-2"></a>                   <span class="at">happiness=</span><span class="fu">c</span>(<span class="dv">14</span>, <span class="dv">28</span>, <span class="dv">50</span>, <span class="dv">70</span>, <span class="dv">89</span>, <span class="dv">94</span>, <span class="dv">90</span>, <span class="dv">75</span>, <span class="dv">59</span>, <span class="dv">44</span>, <span class="dv">27</span>))</span>
+<span id="cb24-3"><a href="#cb24-3"></a></span>
+<span id="cb24-4"><a href="#cb24-4"></a>data <span class="sc">%&gt;%</span></span>
+<span id="cb24-5"><a href="#cb24-5"></a>  <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th style="text-align: right;" data-quarto-table-cell-role="th">hours</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">happiness</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">28</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">70</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">89</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">35</td>
+<td style="text-align: right;">94</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">90</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">47</td>
+<td style="text-align: right;">75</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">51</td>
+<td style="text-align: right;">59</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">55</td>
+<td style="text-align: right;">44</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">27</td>
+</tr>
+</tbody>
+</table>
+
 
 </div>
-<img data-src="12-Transformations_files/figure-revealjs/unnamed-chunk-36-1.png" class="quarto-figure-center r-stretch" width="1152"></section>
+</div>
+</section>
+<section id="example-1" class="slide level2">
+<h2>Example</h2>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>anim<span class="fl">.1</span><span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data, <span class="fu">aes</span>(hours,happiness))<span class="sc">+</span></span>
+<span id="cb25-2"><a href="#cb25-2"></a>   <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">5</span>)<span class="sc">+</span></span>
+<span id="cb25-3"><a href="#cb25-3"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size=</span><span class="dv">16</span>)</span>
+<span id="cb25-4"><a href="#cb25-4"></a></span>
+<span id="cb25-5"><a href="#cb25-5"></a>anim<span class="fl">.1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="12-Transformations_files/figure-revealjs/unnamed-chunk-37-1.png" class="quarto-figure-center r-stretch" width="1152"></section>
 <section id="polynomial-regression" class="slide level2">
 <h2>Polynomial regression</h2>
 <p><span class="math display">\[\begin{equation}
 Y_i = b_0 + b_1 x_i + b_2 x_i^2 + e_i.
 \end{equation}\]</span></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>log_df_quad <span class="ot">&lt;-</span> mem_df<span class="sc">%&gt;%</span></span>
-<span id="cb33-2"><a href="#cb33-2"></a>  <span class="fu">mutate</span>(<span class="at">time2=</span>time<span class="sc">^-</span><span class="dv">2</span>) <span class="co"># add in quadratic term to dataset</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>log_df_quad <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb26-2"><a href="#cb26-2"></a>  <span class="fu">mutate</span>(<span class="at">time2=</span>hours<span class="sc">^</span><span class="dv">2</span>) <span class="co"># add in quadratic term to dataset</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="polynomial-regression-1" class="slide level2">
 <h2>Polynomial regression</h2>
+<ul>
+<li>Linear term</li>
+</ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>quad_lm <span class="ot">&lt;-</span><span class="fu">lm</span>(prop <span class="sc">~</span> time <span class="sc">+</span> time2,  <span class="at">data=</span>log_df_quad)</span>
-<span id="cb34-2"><a href="#cb34-2"></a></span>
-<span id="cb34-3"><a href="#cb34-3"></a> quad_lm <span class="sc">%&gt;%</span> </span>
-<span id="cb34-4"><a href="#cb34-4"></a>  <span class="fu">tidy</span>(<span class="at">conf.int =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb34-5"><a href="#cb34-5"></a>  <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>quad_lm <span class="ot">&lt;-</span><span class="fu">lm</span>(happiness <span class="sc">~</span> hours,  <span class="at">data=</span>log_df_quad)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
 <div class="cell-output-display">
 <table data-quarto-postprocess="true">
 <thead>
@@ -1583,30 +1672,154 @@ Y_i = b_0 + b_1 x_i + b_2 x_i^2 + e_i.
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">(Intercept)</td>
-<td style="text-align: right;">0.4869784</td>
-<td style="text-align: right;">0.0400325</td>
-<td style="text-align: right;">12.164592</td>
-<td style="text-align: right;">0.0000003</td>
-<td style="text-align: right;">0.3977806</td>
-<td style="text-align: right;">0.5761763</td>
+<td style="text-align: right;">48.4531301</td>
+<td style="text-align: right;">17.328772</td>
+<td style="text-align: right;">2.7961087</td>
+<td style="text-align: right;">0.0208447</td>
+<td style="text-align: right;">9.2527245</td>
+<td style="text-align: right;">87.653536</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">time</td>
-<td style="text-align: right;">-0.0000499</td>
-<td style="text-align: right;">0.0000114</td>
-<td style="text-align: right;">-4.364483</td>
-<td style="text-align: right;">0.0014112</td>
-<td style="text-align: right;">-0.0000754</td>
-<td style="text-align: right;">-0.0000244</td>
+<td style="text-align: left;">hours</td>
+<td style="text-align: right;">0.2980935</td>
+<td style="text-align: right;">0.459902</td>
+<td style="text-align: right;">0.6481674</td>
+<td style="text-align: right;">0.5330623</td>
+<td style="text-align: right;">-0.7422772</td>
+<td style="text-align: right;">1.338464</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th style="text-align: right;" data-quarto-table-cell-role="th">r.squared</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">adj.r.squared</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">sigma</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">statistic</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">p.value</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">df</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">logLik</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">AIC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">BIC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">deviance</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">df.residual</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">nobs</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0.0445983</td>
+<td style="text-align: right;">-0.0615575</td>
+<td style="text-align: right;">28.72288</td>
+<td style="text-align: right;">0.420121</td>
+<td style="text-align: right;">0.5330623</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">-51.43927</td>
+<td style="text-align: right;">108.8785</td>
+<td style="text-align: right;">110.0722</td>
+<td style="text-align: right;">7425.035</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">11</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+</section>
+<section id="polynomial-regression-2" class="slide level2">
+<h2>Polynomial regression</h2>
+<ul>
+<li>Quadratic</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>quad_lm_sq <span class="ot">&lt;-</span><span class="fu">lm</span>(happiness <span class="sc">~</span> hours  <span class="sc">+</span> time2,  <span class="at">data=</span>log_df_quad)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">term</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">estimate</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">std.error</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">statistic</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">p.value</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">conf.low</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">conf.high</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-18.2536400</td>
+<td style="text-align: right;">6.1850690</td>
+<td style="text-align: right;">-2.951243</td>
+<td style="text-align: right;">0.0183907</td>
+<td style="text-align: right;">-32.5164348</td>
+<td style="text-align: right;">-3.9908453</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">hours</td>
+<td style="text-align: right;">6.7443581</td>
+<td style="text-align: right;">0.4855153</td>
+<td style="text-align: right;">13.891133</td>
+<td style="text-align: right;">0.0000007</td>
+<td style="text-align: right;">5.6247578</td>
+<td style="text-align: right;">7.8639585</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">time2</td>
-<td style="text-align: right;">0.3620620</td>
-<td style="text-align: right;">0.1248050</td>
-<td style="text-align: right;">2.901021</td>
-<td style="text-align: right;">0.0158059</td>
-<td style="text-align: right;">0.0839790</td>
-<td style="text-align: right;">0.6401449</td>
+<td style="text-align: right;">-0.1011996</td>
+<td style="text-align: right;">0.0074601</td>
+<td style="text-align: right;">-13.565470</td>
+<td style="text-align: right;">0.0000008</td>
+<td style="text-align: right;">-0.1184026</td>
+<td style="text-align: right;">-0.0839966</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th style="text-align: right;" data-quarto-table-cell-role="th">r.squared</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">adj.r.squared</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">sigma</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">statistic</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">p.value</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">df</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">logLik</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">AIC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">BIC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">deviance</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">df.residual</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">nobs</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0.9601962</td>
+<td style="text-align: right;">0.9502452</td>
+<td style="text-align: right;">6.21833</td>
+<td style="text-align: right;">96.4928</td>
+<td style="text-align: right;">2.5e-06</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">-33.95934</td>
+<td style="text-align: right;">75.91869</td>
+<td style="text-align: right;">77.51027</td>
+<td style="text-align: right;">309.341</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">11</td>
 </tr>
 </tbody>
 </table>
@@ -1618,37 +1831,88 @@ Y_i = b_0 + b_1 x_i + b_2 x_i^2 + e_i.
 <section id="model-fit-quadratic" class="slide level2">
 <h2>Model fit quadratic</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>anim<span class="fl">.1</span><span class="ot">&lt;-</span> <span class="fu">ggplot</span>(mem_df, <span class="fu">aes</span>(time,prop))<span class="sc">+</span></span>
-<span id="cb35-2"><a href="#cb35-2"></a>   <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">5</span>)<span class="sc">+</span></span>
-<span id="cb35-3"><a href="#cb35-3"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">formula =</span> y <span class="sc">~</span> x <span class="sc">+</span> <span class="fu">I</span>(x<span class="sc">^</span><span class="dv">2</span>), <span class="at">se =</span> <span class="cn">FALSE</span>)<span class="sc">+</span></span>
-<span id="cb35-4"><a href="#cb35-4"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size=</span><span class="dv">16</span>)</span>
-<span id="cb35-5"><a href="#cb35-5"></a></span>
-<span id="cb35-6"><a href="#cb35-6"></a>anim<span class="fl">.1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>anim<span class="fl">.1</span><span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data, <span class="fu">aes</span>(hours,happiness))<span class="sc">+</span></span>
+<span id="cb29-2"><a href="#cb29-2"></a>   <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">5</span>)<span class="sc">+</span></span>
+<span id="cb29-3"><a href="#cb29-3"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">formula =</span> y <span class="sc">~</span> x <span class="sc">+</span> <span class="fu">I</span>(x<span class="sc">^</span><span class="dv">2</span>), <span class="at">se =</span> <span class="cn">FALSE</span>)<span class="sc">+</span></span>
+<span id="cb29-4"><a href="#cb29-4"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size=</span><span class="dv">16</span>)</span>
+<span id="cb29-5"><a href="#cb29-5"></a></span>
+<span id="cb29-6"><a href="#cb29-6"></a>anim<span class="fl">.1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="12-Transformations_files/figure-revealjs/unnamed-chunk-39-1.png" class="quarto-figure-center r-stretch" width="1152"></section>
+<img data-src="12-Transformations_files/figure-revealjs/unnamed-chunk-43-1.png" class="quarto-figure-center r-stretch" width="1152"></section>
+<section id="multicollinearity" class="slide level2">
+<h2>Multicollinearity</h2>
+<ul>
+<li>Time and time^2 are highly correlated</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="fu">check_collinearity</span>(quad_lm_sq)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># Check for Multicollinearity
+
+High Correlation
+
+  Term   VIF     VIF 95% CI Increased SE Tolerance Tolerance 95% CI
+ hours 23.78 [12.49, 46.15]         4.88      0.04     [0.02, 0.08]
+ time2 23.78 [12.49, 46.15]         4.88      0.04     [0.02, 0.08]</code></pre>
+</div>
+</div>
+<ul>
+<li><p>What can be done?</p>
+<ul>
+<li>Centering!</li>
+</ul></li>
+</ul>
+</section>
+<section id="multicollinearity-1" class="slide level2">
+<h2>Multicollinearity</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="co">#center var and then square </span></span>
+<span id="cb32-2"><a href="#cb32-2"></a></span>
+<span id="cb32-3"><a href="#cb32-3"></a>x<span class="ot">=</span>log_df_quad <span class="sc">%&gt;%</span></span>
+<span id="cb32-4"><a href="#cb32-4"></a>  <span class="fu">mutate</span>(<span class="at">hours_c=</span><span class="fu">center</span>(hours), <span class="at">time_sq=</span>hours_c<span class="sc">^</span><span class="dv">2</span>, <span class="at">time_sq_c=</span><span class="fu">center</span>(time_sq))</span>
+<span id="cb32-5"><a href="#cb32-5"></a></span>
+<span id="cb32-6"><a href="#cb32-6"></a>quad_lm_sq <span class="ot">&lt;-</span><span class="fu">lm</span>(happiness <span class="sc">~</span> hours_c <span class="sc">+</span> time_sq_c,  <span class="at">data=</span>x)</span>
+<span id="cb32-7"><a href="#cb32-7"></a></span>
+<span id="cb32-8"><a href="#cb32-8"></a><span class="fu">check_collinearity</span>(quad_lm_sq)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># Check for Multicollinearity
+
+Low Correlation
+
+      Term  VIF       VIF 95% CI Increased SE Tolerance Tolerance 95% CI
+   hours_c 1.01 [1.00, 7.64e+08]         1.01      0.99     [0.00, 1.00]
+ time_sq_c 1.01 [1.00, 7.64e+08]         1.01      0.99     [0.00, 1.00]</code></pre>
+</div>
+</div>
+</section>
 <section id="testing-polynomial-models" class="slide level2">
-<h2>Testing Polynomial Models</h2>
+<h2>Testing polynomial models</h2>
 <ul>
 <li><p>Analyze all the terms in model</p></li>
 <li><p>Model comparisons</p>
 <ul>
-<li><p>Testing some of the <span class="math inline">\(X\)</span> terms, starting with the lowest order term and including the next higher-order terms from there</p></li>
-<li><p>Include all lower terms of that variable</p></li>
+<li><p>Testing some of the <span class="math inline">\(X\)</span> terms, starting with the lowest order term and including the next higher-order terms from there</p>
+<ul>
+<li>Include all lower terms of that variable</li>
+</ul></li>
 </ul></li>
 </ul>
 </section>
 <section id="model-fit-comparison" class="slide level2">
-<h2>Model Fit Comparison</h2>
+<h2>Model fit comparison</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a><span class="co"># forward</span></span>
-<span id="cb36-2"><a href="#cb36-2"></a></span>
-<span id="cb36-3"><a href="#cb36-3"></a>lm_lin <span class="ot">&lt;-</span> <span class="fu">lm</span>(prop <span class="sc">~</span> time,  <span class="at">data=</span>mem_df) </span>
-<span id="cb36-4"><a href="#cb36-4"></a></span>
-<span id="cb36-5"><a href="#cb36-5"></a>lm_quad <span class="ot">&lt;-</span> <span class="fu">lm</span>(prop <span class="sc">~</span> time <span class="sc">+</span> time2,  <span class="at">data=</span>log_df_quad)</span>
-<span id="cb36-6"><a href="#cb36-6"></a></span>
-<span id="cb36-7"><a href="#cb36-7"></a><span class="fu">anova</span>(lm_lin, lm_quad) <span class="sc">%&gt;%</span></span>
-<span id="cb36-8"><a href="#cb36-8"></a>  <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a><span class="co"># forward</span></span>
+<span id="cb34-2"><a href="#cb34-2"></a></span>
+<span id="cb34-3"><a href="#cb34-3"></a><span class="co"># linear model</span></span>
+<span id="cb34-4"><a href="#cb34-4"></a>lm_lin <span class="ot">&lt;-</span> <span class="fu">lm</span>(happiness <span class="sc">~</span> hours,  <span class="at">data=</span>data)</span>
+<span id="cb34-5"><a href="#cb34-5"></a></span>
+<span id="cb34-6"><a href="#cb34-6"></a><span class="co"># linear + quad model </span></span>
+<span id="cb34-7"><a href="#cb34-7"></a>lm_quad <span class="ot">&lt;-</span> <span class="fu">lm</span>(happiness <span class="sc">~</span> hours <span class="sc">+</span> time2,  <span class="at">data=</span>log_df_quad)</span>
+<span id="cb34-8"><a href="#cb34-8"></a></span>
+<span id="cb34-9"><a href="#cb34-9"></a><span class="co"># model comparisons</span></span>
+<span id="cb34-10"><a href="#cb34-10"></a><span class="fu">anova</span>(lm_lin, lm_quad) <span class="sc">%&gt;%</span></span>
+<span id="cb34-11"><a href="#cb34-11"></a>  <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table data-quarto-postprocess="true">
 <thead>
@@ -1663,20 +1927,20 @@ Y_i = b_0 + b_1 x_i + b_2 x_i^2 + e_i.
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">11</td>
-<td style="text-align: right;">0.2550949</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">7425.035</td>
 <td style="text-align: right;">NA</td>
 <td style="text-align: right;">NA</td>
 <td style="text-align: right;">NA</td>
 <td style="text-align: right;">NA</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">10</td>
-<td style="text-align: right;">0.1385187</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">309.341</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">0.1165762</td>
-<td style="text-align: right;">8.415921</td>
-<td style="text-align: right;">0.0158059</td>
+<td style="text-align: right;">7115.694</td>
+<td style="text-align: right;">184.022</td>
+<td style="text-align: right;">8e-07</td>
 </tr>
 </tbody>
 </table>
@@ -1684,15 +1948,22 @@ Y_i = b_0 + b_1 x_i + b_2 x_i^2 + e_i.
 
 </div>
 </div>
+<ul>
+<li><p>If <em>F</em> is significant, less parsimonious model (more DFs) is preferred</p></li>
+<li><p>If <em>F</em> is non-significant, more parsimonious model preferred</p></li>
+</ul>
 </section>
 <section id="next-time" class="slide level2">
 <h2>Next time</h2>
 <ul>
+<li><p>After break</p>
+<ul>
 <li><p>Interactions</p>
 <ul>
-<li><p>Continuous by categorical</p></li>
-<li><p>Continuous by continuous</p></li>
+<li><p>Continuous x categorical</p></li>
+<li><p>Continuous x continuous</p></li>
 <li><p>Categorical x categorical</p></li>
+</ul></li>
 </ul></li>
 </ul>
 <div class="footer footer-default">
