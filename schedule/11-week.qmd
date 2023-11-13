@@ -3,9 +3,14 @@ title: "Week 11"
 subtitle: "MR: Centering/Standardization/Transformations"
 date: 2023-11-13
 ---
+
 ## Before Class
 
 ### Textbook
 
-- [Chapter 12](https://psy503-found-stats.netlify.app/readings_pdf/Regression%20and%20Other%20Stories%20by%20Andrew%20Gelman,%20Jennifer%20Hill,%20Aki%20Vehtari.pdf)
+-   [Chapter
+    12](https://psy503-found-stats.netlify.app/readings_pdf/Regression%20and%20Other%20Stories%20by%20Andrew%20Gelman,%20Jennifer%20Hill,%20Aki%20Vehtari.pdf)
 
+## After Class
+
+{{< video https://youtu.be/f4RO5S83osk?si=DXyPRGB0iSnXMGIt width="800" height="400" >}}
