@@ -173,6 +173,11 @@ anim.1
 
 ```{r}
 
+data %>% 
+  # man 
+  mutate(age_c=age-mean(age), 
+         age_c_dw=center(age))
+
 ```
 
 ## Centering - How?
@@ -202,16 +207,11 @@ head(df_wiz) %>%
 
 ```{r}
 
-lm(pitch~age_c, data=df) %>% 
-  tidy(conf.int=TRUE) %>%
-  knitr::kable() %>%
-    kable_styling(font_size = 24) %>%
- row_spec(1, color = "white",
-              background = "red")
+lm(pitch~age_c, data=df)
 ```
 
 ::: callout-important
-$b_0$:
+$b_0$: The value of Y when age is at its mean
 :::
 
 ## Centering
@@ -229,7 +229,7 @@ lm(pitch~age_c, data=df) %>%
 ```
 
 ::: callout-important
-$b_1$:
+$b_1$: For unit increase in age there is a .69 decrease in age.
 :::
 
 ## Centering
@@ -298,6 +298,10 @@ anim.1
 ## Standardizing - How?
 
 ```{r}
+data %>%
+  mutate(age_z=(age-mean(age))/sd(age), 
+         age_z_dw=datawizard::standardize(age), 
+         age_z_scale=scale(age))
 
 ```
 
@@ -335,7 +339,7 @@ lm(pitch~age_z, data=df_stand)%>%
 ```
 
 ::: callout-important
-$\beta_0$:
+$\beta_0$: The value of Y when age is at it's mean
 :::
 
 ## Standardized model
@@ -353,7 +357,7 @@ lm(pitch~age_z, data=df_stand)%>%
 ```
 
 ::: callout-important
-$\beta_1$:
+$\beta_1$: 1 SD increase in X leads to some change in Y
 :::
 
 ## Output
@@ -942,9 +946,9 @@ quad_lm_sq  %>%
 ```
 
 ::: callout-important
--   Negative coef on quadratic term mean u-shaped (concave)
+-   Negative coef on quadratic term mean inverted u-shaped (concave)
 
--   Positive coefs means inverted-u (convex)
+-   Positive coef means u-shaped (convex)
 :::
 
 ## Model fit
