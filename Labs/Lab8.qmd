@@ -3,25 +3,33 @@ title: "Lab 8"
 format: html
 editor: visual
 author: "Jason Geller, Ph.D."
-date: 2023 04 12
+date: 2023 11 15
 toc: true
 toc_float: true
 ---
 
-## Lab 8: Factor Analysis and SEM
+## Lab 8: Transformations
 
-In this lab, you will evaluate a survey that measures anxiety towards statistics, which was created by Andy Field. The objective of this lab is to:
+This lab uses data from two studies:
 
--   Assess the suitability of factor analysis for the survey
+1.  Winter, B., Perlman, M., Perry, L. K., & Lupyan, G. (2017). Which
+    words are most iconic? Iconicity in English sensory words.
+    Interaction Studies, 18(3),
+    433-454.(file:///Users/jasongeller/Downloads/interactionStudies_WinterEtAl2017.pdf)
 
--   Decide on the number of factors to extract
+2.  Andersen, M. M., Schjoedt, U., Price, H., Rosas, F. E., Scrivner,
+    C., & Clasen, M. (2020). Playing With Fear: A Field Study in
+    Recreational Horror. Psychological Science, 31(12), 1497-1510.
+    https://doi.org/10.1177/0956797620972116
 
--   Choose an extraction and rotation method
+This lab covers multiple aspects of a multiple regression analysis,
+including:
 
--   Interpret and name the factors
+1.  Centering
+2.  Log-transforming
+3.  Multiple regression: collinearity
+4.  Multiple regression: standardized predictors
+5.  Polynomial regression
 
--   Validate the model using CFA
-
-Through this lab, you will gain experience in performing EFA and SEM/CFA using R, as well as visualizing and writing up the results.
-
-To access Lab 8, please [click here](https://classroom.github.com/a/4dcti-rs).
+To access Lab 8, please [click
+here](https://classroom.github.com/a/ojY0P0zF)

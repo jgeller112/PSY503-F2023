@@ -50,7 +50,7 @@ on Sunday (unless otherwise stated)</li>
 | 10 | 11/6/23 | GLM 4: Multiple Regression (MR) | [{{< fa book-open-reader >}}](/schedule/10-week.qmd) | [{{< fa laptop-code >}}](/slides/11-Multiple_Regression/Mul_Reg.html) |  |
 | 10 | 11/8/23 | Lab 7 |  |  | [{{< fa pen-ruler >}}](/Labs/Lab7.qmd) |
 | 11 | 11/13/23 | GLM 5: Centering, Standardization, and Transformations | [{{< fa book-open-reader >}}](/schedule/11-week.qmd) | [{{< fa laptop-code >}}](/slides/12-Transformations/12-Transformations.html) |  |
-| 11 | 11/15/23 | Lab 8 |  |  | {{< fa pen-ruler >}} |
+| 11 | 11/15/23 | Lab 8 |  |  | [{{< fa pen-ruler >}}](/Labs/Lab8.qmd) |
 | 12 | 11/20/23 - 11/23/23 | Thanksgiving - No Class |  |  |  |
 | 13 | 11/27/23 | GLM 6: Interactions | [{{< fa book-open-reader >}}](/schedule/13-week.qmd) | {{< fa laptop-code >}} |  |
 | 13 | 11/29/23 | Lab 9 |  |  | {{< fa pen-ruler >}} |
