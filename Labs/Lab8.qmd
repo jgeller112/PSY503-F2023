@@ -32,3 +32,5 @@ including:
 
 To access Lab 8, please [click
 here](https://classroom.github.com/a/ojY0P0zF)
+
+This lab will be due on November 26th, 2023
