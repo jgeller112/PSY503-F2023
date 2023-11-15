@@ -14,8 +14,7 @@ This lab uses data from two studies:
 
 1.  Winter, B., Perlman, M., Perry, L. K., & Lupyan, G. (2017). Which
     words are most iconic? Iconicity in English sensory words.
-    Interaction Studies, 18(3),
-    433-454.(file:///Users/jasongeller/Downloads/interactionStudies_WinterEtAl2017.pdf)
+    Interaction Studies, 18(3), 433-454.
 
 2.  Andersen, M. M., Schjoedt, U., Price, H., Rosas, F. E., Scrivner,
     C., & Clasen, M. (2020). Playing With Fear: A Field Study in
