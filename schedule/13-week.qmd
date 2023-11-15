@@ -1,10 +1,10 @@
 ---
 title: "Week 13"
-subtitle: "MR: More Interactions"
+subtitle: "Interactions"
 date: 2023-11-27
 ---
 ## Before Class
 
 ### Textbook
 
-- Chapter 16 - Statistics and Data Science: A Modeling Approach
+- Chapter 14 - Statistics and Data Science: A Modeling Approach
