@@ -176,9 +176,9 @@ A moderation analysis typically consists of the following steps:
 3.  Test whether the regression coefficient for XZ (interaction) is
     significant
 
-4.  If so, interpret the moderation effect
+    1.  If so, interpret the moderation effect
 
-5.  Display the moderation effect graphically
+4.  Display the moderation effect graphically
 
 ## Steps for moderation analysis
 
@@ -219,9 +219,21 @@ $$\hat{Y}= b_0 + b_1 X + b_2 Z + b_3 X*Z$$
 -   $b_1$: the simple effect or slope of $X$, for a one unit change in
     $X$ the predicted change in $Y$ at $Z = 0$
 -   $b_2$: The offset/difference in the intercept for a one unit change
-    in $Z$ the predicted change in Y at X = 0
+    in $Z$ the predicted change in Y at X = 0 or at the mean
 -   $b_3$: The interaction of $X$ and $Z$, the offset in slope for $Z$
     for a one-unit increase in $X$ (or vice versa)
+
+## Interpretations
+
+```{r}
+lm(score~age_c*gender_trt, data=evals_interact) %>%
+   tidy(conf.int=TRUE) %>%
+  knitr::kable() %>%
+    kable_styling(font_size = 24) %>%
+ row_spec(1, color = "white",
+              background = "red")
+```
+
 
 ## Interpretations
 
@@ -234,15 +246,41 @@ lm(score~age_c*gender_trt, data=evals_interact) %>%
               background = "red")
 ```
 
+
+## Interpretations
+
+```{r}
+lm(score~age_c*gender_trt, data=evals_interact) %>%
+   tidy(conf.int=TRUE) %>%
+  knitr::kable() %>%
+    kable_styling(font_size = 24) %>%
+ row_spec(3, color = "white",
+              background = "red")
+```
+
+## Interpretations
+
+```{r}
+lm(score~age_c*gender_trt, data=evals_interact) %>%
+   tidy(conf.int=TRUE) %>%
+  knitr::kable() %>%
+    kable_styling(font_size = 24) %>%
+ row_spec(4, color = "white",
+              background = "red")
+```
+
 ## Moderation: simple slopes
 
 -   If the interaction is significant, then you usually ignore the other
     individual effects (age and gender)
 
--   So what do I do if my interaction is significant? **A simple slope
-    analysis**
+-   So what do I do if my interaction is significant?
 
-# Steps for Moderation Analysis
+    . . .
+
+-   **A simple slope analysis**
+
+## Steps for Moderation Analysis
 
 -   Obtain simple slopes
 
@@ -263,6 +301,7 @@ emtrends(d, ~ gender_trt, var="age_c") #simple slopes
 ## Simple Slopes
 
 ```{r}
+library(interactions)
 
 sim_slopes(d, pred=age_c, modx=gender_trt)
 
@@ -299,8 +338,7 @@ ggplot(evals1, aes(x = age, y = score, color = gender)) +
 
 ## Visualize Categorical by Continuous Interactions
 
--   Parallel slopes models still allow for different intercepts but
-    force all lines to have the same slope
+-   Parallel slopes models still allow for different intercepts but force all lines to have the same slope
 
 ```{r, fig.align='center', out.width="80%"}
 ggplot(evals1, aes(x = age, y = score, color = gender)) +
@@ -313,7 +351,7 @@ ggplot(evals1, aes(x = age, y = score, color = gender)) +
 
 -   Model Comparisons
 
-    -   Test model without interaction to model with interaction
+    - Test model without interaction to model with interaction
 
 ```{r}
 
