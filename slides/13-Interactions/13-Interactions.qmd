@@ -36,22 +36,15 @@ execute:
 #| echo: true
 #| 
 library(pacman)
-p_load("tidyverse", "easystats", "broom", "kableExtra", "interactions")
+p_load("tidyverse", "easystats", "broom", "kableExtra", "interactions", "emmeans", "moderndive")
 ```
 
-```{r}
-library(grateful)
-pkgs <- cite_packages(output = "table", out.dir = ".")
-
-pkgs
-```
-
-# Today
+## Today
 
 -   Testing interactions/moderation analysis
 
-    -   Categorical by Continuous
-    -   Continuous by Continuous
+    -   Categorical x Continuous
+    -   Continuous x Continuous
 
 ## Interactions
 
@@ -63,17 +56,7 @@ lm(plant_growth ~ sun_exposure + water)
 
 ```
 
-## Interactions
-
-```{r}
-#| eval: false
-#| 
-
-lm(plant_growth ~ sun_exposure +  water)
-
-```
-
-![](images/sun-water.bmp){fig-align="center"}
+![](images/inter.png){fig-align="center"}
 
 ## Interactions
 
@@ -82,36 +65,46 @@ lm(plant_growth ~ sun_exposure +  water)
 lm(plant_growth ~ sun_exposure * water)
 ```
 
-![](images/plant-sun.png){fig-align="center"}
-
-## Interactions
-
-```{r, eval=FALSE}
-
-lm(plant_growth ~ sun_exposure * water)
-
-```
-
-![](images/sun-inter.png){fig-align="center"}
+![](images/inter1.png){fig-align="center"}
 
 ## What is a moderator?
-
-![](images/moderation1.png){fig-align="center"}
-
-## What is a moderator?
-
-$$Y=b_{0}+b_{1}X_1+ b_2Z_2 + b_3X_1*Z_2 + e$$
 
 -   A moderator variable Z is a variable that alters the strength of the
     relationship between X and Y
 
 ![](images/moderation2.png){fig-align="center"}
 
-## What do interactions Look Like?
+-   To test for moderation we can add the interaction between Z and X to
+    our model
+
+$$
+\hat{Y}=b_{0}+b_{1}X (sunshine)+ b_2Z (water) + b_3X*Z$$
+
+## What do interactions look Like?
 
 ![](images/types-of-interaction-flat.png){fig-align="center"}
 
-# Today's Dataset
+## Interaction shapes
+
+-   Disordinal
+
+    -   Cross-over
+
+![](images/disord.png){fig-align="center"}
+
+## Interaction shapes
+
+-   Ordinal
+
+![](https://uopsych.github.io/psy612/lectures/14-interactions_files/figure-revealjs/unnamed-chunk-19-1.png){fig-align="center"}
+
+## Interaction shapes
+
+-   Ordinal
+
+![](https://uopsych.github.io/psy612/lectures/14-interactions_files/figure-revealjs/unnamed-chunk-20-1.png){fig-align="center"}
+
+## Today's Dataset
 
 -   Student evaluations for a sample of 463 courses taught by 94
     professors from the University of Texas at Austin
@@ -125,10 +118,10 @@ dplyr::select(ID, score, age, gender)
 ```
 
 ```{r, echo=FALSE}
-summary(evals)
+summary(evals1)
 ```
 
-## Research Question
+## Research question
 
 -   Does Age and Sex (Males, Females) of the instructor influence
     instructor ratings?
@@ -137,9 +130,9 @@ summary(evals)
     -   IV:
         -   Age
         -   Gender
-        -   Age\*Gender Interaction
+        -   Age\*Gender interaction
 
-## Scatterplot
+## Scatter plot
 
 ```{r}
 #| fig-align: center
@@ -154,9 +147,8 @@ ggplot(evals1, aes(x = age, y = score, color = gender)) +
 
 -   Moderation analysis can be conducted by adding one or multiple
     interaction terms in a regression analysis
-
-Z is a moderator for the relation between X and Y, we can fit a
-regression model
+-   Z is a moderator for the relation between X and Y, we can fit a
+    regression model
 
 $$\begin{eqnarray*} 
 Y & = & b_{0}+b_{1}*X+b_{2}*Z+b_{3}*X*Z+e \\ & = & \begin{cases} b_{0}+b_{1}*X+e & \mbox{For females}(Z=0)\\ b_{0}+b_{2}+(b_{1}+b_{3})*X+e & \mbox{For males}(Z=1) \end{cases} \end{eqnarray*}$$
@@ -176,13 +168,20 @@ A moderation analysis typically consists of the following steps:
 3.  Test whether the regression coefficient for XZ (interaction) is
     significant
 
-    1.  If so, interpret the moderation effect
+    3.1 If so, interpret the moderation effect
 
 4.  Display the moderation effect graphically
 
 ## Steps for moderation analysis
 
 -   Compute the interaction term XZ=X\*Z
+
+```{r}
+#| eval:false
+#| 
+evals_interact <- evals1 %>%
+ mutate(inter=age*gender)
+```
 
 -   Center continuous variables
 
@@ -199,12 +198,13 @@ evals_interact <- evals1 %>%
 
 ## Steps for moderation analysis
 
--   Fit a multiple regression model with X, Z, and XZ as predictors
+-   Fit a multiple regression model with X, Z, and X\*Z as predictors
 
 ```{r}
-lm(evals_interact$score~age_c*gender_trt, data=evals_interact)  tidy(conf.int=TRUE) %>%
+lm(score~age_c*gender_trt, data=evals_interact) %>%
+  tidy(conf.int=TRUE) %>%
   knitr::kable() %>%
-    kable_styling(font_size = 24)
+    kable_styling(font_size = 28)
 ```
 
 ## Steps for moderation analysis
@@ -215,9 +215,13 @@ lm(evals_interact$score~age_c*gender_trt, data=evals_interact)  tidy(conf.int=TR
 
 $$\hat{Y}= b_0 + b_1 X + b_2 Z + b_3 X*Z$$
 
--   $b_0$: the intercept, or the predicted outcome when X = 0 and Z=0
--   $b_1$: the simple effect or slope of $X$, for a one unit change in
-    $X$ the predicted change in $Y$ at $Z = 0$
+where ( X ) is a continuous predictor and ( Z ) is a dummy coded
+categorical predictor.
+
+-   $b_0$: the intercept, or the predicted outcome when X = at mean and
+    Z=0
+-   $b_1$: the slope of $X$, for a one unit change in $X$ the predicted
+    change in $Y$ at $Z = 0$
 -   $b_2$: The offset/difference in the intercept for a one unit change
     in $Z$ the predicted change in Y at X = 0 or at the mean
 -   $b_3$: The interaction of $X$ and $Z$, the offset in slope for $Z$
@@ -234,7 +238,6 @@ lm(score~age_c*gender_trt, data=evals_interact) %>%
               background = "red")
 ```
 
-
 ## Interpretations
 
 ```{r}
@@ -245,7 +248,6 @@ lm(score~age_c*gender_trt, data=evals_interact) %>%
  row_spec(2, color = "white",
               background = "red")
 ```
-
 
 ## Interpretations
 
@@ -276,7 +278,7 @@ lm(score~age_c*gender_trt, data=evals_interact) %>%
 
 -   So what do I do if my interaction is significant?
 
-    . . .
+. . .
 
 -   **A simple slope analysis**
 
@@ -292,18 +294,24 @@ lm(score~age_c*gender_trt, data=evals_interact) %>%
 
 ```{r}
 #hello to our friend emmeans 
-#library(emmeans)
+library(emmeans)
 d=lm(score~age_c*gender_trt, data=evals_interact)
 
-emtrends(d, ~ gender_trt, var="age_c") #simple slopes
+emtrends(d, ~ gender_trt, var="age_c") %>%
+  kable()
 ```
 
 ## Simple Slopes
 
+-   `emmeans` does not give p-values for simple slopes
+
+-   `sim_slopes` function from `interactions`
+
 ```{r}
+
 library(interactions)
 
-sim_slopes(d, pred=age_c, modx=gender_trt)
+sim_slopes(d, pred=age_c, modx=gender_trt, johnson_neyman = FALSE)
 
 ```
 
@@ -338,7 +346,8 @@ ggplot(evals1, aes(x = age, y = score, color = gender)) +
 
 ## Visualize Categorical by Continuous Interactions
 
--   Parallel slopes models still allow for different intercepts but force all lines to have the same slope
+-   Parallel slopes models still allow for different intercepts but
+    force all lines to have the same slope
 
 ```{r, fig.align='center', out.width="80%"}
 ggplot(evals1, aes(x = age, y = score, color = gender)) +
@@ -351,7 +360,7 @@ ggplot(evals1, aes(x = age, y = score, color = gender)) +
 
 -   Model Comparisons
 
-    - Test model without interaction to model with interaction
+    -   Test model without interaction to model with interaction
 
 ```{r}
 
@@ -393,9 +402,34 @@ ggplot(evals_interact, aes(x = age, y = score, color = gender)) +
 :::
 :::
 
+## Categorical x Continuous Write--up
+
+::: callout-important
+All continuous predictors were mean-centered and deviation coding was
+used for categorical predictors. The results of the regression indicated
+that the model significantly predicted evaluation scores
+`r report_performance(d)` accounting for 5% of the variance. Age was a
+significant negative predictor of scores, *b* = -0.01, *SE* = .003, 95%
+CI \[-0.02, -0.01\], t = -3.89, *p* \< .001, with increases in age being
+associated with lower evals. Gender was also significant, *b* = -0.208,
+*SE* = .05, 95% CI \[-0.312, -0.105\], t = -3.95, *p* \< .001, with
+women having lower evals han men. Importantly, there was a significant
+interaction between age and gender, *b* = -0.01, *SE* = .01, 95% CI
+\[-0.02, -0.003\], t = -2.45, *p* \< .001). Simple slopes analyss
+indicated a significant slope for women, *b* = -0.02, SE = 0.004, 95% CI
+\[-0.026, -0.009\], t = -3.92, *p* \< .001, but not men, *b* = 0.004, SE
+= 0.003, 95% CI \[-0.01, 0.002\], *t* = -1.23, *p* = 0.22. That is as
+one becomes older, being a women leads to lower evaluation scores
+:::
+
 # Continuous x Continuous Interactions
 
 ## Continuous x Continuous Interactions
+
+```{r}
+# grab dataset from link
+moderation_vio=read_csv("https://raw.githubusercontent.com/jgeller112/psy503-psych_stats/master/moderation.csv")
+```
 
 -   Do violent video games make people aggressive?
 
@@ -413,19 +447,11 @@ ggplot(evals_interact, aes(x = age, y = score, color = gender)) +
     playing and aggression depends on the strength of
     callous-unemotional traits
 
-```{r}
-# grab dataset from link
-moderation_vio=read_csv("https://raw.githubusercontent.com/jgeller112/psy503-psych_stats/master/moderation.csv")
-```
-
 ## Continuous x Continuous Interactions
 
 -   Centering
 
     -   Can reduce multicollinearity
-
-    -   This is because if $X*Z$ creates a line, it means you have added
-        a new predictor (XZ) that strongly correlates with X and Z
 
 ```{r}
 library(datawizard)
@@ -435,31 +461,10 @@ moderation_vio <- moderation_vio %>%
 
 ```
 
-## Continuous x Continuous Regression
-
-```{r}
-lm(Aggression~ vid_games_c*caunts_c,  data=moderation_vio)  %>% 
-  tidy(conf.int=TRUE) %>%
-  knitr::kable() %>%
-    kable_styling(font_size = 24) %>%
- row_spec(2, color = "white",
-              background = "red")
-  
-```
-
-???
-
-(Intercept): the intercept, or the predicted outcome when hours = 0 and
-traits = 0. hours: the slope of Hours, for a one unit change in Hours,
-the predicted change in weight loss at Effort=0. triat: the slope of
-trait, for a one unit change in vio the predicted change in trait at
-Hours=0. hours:effort: the interaction of Hours and Effort, the change
-in the slope of HRS for every one unit increase in CALLOUSNESS (or vice
-versa).
-
 ## Interpretation Continuous x Continuous Interactions
 
 -   $b_0$: the intercept, or the predicted outcome when X = 0 and Z=0
+    (or at their mean)
 -   $b_1$: the simple effect or slope of $X$, for a one unit change in
     $X$ the predicted change in $Y$ at $Z = 0$
 -   $b_2$: The simple effect or slope of $Z$, for a one unit change in
@@ -467,12 +472,67 @@ versa).
 -   $b_3$:The interaction of $X$ and $Z$, the change in the slope of $X$
     for a one-unit increase in $Z$ (or vice versa)
 
+## Interpretation Continuous x Continuous Interactions
+
+```{r}
+#| eval: false
+lm(Aggression~ vid_games_c*caunts_c,  data=moderation_vio) %>%
+  tidy(conf.int=TRUE)
+```
+
+```{r}
+#| echo: false
+#| 
+
+lm(Aggression~ vid_games_c*caunts_c,  data=moderation_vio) %>%
+  tidy(conf.int=TRUE) %>%
+  knitr::kable() %>%
+    kable_styling(font_size = 24) %>%
+ row_spec(1, color = "white",
+              background = "red")
+
+```
+
+::: notes
+(Intercept): the intercept, or the predicted outcome when hours = 0 and
+traits = 0. hours: the slope of Hours, for a one unit change in Hours,
+the predicted change in weight loss at Effort=0. triat: the slope of
+trait, for a one unit change in vio the predicted change in trait at
+Hours=0. hours:effort: the interaction of Hours and Effort, the change
+in the slope of HRS for every one unit increase in CALLOUSNESS (or vice
+versa).
+:::
+
+## Interpretation Continuous x Continuous Interactions
+
 ```{r, echo=FALSE}
 lm(Aggression~ vid_games_c*caunts_c,  data=moderation_vio) %>%
   tidy(conf.int=TRUE) %>%
   knitr::kable() %>%
     kable_styling(font_size = 24) %>%
  row_spec(2, color = "white",
+              background = "red")
+```
+
+## Interpretation Continuous x Continuous Interactions
+
+```{r, echo=FALSE}
+lm(Aggression~ vid_games_c*caunts_c,  data=moderation_vio) %>%
+  tidy(conf.int=TRUE) %>%
+  knitr::kable() %>%
+    kable_styling(font_size = 24) %>%
+ row_spec(3, color = "white",
+              background = "red")
+```
+
+## Interpretation Continuous x Continuous Interactions
+
+```{r, echo=FALSE}
+lm(Aggression~ vid_games_c*caunts_c,  data=moderation_vio) %>%
+  tidy(conf.int=TRUE) %>%
+  knitr::kable() %>%
+    kable_styling(font_size = 24) %>%
+ row_spec(4, color = "white",
               background = "red")
 ```
 
@@ -494,9 +554,8 @@ lm(Aggression~ vid_games_c*caunts_c,  data=moderation_vio) %>%
     -   Average groups are people are at the mean
 
     -   High groups are people who are one SD above the mean
-        31b8e172-b470-440e-83d8-e6b185028602:dAB5AHAAZQA6AFoAUQBBAHgAQQBEAGcAQQBNAFEAQQA1AEEARABZAEEATQBBAEEAMQBBAEMAMABBAE0AQQBCAGgAQQBHAE0AQQBaAEEAQQB0AEEARABRAEEAWgBnAEIAaABBAEcAVQBBAEwAUQBBADQAQQBHAEkAQQBPAFEAQQA1AEEAQwAwAEEATwBRAEIAagBBAEQARQBBAFkAZwBBADMAQQBHAEkAQQBaAEEAQQAzAEEARwBNAEEATQBBAEIAbQBBAEQARQBBAAoAcABvAHMAaQB0AGkAbwBuADoATQBRAEEAdwBBAEQAVQBBAE0AUQBBADAAQQBBAD0APQAKAHAAcgBlAGYAaQB4ADoACgBzAG8AdQByAGMAZQA6AEwAUQBBAHQAQQBDADAAQQBDAGcAQQBqAEEAQwBBAEEAVABRAEIAdgBBAEcAUQBBAFoAUQBCAHkAQQBHAEUAQQBkAEEAQgBwAEEARwA4AEEAYgBnAEEANgBBAEMAQQBBAFUAdwBCAHAAQQBHADAAQQBjAEEAQgBzAEEARwBVAEEASQBBAEIAVABBAEcAdwBBAGIAdwBCAHcAQQBHAFUAQQBjAHcAQQBLAEEAQQBvAEEATABRAEEAZwBBAEYAYwBBAFoAUQBBAGcAQQBHAEUAQQBjAGcAQgBsAEEAQwBBAEEAWgBRAEIANABBAEcARQBBAGIAUQBCAHAAQQBHADQAQQBhAFEAQgB1AEEARwBjAEEASQBBAEIAMABBAEcAZwBBAFoAUQBBAGcAQQBHAGsAQQBiAGcAQgAwAEEARwBVAEEAYwBnAEIAaABBAEcATQBBAGQAQQBCAHAAQQBHADgAQQBiAGcAQQBnAEEARwBJAEEAWgBRAEIAMABBAEgAYwBBAFoAUQBCAGwAQQBHADQAQQBJAEEAQgBvAEEARwA4AEEAZABRAEIAeQBBAEgATQBBAEkAQQBCAHYAQQBHAFkAQQBJAEEAQgAyAEEARwBrAEEAWgBBAEIAbABBAEcAOABBAEkAQQBCAG4AQQBHAEUAQQBiAFEAQgBsAEEASABNAEEASQBBAEIAaABBAEcANABBAFoAQQBBAGcAQQBIAFUAQQBiAGcAQgBsAEEARwAwAEEAYgB3AEIAMABBAEcAawBBAGIAdwBCAHUAQQBHAEUAQQBiAEEAQQBnAEEASABRAEEAYwBnAEIAaABBAEcAawBBAGQAQQBCAHoAQQBDAEEAQQBkAEEAQgB2AEEAQwBBAEEAYwBBAEIAeQBBAEcAVQBBAFoAQQBCAHAAQQBHAE0AQQBkAEEAQQBnAEEARwBFAEEAWgB3AEIAbgBBAEgASQBBAFoAUQBCAHoAQQBIAE0AQQBhAFEAQgB2AEEARwA0AEEAQwBnAEEASwBBAEMAMABBAEkAQQBCAFUAQQBHAGcAQQBhAFEAQgB1AEEARwBzAEEASQBBAEIAaABBAEcASQBBAGIAdwBCADEAQQBIAFEAQQBJAEEAQgAzAEEARwBnAEEAYQBRAEIAagBBAEcAZwBBAEkAQQBCADIAQQBHAEUAQQBjAGcAQgBwAEEARwBFAEEAWQBnAEIAcwBBAEcAVQBBAEkAQQBCADUAQQBHADgAQQBkAFEAQQBnAEEASABjAEEAWQBRAEIAdQBBAEgAUQBBAEkAQQBCADAAQQBHADgAQQBJAEEAQgByAEEARwA0AEEAYgB3AEIAMwBBAEMAQQBBAGQAQQBCAG8AQQBHAFUAQQBJAEEAQgBrAEEARwBrAEEAWgBnAEIAbQBBAEcAVQBBAGMAZwBCAGwAQQBHADQAQQBZAHcAQgBsAEEASABNAEEASQBBAEIAcABBAEcANABBAEkAQQBBAG8AQQBHAGsAQQBMAGcAQgBsAEEAQwA0AEEATABBAEEAZwBBAEcAdwBBAGIAdwBCADMAQQBDAHcAQQBJAEEAQgBoAEEASABZAEEAWgBRAEIAeQBBAEcARQBBAFoAdwBCAGwAQQBDAHcAQQBJAEEAQgBvAEEARwBrAEEAWgB3AEIAbwBBAEMAawBBAEMAZwBBAEsAQQBDADAAQQBJAEEAQgBUAEEARwA4AEEASQBBAEIAaABBAEgAUQBBAEkAQQBCAGsAQQBHAGsAQQBaAGcAQgBtAEEARwBVAEEAYwBnAEIAbABBAEcANABBAGQAQQBBAGcAQQBHAHcAQQBaAFEAQgAyAEEARwBVAEEAYgBBAEIAegBBAEMAQQBBAGIAdwBCAG0AQQBDAEEAQQBZAHcAQgBoAEEARwB3AEEAYgBBAEIAdgBBAEgAVQBBAGMAdwBCAHUAQQBHAFUAQQBjAHcAQgB6AEEAQwB3AEEASQBBAEIAMwBBAEcAVQBBAEkAQQBCADMAQQBHAEUAQQBiAGcAQgAwAEEAQwBBAEEAZABBAEIAdgBBAEMAQQBBAFoAUQBCADQAQQBHAEUAQQBiAFEAQgBwAEEARwA0AEEAWgBRAEEAZwBBAEgAUQBBAGEAQQBCAGwAQQBDAEEAQQBjAGcAQgBsAEEARwB3AEEAWQBRAEIAMABBAEcAawBBAGIAdwBCAHUAQQBIAE0AQQBhAEEAQgBwAEEASABBAEEASQBBAEIAaQBBAEcAVQBBAGQAQQBCADMAQQBHAFUAQQBaAFEAQgB1AEEAQwBBAEEAYQBBAEIAdgBBAEgAVQBBAGMAZwBCAHoAQQBDAEEAQQBiAHcAQgBtAEEAQwBBAEEAZABnAEIAcABBAEcAUQBBAFoAUQBCAHYAQQBDAEEAQQBaAHcAQgBoAEEARwAwAEEAWgBRAEEAZwBBAEgAQQBBAGIAQQBCAGgAQQBIAGsAQQBJAEEAQgBoAEEARwA0AEEAWgBBAEEAZwBBAEcARQBBAFoAdwBCAG4AQQBIAEkAQQBaAFEAQgB6AEEASABNAEEAYQBRAEIAdgBBAEcANABBAEMAZwBBAHQAQQBDADAAQQBMAFEAQQA9AAoAcwB1AGYAZgBpAHgAOgA=:31b8e172-b470-440e-83d8-e6b185028602
 
-# Probing Interactions: Spotlight Analysis
+## Probing Interactions: Spotlight Analysis
 
 -   Low/below mean created by *SUBTRACTING* 1 SD
 
@@ -537,7 +596,7 @@ emtrends(d,~caunts_c, var="vid_games_c", at=mylist)
 -   At high levels of callousness, the strength of hours of video games
     predicting aggression is the strongest, b = 0.43
 
-## Probing Interactions: Simplier Way
+## Probing Interactions
 
 -   Use `interact_plot` from the `interactions`
 
@@ -550,23 +609,27 @@ interact_plot(d, pred = vid_games_c, modx = caunts_c, interval = TRUE, plot.poin
 
 ## Probing Interactions: Johnson-Neyman Plot
 
--   Is a floodlight analysis on the whole range of the moderator
+::: columns
+::: {.column width="50%"}
+-   Floodlight analysis on the whole range of the moderator
 
 -   Provides an interval (2 points) where the slope of a predictor is
     not statistically significant across different values of the
     mediator
 
 ```{r}
-library(interactions)
 johnson_neyman(model = d, pred = vid_games_c,
   modx = caunts_c, control.fdr = TRUE) # important bc otherwise does not correct for multiple comparisons
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+knitr::include_graphics("images/JNplot.png")
 
 ```
-
-```{r, echo=FALSE, fig.align='center', out.width="100%", warning=FALSE, message=FALSE, fig.align='center'}
-
-knitr::include_graphics("JNplot.png")
-```
+:::
+:::
 
 ## Moderation: MeMoBootR
 
@@ -596,3 +659,38 @@ mod_model <- moderation1(y = "Aggression",
 #graphs
 #mod_model$graphslopes
 ```
+
+## Power
+
+```{r}
+
+WebPower::wp.regression(n=NULL, p1=3, p2=0, f2=.2, alpha=.05, power=.9)
+
+```
+
+## Power
+
+-   `InteractionPoweR`
+
+```{r}
+#install.packages("InteractionPoweR")
+library(InteractionPoweR)
+
+```
+
+-   All we need is:
+
+    -   Correlations
+
+        -   X1-Y
+
+        -   X2-Y
+
+        -   X1X2-Y
+
+        -   X1-X2
+
+```{=html}
+<!-- -->
+```
+-   <https://mfinsaas.shinyapps.io/InteractionPoweR/>
