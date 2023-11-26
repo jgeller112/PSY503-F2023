@@ -11,7 +11,7 @@
   <meta name="generator" content="quarto-1.4.504">
 
   <meta name="author" content="Jason Geller, PH.D.(he/him)">
-  <meta name="dcterms.date" content="2023-11-25">
+  <meta name="dcterms.date" content="2023-11-26">
   <title>Interactions 1</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -683,7 +683,7 @@ Jason Geller, PH.D.(he/him)
 </div>
 </div>
 
-  <p class="date">2023-11-25</p>
+  <p class="date">2023-11-26</p>
 </section>
 <section id="packages" class="slide level2">
 <h2>Packages</h2>
@@ -2276,7 +2276,7 @@ evals_interact <- evals1 %>%
 <li><span class="math inline">\(b_0\)</span>: the intercept, or the predicted outcome when X = at mean and Z=0</li>
 <li><span class="math inline">\(b_1\)</span>: the slope of <span class="math inline">\(X\)</span>, for a one unit change in <span class="math inline">\(X\)</span> the predicted change in <span class="math inline">\(Y\)</span> at <span class="math inline">\(Z = 0\)</span></li>
 <li><span class="math inline">\(b_2\)</span>: The offset/difference in the intercept for a one unit change in <span class="math inline">\(Z\)</span> the predicted change in Y at X = 0 (or at it’s mean)</li>
-<li><span class="math inline">\(b_3\)</span>: The interaction of <span class="math inline">\(X\)</span> and <span class="math inline">\(Z\)</span>, the offset in slope for <span class="math inline">\(Z\)</span> for a one-unit increase in <span class="math inline">\(X\)</span> (or vice versa)</li>
+<li><span class="math inline">\(b_3\)</span>: The interaction of <span class="math inline">\(X\)</span> and <span class="math inline">\(Z\)</span>, the offset/difference in slope for <span class="math inline">\(Z\)</span> for a one-unit increase in <span class="math inline">\(X\)</span> (or vice versa)</li>
 </ul>
 </section>
 <section id="interpretations-1" class="slide level2">
@@ -7200,7 +7200,7 @@ ggplot(evals_interact, aes(x = age, y = score, color = gender)) +
 <p><strong>Tip</strong></p>
 </div>
 <div class="callout-content">
-<p>All continuous predictors were mean-centered and deviation coding was used for categorical predictors. The results of the regression indicated that the model significantly predicted evaluation scores accounting for 5% of the variance. Age was a significant negative predictor of scores, <em>b</em> = -0.01, <em>SE</em> = .003, 95% CI [-0.02, -0.01], t = -3.89, <em>p</em> &lt; .001, with increases in age being associated with lower evals. Gender was also significant, <em>b</em> = -0.208, <em>SE</em> = .05, 95% CI [-0.312, -0.105], t = -3.95, <em>p</em> &lt; .001, with women (<em>M</em> = 4.04) having lower evals than men (<em>M</em> =4.24). Importantly, there was a significant interaction between age and gender, <em>b</em> = -0.01, <em>SE</em> = .01, 95% CI [-0.02, -0.003], t = -2.45, <em>p</em> &lt; .001). A simple slopes analysis indicated a significant slope for women, <em>b</em> = -0.02, <em>SE</em> = 0.004, 95% CI [-0.026, -0.009], <em>t</em> = -3.92, <em>p</em> &lt; .001, but not men, <em>b</em> = 0.004, <em>SE</em> = 0.003, 95% CI [-0.01, 0.002], <em>t</em> = -1.23, <em>p</em> = 0.22. While age does not seem to affect evaluation scores for men, evaluation scores are poorer for older women.</p>
+<p>All continuous predictors were mean-centered and deviation coding was used for categorical predictors. The results of the regression indicated that the model significantly predicted evaluation scores (R2 =0.05, F(3, 459) = 8.29, p &lt;.001, adj. R2 = 0.05) accounting for 5% of the variance. Age was a significant negative predictor of scores, <em>b</em> = -0.01, <em>SE</em> = .003, 95% CI [-0.02, -0.01], t = -3.89, <em>p</em> &lt; .001, with increases in age being associated with lower evals. Gender was also significant, <em>b</em> = -0.208, <em>SE</em> = .05, 95% CI [-0.312, -0.105], t = -3.95, <em>p</em> &lt; .001, with women (<em>M</em> = 4.04) having lower evals than men (<em>M</em> =4.24). Importantly, there was a significant interaction between age and gender, <em>b</em> = -0.01, <em>SE</em> = .01, 95% CI [-0.02, -0.003], t = -2.45, <em>p</em> &lt; .001). A simple slopes analysis indicated a significant slope for women, <em>b</em> = -0.02, <em>SE</em> = 0.004, 95% CI [-0.026, -0.009], <em>t</em> = -3.92, <em>p</em> &lt; .001, but not men, <em>b</em> = 0.004, <em>SE</em> = 0.003, 95% CI [-0.01, 0.002], <em>t</em> = -1.23, <em>p</em> = 0.22. While age does not seem to affect evaluation scores for men, evaluation scores are poorer for older women.</p>
 </div>
 </div>
 </div>
@@ -9833,8 +9833,9 @@ moderation_vio <- moderation_vio %>%
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
       value: `lm(Aggression~ vid_games_c*caunts_c,  data=moderation_vio) %>%
-  slice(4) %>% 
-  tidy(conf.int=TRUE)`,
+  tidy(conf.int=TRUE)
+ slice(4) %>% 
+   kable()`,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -10719,8 +10720,9 @@ mylist <- list(caunts_c=c(round(b, 1), round(at,1), round(a, 1)))
 d=lm(Aggression~vid_games_c*caunts_c,data=moderation_vio)
 
 # get simple slopes at each level at b a
+#adjust for multiple tests
 emtrends(d,~caunts_c, var="vid_games_c", at=mylist) %>%
-  test()`,
+  test(adjust="holm")`,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -10977,7 +10979,11 @@ emtrends(d,~caunts_c, var="vid_games_c", at=mylist) %>%
 </script>
 <div class="fragment">
 <ul>
-<li>At high levels of callousness, the strength of hours of video games predicting aggression is the strongest, b = 0.43</li>
+<li>At average levels of callousness, the association between hours played and aggression is positive, <em>b</em> = .17</li>
+</ul>
+<!-- -->
+<ul>
+<li>At high levels of callousness, the strength of hours of video games predicting aggression is the strongest, <em>b</em> = 0.43</li>
 </ul>
 </div>
 </section>
@@ -11590,7 +11596,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">hypothesis_test</span>(pr, <span class="at">test=</span><span class="cn">NULL</span>) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">hypothesis_test</span>(pr, <span class="at">test=</span><span class="cn">NULL</span>, <span class="at">p_adjust =</span> <span class="st">"holm"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb6-2"><a href="#cb6-2"></a>  <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table data-quarto-postprocess="true">
@@ -11611,7 +11617,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">-0.3337320</td>
 <td style="text-align: right;">-0.6302354</td>
 <td style="text-align: right;">-0.0372286</td>
-<td style="text-align: right;">0.0274704</td>
+<td style="text-align: right;">0.5029953</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">slope</td>
@@ -11619,7 +11625,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">-0.3066698</td>
 <td style="text-align: right;">-0.5910010</td>
 <td style="text-align: right;">-0.0223387</td>
-<td style="text-align: right;">0.0345841</td>
+<td style="text-align: right;">0.5879292</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">slope</td>
@@ -11627,7 +11633,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">-0.2796076</td>
 <td style="text-align: right;">-0.5519214</td>
 <td style="text-align: right;">-0.0072938</td>
-<td style="text-align: right;">0.0441965</td>
+<td style="text-align: right;">0.7071445</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">slope</td>
@@ -11635,7 +11641,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">-0.2525454</td>
 <td style="text-align: right;">-0.5130128</td>
 <td style="text-align: right;">0.0079219</td>
-<td style="text-align: right;">0.0573541</td>
+<td style="text-align: right;">0.8603115</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">slope</td>
@@ -11643,7 +11649,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">-0.2254833</td>
 <td style="text-align: right;">-0.4742998</td>
 <td style="text-align: right;">0.0233333</td>
-<td style="text-align: right;">0.0755913</td>
+<td style="text-align: right;">1.0000000</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">slope</td>
@@ -11651,7 +11657,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">-0.1984211</td>
 <td style="text-align: right;">-0.4357799</td>
 <td style="text-align: right;">0.0389378</td>
-<td style="text-align: right;">0.1011048</td>
+<td style="text-align: right;">1.0000000</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">slope</td>
@@ -11659,7 +11665,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">-0.1713589</td>
 <td style="text-align: right;">-0.3975433</td>
 <td style="text-align: right;">0.0548256</td>
-<td style="text-align: right;">0.1372079</td>
+<td style="text-align: right;">1.0000000</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">slope</td>
@@ -11667,7 +11673,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">-0.1442967</td>
 <td style="text-align: right;">-0.3596104</td>
 <td style="text-align: right;">0.0710171</td>
-<td style="text-align: right;">0.1884778</td>
+<td style="text-align: right;">1.0000000</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">slope</td>
@@ -11675,7 +11681,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">-0.1172345</td>
 <td style="text-align: right;">-0.3219646</td>
 <td style="text-align: right;">0.0874956</td>
-<td style="text-align: right;">0.2610175</td>
+<td style="text-align: right;">1.0000000</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">slope</td>
@@ -11683,7 +11689,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">-0.0901723</td>
 <td style="text-align: right;">-0.2847782</td>
 <td style="text-align: right;">0.1044336</td>
-<td style="text-align: right;">0.3629635</td>
+<td style="text-align: right;">1.0000000</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">slope</td>
@@ -11691,7 +11697,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">-0.0631101</td>
 <td style="text-align: right;">-0.2480262</td>
 <td style="text-align: right;">0.1218060</td>
-<td style="text-align: right;">0.5027201</td>
+<td style="text-align: right;">1.0000000</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">slope</td>
@@ -11699,7 +11705,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">-0.0360479</td>
 <td style="text-align: right;">-0.2118081</td>
 <td style="text-align: right;">0.1397122</td>
-<td style="text-align: right;">0.6870733</td>
+<td style="text-align: right;">1.0000000</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">slope</td>
@@ -11707,7 +11713,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">-0.0089857</td>
 <td style="text-align: right;">-0.1762247</td>
 <td style="text-align: right;">0.1582532</td>
-<td style="text-align: right;">0.9159476</td>
+<td style="text-align: right;">1.0000000</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">slope</td>
@@ -11715,7 +11721,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">0.0180764</td>
 <td style="text-align: right;">-0.1413409</td>
 <td style="text-align: right;">0.1774937</td>
-<td style="text-align: right;">0.8237503</td>
+<td style="text-align: right;">1.0000000</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">slope</td>
@@ -11723,7 +11729,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">0.0451386</td>
 <td style="text-align: right;">-0.1073294</td>
 <td style="text-align: right;">0.1976066</td>
-<td style="text-align: right;">0.5609594</td>
+<td style="text-align: right;">1.0000000</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">slope</td>
@@ -11731,7 +11737,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">0.0722008</td>
 <td style="text-align: right;">-0.0742708</td>
 <td style="text-align: right;">0.2186724</td>
-<td style="text-align: right;">0.3331749</td>
+<td style="text-align: right;">1.0000000</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">slope</td>
@@ -11739,7 +11745,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">0.0992630</td>
 <td style="text-align: right;">-0.0422840</td>
 <td style="text-align: right;">0.2408100</td>
-<td style="text-align: right;">0.1688213</td>
+<td style="text-align: right;">1.0000000</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">slope</td>
@@ -11747,7 +11753,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">0.1263252</td>
 <td style="text-align: right;">-0.0114862</td>
 <td style="text-align: right;">0.2641366</td>
-<td style="text-align: right;">0.0722983</td>
+<td style="text-align: right;">1.0000000</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">slope</td>
@@ -11755,7 +11761,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">0.1533874</td>
 <td style="text-align: right;">0.0180016</td>
 <td style="text-align: right;">0.2887731</td>
-<td style="text-align: right;">0.0264734</td>
+<td style="text-align: right;">0.5029953</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">slope</td>
@@ -11763,7 +11769,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">0.1804496</td>
 <td style="text-align: right;">0.0461251</td>
 <td style="text-align: right;">0.3147740</td>
-<td style="text-align: right;">0.0085795</td>
+<td style="text-align: right;">0.1715909</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">slope</td>
@@ -11771,7 +11777,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">0.2075118</td>
 <td style="text-align: right;">0.0728712</td>
 <td style="text-align: right;">0.3421523</td>
-<td style="text-align: right;">0.0025977</td>
+<td style="text-align: right;">0.0545526</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">slope</td>
@@ -11779,7 +11785,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">0.2345739</td>
 <td style="text-align: right;">0.0982114</td>
 <td style="text-align: right;">0.3709365</td>
-<td style="text-align: right;">0.0007872</td>
+<td style="text-align: right;">0.0173187</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">slope</td>
@@ -11787,7 +11793,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">0.2616361</td>
 <td style="text-align: right;">0.1222330</td>
 <td style="text-align: right;">0.4010393</td>
-<td style="text-align: right;">0.0002537</td>
+<td style="text-align: right;">0.0058360</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">slope</td>
@@ -11795,7 +11801,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">0.2886983</td>
 <td style="text-align: right;">0.1449861</td>
 <td style="text-align: right;">0.4324105</td>
-<td style="text-align: right;">0.0000917</td>
+<td style="text-align: right;">0.0022012</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">slope</td>
@@ -11803,7 +11809,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">0.3157605</td>
 <td style="text-align: right;">0.1666209</td>
 <td style="text-align: right;">0.4649001</td>
-<td style="text-align: right;">0.0000381</td>
+<td style="text-align: right;">0.0009532</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">slope</td>
@@ -11811,7 +11817,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">0.3428227</td>
 <td style="text-align: right;">0.1872151</td>
 <td style="text-align: right;">0.4984303</td>
-<td style="text-align: right;">0.0000185</td>
+<td style="text-align: right;">0.0004810</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">slope</td>
@@ -11819,7 +11825,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">0.3698849</td>
 <td style="text-align: right;">0.2068956</td>
 <td style="text-align: right;">0.5328742</td>
-<td style="text-align: right;">0.0000104</td>
+<td style="text-align: right;">0.0002813</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">slope</td>
@@ -11827,7 +11833,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">0.3969471</td>
 <td style="text-align: right;">0.2258419</td>
 <td style="text-align: right;">0.5680523</td>
-<td style="text-align: right;">0.0000067</td>
+<td style="text-align: right;">0.0001865</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">slope</td>
@@ -11835,7 +11841,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">0.4240093</td>
 <td style="text-align: right;">0.2440593</td>
 <td style="text-align: right;">0.6039593</td>
-<td style="text-align: right;">0.0000048</td>
+<td style="text-align: right;">0.0001439</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">slope</td>
@@ -11843,7 +11849,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">0.4510715</td>
 <td style="text-align: right;">0.2617204</td>
 <td style="text-align: right;">0.6404225</td>
-<td style="text-align: right;">0.0000038</td>
+<td style="text-align: right;">0.0001252</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">slope</td>
@@ -11851,7 +11857,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">0.4781336</td>
 <td style="text-align: right;">0.2788311</td>
 <td style="text-align: right;">0.6774362</td>
-<td style="text-align: right;">0.0000033</td>
+<td style="text-align: right;">0.0001178</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">slope</td>
@@ -11859,7 +11865,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">0.5051958</td>
 <td style="text-align: right;">0.2955640</td>
 <td style="text-align: right;">0.7148277</td>
-<td style="text-align: right;">0.0000029</td>
+<td style="text-align: right;">0.0001178</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">slope</td>
@@ -11867,7 +11873,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">0.5322580</td>
 <td style="text-align: right;">0.3119161</td>
 <td style="text-align: right;">0.7525999</td>
-<td style="text-align: right;">0.0000028</td>
+<td style="text-align: right;">0.0001178</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">slope</td>
@@ -11875,7 +11881,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">0.5593202</td>
 <td style="text-align: right;">0.3279754</td>
 <td style="text-align: right;">0.7906650</td>
-<td style="text-align: right;">0.0000027</td>
+<td style="text-align: right;">0.0001178</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">slope</td>
@@ -11883,7 +11889,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">0.5863824</td>
 <td style="text-align: right;">0.3436964</td>
 <td style="text-align: right;">0.8290684</td>
-<td style="text-align: right;">0.0000028</td>
+<td style="text-align: right;">0.0001178</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">slope</td>
@@ -11891,7 +11897,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">0.6134446</td>
 <td style="text-align: right;">0.3592578</td>
 <td style="text-align: right;">0.8676313</td>
-<td style="text-align: right;">0.0000029</td>
+<td style="text-align: right;">0.0001178</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">slope</td>
@@ -11899,7 +11905,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">0.6405068</td>
 <td style="text-align: right;">0.3745389</td>
 <td style="text-align: right;">0.9064746</td>
-<td style="text-align: right;">0.0000030</td>
+<td style="text-align: right;">0.0001178</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">slope</td>
@@ -11907,7 +11913,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">0.6675690</td>
 <td style="text-align: right;">0.3896822</td>
 <td style="text-align: right;">0.9454557</td>
-<td style="text-align: right;">0.0000032</td>
+<td style="text-align: right;">0.0001178</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">slope</td>
@@ -11915,7 +11921,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">0.6946311</td>
 <td style="text-align: right;">0.4046855</td>
 <td style="text-align: right;">0.9845768</td>
-<td style="text-align: right;">0.0000034</td>
+<td style="text-align: right;">0.0001178</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">slope</td>
@@ -11923,7 +11929,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">0.7216933</td>
 <td style="text-align: right;">0.4195149</td>
 <td style="text-align: right;">1.0238718</td>
-<td style="text-align: right;">0.0000036</td>
+<td style="text-align: right;">0.0001220</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">slope</td>
@@ -11931,7 +11937,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">0.7758177</td>
 <td style="text-align: right;">0.4487827</td>
 <td style="text-align: right;">1.1028527</td>
-<td style="text-align: right;">0.0000042</td>
+<td style="text-align: right;">0.0001329</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">slope</td>
@@ -11939,7 +11945,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">0.8028799</td>
 <td style="text-align: right;">0.4633260</td>
 <td style="text-align: right;">1.1424338</td>
-<td style="text-align: right;">0.0000045</td>
+<td style="text-align: right;">0.0001382</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">slope</td>
@@ -11947,7 +11953,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <td style="text-align: right;">0.8299421</td>
 <td style="text-align: right;">0.4777436</td>
 <td style="text-align: right;">1.1821405</td>
-<td style="text-align: right;">0.0000048</td>
+<td style="text-align: right;">0.0001439</td>
 </tr>
 </tbody>
 </table>
@@ -11978,7 +11984,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <p><strong>Important</strong></p>
 </div>
 <div class="callout-content">
-<p>All continuous predictors were mean-centered. The results of the regression indicated that the model significantly predicted violent behavior scores (R2 = 0.38,F(3, 438) = 88.46, p &lt; .001, adj.R2 = 0.37) accounting for 37% of the variance. Hours was a significant positive predictor of violence, <em>b</em> = 0.17, <em>SE</em> = .07, 95% CI [0.04, 0.3], t = 2.48, <em>p</em> &lt; .014, with increases in hours played being associated with higher levels of violence. Callous traits was also a positive predictor of violence, <em>b</em> = 0.76, <em>SE</em> = .05, 95% CI [0.51, 0.65], t = 15.37, <em>p</em> &lt; .001, with increases in callous traits being associated with higher levels of violence. Importantly, there was a significant interaction between hours played and callous traits, <em>b</em> = 0.03, <em>SE</em> = .01, 95% CI [0.01, 0.04], t = 3.88, <em>p</em> &lt; .001). Following up with a simple slopes/spotlight analysis showed the effect was strongest at high levels of callous traits, <em>b</em> = -0.42, <em>SE</em>= 0.09, <em>t</em> = 4.64, <em>p</em> &lt; .0001, but not at low levels of callous traits, <em>b</em> = -0.09, <em>SE</em>= 0.10, <em>t</em> = -0.911, <em>p</em> = 0.36 Thus, hours playing video games and violent scores is moderated by callous traits. Specifically, the relationship between hours playing video games and violent cognition is strongest for those with high callous traits.</p>
+<p>All continuous predictors were mean-centered. The results of the regression indicated that the model significantly predicted violent behavior scores (R2 = 0.38,F(3, 438) = 88.46, p &lt; .001, adj.R2 = 0.37) accounting for 37% of the variance. Hours was a significant positive predictor of violence, <em>b</em> = 0.17, <em>SE</em> = .07, 95% CI [0.04, 0.3], t = 2.48, <em>p</em> &lt; .014, with increases in hours played being associated with higher levels of violence. Callous traits was also a positive predictor of violence, <em>b</em> = 0.76, <em>SE</em> = .05, 95% CI [0.51, 0.65], t = 15.37, <em>p</em> &lt; .001, with increases in callous traits being associated with higher levels of violence. Importantly, there was a significant interaction between hours played and callous traits, <em>b</em> = 0.03, <em>SE</em> = .01, 95% CI [0.01, 0.04], t = 3.88, <em>p</em> &lt; .001). Following up with a simple slopes/spotlight analysis showed the effect was significant at average levels of callous traits, <em>b</em> = -0.42, <em>SE</em>= 0.09, <em>t</em> = 4.64, <em>p</em> &lt; .0001 and high levels of callous traits, <em>b</em> = -0.42, <em>SE</em>= 0.09, <em>t</em> = 4.64, <em>p</em> &lt; .0001, but not at low levels of callous traits, <em>b</em> = -0.09, <em>SE</em>= 0.10, <em>t</em> = -0.911, <em>p</em> = 0.36 Thus, hours playing video games and violent scores is moderated by callous traits. Specifically, the relationship between hours playing video games and violent cognition is strongest for those with high callous traits.</p>
 </div>
 </div>
 </div>
@@ -12000,7 +12006,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <p><strong>Tip</strong></p>
 </div>
 <div class="callout-content">
-<p>Since the moderator (callous traits) was continuous, we looked for the turning points for where exactly, in the value of the moderator, the effect of the independent variable (Hours) turns from non-significance to significance (for a pre-specified significance level of 0.05). This is done using the Johnson–Neyman technique. The Johnson–Neyman technique showed that at a Hours &gt; 0 is the turning point . When callous traits is greater than 0, hours played is associated with greater violence.</p>
+<p>Since the moderator (callous traits) was continuous, we looked for the turning points for where exactly, in the value of the moderator, the effect of the independent variable (Hours) turns from non-significance to significance (for a pre-specified significance level of 0.05). This is done using the Johnson–Neyman technique. The Johnson–Neyman technique showed that at the association between hours played and aggression is positive for values higher than -1.30. Inside the interval of [-16.20, -1.30], there were no clear associations. There is a more detrimental effect between hours played and aggression at high levels of callous traits.</p>
 </div>
 </div>
 </div>
@@ -12054,7 +12060,7 @@ URL: http://psychstat.org/regression</code></pre>
 <section id="power-1" class="slide level2">
 <h2>Power</h2>
 <ul>
-<li><code>InteractionPoweR</code><span class="citation" data-cites="baranger2023">(<a href="#/next-time" role="doc-biblioref" onclick="">Baranger et al. 2023</a>)</span>
+<li><code>InteractionPoweR</code><span class="citation" data-cites="baranger2023">(<a href="#/cited" role="doc-biblioref" onclick="">Baranger et al. 2023</a>)</span>
 <ul>
 <li><a href="https://mfinsaas.shinyapps.io/InteractionPoweR/" class="uri">https://mfinsaas.shinyapps.io/InteractionPoweR/</a></li>
 </ul></li>
@@ -12076,11 +12082,14 @@ URL: http://psychstat.org/regression</code></pre>
 </ul></li>
 </ul>
 </section>
-<section id="next-time" class="slide level2 smaller scrollable">
+<section id="next-time" class="slide level2">
 <h2>Next time</h2>
 <ul>
 <li>Categorical x categorical interactions</li>
 </ul>
+</section>
+<section id="cited" class="slide level2 smaller scrollable">
+<h2>Cited</h2>
 <div class="footer footer-default">
 <p>PSY 503: Foundations of Statistics in Psychology</p>
 </div>

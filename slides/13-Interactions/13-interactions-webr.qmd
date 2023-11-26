@@ -560,8 +560,9 @@ lm(Aggression~ vid_games_c*caunts_c,  data=moderation_vio) %>%
 
 ```{webr-r}
 lm(Aggression~ vid_games_c*caunts_c,  data=moderation_vio) %>%
-  slice(4) %>% 
   tidy(conf.int=TRUE)
+ slice(4) %>% 
+   kable()
 ```
 
 ```{webr-r}
@@ -630,9 +631,8 @@ emtrends(d,~caunts_c, var="vid_games_c", at=mylist) %>%
 -   At average levels of callousness, the association between hours
     played and aggression is positive, *b* = .17
 
-```{=html}
 <!-- -->
-```
+
 -   At high levels of callousness, the strength of hours of video games
     predicting aggression is the strongest, *b* = 0.43
 
@@ -809,3 +809,5 @@ library(InteractionPoweR)
 ## Next time
 
 -   Categorical x categorical interactions
+
+## Cited
