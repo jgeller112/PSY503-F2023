@@ -96,7 +96,7 @@ lm(plant_growth ~ sun_exposure * water)
 
 -   Disordinal
 
-    -   Crossover
+    -   Cross-over
 
 ![](images/disord.png){fig-align="center"}
 
@@ -109,6 +109,8 @@ lm(plant_growth ~ sun_exposure * water)
 ## Interaction shapes
 
 -   Ordinal
+
+    -   Knockout
 
 ![](https://uopsych.github.io/psy612/lectures/14-interactions_files/figure-revealjs/unnamed-chunk-20-1.png){fig-align="center"}
 
@@ -679,18 +681,22 @@ d=lm(Aggression~vid_games_c*caunts_c,data=moderation_vio)
 ::: columns
 ::: {.column width="50%"}
 ```{r}
+library(ggeffects)
 
 pr <- ggpredict(d, c("vid_games_c", "caunts_c[all]"))
 
-plot(johnson_neyman(pr), show_rug=TRUE)
+hypothesis_test(pr, test=NULL, p_adjust = "holm") %>%
+  kable()
 
 ```
 :::
 
 ::: {.column width="50%"}
 ```{r}
-hypothesis_test(pr, test=NULL, p_adjust = "holm") %>%
-  kable()
+#| fig-align: center
+#| 
+plot(johnson_neyman(pr), show_rug=TRUE)
+
 ```
 :::
 :::
@@ -717,7 +723,7 @@ average levels of callous traits, *b* = -0.42, *SE*= 0.09, *t* = 4.64,
 *t* = 4.64, *p* \< .0001, but not at low levels of callous traits, *b* =
 -0.09, *SE*= 0.10, *t* = -0.911, *p* = 0.36 Thus, hours playing video
 games and violent scores is moderated by callous traits. Specifically,
-the relationship between hours playing video games and violent cognition
+the relationship between hours playing video games and violence scores
 is strongest for those with high callous traits.
 :::
 :::
@@ -734,7 +740,7 @@ to significance (for a pre-specified significance level of 0.05). This
 is done using the Johnson--Neyman technique. The Johnson--Neyman
 technique showed that at the association between hours played and
 aggression is positive for values higher than -1.30. Inside the interval
-of \[-16.20, -1.30\], there were no clear associations. There is a more
+of \[-16.20, -1.30\], there were no clear associations. There is a
 detrimental effect between hours played and aggression at high levels of
 callous traits.
 :::

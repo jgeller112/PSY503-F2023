@@ -740,7 +740,7 @@ Jason Geller, PH.D.(he/him)
 <ul>
 <li><p>Disordinal</p>
 <ul>
-<li>Crossover</li>
+<li>Cross-over</li>
 </ul></li>
 </ul>
 
@@ -755,7 +755,10 @@ Jason Geller, PH.D.(he/him)
 <section id="interaction-shapes-2" class="slide level2">
 <h2>Interaction shapes</h2>
 <ul>
-<li>Ordinal</li>
+<li><p>Ordinal</p>
+<ul>
+<li>Knockout</li>
+</ul></li>
 </ul>
 
 <img data-src="https://uopsych.github.io/psy612/lectures/14-interactions_files/figure-revealjs/unnamed-chunk-20-1.png" class="quarto-figure quarto-figure-center r-stretch"></section>
@@ -11577,27 +11580,12 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>pr <span class="ot">&lt;-</span> <span class="fu">ggpredict</span>(d, <span class="fu">c</span>(<span class="st">"vid_games_c"</span>, <span class="st">"caunts_c[all]"</span>))</span>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">library</span>(ggeffects)</span>
 <span id="cb4-2"><a href="#cb4-2"></a></span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="fu">plot</span>(<span class="fu">johnson_neyman</span>(pr), <span class="at">show_rug=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>The association between `vid_games_c` and `Aggression` is negative for
-  values of `caunts_c` lower than -16.20 and positive for values higher
-  than -1.30. Inside the interval of [-16.20, -1.30], there were no clear
-  associations. </code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="13-interactions-webr_files/figure-revealjs/unnamed-chunk-5-1.png" width="1152"></p>
-</figure>
-</div>
-</div>
-</div>
-</div><div class="column" style="width:50%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">hypothesis_test</span>(pr, <span class="at">test=</span><span class="cn">NULL</span>, <span class="at">p_adjust =</span> <span class="st">"holm"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a>  <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-3"><a href="#cb4-3"></a>pr <span class="ot">&lt;-</span> <span class="fu">ggpredict</span>(d, <span class="fu">c</span>(<span class="st">"vid_games_c"</span>, <span class="st">"caunts_c[all]"</span>))</span>
+<span id="cb4-4"><a href="#cb4-4"></a></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="fu">hypothesis_test</span>(pr, <span class="at">test=</span><span class="cn">NULL</span>, <span class="at">p_adjust =</span> <span class="st">"holm"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a>  <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table data-quarto-postprocess="true">
 <thead>
@@ -11961,6 +11949,23 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 
 </div>
 </div>
+</div><div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">plot</span>(<span class="fu">johnson_neyman</span>(pr), <span class="at">show_rug=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The association between `vid_games_c` and `Aggression` is negative for
+  values of `caunts_c` lower than -16.20 and positive for values higher
+  than -1.30. Inside the interval of [-16.20, -1.30], there were no clear
+  associations. </code></pre>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="13-interactions-webr_files/figure-revealjs/unnamed-chunk-6-1.png" class="quarto-figure quarto-figure-center" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -11984,7 +11989,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <p><strong>Important</strong></p>
 </div>
 <div class="callout-content">
-<p>All continuous predictors were mean-centered. The results of the regression indicated that the model significantly predicted violent behavior scores (R2 = 0.38,F(3, 438) = 88.46, p &lt; .001, adj.R2 = 0.37) accounting for 37% of the variance. Hours was a significant positive predictor of violence, <em>b</em> = 0.17, <em>SE</em> = .07, 95% CI [0.04, 0.3], t = 2.48, <em>p</em> &lt; .014, with increases in hours played being associated with higher levels of violence. Callous traits was also a positive predictor of violence, <em>b</em> = 0.76, <em>SE</em> = .05, 95% CI [0.51, 0.65], t = 15.37, <em>p</em> &lt; .001, with increases in callous traits being associated with higher levels of violence. Importantly, there was a significant interaction between hours played and callous traits, <em>b</em> = 0.03, <em>SE</em> = .01, 95% CI [0.01, 0.04], t = 3.88, <em>p</em> &lt; .001). Following up with a simple slopes/spotlight analysis showed the effect was significant at average levels of callous traits, <em>b</em> = -0.42, <em>SE</em>= 0.09, <em>t</em> = 4.64, <em>p</em> &lt; .0001 and high levels of callous traits, <em>b</em> = -0.42, <em>SE</em>= 0.09, <em>t</em> = 4.64, <em>p</em> &lt; .0001, but not at low levels of callous traits, <em>b</em> = -0.09, <em>SE</em>= 0.10, <em>t</em> = -0.911, <em>p</em> = 0.36 Thus, hours playing video games and violent scores is moderated by callous traits. Specifically, the relationship between hours playing video games and violent cognition is strongest for those with high callous traits.</p>
+<p>All continuous predictors were mean-centered. The results of the regression indicated that the model significantly predicted violent behavior scores (R2 = 0.38,F(3, 438) = 88.46, p &lt; .001, adj.R2 = 0.37) accounting for 37% of the variance. Hours was a significant positive predictor of violence, <em>b</em> = 0.17, <em>SE</em> = .07, 95% CI [0.04, 0.3], t = 2.48, <em>p</em> &lt; .014, with increases in hours played being associated with higher levels of violence. Callous traits was also a positive predictor of violence, <em>b</em> = 0.76, <em>SE</em> = .05, 95% CI [0.51, 0.65], t = 15.37, <em>p</em> &lt; .001, with increases in callous traits being associated with higher levels of violence. Importantly, there was a significant interaction between hours played and callous traits, <em>b</em> = 0.03, <em>SE</em> = .01, 95% CI [0.01, 0.04], t = 3.88, <em>p</em> &lt; .001). Following up with a simple slopes/spotlight analysis showed the effect was significant at average levels of callous traits, <em>b</em> = -0.42, <em>SE</em>= 0.09, <em>t</em> = 4.64, <em>p</em> &lt; .0001 and high levels of callous traits, <em>b</em> = -0.42, <em>SE</em>= 0.09, <em>t</em> = 4.64, <em>p</em> &lt; .0001, but not at low levels of callous traits, <em>b</em> = -0.09, <em>SE</em>= 0.10, <em>t</em> = -0.911, <em>p</em> = 0.36 Thus, hours playing video games and violent scores is moderated by callous traits. Specifically, the relationship between hours playing video games and violence scores is strongest for those with high callous traits.</p>
 </div>
 </div>
 </div>
@@ -12006,7 +12011,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <p><strong>Tip</strong></p>
 </div>
 <div class="callout-content">
-<p>Since the moderator (callous traits) was continuous, we looked for the turning points for where exactly, in the value of the moderator, the effect of the independent variable (Hours) turns from non-significance to significance (for a pre-specified significance level of 0.05). This is done using the Johnson–Neyman technique. The Johnson–Neyman technique showed that at the association between hours played and aggression is positive for values higher than -1.30. Inside the interval of [-16.20, -1.30], there were no clear associations. There is a more detrimental effect between hours played and aggression at high levels of callous traits.</p>
+<p>Since the moderator (callous traits) was continuous, we looked for the turning points for where exactly, in the value of the moderator, the effect of the independent variable (Hours) turns from non-significance to significance (for a pre-specified significance level of 0.05). This is done using the Johnson–Neyman technique. The Johnson–Neyman technique showed that at the association between hours played and aggression is positive for values higher than -1.30. Inside the interval of [-16.20, -1.30], there were no clear associations. There is a detrimental effect between hours played and aggression at high levels of callous traits.</p>
 </div>
 </div>
 </div>

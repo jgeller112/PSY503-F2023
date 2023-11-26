@@ -593,7 +593,6 @@ nrow(model_out)
 # will estimate all outliers methods
 outliers_list <- check_outliers(model_fit, method = "all")
 
-outliers_list
 # provides a col called outliers with prob of outliers by method (50% more than half said ob was outlier)
 
 out_data <-insight::get_data(model_fit)[outliers_list, ] # Show outliers data
