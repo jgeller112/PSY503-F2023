@@ -34,3 +34,7 @@ To access Lab 8, please [click
 here](https://classroom.github.com/a/ojY0P0zF)
 
 This lab will be due on November 26th, 2023
+
+## Lab Answers
+
+-   [Lab 8 answers](/Labs/lab_ans/lab8_ans/Lab8-Transformations_ans.qmd)
