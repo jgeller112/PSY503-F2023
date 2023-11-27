@@ -3,8 +3,13 @@ title: "Week 13"
 subtitle: "Interactions"
 date: 2023-11-27
 ---
+
 ## Before Class
 
 ### Textbook
 
-- Chapter 14 - Statistics and Data Science: A Modeling Approach
+-   Chapter 14 - Statistics and Data Science: A Modeling Approach
+
+## After Class
+
+{{< video https://www.youtube.com/watch?v=io7wm_c8arw width="800" height="400" >}}
