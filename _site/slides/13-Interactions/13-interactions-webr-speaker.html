@@ -5139,9 +5139,12 @@ evals_interact <- evals1 %>%
 <ul>
 <li><p>Obtain simple slopes</p>
 <ul>
+<li><p>The association between X and <em>Y</em> at different values of Z</p>
+<ul>
 <li><p>Conditional analysis looking at the slope between different levels of the moderator</p>
 <ul>
 <li>Test if slope <span class="math inline">\(\neq\)</span> 0</li>
+</ul></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -11571,7 +11574,10 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <ul>
 <li><p>Floodlight analysis on the whole range of the moderator</p>
 <ul>
-<li>Tests the slope at each observation of the moderator</li>
+<li><p>Tests the slope at each observation of the moderator</p>
+<ul>
+<li>Define a region of significance/non-significance across the slope</li>
+</ul></li>
 </ul></li>
 </ul>
 </section>
@@ -11583,7 +11589,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">library</span>(ggeffects)</span>
 <span id="cb4-2"><a href="#cb4-2"></a></span>
 <span id="cb4-3"><a href="#cb4-3"></a>pr <span class="ot">&lt;-</span> <span class="fu">ggpredict</span>(d, <span class="fu">c</span>(<span class="st">"vid_games_c"</span>, <span class="st">"caunts_c[all]"</span>))</span>
-<span id="cb4-4"><a href="#cb4-4"></a></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co">#correct for mult comparisons</span></span>
 <span id="cb4-5"><a href="#cb4-5"></a><span class="fu">hypothesis_test</span>(pr, <span class="at">test=</span><span class="cn">NULL</span>, <span class="at">p_adjust =</span> <span class="st">"holm"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb4-6"><a href="#cb4-6"></a>  <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -11951,7 +11957,7 @@ ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">plot</span>(<span class="fu">johnson_neyman</span>(pr), <span class="at">show_rug=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">plot</span>(<span class="fu">johnson_neyman</span>(pr, <span class="at">p_adjust =</span> <span class="st">"holm"</span>), <span class="at">show_rug=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>The association between `vid_games_c` and `Aggression` is negative for
   values of `caunts_c` lower than -16.20 and positive for values higher

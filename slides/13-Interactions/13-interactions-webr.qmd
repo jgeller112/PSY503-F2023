@@ -323,10 +323,12 @@ lm(score~age_c*gender_trt, data=evals_interact) %>%
 
 -   Obtain simple slopes
 
-    -   Conditional analysis looking at the slope between different
-        levels of the moderator
+    -   The association between X and *Y* at different values of Z
 
-        -   Test if slope $\neq$ 0
+        -   Conditional analysis looking at the slope between different
+            levels of the moderator
+
+            -   Test if slope $\neq$ 0
 
 ## Steps for moderation analysis
 
@@ -676,6 +678,9 @@ d=lm(Aggression~vid_games_c*caunts_c,data=moderation_vio)
 
     -   Tests the slope at each observation of the moderator
 
+        -   Define a region of significance/non-significance across the
+            slope
+
 ## Probing interactions: Johnson-Neyman Plot
 
 ::: columns
@@ -684,7 +689,7 @@ d=lm(Aggression~vid_games_c*caunts_c,data=moderation_vio)
 library(ggeffects)
 
 pr <- ggpredict(d, c("vid_games_c", "caunts_c[all]"))
-
+#correct for mult comparisons
 hypothesis_test(pr, test=NULL, p_adjust = "holm") %>%
   kable()
 
@@ -695,7 +700,7 @@ hypothesis_test(pr, test=NULL, p_adjust = "holm") %>%
 ```{r}
 #| fig-align: center
 #| 
-plot(johnson_neyman(pr), show_rug=TRUE)
+plot(johnson_neyman(pr, p_adjust = "holm"), show_rug=TRUE)
 
 ```
 :::
