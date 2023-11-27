@@ -1,0 +1,450 @@
+---
+title: "Lab 8: Transformations"
+subtitle: "Princeton University"
+author: "Jason Geller, Ph.D.(he/him)"
+date: 'Updated:`r Sys.Date()`'
+format: html
+toc: true
+toc_float: true
+html:
+    code-fold: true
+    code-tools: true
+execute: 
+  warning: false
+  message: false
+engine: knitr
+webr: 
+  packages: ["tidyverse", "broom","janitor",  "emmeans", "knitr", "easystats"]
+filters:
+  - webr
+---
+
+## Introduction to dataset
+
+We will be analyzing data from the following paper:
+
+Winter, B., Perlman, M., Perry, L. K., & Lupyan, G. (2017). Which words are most iconic? Iconicity in English sensory words. Interaction Studies, 18(3), 433-454.(file:///Users/jasongeller/Downloads/interactionStudies_WinterEtAl2017.pdf)
+
+For this study, Winter et al. collected iconicity ratings from 2,500 native American English speakers for 3,000 words. Participants were asked to rate each word for whether "it sounds like what it means" or "it sounds like the opposite of what it means" on a scale from -5.0 to +5.0. Here, we will be looking at each word's average iconicity score, and we want to look at what words are most iconic.
+
+## Analysis 1: Centering a predictor
+
+Let's load the data into R 
+
+```{webr-r}
+
+library(tidyverse)
+library(broom)
+library(easystats)
+library(knitr)
+
+
+icon <- read_csv("https://raw.githubusercontent.com/jgeller112/psy503-psych_stats/master/static/slides/13_Interactions/data/perry_winter_2017_iconicity.csv")
+
+```
+
+A quick explanation of some of the columns.
+
+- Word = the word (should be unique words)
+
+- SER = sensory experience ratings from Juhasz & Jap (2013)
+
+- imageability = imageability ratings from Cortese & Fugett (2004)
+- Concreteness = concreteness ratings from Brysbaert et al. (2014)
+- Systematicity = systematicity ratings from Monaghan et al. (2014)
+- frequency = frequency of words  from SUBTLEX (Brysbaert & New, 2009)
+
+> Check whether there are any duplicate words in the dataset (`get_dupes` from `Janitor` package is good one to use)
+
+```{webr-r}
+
+icon_dup <- janitor::get_dupes(icon)
+
+icon_dup
+
+```
+
+- If so, which ones are they? Get rid of those:
+
+  - tuxedo and yacht
+
+```{webr-r}
+#removes dup
+icon <- distinct(icon)
+
+```
+
+> Get rid of NAs in the model
+
+```{webr-r}
+
+# remove nas 
+icon <- drop_na(icon)
+
+
+```
+
+
+>  Fit a  model regressing iconicity onto the predictor SER (sensory experience ratings):
+
+```{webr-r}
+
+icon_lm <- lm(iconicity~SER, data=icon) 
+
+```
+
+> Check model:
+
+```{webr-r}
+
+lm(iconicity~SER, data=icon) %>%
+  tidy(conf.int = TRUE) %>%
+  kable()
+
+```
+
+> Create a centered predictor:
+
+```{webr-r}
+
+icon_cent <- icon %>%
+  mutate(SER_c=datawizard::center(SER))
+
+head(icon_cent) %>%
+  kable()
+
+```
+
+> Create a centered lm model:
+
+```{webr-r}
+
+lm_cent <- lm(iconicity~SER_c, data=icon_cent)
+
+```
+
+> Check both  model outputs
+
+```{webr-r}
+# Centered:
+lm_cent %>%
+   broom::tidy(conf.int = TRUE)%>%
+  kable()
+```
+
+```{webr-r}
+# Uncentered:
+lm(iconicity~SER, data=icon) %>%
+  tidy(conf.int = TRUE) %>%
+   kable()
+
+```
+
+> Any differences between the two?
+  
+- Nope. Only the intercept is different. 
+
+> Write up the interpretation of the centered model (interecpt and slope)
+
+- $b_0$: The mean value of iconicity when SER is at it's mean 
+
+- $b_1$: As SER increases, iconicity increases, $b$ = 0.184, SE = 0.024, *t*=7.54, *p* < .001. That is, SER scores are associated increased rating of iconicity. 
+
+## Analysis 2: Log-transforming a predictor
+
+> Create a ggplot2 density graph of the frequency predictor:
+
+```{webr-r}
+
+ggplot(icon, aes(x=frequency))+
+  geom_histogram(bins=20)
+
+```
+
+> Check the same frequency predictor on a log scale:
+
+```{webr-r}
+
+ggplot(icon, aes(x=log(frequency)))+
+  geom_histogram()
+
+```
+
+> Use `mutate()` to log transform the frequency predictor:
+
+```{webr-r}
+
+icon <- icon %>%
+  mutate(logfreq=log(frequency))
+
+```
+
+> Fit two models, one regressing iconicity onto raw frequency, and one regressing it onto log frequency:
+
+```{webr-r}
+
+rawfrq <- lm(iconicity~frequency, data=icon)
+
+rawfrq_log <- lm(iconicity~log(frequency), data=icon)
+
+
+```
+
+> Compare model summaries with `glance()`
+
+```{webr-r}
+glance(rawfrq_log)
+glance(rawfrq)
+```
+
+> use the `anova` fucntion to statistically compare both models
+
+```{webr-r}
+# model comp
+anova(rawfrq, rawfrq_log)
+```
+
+> Which one fits the data better?
+
+- The model with frequency logged fitted the data better
+
+> Write up the interpretation for the better fitting model
+
+```{webr-r}
+
+rawfrq_log <- lm(iconicity~log(frequency), data=icon)
+
+rawfrq_log %>%
+    tidy(conf.int = TRUE) %>%
+  kable()
+
+
+```
+
+- $b_0$: the expected value of Y when frequency is at 0. 
+
+- $b_1$: A 1%  increase in log frequency results in a -0.13 decrease in iconicity scores, b=-0.13, SE = 0.02, t = -7.36, p < .001. 
+
+## Analysis 4: Multiple predictors
+
+- For the main analysis presented in Winter et al. (2017), they regressed iconicity simultaneously onto SER, concreteness, imageability, systematicity and log frequency.
+
+> fit that model
+
+```{webr-r}
+# Build a model with all predictors:
+
+icon_full <- lm(iconicity~log(frequency)+SER+imageability+concreteness+systematicity,  data=icon)
+
+icon_full %>%
+  tidy(conf.int = TRUE) %>%
+  kable()
+
+```
+
+> Check how the concreteness predictor behaves if imageability is not in the model:
+
+```{webr-r}
+
+icon_elm <- lm(iconicity~log(frequency)+SER+concreteness+systematicity,  data=icon)
+
+icon_elm %>%
+  tidy()
+
+
+```
+
+> What do you notice?
+
+- Concreteness is significant when imagabiity is not included. 
+
+> Check correlation between concreteness and imageability
+
+```{webr-r}
+icon_na <- na.omit(icon)
+
+cor(icon_na$concreteness, icon_na$imageability)
+
+```
+
+> Is it high?
+
+- The correlation is high. 
+
+> Check multicollinearity of the main with all the variables in the model
+
+```{webr-r}
+
+check_collinearity(icon_full)
+
+```
+
+
+- None of the VIFs > 10 
+
+There's a lot of talk about different thresholds, with some saying >10 is worrisome, others saying >4 worrisome.
+
+The model in the paper did not go with concreteness because they  didn't think it was sufficiently distinct from imageability, also on a theoretical level.
+
+## Analysis 5: Standardizing predictors
+
+- What predictors have the biggest influence on iconicity ratings? 
+
+The problem is that the slopes are unstandardized, which makes them difficult to compare. Remember that each coefficient is given as a rate of how much iconicity has to change "per one unit of that variable". The problem is that "one unit" has very different meanings for the different variables. 
+
+> Look at the range of SER and systematicity values
+
+```{webr-r}
+
+# Check range of SER:
+
+range(icon_na$SER)
+
+
+# Check range of systematicity:
+
+range(icon_na$systematicity)
+```
+
+- Whereas the SER variable ranges from 1 to about 5.2, the systematicity variable has a really narrow range. A one unit (=1.0) change is a massive jump for a variable with this metric.
+
+> Standardize each predictor in the model without concreatness
+
+```{webr-r}
+
+icon_z <- icon_na  %>%
+  mutate(SER_z=datawizard::standardize(SER),
+          imageability_z=datawizard::standardize(imageability),
+          systematicity_z=datawizard::standardize(systematicity))
+
+```
+
+> Then we re-fit the model with the standardized predictors.
+
+```{webr-r}
+icon_z_lm <- lm(iconicity~log(frequency)+SER_z+imageability_z+systematicity_z,  data=icon_z)
+
+```
+
+> Rank order the coefficients minus the intercept:
+
+```{webr-r}
+
+sort(icon_z_lm$coefficients[2:5])
+
+
+```
+
+> Which one has the biggest influence?
+
+- SER does 
+
+> Write-up this model (focusing on the coeffiencets)
+
+- For each one standard deviation increase in 'Imageability_z', iconicity  is expected to decrease by 0.367 units
+
+- A one standard deviation increase in the logarithm of frequency is associated with a decrease of about 0.117 units in iconicity 
+
+- For each one standard deviation increase in 'Systematicity_z', iconicity increases by approximately 0.045 units 
+
+- For each one standard deviation increase in 'SER_z', iconicity is expected to increase by about 0.417 units
+
+## Polynomial Regression
+
+> Load in data from https://osf.io/kzm7b
+
+```{webr-r}
+library(data.table)
+#the data on OSF is formatted weird
+#fread guesses how columns are different
+
+data <- fread("https://osf.io/kzm7b/download")
+
+```
+
+> Subset the data so we only have a column for `Fear Piggy` and `Enjoy Piggy`
+
+```{webr-r}
+
+df <- data  %>%
+  select(`Fear Piggy`, `Enjoyment Piggy`)
+
+```
+
+> Create a plot visualizing the realtionship between the two variables
+
+```{webr-r}
+
+df %>%
+  ggplot(., aes(x=`Fear Piggy`, y=`Enjoyment Piggy`)) +
+  geom_point()
+
+```
+
+
+> Do you think a linear model is a good fit to this data? Add a linear line to the data. 
+
+```{webr-r}
+df %>%
+  ggplot(., aes(x=`Fear Piggy`, y=`Enjoyment Piggy`)) +
+  geom_point() + 
+  geom_smooth(method="lm")
+
+```
+
+- No. It does not fit the data very well. 
+
+> Use `mutate()` to add a quadratic X term
+
+```{webr-r}
+
+df_2 <- df  %>%
+  mutate(X2=`Fear Piggy`^2)
+
+```
+
+> Now fit a polynomial regression that includes a quadratic term
+
+```{webr-r}
+
+lm_quad <- lm(`Enjoyment Piggy`~ `Fear Piggy` + X2 , data=df_2)
+
+```
+
+> The coefficient for the squared term is negative. What does this mean?
+
+- It means the shape is inverted U--it incrases up to a certain point and decreases
+
+>  Add a quadratic line to the scatter plot from above
+
+```{webr-r}
+
+df %>%
+  ggplot(., aes(x=`Fear Piggy`, y=`Enjoyment Piggy`)) +
+  geom_point() + 
+  geom_smooth(method="lm")+
+  geom_smooth(method = "lm", formula = y ~ x + I(x^2), se = TRUE)
+
+
+
+
+```
+
+
+> Does a model with a quadrtic term fit the data better than a linear one? Test this.
+
+```{webr-r}
+lm_lin <- lm(`Enjoyment Piggy`~ `Fear Piggy` , data=df_2)
+
+lm_quad <- lm(`Enjoyment Piggy`~ `Fear Piggy` + X2 , data=df_2)
+
+
+anova(lm_lin, lm_quad) 
+
+```
+
+- It does not. 
+
+::: callout-note
+While we do not find a significant quadratic relationship in this analysis, the paper does. This is because they looked at several scares and used a different model. Nonetheless, hopefully you better understand how to test non-linear relationships in a  regression context
+:::
