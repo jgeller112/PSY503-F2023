@@ -127,7 +127,6 @@ lm(plant_growth ~ sun_exposure * water)
 evals_agegend=read.csv("https://raw.githubusercontent.com/jgeller112/psy503-psych_stats/master/evals.csv")
 evals1= evals_agegend %>%
 dplyr::select(ID, score, age, gender)
-
 ```
 
 ## Research question
@@ -250,7 +249,7 @@ lm(score~age_c*gender_trt, data=evals_interact) %>%
 
 ```{webr-r}
 
-
+b_1: Predicted outcome for females when Age is at its mean. Mean eval scores for females is 4.04. 
 
 ```
 
@@ -264,8 +263,8 @@ lm(score~age_c*gender_trt, data=evals_interact) %>%
 ```
 
 ```{webr-r}
-
-
+b_2: The slope of age for females. For females, 
+a one unit increase in age leads to a -0.02 decrease in eval scores. 
 ```
 
 ## Interpretations
@@ -278,6 +277,8 @@ lm(score~age_c*gender_trt, data=evals_interact) %>%
 ```
 
 ```{webr-r}
+
+b_2: The offset or difference in intercept for gender. Subtracting b_0 from b_2 will give you mean eval scores for males. 
 
 ```
 
@@ -292,18 +293,28 @@ lm(score~age_c*gender_trt, data=evals_interact) %>%
 
 ```{webr-r}
 
+b_3: The interaction between gender and age. The offset of difference in slope for gender for one unit increase in age. Going from females to males leads to a 0.01 slope difference between Age and Eval scores.  
+
 ```
 
 ## Deviation coding
 
 ```{webr-r}
 
-
+evals_interact %>%
+  mutate(gender_dev=ifelse(gender=="female", 0.5, -0.5)) %>%
+  lm(score~age_c*gender_dev, data=.) %>%
+  tidy() %>%
+  kable()
 
 ```
 
 ```{webr-r}
 
+b_0: Grand mean of mean when age is at its mean
+b_1: The slope of age at grand mean of age
+b_2: The offset of differene in gender when age is at its mean
+b_3: Interaction between gender and age. The offset of differene in gender slope for unit increase in age. 
 
 
 ```
@@ -531,6 +542,8 @@ lm(Aggression~ vid_games_c*caunts_c,  data=moderation_vio) %>%
 
 ```{webr-r}
 
+b_0: The expected value of Y when Hours and Traits are at their means
+
 
 ```
 
@@ -545,6 +558,8 @@ lm(Aggression~ vid_games_c*caunts_c,  data=moderation_vio) %>%
 
 ```{webr-r}
 
+b_1: The slope of hours. For every unit increase in Hours there is a  0.17 increase in aggression scores
+
 ```
 
 ## Interpretation Continuous x Continuous Interactions
@@ -558,6 +573,8 @@ lm(Aggression~ vid_games_c*caunts_c,  data=moderation_vio) %>%
 
 ```{webr-r}
 
+b_2: The slope of Traits. For every unit increase in callous traitsm  there is a  0.76 increase in aggression scores
+
 ```
 
 ## Interpretation Continuous x Continuous Interactions
@@ -570,6 +587,8 @@ lm(Aggression~ vid_games_c*caunts_c,  data=moderation_vio) %>%
 ```
 
 ```{webr-r}
+
+b_3: The interaction between Hours and Traits. The difference in slope of hours for unit increase in callous traits. For unit increase in traits, there is a .023 change in the slope between Hours and Aggression. 
 
 ```
 

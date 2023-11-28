@@ -11,7 +11,7 @@
   <meta name="generator" content="quarto-1.4.504">
 
   <meta name="author" content="Jason Geller, PH.D.(he/him)">
-  <meta name="dcterms.date" content="2023-11-26">
+  <meta name="dcterms.date" content="2023-11-28">
   <title>Interactions 1</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -683,7 +683,7 @@ Jason Geller, PH.D.(he/him)
 </div>
 </div>
 
-  <p class="date">2023-11-26</p>
+  <p class="date">2023-11-28</p>
 </section>
 <section id="packages" class="slide level2">
 <h2>Packages</h2>
@@ -2595,7 +2595,7 @@ evals_interact <- evals1 %>%
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
       value: `
-`,
+b_1: Predicted outcome for females when Age is at its mean. Mean eval scores for females is 4.04. `,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -3163,7 +3163,8 @@ evals_interact <- evals1 %>%
   let editor;
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
-      value: ``,
+      value: `b_2: The slope of age for females. For females, 
+a one unit increase in age leads to a -0.02 decrease in eval scores. `,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -3731,7 +3732,8 @@ evals_interact <- evals1 %>%
   let editor;
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
-      value: ``,
+      value: `
+b_2: The offset or difference in intercept for gender. Subtracting b_0 from b_2 will give you mean eval scores for males. `,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -4299,7 +4301,8 @@ evals_interact <- evals1 %>%
   let editor;
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
-      value: ``,
+      value: `
+b_3: The interaction between gender and age. The offset of difference in slope for gender for one unit increase in age. Going from females to males leads to a 0.01 slope difference between Age and Eval scores.  `,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -4584,7 +4587,11 @@ evals_interact <- evals1 %>%
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
       value: `
-`,
+evals_interact %>%
+  mutate(gender_dev=ifelse(gender=="female", 0.5, -0.5)) %>%
+  lm(score~age_c*gender_dev, data=.) %>%
+  tidy() %>%
+  kable()`,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -4866,6 +4873,10 @@ evals_interact <- evals1 %>%
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
       value: `
+b_0: Grand mean of mean when age is at its mean
+b_1: The slope of age at grand mean of age
+b_2: The offset of differene in gender when age is at its mean
+b_3: Interaction between gender and age. The offset of differene in gender slope for unit increase in age. 
 `,
       language: 'r',
       theme: 'vs-light',
@@ -8418,7 +8429,9 @@ moderation_vio <- moderation_vio %>%
   let editor;
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
-      value: ``,
+      value: `
+b_0: The expected value of Y when Hours and Traits are at their means
+`,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -8986,7 +8999,8 @@ moderation_vio <- moderation_vio %>%
   let editor;
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
-      value: ``,
+      value: `
+b_1: The slope of hours. For every unit increase in Hours there is a  0.17 increase in aggression scores`,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -9554,7 +9568,8 @@ moderation_vio <- moderation_vio %>%
   let editor;
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
-      value: ``,
+      value: `
+b_2: The slope of Traits. For every unit increase in callous traitsm  there is a  0.76 increase in aggression scores`,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -10122,7 +10137,8 @@ moderation_vio <- moderation_vio %>%
   let editor;
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
-      value: ``,
+      value: `
+b_3: The interaction between Hours and Traits. The difference in slope of hours for unit increase in callous traits. For unit increase in traits, there is a .023 change in the slope between Hours and Aggression. `,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
