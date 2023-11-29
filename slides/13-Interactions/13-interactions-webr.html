@@ -11,7 +11,7 @@
   <meta name="generator" content="quarto-1.4.504">
 
   <meta name="author" content="Jason Geller, PH.D.(he/him)">
-  <meta name="dcterms.date" content="2023-11-28">
+  <meta name="dcterms.date" content="2023-11-29">
   <title>Interactions 1</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -683,7 +683,7 @@ Jason Geller, PH.D.(he/him)
 </div>
 </div>
 
-  <p class="date">2023-11-28</p>
+  <p class="date">2023-11-29</p>
 </section>
 <section id="packages" class="slide level2">
 <h2>Packages</h2>
@@ -7526,6 +7526,16 @@ moderation_vio=read.csv("https://raw.githubusercontent.com/jgeller112/psy503-psy
 </section>
 <section id="continuous-x-continuous-interactions-1" class="slide level2">
 <h2>Continuous x Continuous Interactions</h2>
+
+<img data-src="images/inter_example.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="continuous-x-continuous-interactions-2" class="slide level2">
+<h2>Continuous x Continuous Interactions</h2>
+<ul>
+<li><p>Centering</p>
+<ul>
+<li>Can reduce multicollinearity</li>
+</ul></li>
+</ul>
 <div id="qwebr-interactive-area-24" class="qwebr-interactive-area">
   <button class="btn btn-default qwebr-button-run" disabled="" type="button" id="qwebr-button-run-24">🟡 Loading
     webR...</button>
@@ -7552,12 +7562,10 @@ moderation_vio=read.csv("https://raw.githubusercontent.com/jgeller112/psy503-psy
   let editor;
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
-      value: `#| 
-moderation_vio=read.csv("https://raw.githubusercontent.com/jgeller112/psy503-psych_stats/master/moderation.csv")
-
-lm1 <- lm(Aggression~ Vid_Games*CaUnTs,  data=moderation_vio)
-
-visreg2d(lm1,"Vid_Games", "CaUnTs", plot.type="persp")`,
+      value: `library(datawizard)
+# centering vars
+moderation_vio <- moderation_vio %>%
+  mutate(vid_games_c=center(Vid_Games), caunts_c=center(CaUnTs))`,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -7813,14 +7821,19 @@ visreg2d(lm1,"Vid_Games", "CaUnTs", plot.type="persp")`,
   };
 </script>
 </section>
-<section id="continuous-x-continuous-interactions-2" class="slide level2">
-<h2>Continuous x Continuous Interactions</h2>
+<section id="interpretation-continuous-x-continuous-interactions" class="slide level2">
+<h2>Interpretation Continuous x Continuous Interactions</h2>
+<p><span class="math display">\[\hat{Y}= b_0 + b_1 X + b_2 Z + b_3 X*Z\]</span></p>
+<p>where ( <span class="math inline">\(X\)</span> ) is a continuous predictor and ( <span class="math inline">\(Z\)</span> ) is a continuous predictor.</p>
 <ul>
-<li><p>Centering</p>
-<ul>
-<li>Can reduce multicollinearity</li>
-</ul></li>
+<li><span class="math inline">\(b_0\)</span>: the intercept, or the predicted outcome when X = 0 and Z=0 (or at their means)</li>
+<li><span class="math inline">\(b_1\)</span>: the simple effect or slope of <span class="math inline">\(X\)</span>, for a one unit change in <span class="math inline">\(X\)</span> the predicted change in <span class="math inline">\(Y\)</span> at <span class="math inline">\(Z = 0\)</span> (or at its mean)</li>
+<li><span class="math inline">\(b_2\)</span>: The simple effect or slope of <span class="math inline">\(Z\)</span>, for a one unit change in <span class="math inline">\(Z\)</span> the predicted change in Y at X = 0 (or at its mean)</li>
+<li><span class="math inline">\(b_3\)</span>:The interaction of <span class="math inline">\(X\)</span> and <span class="math inline">\(Z\)</span>, the change in the slope of <span class="math inline">\(X\)</span> for a one-unit increase in <span class="math inline">\(Z\)</span> (or vice versa)</li>
 </ul>
+</section>
+<section id="interpretation-continuous-x-continuous-interactions-1" class="slide level2">
+<h2>Interpretation Continuous x Continuous Interactions</h2>
 <div id="qwebr-interactive-area-25" class="qwebr-interactive-area">
   <button class="btn btn-default qwebr-button-run" disabled="" type="button" id="qwebr-button-run-25">🟡 Loading
     webR...</button>
@@ -7847,10 +7860,10 @@ visreg2d(lm1,"Vid_Games", "CaUnTs", plot.type="persp")`,
   let editor;
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
-      value: `library(datawizard)
-# centering vars
-moderation_vio <- moderation_vio %>%
-  mutate(vid_games_c=center(Vid_Games), caunts_c=center(CaUnTs))`,
+      value: `lm(Aggression~ vid_games_c*caunts_c,  data=moderation_vio) %>%
+  tidy(conf.int=TRUE) %>%
+  slice(1) %>% 
+  kable()`,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -8105,20 +8118,6 @@ moderation_vio <- moderation_vio %>%
     executeCode(editor.getValue());
   };
 </script>
-</section>
-<section id="interpretation-continuous-x-continuous-interactions" class="slide level2">
-<h2>Interpretation Continuous x Continuous Interactions</h2>
-<p><span class="math display">\[\hat{Y}= b_0 + b_1 X + b_2 Z + b_3 X*Z\]</span></p>
-<p>where ( <span class="math inline">\(X\)</span> ) is a continuous predictor and ( <span class="math inline">\(Z\)</span> ) is a continuous predictor.</p>
-<ul>
-<li><span class="math inline">\(b_0\)</span>: the intercept, or the predicted outcome when X = 0 and Z=0 (or at their means)</li>
-<li><span class="math inline">\(b_1\)</span>: the simple effect or slope of <span class="math inline">\(X\)</span>, for a one unit change in <span class="math inline">\(X\)</span> the predicted change in <span class="math inline">\(Y\)</span> at <span class="math inline">\(Z = 0\)</span> (or at its mean)</li>
-<li><span class="math inline">\(b_2\)</span>: The simple effect or slope of <span class="math inline">\(Z\)</span>, for a one unit change in <span class="math inline">\(Z\)</span> the predicted change in Y at X = 0 (or at its mean)</li>
-<li><span class="math inline">\(b_3\)</span>:The interaction of <span class="math inline">\(X\)</span> and <span class="math inline">\(Z\)</span>, the change in the slope of <span class="math inline">\(X\)</span> for a one-unit increase in <span class="math inline">\(Z\)</span> (or vice versa)</li>
-</ul>
-</section>
-<section id="interpretation-continuous-x-continuous-interactions-1" class="slide level2">
-<h2>Interpretation Continuous x Continuous Interactions</h2>
 <div id="qwebr-interactive-area-26" class="qwebr-interactive-area">
   <button class="btn btn-default qwebr-button-run" disabled="" type="button" id="qwebr-button-run-26">🟡 Loading
     webR...</button>
@@ -8145,10 +8144,9 @@ moderation_vio <- moderation_vio %>%
   let editor;
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
-      value: `lm(Aggression~ vid_games_c*caunts_c,  data=moderation_vio) %>%
-  tidy(conf.int=TRUE) %>%
-  slice(1) %>% 
-  kable()`,
+      value: `
+b_0: The expected value of Y when Hours and Traits are at their means
+`,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -8403,6 +8401,9 @@ moderation_vio <- moderation_vio %>%
     executeCode(editor.getValue());
   };
 </script>
+</section>
+<section id="interpretation-continuous-x-continuous-interactions-2" class="slide level2">
+<h2>Interpretation Continuous x Continuous Interactions</h2>
 <div id="qwebr-interactive-area-27" class="qwebr-interactive-area">
   <button class="btn btn-default qwebr-button-run" disabled="" type="button" id="qwebr-button-run-27">🟡 Loading
     webR...</button>
@@ -8429,9 +8430,10 @@ moderation_vio <- moderation_vio %>%
   let editor;
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
-      value: `
-b_0: The expected value of Y when Hours and Traits are at their means
-`,
+      value: `lm(Aggression~ vid_games_c*caunts_c,  data=moderation_vio) %>%
+  tidy(conf.int=TRUE) %>%
+  slice(2) %>% 
+  knitr::kable()`,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -8686,9 +8688,6 @@ b_0: The expected value of Y when Hours and Traits are at their means
     executeCode(editor.getValue());
   };
 </script>
-</section>
-<section id="interpretation-continuous-x-continuous-interactions-2" class="slide level2">
-<h2>Interpretation Continuous x Continuous Interactions</h2>
 <div id="qwebr-interactive-area-28" class="qwebr-interactive-area">
   <button class="btn btn-default qwebr-button-run" disabled="" type="button" id="qwebr-button-run-28">🟡 Loading
     webR...</button>
@@ -8715,10 +8714,8 @@ b_0: The expected value of Y when Hours and Traits are at their means
   let editor;
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
-      value: `lm(Aggression~ vid_games_c*caunts_c,  data=moderation_vio) %>%
-  tidy(conf.int=TRUE) %>%
-  slice(2) %>% 
-  knitr::kable()`,
+      value: `
+b_1: The slope of hours. For every unit increase in Hours there is a  0.17 increase in aggression scores`,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -8973,6 +8970,9 @@ b_0: The expected value of Y when Hours and Traits are at their means
     executeCode(editor.getValue());
   };
 </script>
+</section>
+<section id="interpretation-continuous-x-continuous-interactions-3" class="slide level2">
+<h2>Interpretation Continuous x Continuous Interactions</h2>
 <div id="qwebr-interactive-area-29" class="qwebr-interactive-area">
   <button class="btn btn-default qwebr-button-run" disabled="" type="button" id="qwebr-button-run-29">🟡 Loading
     webR...</button>
@@ -8999,8 +8999,10 @@ b_0: The expected value of Y when Hours and Traits are at their means
   let editor;
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
-      value: `
-b_1: The slope of hours. For every unit increase in Hours there is a  0.17 increase in aggression scores`,
+      value: `lm(Aggression~ vid_games_c*caunts_c,  data=moderation_vio) %>%
+  tidy(conf.int=TRUE) %>%
+  slice(3) %>% 
+  knitr::kable()`,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -9255,9 +9257,6 @@ b_1: The slope of hours. For every unit increase in Hours there is a  0.17 incre
     executeCode(editor.getValue());
   };
 </script>
-</section>
-<section id="interpretation-continuous-x-continuous-interactions-3" class="slide level2">
-<h2>Interpretation Continuous x Continuous Interactions</h2>
 <div id="qwebr-interactive-area-30" class="qwebr-interactive-area">
   <button class="btn btn-default qwebr-button-run" disabled="" type="button" id="qwebr-button-run-30">🟡 Loading
     webR...</button>
@@ -9284,10 +9283,8 @@ b_1: The slope of hours. For every unit increase in Hours there is a  0.17 incre
   let editor;
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
-      value: `lm(Aggression~ vid_games_c*caunts_c,  data=moderation_vio) %>%
-  tidy(conf.int=TRUE) %>%
-  slice(3) %>% 
-  knitr::kable()`,
+      value: `
+b_2: The slope of Traits. For every unit increase in callous traitsm  there is a  0.76 increase in aggression scores`,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -9542,6 +9539,9 @@ b_1: The slope of hours. For every unit increase in Hours there is a  0.17 incre
     executeCode(editor.getValue());
   };
 </script>
+</section>
+<section id="interpretation-continuous-x-continuous-interactions-4" class="slide level2">
+<h2>Interpretation Continuous x Continuous Interactions</h2>
 <div id="qwebr-interactive-area-31" class="qwebr-interactive-area">
   <button class="btn btn-default qwebr-button-run" disabled="" type="button" id="qwebr-button-run-31">🟡 Loading
     webR...</button>
@@ -9568,8 +9568,10 @@ b_1: The slope of hours. For every unit increase in Hours there is a  0.17 incre
   let editor;
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
-      value: `
-b_2: The slope of Traits. For every unit increase in callous traitsm  there is a  0.76 increase in aggression scores`,
+      value: `lm(Aggression~ vid_games_c*caunts_c,  data=moderation_vio) %>%
+  tidy(conf.int=TRUE)
+ slice(4) %>% 
+   kable()`,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -9824,9 +9826,6 @@ b_2: The slope of Traits. For every unit increase in callous traitsm  there is a
     executeCode(editor.getValue());
   };
 </script>
-</section>
-<section id="interpretation-continuous-x-continuous-interactions-4" class="slide level2">
-<h2>Interpretation Continuous x Continuous Interactions</h2>
 <div id="qwebr-interactive-area-32" class="qwebr-interactive-area">
   <button class="btn btn-default qwebr-button-run" disabled="" type="button" id="qwebr-button-run-32">🟡 Loading
     webR...</button>
@@ -9853,10 +9852,8 @@ b_2: The slope of Traits. For every unit increase in callous traitsm  there is a
   let editor;
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
-      value: `lm(Aggression~ vid_games_c*caunts_c,  data=moderation_vio) %>%
-  tidy(conf.int=TRUE)
- slice(4) %>% 
-   kable()`,
+      value: `
+b_3: The interaction between Hours and Traits. The difference in slope of hours for unit increase in callous traits. For unit increase in traits, there is a .023 change in the slope between Hours and Aggression. `,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -10111,6 +10108,32 @@ b_2: The slope of Traits. For every unit increase in callous traitsm  there is a
     executeCode(editor.getValue());
   };
 </script>
+</section>
+<section id="continuous-x-continuous-interactions-3" class="slide level2">
+<h2>Continuous X Continuous Interactions</h2>
+<ul>
+<li><p>If the Z (moderator variable) was categorical, you would be checking if separate groups (levels) have different slopes for the non-categorical variable</p></li>
+<li><p>However, we cant do that with continuous x continuous interactions</p></li>
+</ul>
+</section>
+<section id="decomposing-continuous-x-continuous-interactions-spotlight-analysis" class="slide level2">
+<h2>Decomposing Continuous X Continuous Interactions: Spotlight Analysis</h2>
+<ul>
+<li><p>For continuous moderator variables, you “create” low, average, and high groups</p>
+<ul>
+<li><p>Low groups are people who are one SD below the mean</p></li>
+<li><p>Average groups are people are at the mean</p></li>
+<li><p>High groups are people who are one SD above the mean</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="probing-interactions-spotlight-analysis" class="slide level2">
+<h2>Probing Interactions: Spotlight Analysis</h2>
+<ul>
+<li><p>Low/below mean created by <em>SUBTRACTING</em> 1 SD</p></li>
+<li><p>High/above mean created by <em>ADDING</em> 1 SD</p></li>
+<li><p>The rule is that we have to bring them to the middle because we centered so that zero is the middle</p></li>
+</ul>
 <div id="qwebr-interactive-area-33" class="qwebr-interactive-area">
   <button class="btn btn-default qwebr-button-run" disabled="" type="button" id="qwebr-button-run-33">🟡 Loading
     webR...</button>
@@ -10137,8 +10160,12 @@ b_2: The slope of Traits. For every unit increase in callous traitsm  there is a
   let editor;
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
-      value: `
-b_3: The interaction between Hours and Traits. The difference in slope of hours for unit increase in callous traits. For unit increase in traits, there is a .023 change in the slope between Hours and Aggression. `,
+      value: `#create the low and high z score variables 
+a <- mean(moderation_vio$caunts_c) + sd(moderation_vio$caunts_c)
+
+at <- mean(moderation_vio$caunts_c)
+
+b <- mean(moderation_vio$caunts_c) - sd(moderation_vio$caunts_c)`,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -10394,31 +10421,8 @@ b_3: The interaction between Hours and Traits. The difference in slope of hours 
   };
 </script>
 </section>
-<section id="continuous-x-continuous-interactions-3" class="slide level2">
-<h2>Continuous X Continuous Interactions</h2>
-<ul>
-<li><p>If the Z (moderator variable) was categorical, you would be checking if separate groups (levels) have different slopes for the non-categorical variable</p></li>
-<li><p>However, we cant do that with continuous x continuous interactions</p></li>
-</ul>
-</section>
-<section id="decomposing-continuous-x-continuous-interactions-spotlight-analysis" class="slide level2">
-<h2>Decomposing Continuous X Continuous Interactions: Spotlight Analysis</h2>
-<ul>
-<li><p>For continuous moderator variables, you “create” low, average, and high groups</p>
-<ul>
-<li><p>Low groups are people who are one SD below the mean</p></li>
-<li><p>Average groups are people are at the mean</p></li>
-<li><p>High groups are people who are one SD above the mean</p></li>
-</ul></li>
-</ul>
-</section>
-<section id="probing-interactions-spotlight-analysis" class="slide level2">
-<h2>Probing Interactions: Spotlight Analysis</h2>
-<ul>
-<li><p>Low/below mean created by <em>SUBTRACTING</em> 1 SD</p></li>
-<li><p>High/above mean created by <em>ADDING</em> 1 SD</p></li>
-<li><p>The rule is that we have to bring them to the middle because we centered so that zero is the middle</p></li>
-</ul>
+<section id="spotlightsimple-slopes-analysis" class="slide level2">
+<h2>Spotlight/simple slopes analysis</h2>
 <div id="qwebr-interactive-area-34" class="qwebr-interactive-area">
   <button class="btn btn-default qwebr-button-run" disabled="" type="button" id="qwebr-button-run-34">🟡 Loading
     webR...</button>
@@ -10445,12 +10449,17 @@ b_3: The interaction between Hours and Traits. The difference in slope of hours 
   let editor;
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
-      value: `#create the low and high z score variables 
-a <- mean(moderation_vio$caunts_c) + sd(moderation_vio$caunts_c)
+      value: `# create a list for values at a, b, and mean and round 
 
-at <- mean(moderation_vio$caunts_c)
+mylist <- list(caunts_c=c(round(b, 1), round(at,1), round(a, 1)))
 
-b <- mean(moderation_vio$caunts_c) - sd(moderation_vio$caunts_c)`,
+# run lm again
+d=lm(Aggression~vid_games_c*caunts_c,data=moderation_vio)
+
+# get simple slopes at each level at b a
+#adjust for multiple tests
+emtrends(d,~caunts_c, var="vid_games_c", at=mylist) %>%
+  test(adjust="holm")`,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -10705,9 +10714,21 @@ b <- mean(moderation_vio$caunts_c) - sd(moderation_vio$caunts_c)`,
     executeCode(editor.getValue());
   };
 </script>
+<div class="fragment">
+<ul>
+<li>At average levels of callousness, the association between hours played and aggression is positive, <em>b</em> = .17</li>
+</ul>
+<!-- -->
+<ul>
+<li>At high levels of callousness, the strength of hours of video games predicting aggression is the strongest, <em>b</em> = 0.43</li>
+</ul>
+</div>
 </section>
-<section id="spotlightsimple-slopes-analysis" class="slide level2">
-<h2>Spotlight/simple slopes analysis</h2>
+<section id="probing-interactions" class="slide level2">
+<h2>Probing interactions</h2>
+<ul>
+<li>Use <code>interact_plot</code> from the <code>interactions</code></li>
+</ul>
 <div id="qwebr-interactive-area-35" class="qwebr-interactive-area">
   <button class="btn btn-default qwebr-button-run" disabled="" type="button" id="qwebr-button-run-35">🟡 Loading
     webR...</button>
@@ -10734,17 +10755,8 @@ b <- mean(moderation_vio$caunts_c) - sd(moderation_vio$caunts_c)`,
   let editor;
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
-      value: `# create a list for values at a, b, and mean and round 
-
-mylist <- list(caunts_c=c(round(b, 1), round(at,1), round(a, 1)))
-
-# run lm again
-d=lm(Aggression~vid_games_c*caunts_c,data=moderation_vio)
-
-# get simple slopes at each level at b a
-#adjust for multiple tests
-emtrends(d,~caunts_c, var="vid_games_c", at=mylist) %>%
-  test(adjust="holm")`,
+      value: `library(interactions)
+interact_plot(d, pred = vid_games_c, modx = caunts_c, interval = TRUE, plot.points = TRUE)`,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -10999,20 +11011,11 @@ emtrends(d,~caunts_c, var="vid_games_c", at=mylist) %>%
     executeCode(editor.getValue());
   };
 </script>
-<div class="fragment">
-<ul>
-<li>At average levels of callousness, the association between hours played and aggression is positive, <em>b</em> = .17</li>
-</ul>
-<!-- -->
-<ul>
-<li>At high levels of callousness, the strength of hours of video games predicting aggression is the strongest, <em>b</em> = 0.43</li>
-</ul>
-</div>
 </section>
-<section id="probing-interactions" class="slide level2">
-<h2>Probing interactions</h2>
+<section id="probing-interactions-1" class="slide level2">
+<h2>Probing Interactions</h2>
 <ul>
-<li>Use <code>interact_plot</code> from the <code>interactions</code></li>
+<li><code>ggpredict</code></li>
 </ul>
 <div id="qwebr-interactive-area-36" class="qwebr-interactive-area">
   <button class="btn btn-default qwebr-button-run" disabled="" type="button" id="qwebr-button-run-36">🟡 Loading
@@ -11040,8 +11043,8 @@ emtrends(d,~caunts_c, var="vid_games_c", at=mylist) %>%
   let editor;
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
-      value: `library(interactions)
-interact_plot(d, pred = vid_games_c, modx = caunts_c, interval = TRUE, plot.points = TRUE)`,
+      value: `
+ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -11274,294 +11277,6 @@ interact_plot(d, pred = vid_games_c, modx = caunts_c, interval = TRUE, plot.poin
           pre_pager.innerText = paged_data;
           pre_pager.classList.add("qwebr-output-code-pager");
           pre_pager.setAttribute("id", "qwebr-output-code-pager-editor-36-result-" + (index + 1));
-          outputCodeDiv.appendChild(pre_pager);
-        });
-      }
-    } finally {
-      // Clean up the remaining code
-      webRCodeShelter.purge();
-    }
-
-    // Switch to allowing execution of code
-    document.querySelectorAll(".qwebr-button-run").forEach((btn) => {
-      btn.disabled = false;
-    });
-
-    // Revert to the initial code cell state
-    runButton.innerHTML = '<i class="fa-solid fa-play qwebr-icon-run-code"></i> <span>Run Code</span>';
-  }
-
-  // Add a click event listener to the run button
-  runButton.onclick = function () {
-    executeCode(editor.getValue());
-  };
-</script>
-</section>
-<section id="probing-interactions-1" class="slide level2">
-<h2>Probing Interactions</h2>
-<ul>
-<li><code>ggpredict</code></li>
-</ul>
-<div id="qwebr-interactive-area-37" class="qwebr-interactive-area">
-  <button class="btn btn-default qwebr-button-run" disabled="" type="button" id="qwebr-button-run-37">🟡 Loading
-    webR...</button>
-  <div id="qwebr-console-area-37" class="qwebr-console-area">
-    <div id="qwebr-editor-37" class="qwebr-editor"></div>
-    <div id="qwebr-output-code-area-37" class="qwebr-output-code-area" aria-live="assertive">
-      <pre style="visibility: hidden"></pre>
-    </div>
-  </div>
-  <div id="qwebr-output-graph-area-37" class="qwebr-output-graph-area">
-  </div>
-</div>
-<script type="module">
-  // Retrieve webR code cell information
-  const runButton = document.getElementById("qwebr-button-run-37");
-  const outputCodeDiv = document.getElementById("qwebr-output-code-area-37");
-  const editorDiv = document.getElementById("qwebr-editor-37");
-  const outputGraphDiv = document.getElementById("qwebr-output-graph-area-37");
-
-  // Add a light grey outline around the code editor
-  editorDiv.style.border = "1px solid #eee";
-
-  // Load the Monaco Editor and create an instance
-  let editor;
-  require(['vs/editor/editor.main'], function () {
-    editor = monaco.editor.create(editorDiv, {
-      value: `
-ggpredict(d, terms=c("vid_games_c", "caunts_c")) %>% plot(add.data=TRUE)`,
-      language: 'r',
-      theme: 'vs-light',
-      automaticLayout: true,           // TODO: Could be problematic for slide decks
-      scrollBeyondLastLine: false,
-      minimap: {
-        enabled: false
-      },
-      fontSize: '17.5rem',               // Bootstrap is 1 rem
-      renderLineHighlight: "none",     // Disable current line highlighting
-      hideCursorInOverviewRuler: true  // Remove cursor indictor in right hand side scroll bar
-    });
-
-    // Dynamically modify the height of the editor window if new lines are added.
-    let ignoreEvent = false;
-    const updateHeight = () => {
-      const contentHeight = editor.getContentHeight();
-      // We're avoiding a width change
-      //editorDiv.style.width = `${width}px`;
-      editorDiv.style.height = `${contentHeight}px`;
-      try {
-        ignoreEvent = true;
-
-        // The key to resizing is this call
-        editor.layout();
-      } finally {
-        ignoreEvent = false;
-      }
-    };
-
-    // Helper function to check if selected text is empty
-    function isEmptyCodeText(selectedCodeText) {
-      return (selectedCodeText === null || selectedCodeText === undefined || selectedCodeText === "");
-    }
-
-    // Registry of keyboard shortcuts that should be re-added to each editor window
-    // when focus changes.
-    const addWebRKeyboardShortCutCommands = () => {
-      // Add a keydown event listener for Shift+Enter to run all code in cell
-      editor.addCommand(monaco.KeyMod.Shift | monaco.KeyCode.Enter, () => {
-
-        // Retrieve all text inside the editor
-        executeCode(editor.getValue());
-      });
-
-      // Add a keydown event listener for CMD/Ctrl+Enter to run selected code
-      editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
-
-        // Get the selected text from the editor
-        const selectedText = editor.getModel().getValueInRange(editor.getSelection());
-        // Check if no code is selected
-        if (isEmptyCodeText(selectedText)) {
-          // Obtain the current cursor position
-          let currentPosition = editor.getPosition();
-          // Retrieve the current line content
-          let currentLine = editor.getModel().getLineContent(currentPosition.lineNumber);
-
-          // Propose a new position to move the cursor to
-          let newPosition = new monaco.Position(currentPosition.lineNumber + 1, 1);
-
-          // Check if the new position is beyond the last line of the editor
-          if (newPosition.lineNumber > editor.getModel().getLineCount()) {
-            // Add a new line at the end of the editor
-            editor.executeEdits("addNewLine", [{
-            range: new monaco.Range(newPosition.lineNumber, 1, newPosition.lineNumber, 1),
-            text: "\n", 
-            forceMoveMarkers: true,
-            }]);
-          }
-          
-          // Run the entire line of code.
-          executeCode(currentLine);
-
-          // Move cursor to new position
-          editor.setPosition(newPosition);
-        } else {
-          // Code to run when Ctrl+Enter is pressed with selected code
-          executeCode(selectedText);
-        }
-      });
-    }
-
-    // Register an on focus event handler for when a code cell is selected to update
-    // what keyboard shortcut commands should work.
-    // This is a workaround to fix a regression that happened with multiple
-    // editor windows since Monaco 0.32.0 
-    // https://github.com/microsoft/monaco-editor/issues/2947
-    editor.onDidFocusEditorText(addWebRKeyboardShortCutCommands);
-
-    // Register an on change event for when new code is added to the editor window
-    editor.onDidContentSizeChange(updateHeight);
-
-    // Manually re-update height to account for the content we inserted into the call
-    updateHeight();
-  });
-
-  // Function to execute the code (accepts code as an argument)
-  async function executeCode(codeToRun) {
-
-    // Disallowing execution of other code cells
-    document.querySelectorAll(".qwebr-button-run").forEach((btn) => {
-      btn.disabled = true;
-    });
-
-    // Emphasize the active code cell
-    runButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin qwebr-icon-status-spinner"></i> <span>Run Code</span>';
-
-    // Create a canvas variable for graphics
-    let canvas = undefined;
-
-    // Create a pager variable for help/file contents
-    let pager = [];
-
-    // Process 
-    async function parseTypePager(msg) { 
-
-        // Split out the event data
-        const { path, title, deleteFile } = msg.data; 
-
-        // Process the pager data by reading the information from disk
-        const paged_data = await webR.FS.readFile(path).then((data) => {
-          // Obtain the file content
-          let content = new TextDecoder().decode(data);
-
-          // Remove excessive backspace characters until none remain
-          while(content.match(/.[\b]/)){
-            content = content.replace(/.[\b]/g, '');
-          }
-
-          // Returned cleaned data
-          return content;
-        });
-
-        // Unlink file if needed
-        if (deleteFile) { 
-          await webR.FS.unlink(path); 
-        } 
-
-        // Return extracted data with spaces
-        return paged_data;
-    } 
-
-    // Initialize webR
-    await webR.init();
-
-    // Setup a webR canvas by making a namespace call into the {webr} package
-    await webR.evalRVoid("webr::canvas(width=504, height=360)");
-
-    // Capture output data from evaluating the code
-    const result = await webRCodeShelter.captureR(codeToRun, {
-      withAutoprint: true,
-      captureStreams: true,
-      captureConditions: false//,
-      // env: webR.objs.emptyEnv, // maintain a global environment for webR v0.2.0
-    });
-
-    // Start attempting to parse the result data
-    try {
-
-      // Stop creating images
-      await webR.evalRVoid("dev.off()");
-
-      // Merge output streams of STDOUT and STDErr (messages and errors are combined.)
-      const out = result.output
-        .filter(evt => evt.type === "stdout" || evt.type === "stderr")
-        .map((evt, index) => {
-          const className = `qwebr-output-code-${evt.type}`;
-          return `<code id="${className}-editor-37-result-${index + 1}" class="${className}">${evt.data}</code>`;
-        })
-        .join("\n");
-
-
-      // Clean the state
-      const msgs = await webR.flush();
-
-      // Output each image event stored
-      msgs.forEach((msg) => {
-        // Determine if old canvas can be used or a new canvas is required.
-        if (msg.type === 'canvas'){
-          // Add image to the current canvas
-          if (msg.data.event === 'canvasImage') {
-            canvas.getContext('2d').drawImage(msg.data.image, 0, 0);
-          } else if (msg.data.event === 'canvasNewPage') {
-            // Generate a new canvas element
-            canvas = document.createElement("canvas");
-            canvas.setAttribute("width", 2 * 504);
-            canvas.setAttribute("height", 2 * 360);
-            canvas.style.width = "700px";
-            canvas.style.display = "block";
-            canvas.style.margin = "auto";
-          }
-        } 
-      });
-
-      // Use `map` to process the filtered "pager" events asynchronously
-      const pager = await Promise.all(
-        msgs.filter(msg => msg.type === 'pager').map(
-          async (msg) => {
-            return await parseTypePager(msg);
-          }
-        )
-      );
-
-      // Nullify the output area of content
-      outputCodeDiv.innerHTML = "";
-      outputGraphDiv.innerHTML = "";
-
-      // Design an output object for messages
-      const pre = document.createElement("pre");
-      if (/\S/.test(out)) {
-        // Display results as HTML elements to retain output styling
-        const div = document.createElement("div");
-        div.innerHTML = out;
-        pre.appendChild(div);
-      } else {
-        // If nothing is present, hide the element.
-        pre.style.visibility = "hidden";
-      }
-      outputCodeDiv.appendChild(pre);
-
-      // Place the graphics on the canvas
-      if (canvas) {
-        outputGraphDiv.appendChild(canvas);
-      }
-
-      // Display the pager data
-      if (pager) {
-        // Use the `pre` element to preserve whitespace.
-        pager.forEach((paged_data, index) => {
-          let pre_pager = document.createElement("pre");
-          pre_pager.innerText = paged_data;
-          pre_pager.classList.add("qwebr-output-code-pager");
-          pre_pager.setAttribute("id", "qwebr-output-code-pager-editor-37-result-" + (index + 1));
           outputCodeDiv.appendChild(pre_pager);
         });
       }

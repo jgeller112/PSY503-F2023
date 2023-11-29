@@ -490,16 +490,7 @@ moderation_vio=read.csv("https://raw.githubusercontent.com/jgeller112/psy503-psy
 
 ## Continuous x Continuous Interactions
 
-```{webr-r}
-#| echo: false
-#| fig-align: center
-#| 
-moderation_vio=read.csv("https://raw.githubusercontent.com/jgeller112/psy503-psych_stats/master/moderation.csv")
-
-lm1 <- lm(Aggression~ Vid_Games*CaUnTs,  data=moderation_vio)
-
-visreg2d(lm1,"Vid_Games", "CaUnTs", plot.type="persp")
-```
+![](images/inter_example.png){fig-align="center"}
 
 ## Continuous x Continuous Interactions
 
