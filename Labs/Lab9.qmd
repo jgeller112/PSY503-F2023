@@ -1,17 +1,28 @@
 ---
-title: "Lab 10"
+title: "Lab 9"
 format: html
 editor: visual
 author: "Jason Geller, Ph.D."
-date: 2023 04 26
+date: 2023 11 29
 toc: true
 toc_float: true
 ---
 
-## Lab 10: Multilevel Modeling
+# Lab 9: Interactions 1 
 
-For this lab, we will apply core concepts from class to a dataset from Coyne et al. (2019). Here, you will fit, interpret, and visualize results from a multilevel model.
+For this lab, we will examine core concepts from class to examine data
+from:
 
-> Coyne, M. D., McCoach, D. B., Ware, S., Austin, C. R., Loftus-Rattan, S. M., & Baker, D. L. (2019). Racing Against the Vocabulary Gap: Matthew Effects in Early Vocabulary Instruction and Intervention. *Exceptional Children*, *85*(2), 163--179. <https://doi.org/10.1177/0014402918789162>
+> Przybylski, A. & Weinstein, N. (2017). A Large-Scale Test of the
+> Goldilocks Hypothesis. *Psychological Science*, *28*, 204--215.
 
-To access Lab 10, please [click here](https://classroom.github.com/a/GUBRA5g4).
+Here, you will fit, interpret, and visualize results from a categorical
+x continuous interaction. In addition, you will do some data wrangling
+along the way. Data analysis is never easy :).
+
+This lab is due on December 3, 2023 at 11:59 P.M.
+
+To access Lab 9 please [click
+here](https://classroom.github.com/a/Je9yf9Dj)
+
+## Lab answers
