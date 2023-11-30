@@ -223,7 +223,7 @@ rawfrq_log %>%
 
 - $b_0$: the expected value of Y when frequency is at 0. 
 
-- $b_1$: A 1%  increase in log frequency results in a -0.13 decrease in iconicity scores, b=-0.13, SE = 0.02, t = -7.36, p < .001. 
+- $b_1$: A 1%  increase in log frequency results in a -0.13/100 decrease in iconicity scores, b=-0.13, SE = 0.02, t = -7.36, p < .001. 
 
 ## Analysis 4: Multiple predictors
 
