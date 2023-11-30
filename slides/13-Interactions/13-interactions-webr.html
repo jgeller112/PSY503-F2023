@@ -4873,11 +4873,10 @@ evals_interact %>%
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
       value: `
-b_0: Grand mean of mean when age is at its mean
-b_1: The slope of age at grand mean of age
-b_2: The offset of differene in gender when age is at its mean
-b_3: Interaction between gender and age. The offset of differene in gender slope for unit increase in age. 
-`,
+b_0: Grand mean of gender  when age is at its mean
+b_1: The slope of age at grand mean of gender
+b_2: The offset of difference in gender when age is at its mean
+b_3: Interaction between gender and age. The offset/differene in the gender slope for unit increase in age on scores.`,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
