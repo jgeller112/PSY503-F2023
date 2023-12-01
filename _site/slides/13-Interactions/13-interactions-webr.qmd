@@ -141,7 +141,7 @@ dplyr::select(ID, score, age, gender)
         -   Age\*Gender interaction
 
 ::: callout-note
-A categorical x continuous regression model is an ANCOVA
+ANCOVA is a special case of a categorical x continuous regression model
 :::
 
 ## Scatter plot
