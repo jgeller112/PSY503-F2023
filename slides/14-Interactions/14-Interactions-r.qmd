@@ -1,0 +1,1034 @@
+---
+title: "Interactions 2"
+subtitle: "Princeton University"
+author: "Jason Geller, PH.D.(he/him)"
+date: 'Updated:`r Sys.Date()`'
+footer: "PSY 503: Foundations of Statistics in Psychology"
+format: 
+  revealjs:
+    theme: blood
+    css: slide-style.css
+    multiplex: true
+    transition: fade
+    slide-number: true
+    incremental: false 
+    chalkboard: true
+    fontsize: "25pt"
+webr:
+  packages: ["tidyverse", "easystats", "broom", "kableExtra", "interactions", "emmeans", "ggeffects"]
+filters:
+  - webr
+execute:
+  freeze: auto
+  echo: true
+  message: false
+  warning: false
+  fig-align: center
+  fig-width: 12
+  fig-height: 8
+  editor_options: 
+  chunk_output_type: inline
+  code-overflow: wrap
+  html:
+    code-fold: true
+    code-tools: true
+---
+
+## Final Paper
+
+-   Due final exams week
+
+-   Will post link to Github repository by Wednesday
+
+    -   Similar to our labs
+
+    -   Push everything to the repository
+
+-   I want a reproducible APA formatted paper
+
+    -   This means:
+
+        -   I can reproduce your entire pdf/doc from the qmd/rmd in your
+            repository
+
+-   Questions should be posted via issues from the repository
+
+## Packages
+
+```{r}
+#| echo: true
+library(pacman)
+p_load("tidyverse", "easystats", "broom", "kableExtra", "emmeans", "Superpower")
+
+```
+
+## Moderation/Interaction
+
+-   The effect of X on Y depends on some third variable (moderator)
+
+    -   This tells us about the conditions that facilitate, enhance, or
+        inhibit the effect
+
+        -   Large vs. small
+
+        -   Present vs. absent
+
+        -   Positive vs. negative
+
+# Categorical x Categorical Interaction
+
+## 2 x 2 Between Factorial Dataset
+
+-   LaPaglia, Miller, and Protexter (2022)
+
+    -   Looked at the impact of instructor fluency and gender on test
+        performance (Quiz)
+
+    -   *N* = 72 (49 females, 23 males)
+
+    -   2 (Fluency: fluent, disfluent) x 2 (Gender: male, female) design
+
+```{webr-r}
+gen<- read.csv("https://raw.githubusercontent.com/jgeller112/PSY503-F2023/main/slides/14-Interactions/2x2data.csv")
+
+#make sure factors
+gen <- gen %>%
+  mutate(Gender=as.factor(Gender), Fluency=as.factor(Fluency)) %>% rename("Quiz"= "Quiz.Score")
+```
+
+## Categorical x Categorical Interaction
+
+-   Factorial design
+
+    -   Commonly used to refer to experiments where more than one factor
+        is manipulated
+
+    -   2-way (most common), 3-way, 4-way (don't), 5-way (please don't)
+
+## 2-way (Factorial) ANOVA
+
+-   In the example above we have two factors:
+
+    -   Factor A (e.g., Gender) with 2 levels (e.g., male vs. female)
+    -   Factor B (e.g., Fluency) with 2 levels (e.g., Disfluency vs.
+        Fluency)
+
+-   Fully crossed design
+
+    -   Every level of factor A is tested with every level of factor B
+    -   Total \# groups (cells) is a x b
+
+-   We will see how to formulate in terms of model comparisons:
+
+    -   Main effect of Gender
+    -   Main effect of Fluency
+    -   Interaction effect Gender x Fluency
+
+## Main effects vs. Simple effects
+
+-   What is a main effect?
+
+    -   Marginal mean differences
+
+        -   They tell us what impact a particular factor has, ignoring
+            the impact of the other factor
+
+## Main effects vs. Simple effects
+
+-   Regardless of Gender condition, does Fluency of instructor affect
+    performance?
+
+```{r}
+#| echo: false
+
+gen<- read.csv("https://raw.githubusercontent.com/jgeller112/PSY503-F2023/main/slides/14-Interactions/2x2data.csv")
+
+#make sure factors and change quiz score
+gen <- gen %>%
+  mutate(Gender=as.factor(Gender), Fluency=as.factor(Fluency)) %>% rename("Quiz"= "Quiz.Score")
+
+
+mean.summary = gen %>%
+  drop_na(.) %>%
+  group_by(Gender, Fluency) %>%
+  summarize(Quiz = mean(Quiz)) %>%
+  pivot_wider(names_from = "Fluency",values_from = "Quiz" )
+
+mean.summary$Gender = as.character(mean.summary$Gender)
+mean.summary$Marginal = rowMeans(mean.summary[2:3])
+mean.summary[3,1] = "Marginal"
+mean.summary[3,2:4] = as.list(colMeans(mean.summary[2:4], na.rm=T))
+
+kable(mean.summary, digits = 2) %>% 
+  kable_styling() %>% 
+  group_rows(start_row = 1, end_row = 3) %>%
+  row_spec(3, bold = T, color = "white", background = "#562457")
+
+```
+
+## Main effects vs. simple effects
+
+-   Regardless of Fluency condition, does Gender of instructor affect
+    performance?
+
+```{r}
+#| echo: false
+#| 
+mean.summary = gen %>%
+  drop_na(.) %>%
+  group_by(Gender, Fluency) %>%
+  summarize(Quiz = mean(Quiz)) %>%
+  pivot_wider(names_from = "Fluency",values_from = "Quiz" )
+
+mean.summary$Gender = as.character(mean.summary$Gender)
+mean.summary$Marginal = rowMeans(mean.summary[2:3])
+mean.summary[3,1] = "Marginal"
+mean.summary[3,2:4] = as.list(colMeans(mean.summary[2:4], na.rm=T))
+
+kable(mean.summary, digits = 2) %>% 
+  kable_styling() %>% 
+  group_rows(start_row = 1, end_row = 3) %>% 
+  column_spec(4, bold = T, color = "white", background = "#562457")
+
+```
+
+## Main effects vs. simple effects
+
+-   Simple effects
+
+    -   Conditional mean effects
+
+        -   Differences between conditions/cells
+
+```{r}
+#| echo: false
+
+kable(mean.summary, digits = 2) %>% 
+  kable_styling() %>% 
+  group_rows(start_row = 1, end_row = 2) %>%
+  column_spec(2, background = "purple") %>%
+  column_spec(3, background = "red") %>%
+  column_spec(4, background = "green") %>%
+  row_spec(3, background = "green") 
+
+```
+
+## Fitting the model: Interpretation
+
+$$\hat{Y}= b_0 + b_1 X + b_2 Z + b_3 X*Z$$
+
+where ( X ) is a dummy coded categorical predictor and ( Z ) is a dummy
+coded categorical predictor
+
+-   Testing the simple (conditional effects), not main effects
+
+    -   $b_0$: the intercept, or the predicted outcome when X and Z=0
+    -   $b_1$: The mean difference in the intercept for a one unit
+        change in $X$ the predicted change in Y at Z = 0
+    -   $b_2$: The mean difference in the intercept for a one unit
+        change in $Z$ the predicted change in Y at X = 0
+    -   $b_3$: The interaction of $X$ and $Z$, The offset or mean
+        difference in $Z$ for a one-unit increase in $X$ (or vice versa)
+
+## Fitting the model
+
+```{webr-r}
+lm(Quiz~Gender*Fluency, data=gen) %>%
+  tidy(conf.int=TRUE) %>%
+  slice(1)%>%
+  kable()
+```
+
+```{webr-r}
+
+```
+
+## Fitting the model
+
+```{webr-r}
+
+lm(Quiz~Gender*Fluency, data=gen) %>%
+  tidy(conf.int=TRUE) %>%
+  slice(2)%>%
+  kable()
+
+
+```
+
+```{webr-r}
+
+```
+
+## Fitting the model
+
+```{webr-r}
+
+lm(Quiz~Gender*Fluency, data=gen) %>%
+  tidy(conf.int=TRUE) %>%
+  slice(3)%>%
+  kable()
+
+```
+
+```{webr-r}
+
+
+```
+
+## Fitting the model
+
+```{webr-r}
+
+lm(Quiz~Gender*Fluency, data=gen) %>%
+  tidy(conf.int=TRUE) %>%
+  slice(4)%>%
+  kable()
+
+```
+
+```{webr-r}
+
+
+```
+
+## Fitting the model
+
+-   Interpretation
+
++----------------+----------------------+----------------------+
+| Term           | Interpretation       | Value                |
++:===============+:=====================+:=====================+
+| intercept      | female disfluent     | 6.69                 |
+|                | instrutor            |                      |
++----------------+----------------------+----------------------+
+| male-female    | female minus male,   | 5.50-6.69=-1.19      |
+|                | when disfluent       |                      |
++----------------+----------------------+----------------------+
+| dis            | fluent minus         | 7.85-6.69=1.16       |
+| fluent-fluent  | disfluent, when      |                      |
+|                | female               |                      |
++----------------+----------------------+----------------------+
+| male           | (male minus female   | (6.69−5.50)          |
+| -female:flue   | when                 |                      |
+| nt-disfluent   | disfluent)-(male     | −(7.85-8.00)=1.35    |
+|                | minus female when    |                      |
+|                | fluent)              |                      |
++----------------+----------------------+----------------------+
+
+## Linear modeling approach: Treatment/Dummy coding
+
+-   Testing the simple (conditional effects), not main effects
+
+```{r, echo=FALSE}
+
+tibble::tribble(
+     ~Gender, ~Fluency, ~D1, ~D2, ~Interaction,
+  "Female=0",     "Disfluent=0",  0L,  0L,           0L,
+  "Female=0",  "Fluent=1",  0L,  1L,           0L,
+    "Male=1",     "Disfluent=0",  1L,  0L,           0L,
+    "Male=1",  "Fluent=1",  1L,  1L,           1L
+  ) %>%
+  kable()
+
+```
+
+$$\hat{Y}= b_0 + b_1({0}) + b_2({0}) + b_3({0})$$
+$$\bar Y_{Female,Disfluent} = b_0$$
+
+## Linear modeling approach: Treatment/dummy coding
+
+```{r, echo=FALSE}
+
+tibble::tribble(
+     ~Gender, ~Language, ~D1, ~D2, ~Interaction,
+  "Female=0",     "Disfluent=0",  0L,  0L,           0L,
+  "Female=0",  "Fluent=1",  0L,  1L,           0L,
+    "Male=1",     "Disfluent=0",  1L,  0L,           0L,
+    "Male=1",  "Fluent=1",  1L,  1L,           1L
+  ) %>%
+  kable()
+
+```
+
+$$\hat{Y}= b_0 + b_1({0}) + b_2({1}) + b_3({0})$$
+
+$$\bar Y_{Female,Fluent}= b_0 +  b_2$$
+
+## Linear modeling approach: Treatment/Dummy coding
+
+```{r, echo=FALSE}
+
+tibble::tribble(
+     ~Gender, ~Language, ~D1, ~D2, ~Interaction,
+  "Female=0",     "Disfluent=0",  0L,  0L,           0L,
+  "Female=0",  "Fluent=1",  0L,  1L,           0L,
+    "Male=1",     "Disfluent=0",  1L,  0L,           0L,
+    "Male=1",  "Fluent=1",  1L,  1L,           1L
+  ) %>%
+  kable()
+
+```
+
+$$\hat{Y}= b_0 + b_1({1}) + b_2({0}) + b_3({0})$$
+$$\bar Y_{Male,Disfluent} = b_0 + b_1 $$
+
+## Linear Modeling Approach: Treatment/Dummy coding
+
+```{r, echo=FALSE}
+
+tibble::tribble(
+     ~Gender, ~Language, ~D1, ~D2, ~Interaction,
+  "Female=0",     "Disfluent=0",  0L,  0L,           0L,
+  "Female=0",  "Fluent=1",  0L,  1L,           0L,
+    "Male=1",     "Disfluent=0",  1L,  0L,           0L,
+    "Male=1",  "Fluent=1",  1L,  1L,           1L
+  ) %>%
+  kable()
+
+```
+
+$$\hat{Y}= b_0 + b_1({1}) + b_2({1}) + b_3({1})$$
+
+$$\bar Y_{Male,Fluent} = b_0+b_1 + b_2 + b_3 $$
+
+## Marginal Means: using `Emmeans`
+
+```{webr-r}
+
+lm(Quiz~Gender*Fluency, data=gen) %>%
+  emmeans::emmeans(specs=~Gender|Fluency) %>%
+  kable()
+
+```
+
+## Linear modeling approach: deviation-coding
+
+-   Gives main effects and interaction interpretation!
+
+$$\hat{Y}= b_0 + b_1 X + b_2 Z + b_3 X*Z$$
+
+-   $b_0$: is the overall mean of all cells
+
+-   $b_1$: is the main effect of factor A
+
+-   $b_2$: is the main effect of factor B
+
+-   $b_3$: is the interaction effect
+
+## Linear modeling approach: deviation-coding
+
+```{webr-r}
+contrasts(gen$Gender) <- c(0.5, -0.5)# sum code gend
+contrasts(gen$Fluency) <- c(0.5, -0.5)# sum code fluency
+# fit linear model
+lm(Quiz~Gender*Fluency, data=gen) %>%
+  tidy(conf.int=TRUE) %>%
+  kable()
+```
+
+## Linear Modeling Approach: Deviation-Coding
+
++----------------+----------------------+----------------------+
+| Term           | Interpretation       | Value                |
++:===============+:=====================+:=====================+
+| intercept      | grand mean           | 7.01                 |
++----------------+----------------------+----------------------+
+| male-female    | female minus male    | 7.27-6.75=0.52       |
++----------------+----------------------+----------------------+
+| di             | fluent minus         | 7.92-6.10=-1.83      |
+| sfluent-fluent | disfluent            |                      |
++----------------+----------------------+----------------------+
+| female-male:fl | (female minus male   | (6.69−5.50)          |
+| uent-disfluent | when                 |                      |
+|                | disfluent)-(female - | −(7.85-8.00)=-1.35   |
+|                | male when fluent)    |                      |
++----------------+----------------------+----------------------+
+
+## Visualzing Categorical x Cateorgical Interactions
+
+```{webr-r}
+d=lm(Quiz~Gender*Fluency, data=gen)
+cat_plot(d, pred = Fluency, interval = TRUE,
++               int.type = "confidence", int.width = .8)
+
+```
+
+## Visualizing Categorical x Categorical Interactions
+
+```{webr-r}
+#| fig-align: center
+#| 
+d=lm(Quiz~Gender*Fluency, data=gen)
+cat_plot(d, pred = Fluency, modx = Gender, interval = TRUE,
++               int.type = "confidence", int.width = .8)
+```
+
+# Factorial ANOVA
+
+## ANOVA approach
+
+-   We will formulate a separate restricted model for each hypothesis
+    test
+
+$$
+\begin{aligned}
+ F_A &= \frac{MS_A}{MS_{within}} \\
+\\
+ F_B &= \frac{MS_B}{MS_{within}} \\
+\\
+ F_{AxB} &= \frac{MS_{AxB}}{MS_{within}} \\
+\end{aligned}
+$$
+
+## Null Hypotheses
+
+-   The two main effects and the interaction represent three independent
+    questions we can ask about the data. We have three null hypotheses
+    to test
+
+-   One null hypothesis refers to the marginal row means (Gender)
+
+|          | Disfluent  |   Fluent   |  Marginal  |     |
+|:---------|:----------:|:----------:|:----------:|:---:|
+| F        | $\mu_{11}$ | $\mu_{12}$ | $\mu_{1.}$ |     |
+| M        | $\mu_{21}$ | $\mu_{22}$ | $\mu_{2.}$ |     |
+| Marginal | $\mu_{.1}$ | $\mu_{.2}$ | $\mu_{..}$ |     |
+
+## Null Hypotheses
+
+|          | Disfluent  |   Fluent   |  Marginal  |     |
+|:---------|:----------:|:----------:|:----------:|:---:|
+| F        | $\mu_{11}$ | $\mu_{12}$ | $\mu_{1.}$ |     |
+| M        | $\mu_{21}$ | $\mu_{22}$ | $\mu_{2.}$ |     |
+| Marginal | $\mu_{.1}$ | $\mu_{.2}$ | $\mu_{..}$ |     |
+
+$$
+\begin{aligned}
+ H_0&: \mu_{1.} = \mu_{2.} = \dots = \mu_{R.}\\
+H_1&: \text{Not true that }\mu_{1.} = \mu_{2.} = \dots = \mu_{R.}
+\end{aligned}
+$$
+
+## Null Hypotheses
+
+|          | Disfluent  |   Fluent   |  Marginal  |     |
+|:---------|:----------:|:----------:|:----------:|:---:|
+| F        | $\mu_{11}$ | $\mu_{12}$ | $\mu_{1.}$ |     |
+| M        | $\mu_{21}$ | $\mu_{22}$ | $\mu_{2.}$ |     |
+| Marginal | $\mu_{.1}$ | $\mu_{.2}$ | $\mu_{..}$ |     |
+
+$$
+\begin{aligned}
+ \alpha_a&= \mu_{a.} - \mu_{..} \\
+ H_0&: \alpha_1 = \alpha_2 = \dots = \alpha_R = 0\\
+H_1&: \text{At least one }\alpha_r \neq 0
+\end{aligned}
+$$
+
+## Null Hypotheses
+
+-   Main effect of Fluency
+
+|          | Disfluent  |   Fluent   |  Marginal  |     |
+|:---------|:----------:|:----------:|:----------:|:---:|
+| F        | $\mu_{11}$ | $\mu_{12}$ | $\mu_{1.}$ |     |
+| M        | $\mu_{21}$ | $\mu_{22}$ | $\mu_{2.}$ |     |
+| Marginal | $\mu_{.1}$ | $\mu_{.2}$ | $\mu_{..}$ |     |
+
+$$
+\begin{aligned}
+ \beta_b&= \mu_{.b} - \mu_{..} \\
+ H_0&: \beta_1 = \beta_2 = \dots = \beta_C = 0\\
+H_1&: \text{At least one }\beta_c \neq 0
+\end{aligned}
+$$
+
+## Null Hypotheses
+
+The interaction null hypothesis can then be stated as follows:
+
+|          | Disfluent  |   Fluent   |  Marginal  |     |
+|:---------|:----------:|:----------:|:----------:|:---:|
+| F        | $\mu_{11}$ | $\mu_{12}$ | $\mu_{1.}$ |     |
+| M        | $\mu_{21}$ | $\mu_{22}$ | $\mu_{2.}$ |     |
+| Marginal | $\mu_{.1}$ | $\mu_{.2}$ | $\mu_{..}$ |     |
+
+$$
+\begin{aligned}
+ (\alpha\beta)_{ab}&= \mu_{ab} - \alpha_a - \beta_b  - \mu_{..} \\
+ H_0&: (\alpha\beta)_{11} = (\alpha\beta)_{12} = \dots = (\alpha\beta)_{AB} = 0\\
+H_1&: \text{At least one }(\alpha\beta)_{ab} \neq 0
+\end{aligned}
+$$
+
+## F-statistics
+
+$$
+\begin{aligned}
+ SS_{\text{total}} &= \sum_{a=1}^A\sum_{b=1}^B\sum_{i=1}^{N_{ab}}(Y_{abi}-\bar{Y}_{...})^2 \\
+ SS_{\text{Within}} &= \sum_{a=1}^A\sum_{b=1}^B\sum_{i=1}^{N_{ab}}(Y_{abi}-\bar{Y}_{ab.})^2 \\
+ SS_A &= BN\sum_{a=1}^A(\bar{Y}_{a..}-\bar{Y}_{...})^2\\
+SS_B &= AN\sum_{b=1}^B(\bar{Y}_{.b.}-\bar{Y}_{...})^2\\
+ SS_{AB} &= N\sum_{a=1}^A\sum_{b=1}^B(\bar{Y}_{ab.}-\bar{Y}_{a..}-\bar{Y}_{.b.}+\bar{Y}_{...})^2 \\
+\end{aligned}$$
+
+## F-statistics
+
+-   If the design is balanced (equal observations in all conditions),
+    then:
+
+$$ SS_{\text{total}} = SS_{\text{within}} + SS_R + SS_C + SS_{RxC}$$
+
+-   $df$, $MS$, and $F$ ratios are defined in the same way as they were
+    for one-way ANOVA. We just have more of them
+
+## ANOVA
+
+-   Use `afex` package to run (my favorite)
+
+::: panel-tabset
+## ANOVA
+
+```{r}
+library(afex)
+aov_ez(id="Subject.Number", between=c("Gender", "Fluency"), dv="Quiz", data=gen,  anova_table = list(es = "pes")) %>% 
+  nice()%>% 
+  kable()
+
+```
+
+## LM
+
+```{r}
+#| echo: false
+#| 
+contrasts(gen$Gender) <- c(0.5, -0.5)# sum code gend
+contrasts(gen$Fluency) <- c(0.5, -0.5)# sum code fluency
+# fit linear model
+lm(Quiz~Gender*Fluency, data=gen) %>%
+  tidy(conf.int=TRUE) %>%
+  kable()
+```
+:::
+
+## Simple effects analysis
+
+-   An examination of one factor at the levels of another
+
+    -   Our example:
+
+        -   Difference in quiz performance for videos with Males and
+            Females at Disfluent and Fluent
+
+            -   Get F test for these comparisons (2 one-way ANOVAs)
+
+$$F=\frac{MS_{gender_{oneway}}}{MS_{W_{omnibus}}}$$
+
+::: callout-note
+Using error from entire model is preferable
+:::
+
+## Simple effects analysis
+
+```{webr-r}
+lm(Quiz~Gender*Fluency, data=gen) %>%
+  emmeans::emmeans(pairwise~Gender|Fluency) %>%
+  joint_tests(by="Fluency") %>%
+  kable()
+```
+
+. . .
+
+-   No Gender effect for Fluency, *F*(1, 46) = 0.29, *p* = .867
+
+-   No Gender effect for Disfluency, *F*(1, 46) = 0.596, *p* = .867
+
+## As *t*-tests
+
+```{r}
+lm(Quiz~Gender*Fluency, data=gen) %>%
+  emmeans::emmeans(pairwise ~Gender|Fluency)
+```
+
+## Effect Sizes: Main Effects and Interaction
+
+-Report $\eta_p^2$ or $\omega_2^2$ for Main Effects and interactions
+
+```{r}
+#eta_squared
+lm(Quiz~Gender*Fluency, data=gen) %>%
+  effectsize::eta_squared(partial=TRUE)
+ 
+```
+
+## Effect Sizes for simple effects
+
+```{r}
+t_to_d(t = c(c(0.169, 0.772)), 
+             df_error=46) # for full model
+
+```
+
+## Types of sums of squares
+
+-   Type 1 - Sequential
+
+-   Type 2 - Hierarchical
+
+-   Type 3 - Simultaneous
+
+    -   No difference if design is balanced, but different if unbalanced
+
+    ```{r}
+    #| echo: false
+    #| 
+    table(gen$Gender, gen$Fluency) %>% 
+      kable()
+    ```
+
+## Type I, Type II, and Type III SS
+
+-   By default R `aov` calculates Type I (SS)
+
+    -   Sequential (order listed in model)
+
+        -   First assign a maximum of variation to variable A
+
+        -   In the remaining variation, assign the maximum of variation
+            to variable B
+
+        -   In the remaining variation, assign the maximum of variation
+            to the interaction effect
+
+        -   Assign the rest to the residual SS
+
+-   *Can change depending on order terms are placed in the model!*
+
+## Main Effect of Gender $SS_A$
+
+> Does Gender contribute significantly over and above an intercept-only
+> model?
+
+```{r,echo=FALSE}
+knitr::kable(tibble::tribble(
+                   ~V1,                ~V2,
+         "Restricted/Null model:",     "`Quiz ~ 1`",
+  "Full/Alternative model:", "`Quiz ~ Gender`"
+  ), col.names= c("", "")) %>%
+  kableExtra::kable_material_dark()
+```
+
+## F-Statistic for Gender Main Effect: $SS_A$
+
+```{r, echo=FALSE}
+r = lm(Quiz~1, data=gen) # intercept-only
+f = lm(Quiz~Gender, data=gen) # gender
+
+anova(r, f) %>% 
+tidy() %>%
+  kable()#  allows us to compare models %>
+```
+
+## Main Effect of *B*
+
+> Does Fluency contribute meaningfully to the model over and above
+> Gender?
+
+```{r, echo=FALSE}
+knitr::kable(tibble::tribble(
+                   ~V1,                ~V2,
+         "Restricted/Null model:",     "`Quiz ~ Gender`",
+  "Full/Alternative model:", "`Quiz ~ Gender + Fluency`"
+  ), col.names= c("", "")) %>%
+  kableExtra::kable_material_dark()
+```
+
+## F-Statistic for Fluency Main Effect: $SS_B$
+
+```{r, echo=FALSE}
+
+r = lm(Quiz~Gender, data=gen) # gender-only
+f = lm(Quiz~Gender + Fluency , data=gen) # gender + Fluency
+
+anova(r, f) %>%
+   tidy()%>%
+  kable()
+  
+```
+
+## Interaction Effect of *AB*
+
+> Does the interaction between Fluency and Gender contribute
+> meaningfully to the model over and above the main effects?
+
+```{r, echo=FALSE}
+
+knitr::kable(tibble::tribble(
+                   ~V1,                ~V2,
+         "Restricted/Null model:",     "`Quiz ~ Gender + Fluency`",
+  "Full/Alternative model:", "`Quiz ~ Gender + Fluency + Gender:Fluency`"
+  ), col.names= c("", "")) %>%
+    kableExtra::kable_material_dark()
+```
+
+## F-Statistic for Gender\*Fluency Effect: $SS_{AB}$
+
+```{r}
+#| echo: false
+#| 
+r = lm(Quiz~Gender+Fluency, data=gen) # main effects only
+f = lm(Quiz~Gender+Fluency + Fluency:Gender, data=gen) # main +inter
+
+anova(r, f) %>%
+  tidy() %>%
+  knitr::kable(digits=3)
+```
+
+## Full ANOVA Table
+
+```{r, echo=FALSE, fig.align='center', out.width="100%"}
+# aov function uses type 1 ss
+aov(lm(Quiz~Gender*Fluency, data=gen)) %>% 
+  tidy(digits=3) %>%
+  kable()
+```
+
+## Type I, Type II, and Type III ANOVAs
+
+::: columns
+::: {.column width="50%"}
+-   Type 2
+
+    -   The `Anova()` function from the car package provides Type II
+        sums of squares
+
+        -   Tests main effects
+
+            -   Ignores interactions
+
+$$SS(A | B) A$$
+
+$$SS(B | A) B$$
+:::
+
+::: {.column width="50%"}
+![](slides/14-Interactions/Presentation1.jpg){fig-align="center"}
+:::
+:::
+
+::: callout-note
+Use Type II if you don't care about interaction
+:::
+
+## Type II SS
+
+-   Main effect Gender
+
+```{r, echo=FALSE}
+knitr::kable(tibble::tribble(
+                   ~V1,                                               ~V2,
+         "Reduced/Null model:",     "`Quiz ~ Fluency`",
+  "Full/Alternative model:", "`Quiz ~ Fluency  + Gender`"
+  ), col.names = c("", "")) %>% 
+  kableExtra::kable_material_dark()
+
+```
+
+-   Main effect Fluency
+
+```{r, echo=FALSE}
+knitr::kable(tibble::tribble(
+                   ~V1,                                               ~V2,
+         "Reduced/Null model:",     "`Quiz ~ Gender`",
+  "Full/Alternative model:", "`Quiz ~ Gender + Fluency`"
+  ), col.names = c("", "")) %>%
+  kableExtra::kable_material_dark()
+
+```
+
+## Type II SS
+
+-   `Anova` function in `car` package can handle these cases
+
+```{r}
+library(car)
+
+Anova(lm(Quiz~Gender*Fluency, data=gen), type="II") %>%
+  tidy()%>%
+  kable()
+```
+
+## Type I, Type II, and Type III SS
+
+::: columns
+::: {.column width="50%"}
+-   Type III
+
+    -   Treats main effects and interactions simultaneously
+
+    -   Fit full model and remove effect of interest
+
+        -   How much of the variance is accounted for by X after taking
+            into consideration all the other effects
+
+-   *Preferable if unequal cell sizes and care about interaction*
+:::
+
+::: {.column width="50%"}
+![](type3.jpg){fig-align="center"}
+:::
+:::
+
+## Type III
+
+-   Main effect of Gender
+
+```{r}
+#| echo: false
+knitr::kable(tibble::tribble(
+                   ~V1,                                               ~V2,
+         "Reduced/Null model:",     "`Quiz ~ Fluency + Gender:Fluency`",
+  "Full/Alternative model:", "`Quiz ~ Gender + Fluency + Gender:Fluency`"
+  ), col.names = c("", "")) %>%
+  kableExtra::kable_material_dark()
+```
+
+## Type III
+
+-   Main effect of Fluency
+
+```{r}
+#| echo: false
+knitr::kable(tibble::tribble(
+                   ~V1,                                               ~V2,
+         "Reduced/Null model:",     "`Quiz ~ Gender  + Gender:Fluency`",
+  "Full/Alternative model:", "`Quiz ~ Gender + Fluency + Gender:Fluency`"
+  ), col.names = c("", "")) %>%
+  kableExtra::kable_material_dark()
+
+
+```
+
+## Type III
+
+-   Interaction
+
+```{r}
+#| echo: false
+#| 
+knitr::kable(tibble::tribble(
+                   ~V1,                                               ~V2,
+         "Reduced/Null model:", "`Quiz ~ Gender + Fluency`",
+  "Full/Alternative model:", "`Quiz ~ Gender + Fluency + Gender:Fluency`"
+  ), col.names = c("", "")) %>%
+  kableExtra::kable_material_dark()
+
+```
+
+## Type III
+
+```{r}
+Anova(lm(Quiz~Gender*Fluency, data=gen), type="III") %>%
+  tidy()%>%
+  kable()
+```
+
+## Type I, Type II, and Type III SS
+
+### Sums of Squares
+
+| Effect | Type I      | Type II     | Type III    |
+|--------|-------------|-------------|-------------|
+| A      | SS(A)       | SS(A\|B)    | SS(A\|B,AB) |
+| B      | SS(B\|A)    | SS(B\|A)    | SS(B\|A,AB) |
+| A:B    | SS(AB\|A,B) | SS(AB\|A,B) | SS(AB\|A,B) |
+
+## ANOVA power
+
+-   `Superpower`
+
+```{r}
+string <- "2b*2b"
+n <- 20
+# We are thinking of running 100 people in each condition
+mu <- c(5.50, 8.00, 6.69, 7.85)
+# Enter means in the order that matches the labels below.
+# In this case, control, pet.
+sd <-c(2.39,0.71,1.93,1.57)
+labelnames <- c("Gender", "male", "female", "Fluency", "Disfluency", "Fluency") #
+# the label names should be in the order of the means specified above.
+```
+
+## ANOVA power
+
+```{r}
+#| fig-align: center
+#| 
+design_result <- ANOVA_design(design = string,
+                   n = n,
+                   mu = mu,
+                   sd = sd,
+                   labelnames = labelnames)
+
+```
+
+## Run Simulation
+
+```{r}
+#nsims = 100 is not enough
+simulation_result <- ANOVA_power(design_result, 
+                                 alpha_level = .05, 
+                                 nsims = 100,
+                                 verbose = FALSE)
+
+simulation_result
+```
+
+## Power: Drawing your interactions
+
+> Sommet, N., Weissman, D. L., Cheutin, N., & Elliot, A. J. (2023). How
+> many participants do I need to test an interaction? Conducting an
+> appropriate power analysis and achieving sufficient power to detect an
+> interaction.*Advances in Methods and Practices in Psychological
+> Science, 6*(2), 1-21.<https://doi.org/10.1177/25152459231178728>
+
+-   <https://intxpower.com/?A=0.6&B=0.4&C=0.4&D=0.6&targetPower=80&algo=betweenTwoTailedFactorial>
+
+## Reporting results
+
+I would report the three effects from this model as follows:
+
+-   Main effect 1
+
+-   Main effect 2
+
+-   Interaction
+
+    -   Report *M* and *SD* for main effects
+    -   Significance tests (*F*, *df*, *p*, effect size)
+        -   If interaction is significant, simple effects analysis
+            -   Interpretation of simple effects
+
+-   Figure visualizing either the main effects (if interaction is not
+    significant) or interaction
+
+## Reporting results
+
+```{r}
+d=aov(Quiz~Gender*Fluency, data=gen)
+report(d)
+```
+
+## Thoughts on interactions
+
+1.  Avoid them if not theoretically motivated
+
+2.  Testing interactions require lots of data
+
+-   Power is worse in observational studies compared to experimental
+    paradigms
+
+3.  Center continuous variables and deviation code categorical
+    predictors
+4.  For non-simple designs (\> 2:2) use ANOVA `afex::aov_ez` (uses Type
+    III SS)
