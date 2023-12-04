@@ -1,10 +1,16 @@
 ---
 title: "Week 14"
-subtitle: "Mulitvariate Model Selection"
+subtitle: "More Interactions"
 date: 2023-12-4
 ---
 ## Before Class
 
 ### Textbook
 
-Chapter 14 - Statistics and Data Science: A Modeling Approach
+Chapter 16 - Statistics and Data Science: A Modeling Approach
+
+## After Class
+
+{{< video https://www.youtube.com/watch?v=_kN0To7BTjs&t=1937s width="800" height="400" >}}
+
+
