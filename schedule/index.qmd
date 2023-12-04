@@ -54,7 +54,7 @@ on Sunday (unless otherwise stated)</li>
 | 12 | 11/20/23 - 11/23/23 | Thanksgiving - No Class |  |  |  |
 | 13 | 11/27/23 | GLM 6: Interactions | [{{< fa book-open-reader >}}](/schedule/13-week.qmd) | [{{< fa laptop-code >}}](/slides/13-Interactions/13-interactions-webr.html) |  |
 | 13 | 11/29/23 | Lab 9 |  |  | [{{< fa pen-ruler >}}](/Labs/Lab9.qmd) |
-| 14 | 12/4/23 | GLM 6: Interactions | [{{< fa book-open-reader >}}](/schedule/14-week.qmd) | {{< fa laptop-code >}} |  |
+| 14 | 12/4/23 | GLM 6: Interactions | [{{< fa book-open-reader >}}](/schedule/14-week.qmd) | [{{< fa laptop-code >}}](/slides/14-Interactions/14-Interactions-r.html) |  |
 | 14 | 12/6/23 | Lab 10 |  |  | {{< fa pen-ruler >}} |
 | 15 | 12/11/23-12/13/23 | Reading Week - No Class |  |  |  |
 | 15 | Finals | Final Paper Due |  |  | {{< fa pen-ruler >}} |

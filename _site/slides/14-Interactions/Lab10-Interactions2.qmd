@@ -1,0 +1,181 @@
+---
+title: "Lab 10: Factorial Designs"
+output: 
+  html_document: 
+    fig_caption: yes
+    theme: cosmo
+    toc: yes
+    toc_depth: 3
+    toc_float: TRUE
+    df_print: paged
+editor_options: 
+  chunk_output_type: console
+---
+
+# Research scenario
+
+Based on subjects' self-reports of rejection sensitivity (N = 80), a researcher divides subjects into two equal groups (low RS and high RS).  Whereas half of the subjects in each group interact with a partner who displays a happy emotional expression during the interaction, the other half of the subjects in each group interact with a partner who displays a neutral emotional expression during the interaction.  After the interaction, subjects are asked to rate the statement, "My interaction partner likes me", on a scale from 1 (strongly disagree) to 7 (strongly agree).
+
+**Factor 1: Rejection Sensitivity**
+
+* Low
+* High
+
+**Factor 2: Partner's Emotional Expression**
+
+* Neutral
+* Happy
+
+**Dependent Variable: Perceived Liking**
+
+# Import & inspect the Data
+
+```{r lab-8-2}
+reject <- import("https://raw.githubusercontent.com/uopsych/psy612/master/labs/lab-8/data/reject.csv")
+```
+
+> Are the categorical variables factors? If not, change that 
+
+```{r}
+```
+
+- Notice that by default R orders factor levels alphabetically. In our case, this means that `High` will be the reference group of rejection sensitivity and `Happy` will be the reference group of interaction partner's emotional expression. However, it might be more intuitive to have `Low` and `Neutral` be the reference groups, respectively. 
+
+> Reorder the levels
+
+```{r}
+
+```
+
+# Descriptive Statistics
+
+- What is the sample size per condition?
+
+```{r}
+
+```
+
+## Table of Means
+
+The results of a factorial ANOVA are often represented in a table of means, which contains the means of each combination of conditions (the cell means) and means for the levels of each variable ignoring the other variables (the marginal means).
+
+### Table of Means using `apa.2way.table()`
+
+* The apa.2way.table() function from the `apaTables` package is a very convenient way to get our cell means and marginal means. This function works for any type of 2-way ANOVA, regardless of the number of levels of your factors, e.g. it would work for a 3 x 3 ANOVA. All you need to do is indicate what the IV's (aka factors) and DV are and specify `show.marginal.means = TRUE`. 
+
+Use apa.2way.table() to create a table
+
+```{r}
+
+
+
+```
+
+> Which means are being compared in the main effect of rejection sensitivity?
+
+> Which means are being compared in the main effect of interaction partner?
+
+>  Which means are involved in the interaction?
+
+# Conduct the Factorial ANOVA 
+
+# Using Regression: `lm`()
+
+Factorial ANOVA is the method by which we can examine whether two (or more) categorical IVs have joint effects on a continuous outcome of interest. Like all general linear models, factorial ANOVA is a specific case of multiple regression. However, we may choose to use an ANOVA framework for the sake of interpretability.
+
+Write the `lm()` code that performs the factorial ANOVA analysis.
+
+```{r}
+## your code here
+```
+
+> Intepret each of the regression coefficents 
+
+### Recoding the Factors
+
+Obviously, the means being compared by b1 and b2 do not represent our main effects. The main effect of RS would be a comparison of the marginal means for the low and high conditions. The main effect of partner would be a comparison of the marginal means for the neutral and happy conditions.
+
+With the way we have rs and partner coded in the model, the regression coefficient estimates don't correspond simply to the mean difference between conditions. We can recode the factors so that the parameter estimates, b1 and b2, correspond to a test of the main effects.
+
+> How should we code the levels of rejection sensitivity and partner emotion so that the parameter estimates, b1 and b2, correspond to a test of their main effects?
+
+Assign new codes to the levels of each factor.
+```{r}
+## your code here
+```
+
+Re-run the analysis with newly coded factors.
+```{r}
+## your code here
+```
+
+
+> Interpret the new model coefiifcents
+
+
+## Using Traditional ANOVA: `afex`
+
+You can also perform a traditional ANOVA and get straightforward results by passing the model to the `aov_ez` function.
+
+```{r}
+
+```
+
+>**Question:** How would you interpret these results? 
+
+# Effect Sizes 
+
+- Effect size is really important to report. It provides an idea of the *size* of the effect of a predictor variable on an outcome variable. Reporting effect size in publications is also very helpful for other researchers wanting to conduct a priori power analyses.
+
+> What are the effect sizes for each main effect and interaction: 
+
+# Visualization
+
+- Visualizing the results is helpful for understanding your results and interpreting significant (or non-significant) effects. Especially when there is a significant interaction effect, a plot can help illustrate what the interaction effect is. Below plot each main effect and the interaction.  
+
+## Main effects
+
+* Remember that main effects correspond to differences in marginal means.
+
+### Plotting the Main Effect of Rejection Sensitivity
+
+```{r}
+
+```
+
+### Plotting the Main Effect of Partner's Emotional Expression
+```{r}
+
+```
+
+## Plotting the Interaction Effect
+```{r}
+
+```
+
+>**Question:** How would you describe in a paper what the significant interaction effect means? 
+
+
+
+# Simple effects
+
+- Simple effects are the effect of some factor (e.g., interaction partner's expression) at each level of another factor (e.g., at high and low RS separately). 
+
+>**Question:** Does partner emotion have an effect on perceived liking for people low on rejection sensitivity? For people high on rejection sensitivty? 
+
+```{r}
+# Comparing cell means
+emmeans(model, pairwise~rs*partner, adjust = "bonferroni")
+
+```
+
+>**Question:** Does rejection sensitivity have an effect on perceived liking when partner shows neutral emotions? When partner shows happy emotions? 
+
+```{r}
+
+```
+
+> Write-up the results from the ANOVA analysis. Be sure to include a table of means and visualziations in your write-up. 
+
+
+
