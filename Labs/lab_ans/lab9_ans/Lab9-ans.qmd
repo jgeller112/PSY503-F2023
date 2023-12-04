@@ -1,0 +1,273 @@
+---
+title: "Lab 9: Interactions 1"
+subtitle: "Princeton University"
+author: "Jason Geller, Ph.D.(he/him)"
+date: 'Updated:`r Sys.Date()`'
+format: html
+toc: true
+toc_float: true
+html:
+    code-fold: true
+    code-tools: true
+execute: 
+  warning: false
+  message: false
+engine: knitr
+webr: 
+  packages: ["tidyverse", "broom","emmeans", "knitr", "easystats", "interactions"]
+filters:
+  - webr
+---
+
+# Lab 9
+
+There is currently much debate (and hype) surrounding smartphones and their effects on well-being, especially with regard to children and teenagers.  We'll be looking at data from this recent study of English adolescents:
+
+> Przybylski, A. & Weinstein, N. (2017). A Large-Scale Test of the Goldilocks Hypothesis. *Psychological Science*, *28*, 204--215.
+
+This was a large-scale study that found support for the "Goldilocks" hypothesis among adolescents: that there is a "just right" amount of screen time, such that any amount more or less than this amount is associated with lower well-being.  This was a huge survey study: the data contain responses from over 120,000 participants! 
+
+Fortunately, the authors made the data from this study openly available, which allows us to dig deeper into their results. In this lab, we will look at whether the relationship between screen time and well-being is modulated by participants' (self-reported) gender.
+
+The dependent measure used in the study was the [Warwick-Edinburgh Mental Well-Being Scale (WEMWBS)](https://warwick.ac.uk/fac/med/research/platform/wemwbs/). This is a 14-item scale with 5 response categories, summed together to form a single score ranging from 14-70.
+
+At [Przybylski & Weinstein's page for this study on the Open Science Framework](https://osf.io/82ybd/), you can find the [participant survey](https://osf.io/82ybd/) which asks a large number of additional questions (see page 14 for the WEMWBS questions and pages 4-5 for the questions about screen time). Within the same page you can also find the [raw data](https://osf.io/82ybd/); however, for the purpose of this exercise, you will be using local pre-processed copies of the data (see data folder). 
+
+Przybylski and Weinstein looked at multiple measures of screen time, but we will be focusing on smartphone use. They found that decrements in well-being started to appear when respondents reported more than one hour of weekly smartphone use.  Our question: Does the negative association between hours of (smartphone) use and well-being (beyond the one-hour point) differ for boys and girls?
+
+Note that in this analysis, we have:
+
+- a continuous$^*$ DV, well-being;
+
+- a continuous$^*$ predictor, screen time;
+
+- a categorical predictor, gender.
+
+$^*$these variables are only quasi-continuous, inasmuch as only discrete values are possible. However, there are a sufficient number of discrete categories that we can treat them as effectively continuous.
+
+We want to estimate two slopes relating screen time to well-being, one for girls and one for boys, and then statistically compare these slopes. So this problem seems simultaneously like a situation where you would run a regression (to estimate the slopes) but also one where you would need a t-test (to compare two groups).
+
+
+## Set-up
+
+- Load in the `wellbeing.csv`, `participant_info.csv`, and `screen_time.csv` file from your data folder. Save them as `wellbeing`, `pinfo` and `screen`. 
+
+```{webr-r}
+library("WebPower")
+library("easystats")
+library("tidyverse")
+library("broom")
+
+pinfo <- read.csv("data/participant_info.csv")
+wellbeing <- read.csv("data/wellbeing (1).csv")
+screen<- read.csv("data/screen_time.csv")
+
+```
+
+##  Look at the data {#mulregression-a2}
+
+Take a look at the tibble for `pinfo`, `wellbeing`, and `screen`.  The `wellbeing` tibble has information from the WEMWBS questionnaire; `screen` has information about screen time use on weekends (variables ending with `we`) and weekdays (variables ending with `wk`) for four types of activities: using a computer (variables starting with `Comph`; Q10 on the survey), playing video games (variables starting with `Comp`; Q9 on the survey), using a smartphone (variables starting with `Smart`; Q11 on the survey) and watching TV (variables starting with `Watch`; Q8 on the survey).  If you want more information about these variables, look at the items 8-11 on pages 4-5 of the the [PDF version of the survey on the OSF website](https://osf.io/82ybd/).
+
+- The variable corresponding to *gender* is located in the table named `pinfo`and this variable is called `male`. 
+
+-  Individual participants in this dataset are identified by the variable named `Serial`.  This variable will allow us to link information across the three tables.
+
+> Run `summary()` on the three data-sets. Are there any missing data points? If so, get rid of them. 
+
+```{webr-r}
+
+summary(pinfo) 
+summary(wellbeing)
+summary(screen)
+
+```
+
+## Compute the well-being score for each respondent
+
+The WEMWBS well-being score is simply the *sum* of all the items. 
+
+> Write the code to create a new table called `wemwbs`, with two variables: `Serial` (the participant ID), and `tot_wellbeing`, the total WEMWBS score. You will need to use `pivot_longer` to do this. 
+
+```{webr-r}
+
+wemwbs <- wellbeing %>%
+  pivot_longer(cols=starts_with("WB"), names_to = "var", values_to = "score") %>%
+  group_by(Serial) %>%
+  summarise(tot_wellbeing = sum(score))
+
+wemwbs
+```
+
+> **Sanity check:** Verify for yourself that the scores all fall in the 14-70 range.  Przybylski and Weinstein reported a mean of 47.52 with a standard deviation of 9.55. Can you reproduce these values?
+
+```{webr-r}
+
+wemwbs %>% summarise(mean = mean(tot_wellbeing),
+                     sd = sd(tot_wellbeing),
+                     min = min(tot_wellbeing), 
+                     max = max(tot_wellbeing))
+```
+
+> Now visualise the distribution of `tot_wellbeing` in a histogram
+
+```{webr-r}
+
+ggplot(wemwbs, aes(tot_wellbeing)) + geom_histogram() 
+
+
+```
+
+## Smartphone and well-being for boys and girls
+
+For this analysis, we are going to collapse weekday and weekend use for smartphones.
+
+>  Create a new table, `smarttot`, that has the that has mean number of hours per day of smartphone use for each participant, averaged over weekends/weekdays. 
+
+* You will need to filter the dataset to only include smartphone use and not other technologies.
+
+* You will need to use pivot_longer
+
+* You will also need to group the results by the participant ID (i.e., `serial`). 
+
+* The final data-set should have two variables: `Serial` (the participant) and `tothours`.
+
+* You will need to use the data-set `screen_time` to do this.
+
+```{webr-r}
+
+smarttot <- screen %>%
+  select(Serial, Smart_we, Smart_wk) %>%
+  pivot_longer(Smart_we:Smart_wk, names_to="Smartphone", values_to="hours") %>%
+  group_by(Serial) %>%
+  summarise(tothours = mean(hours))
+
+```
+
+> Next, create a new tibble called `smart_wb` that only includes (filters) participants from `smarttot` who used a smartphone for more than one hour per day each week, and then combine (join or merge) this table with the information in `wemwbs` and `pinfo`.** An inner join only keeps observations from X (here smarttot) that have a matching key in Y (`wemwbs` and `pinfo`). So if Serial is absent from `wemwbs` or `pinfo` it will throw out that observation. 
+
+
+```{webr-r}
+
+smart_wb <- smarttot %>%
+  filter(tothours > 1) %>%
+  inner_join(wemwbs) %>%
+  inner_join(pinfo) 
+
+```
+
+##  Mean-centering variables
+
+- As discussed in the lecture, When you have continuous variables in a regression, it is often sensible to transform them by *mean centering*.
+
+>  Use `mutate` to add two new variables to `smart_wb`: `tothours_c`, calculated as a mean-centered version of the `tothours` predictor; and `male_dev`, recoded as -.5 for female and .5 for male.
+
+
+> Finally, recode `male` as factor, so that R knows not to treat them as a real numbers 
+```{webr-r}
+
+```{webr-r}
+smart_wb <- smart_wb %>%
+  mutate(thours_c = tothours - mean(tothours),
+         male_dev = ifelse(male == 1, .5, -.5),
+         male = as.factor(male))
+
+```
+
+
+## Visualise the relationship 
+
+> Calculate mean well-being scores for each combination of `male` and `tothours`, and then create a scatterplot plot that includes separate regression lines for each gender.
+
+```{webr-r}
+
+smart_wb_gen <- smart_wb %>%
+  group_by(tothours, male) %>%
+  summarise(mean_wellbeing = mean(tot_wellbeing))
+
+ggplot(smart_wb_gen, aes(tothours, mean_wellbeing, color = male)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  scale_color_discrete(name = "Gender", labels = c("Female", "Male"))+
+  scale_x_continuous(name = "Total hours smartphone use") +
+  scale_y_continuous(name = "Mean well-being score")
+
+
+
+```
+
+
+## Running the regression
+
+> For the data in `smart_wb`, use the `lm()` function to calculate the multiple regression model. Make sure the table is formatted nicely! 
+
+```{webr-r}
+library(broom)
+mod <- lm(tot_wellbeing ~ thours_c * male_dev, smart_wb)
+# alternatively: 
+# mod <- lm(tot_wellbeing ~ thours_c + male_dev + thours_c:male_dev, smart_wb)
+
+mod %>%
+  tidy(conf.int = TRUE) %>%
+  kable()
+
+```
+
+> Follow-up with a simple effects analysis, if the interaction is significant 
+
+```{webr-r}
+
+mod <- lm(tot_wellbeing ~ thours_c * male_dev, smart_wb)
+
+emmeans::emtrends(mod, ~male_dev, var="thours_c")%>%
+  emmeans::test()
+
+```
+
+##  Assumption checking
+
+- Now it's time to test those pesky assumptions
+
+- The predictors have non-zero variance
+- The relationship between outcome and predictor is linear
+- The residuals should be normally distributed
+- Multicollinearity: predictor variables should not be too highly correlated
+
+> Check assumptions of your model, noting any deviations. 
+
+```{webr-r}
+
+check_model(mod)
+
+```
+
+## Visualization
+
+> use the `interactions` package or `ggeffects` to visualize the interaction effect 
+
+```{webr-r}
+
+interact_plot(mod, pred = thours_c , modx = male_dev, interval = TRUE)
+
+```
+
+##  Write-up
+
+> Provide a write-up/summary of the results in APA style
+
+All continuous predictors were mean-centered and deviation coding was used for categorical predictors. The results of the regression indicated that the model significantly predicted course engagement (F(3, 7.1029^{4}) = 2450.89, p < .001, Adjusted R2 = 0.09, $f_2$ = .63), accounting for 9% of the variance. Total screen time was a significant negative predictor of well-being scores (b = -0.77, p < .001, as was gender (b = 5.14, p < .001, with girls having lower well-being scores than boys. Importantly, there was a significant interaction between screen time and gender (b = 0.45, p < .001), smartphone use was more negatively associated with well-being for girls than for boys.
+
+## Power
+
+Finally, we'll calculate power
+
+> Calculate the minimum effect size we could reliably observe  given our sample size and design, but for 99% power using a power calculator. 
+
+```{webr-r}
+library(WebPower)
+WebPower::wp.regression(n=71033, p1=3, p2=0, alpha=.05, power=.99)
+
+```
+
+- The smallest effect size we can observe with 99% power is .0003. We can observe small effects given the sample size. 
+
+# Finished! 

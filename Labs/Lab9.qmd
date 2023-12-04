@@ -8,7 +8,7 @@ toc: true
 toc_float: true
 ---
 
-# Lab 9: Interactions 1 
+# Lab 9: Interactions 1
 
 For this lab, we will examine core concepts from class to examine data
 from:
@@ -26,3 +26,5 @@ To access Lab 9 please [click
 here](https://classroom.github.com/a/Je9yf9Dj)
 
 ## Lab answers
+
+-   [Lab 9 Answers](/Labs/lab_ans/lab9_ans/lab9_ans-qmd)
