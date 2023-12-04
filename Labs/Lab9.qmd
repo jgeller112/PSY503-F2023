@@ -27,4 +27,4 @@ here](https://classroom.github.com/a/Je9yf9Dj)
 
 ## Lab answers
 
--   [Lab 9 Answers](/Labs/lab_ans/lab9_ans/lab9_ans-qmd)
+-   [Lab 9 Answers](/Labs/lab_ans/lab9_ans/Lab9-ans.qmd)
