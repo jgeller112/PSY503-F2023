@@ -17,11 +17,10 @@ entails importing and inspecting data in R, understanding the factorial
 design's structure using linear modeling and ANOVA, conducting
 descriptive statistical analysis, and creating APA-style tables of
 means. Students will perform a factorial ANOVA using regression and
-traditional methods, analyze effect sizes and power using the
-**`Superpower`** package, and visually represent main and interaction
-effects. They will also examine simple effects to understand how partner
-emotion impacts perceived liking across different levels of rejection
-sensitivity.
+traditional methods, analyze effect sizes and power, and visually
+represent main and interaction effects. They will also examine simple
+effects to understand how partner emotion impacts perceived liking
+across different levels of rejection sensitivity.
 
 To access Lab 10, please [click
 here](https://classroom.github.com/a/LD9JUnwW).
