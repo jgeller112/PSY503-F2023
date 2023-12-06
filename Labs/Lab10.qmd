@@ -3,15 +3,25 @@ title: "Lab 10"
 format: html
 editor: visual
 author: "Jason Geller, Ph.D."
-date: 2023 04 26
+date: 2023 12  06
 toc: true
 toc_float: true
 ---
 
-## Lab 10: Multilevel Modeling
+## Lab 10: Factorial Designs
 
-For this lab, we will apply core concepts of multilevel modeling to a dataset from Coyne et al. (2019). Here, you will be engaging in model building/selection, fitting and interpreting results, and visualizing results. This lab is meant to be an introduction to the techniques of multilevel modeling.
+In this lab students will explore a factorial research design using a
+scenario involving subjects grouped by rejection sensitivity and their
+interactions with partners showing varied emotional expressions. The lab
+entails importing and inspecting data in R, understanding the factorial
+design's structure using linear modeling and ANOVA, conducting
+descriptive statistical analysis, and creating APA-style tables of
+means. Students will perform a factorial ANOVA using regression and
+traditional methods, analyze effect sizes and power using the
+**`Superpower`** package, and visually represent main and interaction
+effects. They will also examine simple effects to understand how partner
+emotion impacts perceived liking across different levels of rejection
+sensitivity.
 
-> Coyne, M. D., McCoach, D. B., Ware, S., Austin, C. R., Loftus-Rattan, S. M., & Baker, D. L. (2019). Racing Against the Vocabulary Gap: Matthew Effects in Early Vocabulary Instruction and Intervention. *Exceptional Children*, *85*(2), 163--179. <https://doi.org/10.1177/0014402918789162>
-
-To access Lab 10, please [click here](https://classroom.github.com/a/GUBRA5g4).
+To access Lab 10, please [click
+here](https://classroom.github.com/a/LD9JUnwW).
