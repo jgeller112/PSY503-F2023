@@ -1,0 +1,20 @@
+---
+title: "Final Paper"
+format: html
+editor: visual
+author: "Jason Geller, Ph.D."
+date: 2023 12 06
+toc: true
+toc_float: true
+---
+
+# Final Paper
+
+All final papers must be submitted by the end of final exams week to your github repository. Please refer to the [syllabus](https://psy503-f2023.netlify.app/syllabus#final-project) for specific details about the paper. 
+
+Here is a link to a website that contains example papers and repositories that have used `papaja` to create reproducible manuscripts: https://www.aggieerin.com/post/current-publications-with-papaja/. 
+
+You can use `papaja` or `Apaquarto to create your manuscript--your choice.
+
+To access your final paper repository,  please [click here](https://classroom.github.com/a/ltbJhvus).
+
