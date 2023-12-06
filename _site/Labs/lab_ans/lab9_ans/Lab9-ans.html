@@ -2640,9 +2640,7 @@ smart_wb <- smarttot %>%
   let editor;
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
-      value: `
-```{webr-r}
-smart_wb <- smart_wb %>%
+      value: `smart_wb <- smart_wb %>%
   mutate(thours_c = tothours - mean(tothours),
          male_dev = ifelse(male == 1, .5, -.5),
          male = as.factor(male))`,

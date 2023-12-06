@@ -164,8 +164,6 @@ smart_wb <- smarttot %>%
 
 > Finally, recode `male` as factor, so that R knows not to treat them as a real numbers 
 ```{webr-r}
-
-```{webr-r}
 smart_wb <- smart_wb %>%
   mutate(thours_c = tothours - mean(tothours),
          male_dev = ifelse(male == 1, .5, -.5),
