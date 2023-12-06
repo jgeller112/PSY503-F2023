@@ -58,9 +58,9 @@ library("easystats")
 library("tidyverse")
 library("broom")
 
-pinfo <- read.csv("data/participant_info.csv")
-wellbeing <- read.csv("data/wellbeing (1).csv")
-screen<- read.csv("data/screen_time.csv")
+pinfo <- read.csv("https://raw.githubusercontent.com/jgeller112/Lab9-Interactions1/main/data/participant_info.csv")
+wellbeing <- read.csv("https://raw.githubusercontent.com/jgeller112/Lab9-Interactions1/main/data/wellbeing.csv")
+screen<- read.csv("https://raw.githubusercontent.com/jgeller112/Lab9-Interactions1/main/data/screen_time.csv")
 
 ```
 
