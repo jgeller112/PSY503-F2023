@@ -24,3 +24,8 @@ across different levels of rejection sensitivity.
 
 To access Lab 10, please [click
 here](https://classroom.github.com/a/LD9JUnwW).
+
+## Lab Answers
+
+-   [Lab 10
+    answers](/Labs/lab_ans/lab10_ans/Lab10-Interactions2-ans.qmd)

@@ -1,0 +1,320 @@
+---
+title: "Lab 10: Factorial Designs"
+subtitle: "Princeton University"
+author: ""
+date: 'Updated:`r Sys.Date()`'
+format: html
+toc: true
+toc_float: true
+html:
+    code-fold: true
+    code-tools: true
+execute: 
+  warning: false
+  message: false
+engine: knitr
+webr: 
+  packages: ["tidyverse", "broom","emmeans", "knitr", "easystats", "ggeffects"]
+filters:
+  - webr
+---
+
+# Research scenario
+
+Based on subjects' self-reports of rejection sensitivity (N = 80), a researcher divides subjects into two equal groups (low RS and high RS). Whereas half of the subjects in each group interact with a partner who displays a happy emotional expression during the interaction, the other half of the subjects in each group interact with a partner who displays a neutral emotional expression during the interaction. After the interaction, subjects are asked to rate the statement, "My interaction partner likes me", on a scale from 1 (strongly disagree) to 7 (strongly agree).
+
+**Factor 1: Rejection Sensitivity**
+
+-   Low
+-   High
+
+**Factor 2: Partner's Emotional Expression**
+
+-   Neutral
+-   Happy
+
+**Dependent Variable: Perceived Liking**
+
+# Import & inspect the data
+
+```{r}
+#load packages
+library(tidyverse)
+library(emmeans)
+library(apaTables)
+library(easystats)
+library(broom)
+
+```
+
+- Load the .csv file from the repository
+
+```{r}
+reject <- read.csv("https://raw.githubusercontent.com/jgeller112/Lab10-Interactions-2/main/reject.csv")
+```
+
+> Make sure the categorical variables are factors
+
+```{r}
+str(reject)
+```
+
+```{r}
+reject_cat <- reject  %>%
+  mutate(rs_cat=as.factor(rs), partner_cat=as.factor(partner))
+
+str(reject_cat)
+```
+
+- Notice that by default R orders factor levels alphabetically. In our case, this means that `High` will be the reference group of rejection sensitivity and `Happy` will be the reference group of interaction partner's emotional expression. However, it might be more intuitive to have `Low` and `Neutral` be the reference groups, respectively.
+
+> Reorder the levels
+
+```{r}
+
+reject_cat <- reject_cat %>% 
+  mutate(rs_cat = factor(rs, levels=c("Low ", "High ")),
+         partner_cat = factor(partner,levels= c("Neutral ", "Happy ")))
+```
+
+# Descriptive Statistics
+
+- How many Ps are there per condition?
+
+```{r}
+
+reject_cat %>%
+  group_by(rs_cat, partner_cat) %>%
+  summarise(n=n())
+
+```
+
+## Table of Means
+
+- The results of a factorial ANOVA are often represented in a table of means, which contains the means of each combination of conditions (the cell means) and means for the levels of each variable ignoring the other variables (the marginal means)
+
+### Table of Means
+
+-  The apa.2way.table() function from the `apaTables` package is a very convenient way to get our cell means and marginal means. This function works for any type of 2-way ANOVA, regardless of the number of levels of your factors, e.g. it would work for a 3 x 3 ANOVA. All you need to do is indicate what the IV's (aka factors) and DV are and specify `show.marginal.means = TRUE`.
+
+> Use `apa.2way.table()` to create a table for our data
+
+```{r}
+
+apa.2way.table(iv1 = rs_cat, 
+               iv2 = partner_cat, 
+               dv = liking, 
+               data = reject_cat,
+               show.marginal.means = TRUE)
+
+```
+
+> **Question:** Which means are being compared in the main effect of rejection sensitivity?
+
+- 4.12 and 5.78
+
+> **Question:** Which means are being compared in the main effect of interaction partner?
+
+- 6.22 and 3.67
+
+> **Question:**Which means are involved in the interaction?
+
+- 6.45, 6.00, 1.80, 5.55
+
+# Conduct the Factorial ANOVA
+
+## Using Regression: `lm`()
+
+> Run a dummy coded regression analysis
+
+```{r}
+## your code here
+
+model <- lm(liking ~ rs_cat * partner_cat, data = reject_cat) %>%
+  tidy(conf.int = TRUE) 
+
+model
+
+```
+
+> Interpret each of the regression coefficients
+
+- $b_0$: The predicted Y value for the neutral, low group (*M*=5.55)
+- $b_1$: The simple effect for the low vs. high group when neutral, *b* = -3.75, *SE* = 0.25, 95% CI[-4.26, -3.24], *t* = -14.75, *p* < .001. 
+- $b_2$: The simple effect for the neutral vs. happy group when low, *b* = 0.45, *SE* = 0.25, 95% CI[-4.26, -3.24], *p* >  .05.
+- $b_3$: The interaction between the rs and partner group, *b* = 4.20, *SE* = 0.36, 95% CI[-4.26, -3.24], *p* < .001.
+
+### Recoding
+
+Obviously, the means being compared by b1 and b2 do not represent our main effects. The main effect of RS would be a comparison of the marginal means for the low and high conditions. The main effect of partner would be a comparison of the marginal means for the neutral and happy conditions.
+
+With the way we have rs and partner coded in the model, the regression coefficient estimates don't correspond simply to the mean difference between conditions. We can recode the factors so that the parameter estimates, b1 and b2, correspond to a test of the main effects.
+
+> **Question:** How should we code the levels of rejection sensitivity and partner emotion so that the parameter estimates, b1 and b2, correspond to a test of their main effects?
+
+- Devaition coding
+
+> Assign new codes to the levels of each factor
+
+```{r}
+#change to dev coding
+contrasts(reject_cat$rs_cat)<-c(0.5, -0.5)
+contrasts(reject_cat$partner_cat)<-c(0.5, -0.5)
+
+```
+
+> Re-run the analysis with newly coded factors
+
+```{r}
+model_dev <- lm(liking ~ rs_cat * partner_cat, data = reject_cat) %>%
+  tidy(conf.int = TRUE) 
+
+model_dev
+```
+
+> Interpret the new model coefficients
+
+- $b_0$: The grand mean across all cell means
+- $b_1$: The main effect of rejection sensitivity, *b* = 1.65, *SE* = 0.18, 95% CI[-4.26, -3.24], *t* = 9.18, *p* < .001. 
+- $b_2$: The main effect of partner , *b* = -2.55, *SE* = 0.18, 95% CI[-4.26, -3.24], t = 14.19, *p* <  .001.
+- $b_3$: The interaction between the rs and partner group, *b* = 4.20, *SE* = 0.36, 95% CI[-4.26, -3.24], *p* < .001.
+
+## Using Traditional ANOVA: `afex`
+
+- You can also perform a traditional ANOVA and get straightforward results by passing the model to the `aov_ez` function.
+
+> Run an ANOVA
+
+```{r}
+
+library(afex)
+
+reject <- read.csv("https://raw.githubusercontent.com/jgeller112/Lab10-Interactions-2/main/reject.csv")
+
+aov_ez(id="X", between=c("rs", "partner"), dv="liking", data=reject,  anova_table = list(es = "pes"))
+## your code here
+```
+
+> **Question:** What type of sums of squares does `aov_ez` use?
+
+- Type 3
+
+# Effect sizes
+
+> What are the effect sizes for each main effect and interaction. For each effect, is it small, medium, or large?
+
+```{r}
+## your code here
+
+model_es <- lm(liking ~ rs_cat * partner_cat, data = reject_cat) %>% 
+  effectsize::eta_squared(partial=TRUE)
+
+model_es
+
+```
+
+- All of them are large (huge!)
+
+# Power
+
+> Using `Superpower` determine the minimum/smallest effect size we could reliably detect given our sample size and design with 90% power
+
+```{r}
+library(Superpower)
+
+string <- "2b*2b"
+n <- 20
+
+mu <- c(5.55, 6.00 ,1.80, 6.45)
+sd <- c(1.05, 0.70, .73, .69)
+labelnames <- c("rs", "Low", "High", "partner", "Neutral", "Happy") #
+design_result <- Superpower::ANOVA_design(design = string,
+                   n = n,
+                   mu = mu,
+                   sd = sd,
+                   labelnames = labelnames, 
+                   plot = TRUE)
+
+Superpower::ANOVA_power(design_result,
+                        alpha_level = 0.05,
+                        nsims = 1000, 
+                        verbose = FALSE)
+
+```
+
+# Visualization
+
+- Use `ggplot2` to create nice figures of the main effects and interaction  
+
+## Main effects
+
+### Plotting the main effect of rejection sensitivity
+
+```{r}
+## your code here
+library(ggeffects)
+
+model_dev <- lm(liking ~ rs_cat * partner_cat, data = reject_cat)
+
+ggemmeans(model_dev, terms=c("rs_cat")) %>% plot(add.data=TRUE, jitter=.2)
+
+
+```
+
+### Plotting the main effect of partner's emotional expression
+
+```{r}
+## your code here
+
+ggemmeans(model_dev, terms=c("partner_cat")) %>% plot(add.data=TRUE, jitter=.2)
+```
+
+## Interaction
+
+### Plotting the interaction effect
+
+```{r}
+## your code here
+
+
+ggemmeans(model_dev, terms=c("rs_cat", "partner_cat")) %>% plot(add.data=TRUE, jitter=.2)
+
+```
+
+> Switch how the interaction is visualized by switching the order of terms
+
+```{r}
+## your code here
+ggemmeans(model_dev, terms=c("partner_cat", "rs_cat")) %>% plot(show_data=TRUE, jitter=.2)
+
+```
+
+> **Question:** How would you describe in a paper what the significant interaction effect means?
+
+# Simple effects
+
+- Simple effects are the effect of some factor (e.g., interaction partner's expression) at each level of another factor (e.g., at high and low RS separately).
+
+> **Question:** Does partner emotion have an effect on perceived liking for people low on rejection sensitivity? For people high on rejection sensitivty?
+
+```{r}
+emmeans::emmeans(model_dev, pairwise~rs_cat*partner_cat) %>%
+  joint_tests(by="rs_cat") 
+```
+
+> **Question:** Does rejection sensitivity have an effect on perceived liking when partner shows neutral emotions? When partner shows happy emotions?
+
+```{r}
+## your code here
+emmeans::emmeans(model_dev, pairwise~rs_cat*partner_cat) %>%
+  joint_tests(by="partner_cat") 
+```
+
+# Reporting results
+
+> Write-up the results from the ANOVA analysis in APA style. Focus on one of the simple effect directions from above (they are equivalent so pick one that makes the most sense)
+
+```{r}
+aov_model <- aov(model_dev)
+report(aov_model)
+```
